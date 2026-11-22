@@ -26,7 +26,7 @@ const WS_ACTIONS = ['sweep', 'push', 'summon_start', 'summon_loop', 'summon_end'
 const WS_LOOPS = { summon_start: 'HOLD_ON_LAST_FRAME', summon_loop: 'LOOP' }
 
 // action lengths and hit frames in ticks (20 per second), matched to the animations
-const WS_LEN = { sweep: 56, push: 40, summon_start: 32, summon_end: 28, awaken: 68, stomp: 38, dash: 32 }
+const WS_LEN = { sweep: 56, push: 40, summon_start: 44, summon_end: 36, awaken: 72, stomp: 40, dash: 32 }   // ticks, matching the animations
 
 StartupEvents.registry('entity_type', event => {
   let b = event.create(WS, 'entityjs:mob')
@@ -50,7 +50,7 @@ StartupEvents.registry('entity_type', event => {
       a.add($Attributes.ARMOR, 14)
       a.add($Attributes.ARMOR_TOUGHNESS, 6)
       a.add($Attributes.KNOCKBACK_RESISTANCE, 1.0)
-      a.add($Attributes.MOVEMENT_SPEED, 0.23)
+      a.add($Attributes.MOVEMENT_SPEED, 0.20)   // walk cycle is animated for this speed (feet stay planted)
       a.add($Attributes.FOLLOW_RANGE, 48)
       a.add($Attributes.ATTACK_DAMAGE, 14)
     })
@@ -82,7 +82,7 @@ StartupEvents.registry('entity_type', event => {
       try {
         let d = e.persistentData, n = d.getInt('ws_dying') + 1
         d.putInt('ws_dying', n)
-        if (n >= 80) { e.level.broadcastEntityEvent(e, 60); e.discard() }
+        if (n >= 90) { e.level.broadcastEntityEvent(e, 60); e.discard() }   // death animation is 3.8s, then a beat
       } catch (err) { wsLogOnce('death', err); e.discard() }
     })
     .onDeath(ctx => { if (!ctx.entity.level.isClientSide()) try { global.wsOnDeath(ctx.entity) } catch (err) { wsLogOnce('onDeath', err) } })
@@ -253,7 +253,7 @@ global.wsTick = e => {
     d.putInt('ws_t', t + 1)
     if (act == 'sweep') {
       if (t < 24 && target) wsFace(e, target)
-      if (t == 22) wsCmd(e, 'playsound minecraft:entity.player.attack.sweep hostile @a ~ ~ ~ 3 0.4')
+      if (t == 23) wsCmd(e, 'playsound minecraft:entity.player.attack.sweep hostile @a ~ ~ ~ 3 0.4')
       if (t == 26) {
         let f = wsFwd(e)
         wsCmd(e, `particle minecraft:sweep_attack ~${f[0] * 3} ~2.5 ~${f[1] * 3} 2 0.4 2 0 12 force`)
@@ -269,7 +269,7 @@ global.wsTick = e => {
       }
     } else if (act == 'summon_start') {
       if (t == 2) wsCmd(e, 'playsound minecraft:entity.evoker.prepare_summon hostile @a ~ ~ ~ 3 0.6')
-      if (t == 23) {
+      if (t == 36) {      // the blade hits the ground
         wsCmd(e, 'playsound minecraft:entity.generic.explode hostile @a ~ ~ ~ 2 0.5')
         wsCmd(e, 'particle minecraft:soul_fire_flame ~ ~0.5 ~ 3 0.2 3 0.05 120 force')
         let tag = 'wsm_' + wsId(e), mobs = ['minecraft:wither_skeleton', 'minecraft:wither_skeleton', 'minecraft:skeleton']
@@ -291,8 +291,9 @@ global.wsTick = e => {
         d.putInt('cd_summon', 900)
       }
     } else if (act == 'awaken') {
-      if (t == 1) wsCmd(e, 'playsound minecraft:entity.warden.roar hostile @a ~ ~ ~ 4 0.6')
-      if (t == 25) {
+      if (t == 2) wsCmd(e, 'playsound minecraft:entity.wither_skeleton.death hostile @a ~ ~ ~ 3 0.4')
+      if (t == 40) wsCmd(e, 'playsound minecraft:entity.warden.roar hostile @a ~ ~ ~ 4 0.6')
+      if (t == 44) {      // rears up: the armour ignites
         wsCmd(e, 'playsound minecraft:entity.wither.spawn hostile @a ~ ~ ~ 3 0.8')
         wsCmd(e, 'particle minecraft:soul_fire_flame ~ ~4 ~ 1.5 3 1.5 0.08 200 force')
         wsHit(e, 6, -1, 0, 1.8, 0.4)
@@ -311,9 +312,16 @@ global.wsTick = e => {
       if (t >= 9 && t <= 16) {
         let f = wsFwd(e)
         let vy = 0; try { let v = wsVec(e.getDeltaMovement()); if (v) vy = v.y } catch (err) {}
+        if (t == 9) vy = 0.32      // he leaps: airborne for the lunge, lands with the animation (~t17)
         e.setDeltaMovement(new $Vec3(f[0] * 1.35, vy, f[1] * 1.35))
         e.hurtMarked = true
         if (!d.getBoolean('ws_dash_hit') && wsHit(e, 3.0, 0.2, 18, 1.4, 0.4) > 0) d.putBoolean('ws_dash_hit', true)
+      }
+      if (t == 17) {             // plants his feet on landing instead of skating on
+        let f = wsFwd(e), vy = 0; try { let v = wsVec(e.getDeltaMovement()); if (v) vy = v.y } catch (err) {}
+        e.setDeltaMovement(new $Vec3(f[0] * 0.12, vy, f[1] * 0.12)); e.hurtMarked = true
+        wsCmd(e, 'playsound minecraft:entity.iron_golem.damage hostile @a ~ ~ ~ 3 0.5')
+        wsCmd(e, 'particle minecraft:campfire_cosy_smoke ~ ~0.2 ~ 1.5 0.1 1.5 0.01 20 force')
       }
     }
     let len = WS_LEN[act]
