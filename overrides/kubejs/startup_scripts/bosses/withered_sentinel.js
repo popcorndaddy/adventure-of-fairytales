@@ -59,7 +59,7 @@ StartupEvents.registry('entity_type', event => {
     .addAnimationController('base', 6, ev => {
       // the predicate must return true/false; the then*() calls pick the animation
       try {
-        WS_ACTIONS.forEach(n => ev.addTriggerableAnimation(n, WS_ANIM(n), WS_LOOPS[n] || 'PLAY_ONCE'))
+        WS_ACTIONS.forEach(n => ev.addTriggerableAnimation(WS_ANIM(n), n, WS_LOOPS[n] || 'PLAY_ONCE'))
         let e = ev.entity
         if (e.isDeadOrDying()) ev.thenPlayAndHold(WS_ANIM('death'))
         else if (ev.isMoving()) ev.thenLoop(WS_ANIM('walk'))
@@ -167,11 +167,23 @@ function wsHit(e, range, arc, dmg, push, lift) {
   return hit
 }
 
+global.wsSeen = global.wsSeen || {}
+function wsNote(key, msg) { if (global.wsSeen[key]) return; global.wsSeen[key] = true; console.info(`[Withered Sentinel] ${msg}`) }
+function wsTrigger(e, action) {
+  try { e.triggerAnimation('base', action) } catch (err) {
+    try { e.triggerAnim('base', action) } catch (err2) { wsLogOnce('trigger', err2) }
+  }
+}
+function wsWalkTo(e, target) {
+  try { if (e.getNavigation().moveTo(target, 1.0)) return } catch (err) { wsLogOnce('moveTo entity', err) }
+  try { let q = wsP(target); if (!q.bad) e.getNavigation().moveTo(q.x, q.y, q.z, 1.0) } catch (err) { wsLogOnce('moveTo position', err) }
+}
 function wsStart(e, action) {
+  wsNote('act_' + action, `first ${action}`)
   let d = e.persistentData
   d.putString('ws_act', action); d.putInt('ws_t', 0)
   e.getNavigation().stop()
-  e.triggerAnim('base', action)
+  wsTrigger(e, action)
 }
 
 function wsStopAll(e) { WS_ACTIONS.forEach(n => { try { e.stopTriggeredAnimation('base', n) } catch (err) {} }) }
@@ -231,6 +243,7 @@ global.wsTick = e => {
   ;['cd_sweep', 'cd_push', 'cd_summon', 'cd_stomp', 'cd_dash'].forEach(k => { if (d.getInt(k) > 0) d.putInt(k, d.getInt(k) - 1) })
 
   let target = e.getTarget()
+  if (target) { try { wsNote('target_' + wsId(e), `locked on to ${target.getType()}`) } catch (err) {} }
   e.setAggressive(!!target)
   let act = d.getString('ws_act'), t = d.getInt('ws_t')
   let p2 = e.getHealth() <= e.getMaxHealth() * 0.5
@@ -269,7 +282,7 @@ global.wsTick = e => {
         })
         d.putBoolean('ws_guarded', true)
       }
-      if (t >= WS_LEN.summon_start) { d.putString('ws_act', 'summon_hold'); d.putInt('ws_t', 0); e.triggerAnim('base', 'summon_loop') }
+      if (t >= WS_LEN.summon_start) { d.putString('ws_act', 'summon_hold'); d.putInt('ws_t', 0); wsTrigger(e, 'summon_loop') }
     } else if (act == 'summon_hold') {
       if (t % 20 == 0) wsCmd(e, 'particle minecraft:soul ~ ~0.5 ~ 1.5 0.2 1.5 0.01 8 force')
       if (t % 10 == 0 && wsMinionsAlive(e) == 0) {
@@ -323,6 +336,6 @@ global.wsTick = e => {
   if (d.getInt('cd_push') == 0 && dist < 6 && r < 0.35) { wsStart(e, 'push'); d.putInt('cd_push', 200); return }
   if (d.getInt('cd_sweep') == 0 && dist < 5.6) { wsStart(e, 'sweep'); d.putInt('cd_sweep', 50); return }
 
-  if (dist > 4.2) e.getNavigation().moveTo(target, 1.0)
+  if (dist > 4.2) wsWalkTo(e, target)
   else { e.getNavigation().stop(); wsFace(e, target) }
 }
