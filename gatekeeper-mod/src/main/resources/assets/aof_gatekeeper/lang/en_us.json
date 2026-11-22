@@ -1,0 +1,16 @@
+{
+  "entity.aof_gatekeeper.gatekeeper": "The Ancient Gatekeeper",
+  "item.aof_gatekeeper.gatekeeper_spawn_egg": "Ancient Gatekeeper Spawn Egg",
+  "message.aof_gatekeeper.guardian_appears": "Something ancient stirs before the portal...",
+  "message.aof_gatekeeper.sealed": "The Gatekeeper's seal holds. Defeat him first.",
+  "message.aof_gatekeeper.seal_broken": "The Ancient Gatekeeper has fallen. The portal's seal is broken.",
+  "subtitles.aof_gatekeeper.ambient": "Gatekeeper drones",
+  "subtitles.aof_gatekeeper.pulse": "Runes pulse",
+  "subtitles.aof_gatekeeper.shriek": "Gatekeeper roars",
+  "subtitles.aof_gatekeeper.step": "Heavy footstep",
+  "subtitles.aof_gatekeeper.impact": "Ground shatters",
+  "subtitles.aof_gatekeeper.whoosh": "Greatsword swings",
+  "subtitles.aof_gatekeeper.drag": "Blade scrapes stone",
+  "subtitles.aof_gatekeeper.eyes": "Eyes ignite",
+  "subtitles.aof_gatekeeper.portal": "Portal flickers"
+}
