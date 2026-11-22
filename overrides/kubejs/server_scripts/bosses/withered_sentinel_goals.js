@@ -9,7 +9,8 @@ EntityJSEvents.addGoalSelectors('kubejs:withered_sentinel', e => {
   e.randomLookAround(9)
 })
 
-EntityJSEvents.addGoalTargets('kubejs:withered_sentinel', e => {
+// EntityJS names the target-goal event 'addGoals'
+EntityJSEvents.addGoals('kubejs:withered_sentinel', e => {
   e.hurtByTarget(1, [], false, [])
   e.nearestAttackableTarget(2, $WsPlayer, 10, true, false, p => !p.isCreative() && !p.isSpectator())
 })

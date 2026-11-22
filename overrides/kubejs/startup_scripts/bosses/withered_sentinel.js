@@ -42,9 +42,8 @@ StartupEvents.registry('entity_type', event => {
     .eggItem(egg => egg.backgroundColor(0x1b2a2c).highlightColor(0x5ff0e0))
     .modelResource(e => `kubejs:geo/entity/${WS}.geo.json`)
     .animationResource(e => `kubejs:animations/entity/${WS}.animation.json`)
-    .textureResource(e => e.getHealth() <= e.getMaxHealth() * 0.5 ? WS_TEX(`${WS}_awakened`) : WS_TEX(WS))
-    .newGlowingGeoLayer(layer => layer.textureResource(e => e.getHealth() <= e.getMaxHealth() * 0.5
-      ? WS_TEX(`${WS}_awakened_glowmask`) : WS_TEX(`${WS}_glowmask`)))
+    .textureResource(e => wsPhase2(e) ? WS_TEX(`${WS}_awakened`) : WS_TEX(WS))
+    .newGlowingGeoLayer(layer => layer.textureResource(e => wsPhase2(e) ? WS_TEX(`${WS}_awakened_glowmask`) : WS_TEX(`${WS}_glowmask`)))
     .attributes(a => {
       a.add($Attributes.MAX_HEALTH, 600)
       a.add($Attributes.ARMOR, 14)
@@ -56,26 +55,35 @@ StartupEvents.registry('entity_type', event => {
     })
     // base layer: idle / combat stance / walk / death
     .addAnimationController('base', 6, ev => {
-      let e = ev.entity
-      if (e.isDeadOrDying()) return ev.thenPlayAndHold(WS_ANIM('death'))
-      if (ev.isMoving()) return ev.thenLoop(WS_ANIM('walk'))
-      if (e.isAggressive()) return ev.thenLoop(WS_ANIM('idle_combat'))
-      return ev.thenLoop(WS_ANIM('idle'))
+      // the predicate must return true/false; the then*() calls pick the animation
+      try {
+        let e = ev.entity
+        if (e.isDeadOrDying()) ev.thenPlayAndHold(WS_ANIM('death'))
+        else if (ev.isMoving()) ev.thenLoop(WS_ANIM('walk'))
+        else if (e.isAggressive()) ev.thenLoop(WS_ANIM('idle_combat'))
+        else ev.thenLoop(WS_ANIM('idle'))
+      } catch (err) {}
+      return true
     })
     .isInvulnerableTo(ctx => {
       let d = ctx.entity.persistentData
       return d.getBoolean('ws_guarded')
     })
-    .tick(e => { if (!e.level.isClientSide()) global.wsTick(e) })
-    .tickDeath(e => {
-      e.deathTime++
-      if (e.deathTime >= 80 && !e.level.isClientSide()) {
-        e.level.broadcastEntityEvent(e, 60)
-        e.discard()
-      }
+    .tick(e => {
+      if (e.level.isClientSide()) return
+      try { global.wsTick(e) } catch (err) { wsLogOnce('tick', err) }
     })
-    .onDeath(ctx => { if (!ctx.entity.level.isClientSide()) global.wsOnDeath(ctx.entity) })
-    .onRemovedFromWorld(e => { if (!e.level.isClientSide()) global.wsClearBar(e) })
+    // he plays his own 4-second death animation instead of tipping over, then crumbles away
+    .tickDeath(e => {
+      if (e.level.isClientSide()) return
+      try {
+        let d = e.persistentData, n = d.getInt('ws_dying') + 1
+        d.putInt('ws_dying', n)
+        if (n >= 80) { e.level.broadcastEntityEvent(e, 60); e.discard() }
+      } catch (err) { wsLogOnce('death', err); e.discard() }
+    })
+    .onDeath(ctx => { if (!ctx.entity.level.isClientSide()) try { global.wsOnDeath(ctx.entity) } catch (err) { wsLogOnce('onDeath', err) } })
+    .onRemovedFromWorld(e => { if (!e.level.isClientSide()) try { global.wsClearBar(e) } catch (err) { wsLogOnce('removed', err) } })
     .setHurtSound(ctx => 'minecraft:entity.skeleton.hurt')
     .setDeathSound('minecraft:entity.wither_skeleton.death')
     .setSoundVolume(2.0)
@@ -89,7 +97,20 @@ StartupEvents.registry('entity_type', event => {
 // ------------------------------------------------------------------ server-side fight logic
 global.wsBars = global.wsBars || {}
 
-function wsId(e) { return String(e.getStringUUID()).substring(0, 8) }
+function wsPhase2(e) { try { return e.getHealth() <= e.getMaxHealth() * 0.5 } catch (err) { return false } }
+
+// a short id saved on the boss, used to tag his summons and find his boss bar
+function wsId(e) {
+  let d = e.persistentData
+  if (!d.contains('ws_id')) d.putString('ws_id', Math.floor(Math.random() * 0xfffffff).toString(16))
+  return String(d.getString('ws_id'))
+}
+global.wsLogged = global.wsLogged || {}
+function wsLogOnce(where, err) {
+  if (global.wsLogged[where]) return
+  global.wsLogged[where] = true
+  console.error(`[Withered Sentinel] ${where}: ${err}`)
+}
 function wsDist(a, b) { let dx = a.x - b.x, dz = a.z - b.z; return Math.sqrt(dx * dx + dz * dz) }
 function wsFace(e, t) {
   let yaw = Math.atan2(t.z - e.z, t.x - e.x) * 180 / Math.PI - 90
