@@ -1,0 +1,27 @@
+{
+	"name": "Mass Destruction",
+	"icon": "bosses_of_mass_destruction:soul_star",
+	"category": "patchouli:bosses",
+	"sortnum": 1,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "$(li)$(l)Night Lich$(): in the cold. Undead drop $(l:bosses/bomd#soul_star)Soul Stars$(/l) that fly toward its tower. Four of them call it down.$(li)$(l)Nether Gauntlet$(): in a rare structure in the Nether."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(li)$(l)Void Blossom$(): at the very bottom of the world. Void lilies point the way.$(li)$(l)Obsidilith$(): in a rare structure out on the End islands."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "bosses_of_mass_destruction:soul_star",
+			"text": "Throw it and follow it to the Night Lich's tower.",
+			"link_recipe": true,
+			"anchor": "soul_star"
+		}
+	],
+	"extra_recipe_mappings": {
+		"bosses_of_mass_destruction:soul_star": 0
+	}
+}

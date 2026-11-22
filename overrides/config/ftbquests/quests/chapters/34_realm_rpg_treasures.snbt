@@ -1,0 +1,342 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "34_realm_rpg_treasures"
+	group: "71E49019A27AF73C"
+	icon: {
+		Count: 1
+		ForgeCaps: {
+			Parent: {
+				Items: [ ]
+				Size: 0
+			}
+		}
+		id: "realmrpg_quests:quest_book"
+		tag: {
+			Inventory: {
+				Items: [ ]
+				Size: 0
+			}
+		}
+	}
+	id: "7F9BFA90908463B4"
+	order_index: 4
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["A quest book from the realm of rpg. Craft or find one."]
+			icon: {
+				Count: 1
+				ForgeCaps: {
+					Parent: {
+						Items: [ ]
+						Size: 0
+					}
+				}
+				id: "realmrpg_quests:quest_book"
+				tag: {
+					Inventory: {
+						Items: [ ]
+						Size: 0
+					}
+				}
+			}
+			id: "5C92711D5CFD811C"
+			rewards: [
+				{
+					count: 6
+					id: "22A416AC87B6128A"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "077551BB61264AA7"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "7F907A6815481E44"
+				item: "realmrpg_quests:quest_book"
+				type: "item"
+			}]
+			title: "The Quest Book"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5C92711D5CFD811C"]
+			description: ["A rare fungus that is a feast and a prize."]
+			icon: "realmrpg_quests:velvet_truffle"
+			id: "704FF74F7CE4B630"
+			rewards: [
+				{
+					count: 6
+					id: "6444204DF348B0D4"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "7242AD98267AF789"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "7DA0E6A74C233ABF"
+				item: "realmrpg_quests:velvet_truffle"
+				type: "item"
+			}]
+			title: "Velvet Truffle"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["704FF74F7CE4B630"]
+			description: ["A fruit that grows near wyvern nests. Rare and hearty."]
+			icon: "realmrpg_quests:wyvernfruit"
+			id: "73CBDB2D5794BA9B"
+			rewards: [
+				{
+					count: 16
+					id: "750DB38885EA1C83"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "3AF7FA3EAB2B394B"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "1AA695300148EFB1"
+				item: "realmrpg_quests:wyvernfruit"
+				type: "item"
+			}]
+			title: "Wyvernfruit"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["73CBDB2D5794BA9B"]
+			description: ["A necklace that makes fish bite more often. Wear it by the river."]
+			icon: "realmrpg_quests:necklace_of_fishing"
+			id: "6CA0D7901F7AE4E5"
+			rewards: [
+				{
+					count: 5
+					id: "13410658C0ACD1A7"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "3DF07E7404B5F439"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "72BA9A71288E7D26"
+				item: "realmrpg_quests:necklace_of_fishing"
+				type: "item"
+			}]
+			title: "A Fisher's Necklace"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6CA0D7901F7AE4E5"]
+			description: ["Grace makes every step lighter. Craft one for the road."]
+			icon: "realmrpg_quests:necklace_of_grace"
+			id: "6E173276D32E6196"
+			rewards: [
+				{
+					id: "62284442D56BC284"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "593590F56E31353D"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "3294141D520D9D88"
+				item: "realmrpg_quests:necklace_of_grace"
+				type: "item"
+			}]
+			title: "The Necklace of Grace"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6E173276D32E6196"]
+			description: ["Never go hungry. A prize for the long trip."]
+			icon: "realmrpg_quests:necklace_of_satiety"
+			id: "118BFD9BFB9C0B72"
+			rewards: [
+				{
+					id: "460A2304BFA6E69B"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "54313F8FB751A127"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "3C7B9E6486405454"
+				item: "realmrpg_quests:necklace_of_satiety"
+				type: "item"
+			}]
+			title: "The Necklace of Satiety"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["118BFD9BFB9C0B72"]
+			description: ["A ring of fire protects against heat. Craft one and a lesser ring."]
+			icon: "realmrpg_quests:ring_of_fire"
+			id: "4ED2D18C79AF59E5"
+			rewards: [
+				{
+					id: "2B3092D02CC8DE70"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "5999119985C9749B"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "03682A23BE36DE5F"
+					item: "realmrpg_quests:ring_of_fire"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "529224BA30B984C5"
+					item: "realmrpg_quests:ring_of_fire_lesser"
+					type: "item"
+				}
+			]
+			title: "Ring of Fire"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4ED2D18C79AF59E5"]
+			description: ["A ring of ice resists cold and slow effects."]
+			icon: "realmrpg_quests:ring_of_ice"
+			id: "647C432C1DDA7AB9"
+			rewards: [
+				{
+					id: "15FD1591A57FF206"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "7EFBFEEC9E43B062"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "4C90063AFC0B60C9"
+				item: "realmrpg_quests:ring_of_ice"
+				type: "item"
+			}]
+			title: "Ring of Ice"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["647C432C1DDA7AB9"]
+			description: ["A ring of wind carries you faster along roads and across plains. Craft one and wear it daily."]
+			icon: "realmrpg_quests:ring_of_wind"
+			id: "1E0FC4D17E0CC999"
+			rewards: [
+				{
+					id: "5A6386C024D7C6C3"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "53FE6E93B91F9201"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "586E31B6DAC9C9F6"
+				item: "realmrpg_quests:ring_of_wind"
+				type: "item"
+			}]
+			title: "Ring of Wind"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1E0FC4D17E0CC999"]
+			description: ["A ring that doubles the experience you gain. The best of the set."]
+			icon: "realmrpg_quests:ring_of_exp"
+			id: "343BE657EFCF927D"
+			rewards: [
+				{
+					count: 8
+					id: "215C19814919F1BC"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "3281AA68B78009CB"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "2D6097DB5497AC8F"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "6DFAFBFA99FE9ED2"
+				item: "realmrpg_quests:ring_of_exp"
+				type: "item"
+			}]
+			title: "Ring of Experience"
+			x: 18.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Rings, necklaces and rare fruits from a wider world."]
+	title: "Realm RPG Treasures"
+}

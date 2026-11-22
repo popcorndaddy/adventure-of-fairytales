@@ -1,0 +1,38 @@
+{
+	"name": "Forbidden Tools",
+	"icon": "forbidden_arcanus:dark_rune",
+	"category": "patchouli:magic",
+	"sortnum": 5,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "$(li)$(l:magic/forbidden2#arcane_crystal_obelisk)Arcane Crystal Obelisk$(/l): gathers aureal for a nearby forge on its own.$(li)$(l:magic/forbidden2#quantum_catcher)Quantum Catcher$(/l): carries a living mob in your pocket.$(li)$(l:magic/forbidden#deorum_ingot)Deorum$(/l) and $(l:magic/forbidden2#edelwood_log)Edelwood$(/l): the mod's finest materials."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Every ritual is listed in JEI."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "forbidden_arcanus:arcane_crystal_obelisk",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "arcane_crystal_obelisk"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "forbidden_arcanus:quantum_catcher",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "quantum_catcher"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "forbidden_arcanus:edelwood_log",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "edelwood_log"
+		}
+	]
+}

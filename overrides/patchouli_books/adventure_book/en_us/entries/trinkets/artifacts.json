@@ -1,0 +1,40 @@
+{
+	"name": "Artifacts",
+	"icon": "artifacts:cloud_in_a_bottle",
+	"category": "patchouli:trinkets",
+	"sortnum": 1,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Artifacts do one thing each, and do it well: double jumps, fire immunity, night vision, heavier fists.$(br2)They can't be crafted. Look in dungeon chests, underground camps, and the mouths of $(l)mimics$()."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "artifacts:cloud_in_a_bottle",
+			"text": "Double jump.",
+			"link_recipe": true,
+			"anchor": "cloud_in_a_bottle"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "artifacts:running_shoes",
+			"text": "Faster running and step-up.",
+			"link_recipe": true,
+			"anchor": "running_shoes"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "artifacts:flame_pendant",
+			"text": "Sets attackers on fire.",
+			"link_recipe": true,
+			"anchor": "flame_pendant"
+		}
+	],
+	"extra_recipe_mappings": {
+		"artifacts:cloud_in_a_bottle": 0,
+		"artifacts:running_shoes": 0,
+		"artifacts:flame_pendant": 0,
+		"artifacts:power_glove": 0
+	}
+}

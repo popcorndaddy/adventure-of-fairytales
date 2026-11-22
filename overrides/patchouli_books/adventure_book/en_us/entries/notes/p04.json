@@ -1,0 +1,18 @@
+{
+	"name": "The Pumpkin Rider",
+	"icon": "minecraft:paper",
+	"category": "patchouli:notes",
+	"sortnum": 5,
+	"read_by_default": false,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Under the ground there are catacombs, old tombs from before my time. The dead down there don't stay down.$(br2)The Dead King sits on a throne at the heart of them. I went down once. I came back up a lot faster than I went in."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(o)Gravediggers mutter that the Dead King guards the Undead Eye, deep in the Catacombs. A Wayward Compass knows the way.$()"
+		}
+	],
+	"advancement": "kubejs:fairytale/p04"
+}

@@ -1,0 +1,71 @@
+{
+	"name": "End Remastered",
+	"icon": "endrem:old_eye",
+	"category": "patchouli:end",
+	"sortnum": 0,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "The End portal won't take Eyes of Ender here. It needs $(l)twelve$() special eyes, and each one is held by a boss. They're in no chest, no recipe. An eye that comes any other way crumbles in your hand."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Everyone who helps bring the boss down gets one.$(br2)$(li)$(l:end/eyes#lost_eye)Lost Eye$(/l): the Ferrous Wroughtnaut$(li)$(l:end/eyes#cold_eye)Cold Eye$(/l): the Frostmaw$(li)$(l:end/eyes#rogue_eye)Rogue Eye$(/l): Umvuthi$(li)$(l:end/eyes#witch_eye)Witch Eye$(/l): Sir Pumpkinhead$(li)$(l:end/eyes#undead_eye)Undead Eye$(/l): the Dead King"
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(li)$(l:end/eyes#black_eye)Black Eye$(/l): Captain Cornelia"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "endrem:lost_eye",
+			"text": "From the Ferrous Wroughtnaut.",
+			"link_recipe": true,
+			"anchor": "lost_eye"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "endrem:cold_eye",
+			"text": "From the Frostmaw.",
+			"link_recipe": true,
+			"anchor": "cold_eye"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "endrem:rogue_eye",
+			"text": "From Umvuthi.",
+			"link_recipe": true,
+			"anchor": "rogue_eye"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "endrem:witch_eye",
+			"text": "From Sir Pumpkinhead.",
+			"link_recipe": true,
+			"anchor": "witch_eye"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "endrem:undead_eye",
+			"text": "From the Dead King.",
+			"link_recipe": true,
+			"anchor": "undead_eye"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "endrem:black_eye",
+			"text": "From Captain Cornelia.",
+			"link_recipe": true,
+			"anchor": "black_eye"
+		}
+	],
+	"extra_recipe_mappings": {
+		"endrem:lost_eye": 0,
+		"endrem:cold_eye": 0,
+		"endrem:rogue_eye": 0,
+		"endrem:witch_eye": 0,
+		"endrem:undead_eye": 0,
+		"endrem:black_eye": 0
+	}
+}

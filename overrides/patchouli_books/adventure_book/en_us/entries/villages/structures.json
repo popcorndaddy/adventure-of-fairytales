@@ -1,0 +1,23 @@
+{
+	"name": "Structures",
+	"icon": "explorerscompass:explorerscompass",
+	"category": "patchouli:villages",
+	"sortnum": 4,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "The world is crowded with places to explore: redesigned dungeons and temples, sprawling underground crawls, roadside taverns, and the lairs of the $(l:bosses/mowzie)Mowzie's bosses$(/l).$(br2)An $(l:villages/structures#explorerscompass)Explorer's Compass$(/l) finds whatever you're looking for."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "explorerscompass:explorerscompass",
+			"text": "Pick a structure and it points the way.",
+			"link_recipe": true,
+			"anchor": "explorerscompass"
+		}
+	],
+	"extra_recipe_mappings": {
+		"explorerscompass:explorerscompass": 0
+	}
+}

@@ -1,0 +1,18 @@
+{
+	"name": "The Worm",
+	"icon": "minecraft:paper",
+	"category": "patchouli:notes",
+	"sortnum": 10,
+	"read_by_default": false,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "There's a pyramid in the desert that isn't like the others. The locals won't go near it.$(br2)Whatever is inside won't wake on its own. It wakes for one thing: the Necklace of the Desert. I'd rather it stayed asleep, but you need what it's holding."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(o)The Ancient Remnant sleeps on the Old Eye, inside the Cursed Pyramid out in the desert.$()"
+		}
+	],
+	"advancement": "kubejs:fairytale/p09"
+}

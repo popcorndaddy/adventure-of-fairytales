@@ -1,0 +1,475 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "07_creatures_of_the_wild"
+	group: "01FA0B74B5D0B1FB"
+	icon: "alexsmobs:animal_dictionary"
+	id: "420BB4B611EB2617"
+	order_index: 6
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Alex's Mobs comes with a dictionary of every creature. Craft one and start your field notes."]
+			icon: "alexsmobs:animal_dictionary"
+			id: "0743B3C310C2EBEB"
+			rewards: [
+				{
+					count: 32
+					id: "10B348B1032E44B9"
+					item: "minecraft:arrow"
+					type: "item"
+				}
+				{
+					id: "336C5DDDBD149FA0"
+					type: "xp"
+					xp: 50
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "74FD12146F117007"
+				item: "alexsmobs:animal_dictionary"
+				type: "item"
+			}]
+			title: "The Animal Dictionary"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0743B3C310C2EBEB"]
+			description: ["A falconry glove and hood let you fly a trained bald eagle."]
+			icon: "alexsmobs:falconry_glove"
+			id: "44E8BC1331DCA00E"
+			rewards: [
+				{
+					count: 3
+					id: "6E39655E579C49D5"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "1715BA62AE951725"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "18F3E819B4E0A8BA"
+					item: "alexsmobs:falconry_glove"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "3ED024D6C0C61BD5"
+					item: "alexsmobs:falconry_hood"
+					type: "item"
+				}
+			]
+			title: "Falconry"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["44E8BC1331DCA00E"]
+			description: ["Bananas grow in the jungle. Bring some home and keep the peel away from your feet."]
+			icon: "alexsmobs:banana"
+			id: "0767C5DE0C4DF050"
+			rewards: [
+				{
+					count: 6
+					id: "534B2F22F1C0C108"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "6B0E51F8C28AABCC"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 8L
+					id: "138230D889A297D7"
+					item: "alexsmobs:banana"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "1080E11306EAA5EF"
+					item: "alexsmobs:banana_peel"
+					type: "item"
+				}
+			]
+			title: "Fruit of the Jungle"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0767C5DE0C4DF050"]
+			description: ["Gazelles graze on the savanna and flee at the first sign of danger. Hunt one and learn how fast it runs."]
+			icon: "minecraft:book"
+			id: "2C865FC191404027"
+			rewards: [
+				{
+					count: 16
+					id: "5B2E91032CEB32AB"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "79BFC6FDA121E2D5"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				entity: "alexsmobs:gazelle"
+				id: "19697CCA325DB879"
+				type: "kill"
+				value: 1L
+			}]
+			title: "Savanna Hunters"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2C865FC191404027"]
+			description: ["Grizzlies are strong and hungry. Hunt one and take its fur."]
+			icon: "alexsmobs:bear_fur"
+			id: "46E0A9B7B6E35290"
+			rewards: [
+				{
+					count: 6
+					id: "18E268B66CB37A0A"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "2CB616A191B0048C"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					entity: "alexsmobs:grizzly_bear"
+					id: "11AFCAC29CC2590A"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "767BDDA73248B208"
+					item: "alexsmobs:bear_fur"
+					type: "item"
+				}
+			]
+			title: "The Grizzly"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["46E0A9B7B6E35290"]
+			description: ["Crocodiles lurk in rivers and swamps. Take their scutes and a bite of their meat."]
+			icon: "alexsmobs:crocodile_scute"
+			id: "647EBA10534C6A4C"
+			rewards: [
+				{
+					count: 6
+					id: "331A276A7DD981D9"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "426941A7B86E15CE"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					entity: "alexsmobs:crocodile"
+					id: "23934EE2A9C375B3"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "7CBAAD0C641AAE42"
+					item: "alexsmobs:crocodile_scute"
+					type: "item"
+				}
+			]
+			title: "The Crocodile"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["647EBA10534C6A4C"]
+			description: ["Bison roam the open plains. Their fur makes warm bedding and thick armor."]
+			icon: "alexsmobs:bison_fur"
+			id: "48D906806592A7B5"
+			rewards: [
+				{
+					count: 5
+					id: "52250ADDB498BAF9"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "4355A63B6FCD1BD8"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					entity: "alexsmobs:bison"
+					id: "27EC0A889D5A2FFF"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "09F7033D7DD7F7FD"
+					item: "alexsmobs:bison_fur"
+					type: "item"
+				}
+			]
+			title: "Bison and Plains"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["48D906806592A7B5"]
+			description: ["Endergrades drift in the End. Hunt one and take their residue."]
+			icon: "alexsmobs:ender_residue"
+			id: "60A009A32D560EBB"
+			rewards: [
+				{
+					id: "5C1ABDA8F47D14F8"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "6CECE3D64F483B92"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					entity: "alexsmobs:endergrade"
+					id: "5BFDB6A499165777"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "1F4870A9330F951F"
+					item: "alexsmobs:ender_residue"
+					type: "item"
+				}
+			]
+			title: "The Endergrade"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["60A009A32D560EBB"]
+			description: ["Dropbears wait in the trees. Look up and survive the ambush."]
+			icon: "alexsmobs:dropbear_claw"
+			id: "5132B8B7F8628AC2"
+			rewards: [
+				{
+					id: "02BCD297D23AA636"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "5493E9AB0F87AD82"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					entity: "alexsmobs:dropbear"
+					id: "6C4C90C440CFBDF3"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "3DA0967AE23728FE"
+					item: "alexsmobs:dropbear_claw"
+					type: "item"
+				}
+			]
+			title: "The Roar of the Dropbear"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5132B8B7F8628AC2"]
+			description: ["The gorilla guards the jungle. Take it on and bring back something to prove it."]
+			icon: "minecraft:book"
+			id: "658BD8D119E06084"
+			rewards: [
+				{
+					count: 8
+					id: "153FBD1B918B4B7C"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "5078AA5D63D3C206"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				entity: "alexsmobs:gorilla"
+				id: "69723CDCF711C2EA"
+				type: "kill"
+				value: 1L
+			}]
+			title: "Gorilla Warfare"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["658BD8D119E06084"]
+			description: ["The cachalot whale hunts in deep oceans. Face it only with a good boat and a plan."]
+			icon: "alexsmobs:cachalot_whale_tooth"
+			id: "2CACF556037AD8F3"
+			rewards: [
+				{
+					count: 2
+					id: "255A2200EA698D6C"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "6DD4427C35C4DA11"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					entity: "alexsmobs:cachalot_whale"
+					id: "66DB479018CE7A43"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "0DF9C549C318D2BA"
+					item: "alexsmobs:cachalot_whale_tooth"
+					type: "item"
+				}
+			]
+			title: "The Great Cachalot"
+			x: 20.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2CACF556037AD8F3"]
+			description: ["Hunt the crimson mosquito in the Nether. Its sac is a rare drop."]
+			icon: "alexsmobs:blood_sac"
+			id: "7D30C361B40FFCEC"
+			rewards: [
+				{
+					count: 8
+					id: "54171F60C4305D75"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "5CE4E9BF5A0C7BD7"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "78DC80BBFF3F0D8E"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					entity: "alexsmobs:crimson_mosquito"
+					id: "457AB24DA5C2AE49"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "26F513F0FAB73F71"
+					item: "alexsmobs:blood_sac"
+					type: "item"
+				}
+			]
+			title: "The Warped Mosquito"
+			x: 22.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["7D30C361B40FFCEC"]
+			description: ["Farseers are strange. Find one, and its arm becomes yours."]
+			icon: "alexsmobs:farseer_arm"
+			id: "36B966FF9340A4AE"
+			rewards: [
+				{
+					count: 3
+					id: "7F957A695EFD6D04"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "3E2A064310A66F1F"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [
+				{
+					entity: "alexsmobs:farseer"
+					id: "0218ED15B03460F0"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "3A62D81B8788CB01"
+					item: "alexsmobs:farseer_arm"
+					type: "item"
+				}
+			]
+			title: "Farseer's Reach"
+			x: 24.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Alex's Mobs fills every biome with something new."]
+	title: "Creatures of the Wild"
+}

@@ -1,0 +1,27 @@
+{
+	"name": "Aquamirae",
+	"icon": "aquamirae:frozen_key",
+	"category": "patchouli:bosses",
+	"sortnum": 3,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Over the deep frozen ocean lies the $(l)Ice Maze$(), a graveyard of pirate ships."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Take a Shell Horn from a pirate captain and blow it near open water to call up the $(l)Ghost of Captain Cornelia$(). Her $(l:bosses/aquamirae#frozen_key)Frozen Key$(/l) opens a chest in a shelter below.$(br2)The Maze Mother hunts near the anglerfish. The Shipbreaker can't be beaten. Run."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "aquamirae:frozen_key",
+			"text": "Opens one Frozen Chest.",
+			"link_recipe": true,
+			"anchor": "frozen_key"
+		}
+	],
+	"extra_recipe_mappings": {
+		"aquamirae:frozen_key": 0
+	}
+}

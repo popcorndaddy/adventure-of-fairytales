@@ -1,0 +1,360 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "25_advanced_netherite"
+	group: "03F7C10E6FAF5CEC"
+	icon: "advancednetherite:netherite_diamond_ingot"
+	id: "60F04B06B778E5BB"
+	order_index: 1
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Combine a diamond into your netherite for a stronger alloy. This is the first advanced ingot."]
+			icon: "advancednetherite:netherite_diamond_ingot"
+			id: "13383B5AF74966E2"
+			rewards: [
+				{
+					count: 8
+					id: "4402E065CF1EC394"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "7597C052FCE90EDA"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "71B5AAA03AD514AE"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "609C72ED30C0F2E0"
+				item: "advancednetherite:netherite_diamond_ingot"
+				type: "item"
+			}]
+			title: "Netherite and Diamond"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["13383B5AF74966E2"]
+			description: ["A pickaxe and a sword in the new alloy. Faster and harder than plain netherite."]
+			icon: {
+				Count: 1
+				id: "advancednetherite:netherite_diamond_pickaxe"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "66344E20C4A842FA"
+			rewards: [
+				{
+					count: 8
+					id: "2E74AC6DC2BDE523"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "56B3105E20A31BA5"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "07F3F5C64F84BC22"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "767169210918EAC9"
+					item: {
+						Count: 1
+						id: "advancednetherite:netherite_diamond_pickaxe"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "5B15C2EC0665167F"
+					item: {
+						Count: 1
+						id: "advancednetherite:netherite_diamond_sword"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Diamond Netherite Tools"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["66344E20C4A842FA"]
+			description: ["A full chestplate and helmet in the new alloy."]
+			icon: {
+				Count: 1
+				id: "advancednetherite:netherite_diamond_chestplate"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "6A9D0FCAA4B38FA8"
+			rewards: [
+				{
+					count: 2
+					id: "2A10BF36768CE3D7"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "17EB5DDAD2216726"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "212A2E605F06DAF4"
+					item: {
+						Count: 1
+						id: "advancednetherite:netherite_diamond_chestplate"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "406E65AD61A39998"
+					item: {
+						Count: 1
+						id: "advancednetherite:netherite_diamond_helmet"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Diamond Netherite Armor"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6A9D0FCAA4B38FA8"]
+			description: ["Emerald-infused netherite trades hardness for speed. Smelt the new ingot."]
+			icon: "advancednetherite:netherite_emerald_ingot"
+			id: "72853698BD885867"
+			rewards: [
+				{
+					count: 2
+					id: "6DCA2F1F223250D7"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "42595D5D60B190F6"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "1AD5A389296D5978"
+				item: "advancednetherite:netherite_emerald_ingot"
+				type: "item"
+			}]
+			title: "Netherite and Emerald"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["72853698BD885867"]
+			description: ["An axe and a shovel in emerald netherite, the choice of a fast builder."]
+			icon: {
+				Count: 1
+				id: "advancednetherite:netherite_emerald_axe"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "5E2B2CED48C30102"
+			rewards: [
+				{
+					count: 2
+					id: "6F777F312CAAB2C6"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "33637E2B74DBCC4E"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "2C5D17B94942E286"
+					item: {
+						Count: 1
+						id: "advancednetherite:netherite_emerald_axe"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "5A2CC2AEF6331910"
+					item: {
+						Count: 1
+						id: "advancednetherite:netherite_emerald_shovel"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Emerald Tools"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5E2B2CED48C30102"]
+			description: ["A gold alloy that enchants well. A great ingot for a spell caster."]
+			icon: "advancednetherite:netherite_gold_ingot"
+			id: "2A4E6F1D911C02AB"
+			rewards: [
+				{
+					count: 2
+					id: "2EA9633D06664FA4"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "5E2F0FCDB312DFF9"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "08E44721F72DDCF4"
+				item: "advancednetherite:netherite_gold_ingot"
+				type: "item"
+			}]
+			title: "Netherite and Gold"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2A4E6F1D911C02AB"]
+			description: ["The simplest alloy, and a fine armor for the long road."]
+			icon: "advancednetherite:netherite_iron_ingot"
+			id: "31BFE1D1209078B3"
+			rewards: [
+				{
+					count: 2
+					id: "7B8C8E2BDBD88DFF"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "6B78B2DC59824BFA"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "4885C8FF9ACCED03"
+				item: "advancednetherite:netherite_iron_ingot"
+				type: "item"
+			}]
+			title: "Netherite and Iron"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["31BFE1D1209078B3"]
+			description: ["Gold and iron netherite pickaxes, a pair of tools for a master smith."]
+			icon: {
+				Count: 1
+				id: "advancednetherite:netherite_gold_pickaxe"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "2F9A301526515058"
+			rewards: [
+				{
+					count: 3
+					id: "6B793FACCB3A2526"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "7C54768FC35690C6"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "7196A7F527B0CCED"
+					item: {
+						Count: 1
+						id: "advancednetherite:netherite_gold_pickaxe"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "0B886E6AFAF64CCF"
+					item: {
+						Count: 1
+						id: "advancednetherite:netherite_iron_pickaxe"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "The Alloy Smith"
+			x: 14.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Netherite is only the beginning."]
+	title: "Advanced Netherite"
+}

@@ -1,0 +1,14 @@
+{
+  "bookGuiScale": 0,
+  "clickedVisualize": false,
+  "bookData": {
+    "patchouli:adventure_book": {
+      "viewedEntries": [
+        "patchouli:notes/start",
+        "patchouli:world/about"
+      ],
+      "bookmarks": [],
+      "completedManualQuests": []
+    }
+  }
+}

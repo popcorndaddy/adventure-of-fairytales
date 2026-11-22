@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:writable_book"
+    },
+    "title": {
+      "text": "Apollo's Notes"
+    },
+    "description": {
+      "text": "Pages you've taken back."
+    },
+    "background": "minecraft:textures/block/dark_oak_planks.png",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "given": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+	"name": "Bring It Home",
+	"icon": "kubejs:kings_crown",
+	"category": "patchouli:notes",
+	"sortnum": 18,
+	"read_by_default": false,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "The last page was blank when you found this book. It isn't now.$(br2)In different ink, in a hand you don't recognise:$(br2)$(o)Thank you. The roads will be safe again. — A.$()"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "kubejs:kings_crown",
+			"anchor": "kings_crown"
+		}
+	],
+	"advancement": "kubejs:fairytale/p17"
+}

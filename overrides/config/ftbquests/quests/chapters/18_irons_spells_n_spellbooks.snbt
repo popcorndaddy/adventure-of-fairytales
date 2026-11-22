@@ -1,0 +1,504 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "18_irons_spells_n_spellbooks"
+	group: "0367FDC07E543102"
+	icon: "irons_spellbooks:inscription_table"
+	id: "54DDA077BF853EA0"
+	order_index: 6
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["An inscription table writes spells onto scrolls and into your spell book. It is bound with an Ars Nouveau Worn Notebook. Craft one and some common ink."]
+			icon: "irons_spellbooks:inscription_table"
+			id: "63F73E7E78668532"
+			rewards: [
+				{
+					count: 3
+					id: "701D8E6E67C2F6F9"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "16DA8C8799FE6685"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "3AEB321ED2A60567"
+					item: "irons_spellbooks:inscription_table"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "170C37EA71B988BA"
+					item: "irons_spellbooks:common_ink"
+					type: "item"
+				}
+			]
+			title: "The Inscription Table"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: [
+				"63F73E7E78668532"
+				"3ACB8B218B1AA644"
+			]
+			description: ["A scroll forge makes spell scrolls from ink and paper. It is built around a Source Gem Block from Ars Nouveau. Arcane Essence also comes from an Ars Imbuement Chamber."]
+			icon: "irons_spellbooks:scroll_forge"
+			id: "56A8A3029B594859"
+			rewards: [
+				{
+					count: 8
+					id: "106A14471B063F8D"
+					item: "minecraft:golden_carrot"
+					type: "item"
+				}
+				{
+					id: "32442774A865910D"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "0CF4DC8A70674884"
+					item: "irons_spellbooks:scroll_forge"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 4L
+					id: "634DA293F51DE8F1"
+					item: "irons_spellbooks:arcane_essence"
+					type: "item"
+				}
+			]
+			title: "The Scroll Forge"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["56A8A3029B594859"]
+			description: ["A spell book holds your spells. Start with an iron one."]
+			icon: "irons_spellbooks:iron_spell_book"
+			id: "2FD729041BC77CCA"
+			rewards: [
+				{
+					count: 3
+					id: "5B36F3B5C0EACC4D"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "4CB55815C7F86E7B"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "23633405195B38DE"
+				item: "irons_spellbooks:iron_spell_book"
+				type: "item"
+			}]
+			title: "An Iron Spell Book"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2FD729041BC77CCA"]
+			description: ["Runes are the building blocks of spellcasting gear. Craft blank runes and one of fire."]
+			icon: "irons_spellbooks:blank_rune"
+			id: "2A50DE84563689CD"
+			rewards: [
+				{
+					count: 5
+					id: "4E9B4877398BE385"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "6B7FCD121572473D"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 4L
+					id: "045686B02F2A4551"
+					item: "irons_spellbooks:blank_rune"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "0CEFD6F22B9EAD85"
+					item: "irons_spellbooks:fire_rune"
+					type: "item"
+				}
+			]
+			title: "Runes of Power"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2A50DE84563689CD"]
+			description: ["An alchemist's cauldron makes elixirs and potions of power."]
+			icon: "irons_spellbooks:alchemist_cauldron"
+			id: "6762CB99B1E0FCD6"
+			rewards: [
+				{
+					count: 10
+					id: "51A508E942ED059C"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "1FC7E0BAABC45DE9"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "06C30481AC4444C8"
+				item: "irons_spellbooks:alchemist_cauldron"
+				type: "item"
+			}]
+			title: "The Alchemist's Cauldron"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6762CB99B1E0FCD6"]
+			description: ["Mithril ore lies deep in the deepslate, and only a netherite pickaxe will take it. Blast the raw mithril into scrap; four scraps make an ingot. An Arcane Ingot is a plain iron, copper or gold ingot ringed with eight Arcane Essence."]
+			icon: "irons_spellbooks:mithril_ore"
+			id: "0A2A987E0705E472"
+			rewards: [
+				{
+					id: "7B73F84B14D48A80"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "7F6848C23FA55C89"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "072C83B35ABDCE69"
+					item: "irons_spellbooks:mithril_ingot"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "350A0F2B23277832"
+					item: "irons_spellbooks:arcane_ingot"
+					type: "item"
+				}
+			]
+			title: "Arcane Metal"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0A2A987E0705E472"]
+			description: ["The arcane anvil upgrades spellcasting gear with orbs and runes."]
+			icon: "irons_spellbooks:arcane_anvil"
+			id: "629152E1BB981623"
+			rewards: [
+				{
+					id: "78EBAB8170ECC693"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "78143A2987D0A8CD"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "5B5C6A403B47188F"
+				item: "irons_spellbooks:arcane_anvil"
+				type: "item"
+			}]
+			title: "The Arcane Anvil"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["629152E1BB981623"]
+			description: ["A cooldown ring and a cast time ring let a mage cast faster and cast again sooner."]
+			icon: "irons_spellbooks:cooldown_ring"
+			id: "1FAA9928C5EC917C"
+			rewards: [
+				{
+					id: "4F77E36038BD8B46"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "2D84F712BF3DC169"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "5A96FF0BECEEB0FB"
+					item: "irons_spellbooks:cooldown_ring"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "2F980D3BB21D9342"
+					item: "irons_spellbooks:cast_time_ring"
+					type: "item"
+				}
+			]
+			title: "Rings of Haste"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1FAA9928C5EC917C"]
+			description: ["Cultists gather in the dark with spells of blood. Fight them and take their robes."]
+			icon: {
+				Count: 1
+				id: "irons_spellbooks:cultist_helmet"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "3BA73E3B7A77C9B5"
+			rewards: [
+				{
+					id: "14071D73902E8EF4"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "01131C701EADB115"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					entity: "irons_spellbooks:cultist"
+					id: "7C533129C0C6F197"
+					type: "kill"
+					value: 4L
+				}
+				{
+					consume_items: false
+					id: "031D8401CB223996"
+					item: {
+						Count: 1
+						id: "irons_spellbooks:cultist_helmet"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "The Cultists"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3BA73E3B7A77C9B5"]
+			description: ["The apothecarist brews dangerous potions. Take the fight to him in his own tower."]
+			icon: "minecraft:book"
+			id: "0D61ED82A8324D49"
+			rewards: [
+				{
+					count: 8
+					id: "4A2CB99B8BFB6219"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "3D308DA46EE23DE4"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "6F419A6C20AD9347"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				entity: "irons_spellbooks:apothecarist"
+				id: "1C36FA27DAB11162"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Apothecarist"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0D61ED82A8324D49"]
+			description: ["Cryomancers freeze everything. Bring fire resistance and a warm cloak."]
+			icon: "minecraft:book"
+			id: "53BF1BF57E12B362"
+			rewards: [
+				{
+					count: 2
+					id: "51CDB086AF1D72C8"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "31C88AE67AA77282"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				entity: "irons_spellbooks:cryomancer"
+				id: "40F0BD03F1BF9AE2"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Cryomancer"
+			x: 20.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["53BF1BF57E12B362"]
+			description: ["The archevoker commands evokers and lightning. Look to the sky."]
+			icon: "minecraft:book"
+			id: "4234461E709948D6"
+			rewards: [
+				{
+					count: 2
+					id: "6680671DF98B8AAA"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "7A7D0DF26ADCA7E8"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				entity: "irons_spellbooks:archevoker"
+				id: "7A7117B196C31EA6"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Archevoker"
+			x: 22.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4234461E709948D6"]
+			description: ["A fortress of the dead lies in the earth. Cut through the zombies and reach the king."]
+			icon: "minecraft:book"
+			id: "48123A5E7AA04FB0"
+			rewards: [
+				{
+					count: 8
+					id: "069B6A7A4C1385C3"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "72A382716624EC73"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "70F77090425B6C1E"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				entity: "irons_spellbooks:catacombs_zombie"
+				id: "0915272F72FDF32E"
+				type: "kill"
+				value: 8L
+			}]
+			title: "The Catacombs"
+			x: 24.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["48123A5E7AA04FB0"]
+			description: ["The dead king rules the catacombs. Defeat him and take his phylactery."]
+			icon: "irons_spellbooks:dead_king_phylactery"
+			id: "30238455DF121E28"
+			rewards: [
+				{
+					id: "176A9ABA701EA1C8"
+					item: "minecraft:netherite_scrap"
+					type: "item"
+				}
+				{
+					count: 2
+					id: "6363926C3EA988D6"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "1CDF295D6CB41C92"
+					type: "xp"
+					xp: 550
+				}
+			]
+			tasks: [
+				{
+					entity: "irons_spellbooks:dead_king"
+					id: "2B392C7ED7DA73FB"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "27AC0E17F44D482B"
+					item: "irons_spellbooks:dead_king_phylactery"
+					type: "item"
+				}
+			]
+			title: "The Dead King"
+			x: 26.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Ink, scrolls and the arcane arts."]
+	title: "Iron's Spells 'n Spellbooks"
+}

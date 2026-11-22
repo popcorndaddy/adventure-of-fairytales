@@ -1,0 +1,22 @@
+{
+	"name": "The Grove",
+	"icon": "minecraft:paper",
+	"category": "patchouli:notes",
+	"sortnum": 4,
+	"read_by_default": false,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "The next one is the strangest thing in this book."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Somebody left a ring of candles around a rotten pumpkin, out in the middle of nowhere. Break the pumpkin and a rider comes out of it. Sir Pumpkinhead, people call him. Kill the horse first if you can."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(o)Sir Pumpkinhead rides with the Witch Eye. His candle shrines turn up all over the Overworld, and they're easiest to spot at night.$()"
+		}
+	],
+	"advancement": "kubejs:fairytale/p03"
+}

@@ -1,0 +1,42 @@
+{
+	"name": "Create: Brass",
+	"icon": "create:brass_ingot",
+	"category": "patchouli:crafting",
+	"sortnum": 3,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Copper and zinc mixed over heat make $(l:crafting/create2#brass_ingot)brass$(/l), and brass makes the clever parts: the $(l:crafting/create2#crafting_kinetics_deployer)Deployer$(/l), the $(l:crafting/create2#crafting_kinetics_deployer)Mechanical Arm$(/l), belts and $(l:crafting/create2#crafting_kinetics_belt_connector)Depots$(/l), and sequenced assembly lines for precision work."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "A Blaze Burner needs a blaze. Right-click one with an empty burner."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "create:brass_ingot",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "brass_ingot"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "create:crafting/kinetics/deployer",
+			"recipe2": "create:crafting/kinetics/mechanical_arm",
+			"anchor": "crafting_kinetics_deployer"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "create:crafting/kinetics/belt_connector",
+			"recipe2": "create:crafting/kinetics/depot",
+			"anchor": "crafting_kinetics_belt_connector"
+		}
+	],
+	"extra_recipe_mappings": {
+		"create:brass_ingot": 0,
+		"create:deployer": 0,
+		"create:depot": 0,
+		"create:blaze_burner": 0
+	}
+}

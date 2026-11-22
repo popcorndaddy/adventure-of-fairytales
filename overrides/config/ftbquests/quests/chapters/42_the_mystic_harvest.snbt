@@ -1,0 +1,509 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "42_the_mystic_harvest"
+	group: "0367FDC07E543102"
+	icon: "mysticalagriculture:infusion_altar"
+	id: "0AA9AE8FE20C0258"
+	order_index: 8
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Inferium ore gives the essence everything here is built from. Mobs drop it rarely too."]
+			icon: "mysticalagriculture:inferium_essence"
+			id: "57BA357B86829B5A"
+			rewards: [
+				{
+					count: 8
+					id: "5922234CAC81163A"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "1D0D7C0283EDEDFC"
+					type: "xp"
+					xp: 60
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 16L
+				id: "65F2BBFD99705EF4"
+				item: "mysticalagriculture:inferium_essence"
+				type: "item"
+			}]
+			title: "Inferium"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["57BA357B86829B5A"]
+			description: ["Prosperity shards come from prosperity ore."]
+			icon: "mysticalagriculture:prosperity_shard"
+			id: "1D601CB08787C478"
+			rewards: [
+				{
+					count: 6
+					id: "5DF8666E108CFDFF"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "2EBC825056A3C2A4"
+					type: "xp"
+					xp: 60
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 8L
+				id: "74B67FE6C7065526"
+				item: "mysticalagriculture:prosperity_shard"
+				type: "item"
+			}]
+			title: "Prosperity"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1D601CB08787C478"]
+			description: ["Built from Create brass and arcane essence. Seeds are infused here, with pedestals around it."]
+			icon: "mysticalagriculture:infusion_altar"
+			id: "68804767F3FBC821"
+			rewards: [
+				{
+					count: 8
+					id: "3DDCCDE2AFB84BEF"
+					item: "create:brass_ingot"
+					type: "item"
+				}
+				{
+					id: "1DE0FA24DF56DBAA"
+					type: "xp"
+					xp: 120
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "7A10A077D83ACE4F"
+				item: "mysticalagriculture:infusion_altar"
+				type: "item"
+			}]
+			title: "The Infusion Altar"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["68804767F3FBC821"]
+			description: ["The altar needs eight pedestals around it to infuse anything."]
+			icon: "mysticalagriculture:infusion_pedestal"
+			id: "09145EF1E2466D54"
+			rewards: [
+				{
+					count: 16
+					id: "530D2B0CCEC7E7BA"
+					item: "minecraft:chiseled_stone_bricks"
+					type: "item"
+				}
+				{
+					id: "54443A3BDCE590CB"
+					type: "xp"
+					xp: 100
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 8L
+				id: "4EA23DE7D9DDFBCF"
+				item: "mysticalagriculture:infusion_pedestal"
+				type: "item"
+			}]
+			title: "Pedestals"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["09145EF1E2466D54"]
+			description: ["Infuse wheat seeds with inferium essence and sage seeds. Crops only drop a second seed on Essence Farmland, and more often on farmland of their own tier."]
+			icon: "mysticalagriculture:inferium_seeds"
+			id: "1E9FA83B32D035F1"
+			rewards: [
+				{
+					count: 32
+					id: "3D776ABCA4102359"
+					item: "minecraft:bone_meal"
+					type: "item"
+				}
+				{
+					id: "1D3F0E84C34F45CD"
+					type: "xp"
+					xp: 100
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "750D38C31C260DBE"
+				item: "mysticalagriculture:inferium_seeds"
+				type: "item"
+			}]
+			title: "Inferium Seeds"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1E9FA83B32D035F1"]
+			description: ["Every resource seed starts from one of these, and each needs a mandrake root."]
+			icon: "mysticalagriculture:prosperity_seed_base"
+			id: "6EFA522802B05C0C"
+			rewards: [
+				{
+					count: 16
+					id: "40A702A34BC13949"
+					item: "minecraft:wheat_seeds"
+					type: "item"
+				}
+				{
+					id: "5E9CD44F232B9E39"
+					type: "xp"
+					xp: 100
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "416C454A61ACA4F2"
+				item: "mysticalagriculture:prosperity_seed_base"
+				type: "item"
+			}]
+			title: "Prosperity Seed Base"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6EFA522802B05C0C"]
+			description: ["Crafts essence into ingots and gear, and mixes each essence tier into the next. It wears out after 500 uses."]
+			icon: {
+				Count: 1
+				id: "mysticalagriculture:infusion_crystal"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "6E03702218B5D60D"
+			rewards: [
+				{
+					id: "5CDB0CD9662A2481"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "147F88F47F0C08C9"
+					type: "xp"
+					xp: 120
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "749FAC7539756D51"
+				item: {
+					Count: 1
+					id: "mysticalagriculture:infusion_crystal"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "Infusion Crystal"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6E03702218B5D60D"]
+			description: ["In a Create mixer, four inferium essence around an Infusion Crystal make four prudentium. The crystal comes back with one use spent."]
+			icon: "mysticalagriculture:prudentium_essence"
+			id: "3250F128610B26EB"
+			rewards: [
+				{
+					count: 16
+					id: "4DDAE58E465A4F53"
+					item: "mysticalagriculture:inferium_essence"
+					type: "item"
+				}
+				{
+					id: "4E0EF980D94278A3"
+					type: "xp"
+					xp: 150
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 8L
+				id: "5108F5FE69B34504"
+				item: "mysticalagriculture:prudentium_essence"
+				type: "item"
+			}]
+			title: "Prudentium"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3250F128610B26EB"]
+			description: ["Four prudentium around an Infusion Crystal make four tertium."]
+			icon: "mysticalagriculture:tertium_essence"
+			id: "1BBB0F4B8D3FE030"
+			rewards: [
+				{
+					count: 8
+					id: "7D3EADAD5A205B26"
+					item: "minecraft:coal_block"
+					type: "item"
+				}
+				{
+					id: "62CECB612E7DE368"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 8L
+				id: "4D8C5C5004CBC252"
+				item: "mysticalagriculture:tertium_essence"
+				type: "item"
+			}]
+			title: "Tertium"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1BBB0F4B8D3FE030"]
+			description: ["Mystical machines are built on a Create brass casing."]
+			icon: "mysticalagriculture:machine_frame"
+			id: "169A4B1DE96D02ED"
+			rewards: [
+				{
+					count: 4
+					id: "6B49AF22983BBE81"
+					item: "create:brass_casing"
+					type: "item"
+				}
+				{
+					id: "6EA3C5F8929CD181"
+					type: "xp"
+					xp: 150
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "163E2647ADDE8A83"
+				item: "mysticalagriculture:machine_frame"
+				type: "item"
+			}]
+			title: "Machine Frame"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["169A4B1DE96D02ED"]
+			description: ["Four tertium around an Infusion Crystal make four imperium, in a heated mixer."]
+			icon: "mysticalagriculture:imperium_essence"
+			id: "6AE7305FD78D6BE2"
+			rewards: [
+				{
+					count: 2
+					id: "7C61B67E95F5F4C3"
+					item: "mysticalagriculture:imperium_gemstone"
+					type: "item"
+				}
+				{
+					id: "2A158E1C4590DD72"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 8L
+				id: "298E7D7E03340F15"
+				item: "mysticalagriculture:imperium_essence"
+				type: "item"
+			}]
+			title: "Imperium"
+			x: 20.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["31BBF0671558F90F"]
+			description: ["Four imperium around the Master Infusion Crystal make four supremium, in a heated mixer."]
+			icon: "mysticalagriculture:supremium_essence"
+			id: "5146999E6ECEE27C"
+			rewards: [
+				{
+					count: 4
+					id: "3D90F797CB49A2B1"
+					item: "create:blaze_cake"
+					type: "item"
+				}
+				{
+					id: "535EC8A3BABE30F9"
+					type: "xp"
+					xp: 500
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 8L
+				id: "4C39DCC0857FF929"
+				item: "mysticalagriculture:supremium_essence"
+				type: "item"
+			}]
+			title: "Supremium"
+			x: 24.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6AE7305FD78D6BE2"]
+			description: ["A crystal that never wears out. Imperium essence and gemstones around a Nether Star. Supremium and Insanium are mixed around it."]
+			icon: "mysticalagriculture:master_infusion_crystal"
+			id: "31BBF0671558F90F"
+			rewards: [
+				{
+					count: 16
+					id: "6D6847D6605E63EE"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "3F35E97255833A16"
+					type: "xp"
+					xp: 600
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "771E694CB83D7A33"
+				item: "mysticalagriculture:master_infusion_crystal"
+				type: "item"
+			}]
+			title: "Master Infusion Crystal"
+			x: 22.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5146999E6ECEE27C"]
+			description: ["Four supremium around the Master Infusion Crystal make four insanium, in a mixer superheated with a Blaze Cake. The last tier."]
+			icon: "mysticalagradditions:insanium_essence"
+			id: "5AC8446BFF3E6C60"
+			rewards: [
+				{
+					count: 2
+					id: "19D9C71862441EE4"
+					item: "minecraft:diamond_block"
+					type: "item"
+				}
+				{
+					id: "4B04B3A194F2689B"
+					type: "xp"
+					xp: 800
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 4L
+				id: "5A6A3BA296F24E74"
+				item: "mysticalagradditions:insanium_essence"
+				type: "item"
+			}]
+			title: "Insanium"
+			x: 26.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5AC8446BFF3E6C60"]
+			description: ["Built with Ignitium from Ignis. It awakens supremium into the best gear in the mod."]
+			icon: "mysticalagriculture:awakening_altar"
+			id: "715C70926CB480BB"
+			rewards: [
+				{
+					count: 2
+					id: "0947BF5288B73808"
+					item: "minecraft:netherite_ingot"
+					type: "item"
+				}
+				{
+					id: "7351639B01F6C4B7"
+					type: "xp"
+					xp: 1000
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "3B8EEED87B19660E"
+				item: "mysticalagriculture:awakening_altar"
+				type: "item"
+			}]
+			title: "The Awakening Altar"
+			x: 28.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["715C70926CB480BB"]
+			description: ["Two Insanium Ingots and two Insanium Gemstones around a piece of Awakened Supremium gear make its Insanium version. It keeps its enchantments, gems, quality and name."]
+			icon: {
+				Count: 1
+				id: "mysticaladaptations:insanium_chestplate"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "3EFD94C93F0D7217"
+			rewards: [
+				{
+					count: 2
+					id: "16A1121377FCBFF9"
+					item: "mysticalagradditions:insanium_gemstone"
+					type: "item"
+				}
+				{
+					id: "3A4A57F9ACFCB0D2"
+					type: "xp"
+					xp: 1200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "2594624D5C3AD003"
+				item: {
+					Count: 1
+					id: "mysticaladaptations:insanium_chestplate"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "Insanium Gear"
+			x: 30.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Mystical Agriculture, earned one tier at a time."]
+	title: "The Mystic Harvest"
+}

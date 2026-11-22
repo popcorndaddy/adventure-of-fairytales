@@ -1,0 +1,888 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "01_the_wanderers_path"
+	group: "01FA0B74B5D0B1FB"
+	icon: "minecraft:compass"
+	id: "12CACABB55D54E68"
+	order_index: 0
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Every legend starts at a workbench. Craft a crafting table and a bundle of sticks, and the kingdom begins to take shape around you."]
+			icon: "minecraft:book"
+			id: "12DAB37DD8D8598C"
+			rewards: [
+				{
+					count: 6
+					id: "08B29E60982DBEAD"
+					item: "minecraft:bread"
+					type: "item"
+				}
+				{
+					id: "1E1DBB0E33100180"
+					type: "xp"
+					xp: 25
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "475269DE60B7F80A"
+					item: "minecraft:crafting_table"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 16L
+					id: "2B016928F0319893"
+					item: "minecraft:stick"
+					type: "item"
+				}
+			]
+			title: "The First Page"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["12DAB37DD8D8598C"]
+			description: ["The hills offer stone and coal. Gather enough cobblestone and fuel to light and wall in your first camp."]
+			icon: "minecraft:cobblestone"
+			id: "33EDEA9B39E76F99"
+			rewards: [
+				{
+					count: 16
+					id: "76A0154EFB553AB5"
+					item: "minecraft:torch"
+					type: "item"
+				}
+				{
+					id: "6B736D04A6FD2E02"
+					type: "xp"
+					xp: 25
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 48L
+					id: "238B0D691B8EF932"
+					item: "minecraft:cobblestone"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 16L
+					id: "17D47FECE02FFF1F"
+					item: "minecraft:coal"
+					type: "item"
+				}
+			]
+			title: "Stonebound"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["33EDEA9B39E76F99"]
+			description: ["A furnace turns ore into metal and raw meat into dinner. Set one up beside a campfire and light the dark with torches."]
+			icon: "minecraft:furnace"
+			id: "26A840F2BFB1BEE2"
+			rewards: [
+				{
+					count: 16
+					id: "669D8F65AD2DFE49"
+					item: "minecraft:arrow"
+					type: "item"
+				}
+				{
+					id: "292BF8E17DBB8F89"
+					type: "xp"
+					xp: 25
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "3E154F6C0C95E6DA"
+					item: "minecraft:furnace"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "5F1FC83E85EDB186"
+					item: "minecraft:campfire"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 32L
+					id: "0ED240C83806DCEC"
+					item: "minecraft:torch"
+					type: "item"
+				}
+			]
+			title: "A Place by the Fire"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["26A840F2BFB1BEE2"]
+			description: ["A bed skips the night and sets your spawn. Craft one, and a chest for your first stash of belongings."]
+			icon: "minecraft:red_bed"
+			id: "770F6A1E7F048EDE"
+			rewards: [
+				{
+					count: 16
+					id: "7763F107EAAC0E92"
+					item: "minecraft:arrow"
+					type: "item"
+				}
+				{
+					id: "7161AC65EAFED7F2"
+					type: "xp"
+					xp: 25
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "3B113949D34B161F"
+					item: "minecraft:red_bed"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "5282041E0E7C2693"
+					item: "minecraft:chest"
+					type: "item"
+				}
+				{
+					advancement: "minecraft:adventure/sleep_in_bed"
+					criterion: ""
+					id: "3993995F491B3C7C"
+					type: "advancement"
+				}
+			]
+			title: "Sleep Tight"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["770F6A1E7F048EDE"]
+			description: ["Iron is the backbone of any kingdom. Mine it, smelt it and keep a healthy stack in reserve."]
+			icon: "minecraft:iron_ingot"
+			id: "1BCAE482A8F66BB1"
+			rewards: [
+				{
+					count: 3
+					id: "3501BFF0157A3B6D"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "0C8A5911248947FE"
+					type: "xp"
+					xp: 50
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 16L
+				id: "605A7250A6F5654F"
+				item: "minecraft:iron_ingot"
+				type: "item"
+			}]
+			title: "Veins of the Earth"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1BCAE482A8F66BB1"]
+			description: ["A pickaxe, an axe, a sword and a shield: the kit that carries you through the first dangerous nights."]
+			icon: {
+				Count: 1
+				id: "minecraft:iron_pickaxe"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "0024A9C985073202"
+			rewards: [
+				{
+					count: 4
+					id: "5AC9288F59E79053"
+					item: "minecraft:golden_carrot"
+					type: "item"
+				}
+				{
+					id: "1348BECBB8B21FC1"
+					type: "xp"
+					xp: 50
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "27F6F2A5E0F7CA6E"
+					item: {
+						Count: 1
+						id: "minecraft:iron_pickaxe"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "0F4F261E9A140C9A"
+					item: {
+						Count: 1
+						id: "minecraft:iron_axe"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "10F96A4452B511B9"
+					item: {
+						Count: 1
+						id: "minecraft:iron_sword"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "73CDD20A700B69B9"
+					item: {
+						Count: 1
+						id: "minecraft:shield"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Tools of a Knight"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0024A9C985073202"]
+			description: ["Plant seeds, tend the rows and bake your first loaves. A full larder is the start of every safe kingdom."]
+			icon: "minecraft:wheat"
+			id: "3E4ACAAC416CE080"
+			rewards: [
+				{
+					count: 6
+					id: "7694CDF366D75832"
+					item: "minecraft:cooked_beef"
+					type: "item"
+				}
+				{
+					id: "232EFA795BB1D7B2"
+					type: "xp"
+					xp: 50
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 32L
+					id: "711191150CD1EE22"
+					item: "minecraft:wheat"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 8L
+					id: "36425E3BFA8CBBC1"
+					item: "minecraft:bread"
+					type: "item"
+				}
+				{
+					advancement: "minecraft:husbandry/plant_seed"
+					criterion: ""
+					id: "304C66754D117913"
+					type: "advancement"
+				}
+			]
+			title: "Golden Fields"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3E4ACAAC416CE080"]
+			description: ["Breed a pair of animals, keep a couple of leads handy and carry shears for wool. Livestock means food, leather and wool."]
+			icon: "minecraft:lead"
+			id: "42079656D35BC0DB"
+			rewards: [
+				{
+					count: 32
+					id: "5CDE2E5B6F21FF97"
+					item: "minecraft:arrow"
+					type: "item"
+				}
+				{
+					id: "1B1A8E2A1B827D60"
+					type: "xp"
+					xp: 50
+				}
+			]
+			tasks: [
+				{
+					advancement: "minecraft:husbandry/breed_an_animal"
+					criterion: ""
+					id: "0DB6C39985D9AAC1"
+					type: "advancement"
+				}
+				{
+					consume_items: false
+					count: 2L
+					id: "27C0C6EC166CD1A5"
+					item: "minecraft:lead"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "75BD476EE340BC10"
+					item: {
+						Count: 1
+						id: "minecraft:shears"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Pastoral Life"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["42079656D35BC0DB"]
+			description: ["Forge a full suit of iron armor. Nothing in the overworld hits as hard as what waits beyond the gate."]
+			icon: {
+				Count: 1
+				id: "minecraft:iron_helmet"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "07375512BB22778F"
+			rewards: [
+				{
+					count: 8
+					id: "177C299D06A28F4D"
+					item: "minecraft:cooked_porkchop"
+					type: "item"
+				}
+				{
+					id: "6AC6FF448E7BEDED"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "5BD3893D01A8D18E"
+					item: {
+						Count: 1
+						id: "minecraft:iron_helmet"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "37CB37A9874A1D99"
+					item: {
+						Count: 1
+						id: "minecraft:iron_chestplate"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "5A0E0A3D936B03D4"
+					item: {
+						Count: 1
+						id: "minecraft:iron_leggings"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "76604AFA45877349"
+					item: {
+						Count: 1
+						id: "minecraft:iron_boots"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Guard of the Gate"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["07375512BB22778F"]
+			description: ["Find a village, trade with a villager and put together a purse of emeralds."]
+			icon: "minecraft:emerald"
+			id: "33650330DFBC6544"
+			rewards: [
+				{
+					count: 6
+					id: "469230E2F50063B1"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "57D048BAE046DC1E"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 16L
+					id: "7F641E0C0CB77232"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					advancement: "minecraft:adventure/trade"
+					criterion: ""
+					id: "71DA4302087EE8D5"
+					type: "advancement"
+				}
+			]
+			title: "The Merchant's Promise"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["33650330DFBC6544"]
+			description: ["Craft paper, a compass and a map. Knowing where you stand is half of exploring."]
+			icon: "minecraft:paper"
+			id: "2A925E9604B1E571"
+			rewards: [
+				{
+					count: 3
+					id: "2F253CF118CB7EAE"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "5A6E3889285FB99A"
+					type: "xp"
+					xp: 50
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 16L
+					id: "5008A6D21A496196"
+					item: "minecraft:paper"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "3C8AABEC9B158DEE"
+					item: "minecraft:compass"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "74FCE8B58A4C54F9"
+					item: "minecraft:map"
+					type: "item"
+				}
+			]
+			title: "The First Map"
+			x: 20.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2A925E9604B1E571"]
+			description: ["Set up a cartography table, pick up a spyglass to scout distant landmarks and plant signposts along your roads."]
+			icon: "minecraft:cartography_table"
+			id: "2B547B82F2888DB0"
+			rewards: [
+				{
+					count: 6
+					id: "31506B48CD723C8D"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "2B4ADE7026516D8C"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "0372066175D3B875"
+					item: "minecraft:cartography_table"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 4L
+					id: "6570957AF7E2CCD0"
+					item: "minecraft:oak_sign"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "0572882E46951EFE"
+					item: "minecraft:spyglass"
+					type: "item"
+				}
+			]
+			title: "An Atlas of Roads"
+			x: 22.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2B547B82F2888DB0"]
+			description: ["Dig deep to find diamonds, and bring lapis along for the enchanting table."]
+			icon: "minecraft:diamond"
+			id: "40234985D48A8AEB"
+			rewards: [
+				{
+					count: 16
+					id: "63403E2F66978D7F"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "56EE071E797B1CE6"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 8L
+					id: "097BFC0B42B553E0"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 16L
+					id: "78B398FAC43ECC1F"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					advancement: "minecraft:story/mine_diamond"
+					criterion: ""
+					id: "282FE96EE564CAC6"
+					type: "advancement"
+				}
+			]
+			title: "First Light in the Deep"
+			x: 24.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["40234985D48A8AEB"]
+			description: ["Craft a diamond pickaxe, sword and chestplate. The first real piece of legendary kit is yours."]
+			icon: {
+				Count: 1
+				id: "minecraft:diamond_pickaxe"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "2AABEC8F05438DDC"
+			rewards: [
+				{
+					count: 8
+					id: "6B77A24EF36805AD"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "2E28F4BA2FE6FDC5"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "29D799993E36E171"
+					item: {
+						Count: 1
+						id: "minecraft:diamond_pickaxe"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "73DEEF7A6AB2C1A3"
+					item: {
+						Count: 1
+						id: "minecraft:diamond_sword"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "0F508C70D7B6E5B0"
+					item: {
+						Count: 1
+						id: "minecraft:diamond_chestplate"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "The Diamond Oath"
+			x: 26.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2AABEC8F05438DDC"]
+			description: ["Complete the set with a helmet, leggings and boots, and keep a few golden apples for emergencies."]
+			icon: {
+				Count: 1
+				id: "minecraft:diamond_helmet"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "3A35BE0F10FB0FBA"
+			rewards: [
+				{
+					id: "0E757A1FD12EC81A"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "2ED74C0D154CE23B"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "34237F3EDBF5FED4"
+					item: {
+						Count: 1
+						id: "minecraft:diamond_helmet"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "6356259C4CD52F47"
+					item: {
+						Count: 1
+						id: "minecraft:diamond_leggings"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "32042CBF7A270902"
+					item: {
+						Count: 1
+						id: "minecraft:diamond_boots"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 2L
+					id: "2E8D7151245D0F5F"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+			]
+			title: "Blade of the Realm"
+			x: 28.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3A35BE0F10FB0FBA"]
+			description: ["Surround an enchanting table with bookshelves and enchant your first book. The deeper you go into arcane craft, the more you need this room."]
+			icon: "minecraft:enchanting_table"
+			id: "1615164F64E94279"
+			rewards: [
+				{
+					count: 5
+					id: "1704DA06D3CF6CF8"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "7191FF26B7930377"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "7930623164740305"
+					item: "minecraft:enchanting_table"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 15L
+					id: "03866C4CC3A53FD4"
+					item: "minecraft:bookshelf"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "19F63772D853DF7D"
+					item: "minecraft:enchanted_book"
+					type: "item"
+				}
+			]
+			title: "The Scholar's Hall"
+			x: 30.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1615164F64E94279"]
+			description: ["Beyond the gate lie hostile worlds. Pack arrows and hearty food before you step through."]
+			icon: "minecraft:arrow"
+			id: "63D3F7BD0B6F7922"
+			rewards: [
+				{
+					id: "03A56EE7BF1807DC"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "46D7D1D1CE78DD24"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 64L
+					id: "4792048F7F2B0106"
+					item: "minecraft:arrow"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 16L
+					id: "074FB6A6952EC842"
+					item: "minecraft:cooked_porkchop"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 8L
+					id: "1A3F495101AAF0F7"
+					item: "minecraft:golden_carrot"
+					type: "item"
+				}
+			]
+			title: "Provisions for the Unknown"
+			x: 32.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["63D3F7BD0B6F7922"]
+			description: ["Everything you have built so far was practice. Stand before the gate, take a breath, and step into the realms of legend."]
+			icon: "minecraft:nether_star"
+			id: "331CB7D2A8F78EBE"
+			rewards: [
+				{
+					count: 2
+					id: "63D2E17D3D2D3C60"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "6E39BD9E6C18979A"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				id: "311F5C250CA48A20"
+				type: "checkmark"
+			}]
+			title: "The Gate of Legends"
+			x: 34.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["From your first workbench to the gate of legends."]
+	title: "The Wanderer's Path"
+}

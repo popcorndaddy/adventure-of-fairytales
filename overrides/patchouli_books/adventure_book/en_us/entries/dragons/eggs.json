@@ -1,0 +1,41 @@
+{
+	"name": "Raising a Dragon",
+	"icon": "iceandfire:dragonegg_red",
+	"category": "patchouli:dragons",
+	"sortnum": 3,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Grown females, stage 4 or 5, carry eggs. Bottle their blood and the eggs are lost. Fire eggs hatch in fire, ice eggs in water, lightning eggs in the rain."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "The hatchling is yours alone. Feed it, raise it, saddle it when it's big enough, and keep a $(l:dragons/eggs#dragon_horn)Dragon Horn$(/l) for when you need to carry it."
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "iceandfire:dragon_horn",
+			"anchor": "dragon_horn"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "iceandfire:dragon_meal",
+			"text": "Makes young dragons grow.",
+			"link_recipe": true,
+			"anchor": "dragon_meal"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "iceandfire:bestiary",
+			"title": "Further Reading",
+			"text": "The $(l)Bestiary$() goes deeper.",
+			"anchor": "bestiary"
+		}
+	],
+	"extra_recipe_mappings": {
+		"iceandfire:dragon_horn": 0,
+		"iceandfire:dragon_meal": 0,
+		"iceandfire:dragonegg_red": 0
+	}
+}

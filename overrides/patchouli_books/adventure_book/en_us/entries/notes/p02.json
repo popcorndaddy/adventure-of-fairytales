@@ -1,0 +1,22 @@
+{
+	"name": "The Snowfields",
+	"icon": "minecraft:paper",
+	"category": "patchouli:notes",
+	"sortnum": 3,
+	"read_by_default": false,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Sorry about the writing. My hands were cold."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Somewhere warmer, where the grass goes yellow and the trees are flat on top, there's a tribe in bird masks. Their king sits on a throne in the middle of a grove. He won't stay sitting for long once you walk in."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(o)Anyone who has crossed the savanna has heard of Umvuthi, the Sunbird, and the Rogue Eye he keeps on his throne.$()"
+		}
+	],
+	"advancement": "kubejs:fairytale/p02"
+}

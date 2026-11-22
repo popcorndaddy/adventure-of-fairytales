@@ -1,0 +1,379 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "16_seasons"
+	group: "5A734B321110FED6"
+	icon: "sereneseasons:calendar"
+	id: "24CD976F48D7B15D"
+	order_index: 7
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["A calendar shows the day and season. Craft one and hang it near your door."]
+			icon: "sereneseasons:calendar"
+			id: "300E0043EC398338"
+			rewards: [
+				{
+					count: 6
+					id: "1538C174CA41AEB3"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "4ECD71BB930659D6"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "778A87481C452257"
+				item: "sereneseasons:calendar"
+				type: "item"
+			}]
+			title: "A Calendar"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["300E0043EC398338"]
+			description: ["A season sensor sends a signal based on the season. Use it to power farms or lights."]
+			icon: "sereneseasons:season_sensor"
+			id: "69DEE8BE9AF3269B"
+			rewards: [
+				{
+					count: 16
+					id: "18F7FD4EBDAE78CF"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "5B855813CC4D0A7A"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "068855C88A759AD6"
+				item: "sereneseasons:season_sensor"
+				type: "item"
+			}]
+			title: "The Season Sensor"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["69DEE8BE9AF3269B"]
+			description: ["In warm biomes the wet and dry seasons shape the harvest. Gather cocoa from the jungle trees."]
+			icon: "minecraft:cocoa_beans"
+			id: "02AD5F08D151D016"
+			rewards: [
+				{
+					count: 10
+					id: "54E765FABBA4499E"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "2BEE2C851826C2CF"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "5D66EA5761379ED0"
+				item: "minecraft:cocoa_beans"
+				type: "item"
+			}]
+			title: "Tropical Harvest"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["02AD5F08D151D016"]
+			description: ["Plant a field of seeds in the spring. Everything grows faster under rain."]
+			icon: "minecraft:beetroot_seeds"
+			id: "096A45D452E0FC2C"
+			rewards: [
+				{
+					count: 6
+					id: "6BA53A10B5D82FF6"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "2A6937F2DF96396F"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 16L
+					id: "3FA0A66A3407233A"
+					item: "minecraft:beetroot_seeds"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 8L
+					id: "1E204A05B741AE60"
+					item: "minecraft:melon_seeds"
+					type: "item"
+				}
+			]
+			title: "Spring Planting"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["096A45D452E0FC2C"]
+			description: ["Summer is the season of plenty. Harvest pumpkins and melons."]
+			icon: "minecraft:pumpkin"
+			id: "79158EFA6DBF8241"
+			rewards: [
+				{
+					count: 8
+					id: "14F7A24D91451DA0"
+					item: "minecraft:golden_carrot"
+					type: "item"
+				}
+				{
+					id: "73C0986C34C78317"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 8L
+					id: "07F1B23C26E9F49C"
+					item: "minecraft:pumpkin"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 16L
+					id: "4119E027366CB1BF"
+					item: "minecraft:melon_slice"
+					type: "item"
+				}
+			]
+			title: "Summer Harvest"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["79158EFA6DBF8241"]
+			description: ["Autumn fills the larder. Dry and salt your supply."]
+			icon: "minecraft:dried_kelp"
+			id: "2217D5AAAB26672E"
+			rewards: [
+				{
+					count: 3
+					id: "12A5012BC2C609D0"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "57D3ED98D1B1687A"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 16L
+					id: "2B8A87A07F4621AA"
+					item: "minecraft:dried_kelp"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 16L
+					id: "4ADD0B97A0603679"
+					item: "minecraft:potato"
+					type: "item"
+				}
+			]
+			title: "Autumn Storage"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2217D5AAAB26672E"]
+			description: ["Winter chills the land. Keep a stack of firewood and a fur coat."]
+			icon: "minecraft:leather"
+			id: "455CFC700D2AB531"
+			rewards: [
+				{
+					count: 8
+					id: "456DBA64511F7387"
+					item: "minecraft:golden_carrot"
+					type: "item"
+				}
+				{
+					id: "0FEB4156568A3A44"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 16L
+					id: "19C9BCF6FCCC3D4D"
+					item: "minecraft:leather"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 8L
+					id: "4413A03834321696"
+					item: "minecraft:white_wool"
+					type: "item"
+				}
+			]
+			title: "Winter Warmth"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["455CFC700D2AB531"]
+			description: ["Winter brings blocks of snow and ice. Stack them against the cold."]
+			icon: "minecraft:snow_block"
+			id: "361B70812DA95121"
+			rewards: [
+				{
+					count: 5
+					id: "429BF10C578A6669"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "4765012B9C24EC60"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 16L
+					id: "5F6398B31DE1596A"
+					item: "minecraft:snow_block"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 8L
+					id: "1AB9178B51A8B5FC"
+					item: "minecraft:packed_ice"
+					type: "item"
+				}
+			]
+			title: "Frost and Snow"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["361B70812DA95121"]
+			description: ["Glass lets you grow crops through winter. Build a small greenhouse."]
+			icon: "minecraft:white_stained_glass"
+			id: "74547C1333C95A84"
+			rewards: [
+				{
+					count: 6
+					id: "677DB5D84CBE76E7"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "021B9DE99D527113"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 8L
+					id: "5038C6964BE5045C"
+					item: "minecraft:white_stained_glass"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 4L
+					id: "206DD6E09890DC21"
+					item: "minecraft:flower_pot"
+					type: "item"
+				}
+			]
+			title: "A Greenhouse"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["74547C1333C95A84"]
+			description: ["Track the sun and the storms: a daylight detector, sunflowers and a lightning rod."]
+			icon: "minecraft:daylight_detector"
+			id: "3AD7ED8D93BB4455"
+			rewards: [
+				{
+					count: 5
+					id: "108BBFE7B6E02831"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "6DC1BDA7884179FA"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "5A4D3B87EFB3E74C"
+					item: "minecraft:daylight_detector"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 4L
+					id: "4FF6AF406BF20CB0"
+					item: "minecraft:sunflower"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "730E98E208E72354"
+					item: "minecraft:lightning_rod"
+					type: "item"
+				}
+			]
+			title: "The Climate Atlas"
+			x: 18.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Four seasons, and a kingdom that must live by them."]
+	title: "Seasons"
+}

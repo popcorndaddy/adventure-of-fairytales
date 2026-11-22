@@ -1,0 +1,21 @@
+{
+	"name": "A Harder World",
+	"icon": "minecraft:netherite_sword",
+	"category": "patchouli:world",
+	"sortnum": 0,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "The world grows harder in three stages. $(l)Expert$() begins the first time anyone crosses into another dimension. $(l)Master$() begins when the Ender Dragon falls."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Some mobs now travel in packs behind a leader. Kill enough undead and an $(l)Undead Army$() comes for you, with Born in Chaos horrors in its ranks.$(br2)Think twice before that first trip to the Nether."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Gear forged here is a little stronger than you may be used to, with harder-hitting blades and tougher armor. You'll need it."
+		}
+	]
+}

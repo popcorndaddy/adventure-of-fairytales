@@ -1,0 +1,24 @@
+{
+	"name": "The Bumblezone",
+	"icon": "minecraft:bee_nest",
+	"category": "patchouli:bees",
+	"sortnum": 1,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Somewhere inside the bee nests is a whole other world. Throw an ender pearl at a nest to find it."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Don't anger the bees. $(l:bees/bumblezone#honey_compass)Honey Compasses$(/l) lead to its structures, and the rarest ones lead to the $(l)Bee Queen$(), who trades if you bring what she wants.$(br2)Fall through the bottom to get home."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "the_bumblezone:honey_compass",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "honey_compass"
+		}
+	]
+}

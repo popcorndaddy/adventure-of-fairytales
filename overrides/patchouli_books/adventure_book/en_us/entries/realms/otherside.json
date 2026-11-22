@@ -1,0 +1,35 @@
+{
+	"name": "The Otherside",
+	"icon": "deeperdarker:heart_of_the_deep",
+	"category": "patchouli:realms",
+	"sortnum": 1,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Below the Deep Dark lies the $(l)Otherside$(). Ancient Cities hold its portal frame. The Warden carries the $(l:realms/otherside#heart_of_the_deep)Heart of the Deep$(/l) that lights it."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(l)Warden$() and $(l)Resonarium$() gear come from there, and Warden armor can be smithed into Cataclysm's Ignitium or Cursium later."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "deeperdarker:heart_of_the_deep",
+			"text": "Dropped by the Warden. It lights the Otherside portal.",
+			"link_recipe": true,
+			"anchor": "heart_of_the_deep"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "deeperdarker:soul_crystal",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "soul_crystal"
+		}
+	],
+	"extra_recipe_mappings": {
+		"deeperdarker:heart_of_the_deep": 0,
+		"deeperdarker:soul_crystal": 0
+	}
+}

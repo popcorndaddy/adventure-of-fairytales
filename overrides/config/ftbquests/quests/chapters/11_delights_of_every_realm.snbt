@@ -1,0 +1,426 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "11_delights_of_every_realm"
+	group: "5A734B321110FED6"
+	icon: "nethersdelight:blackstone_stove"
+	id: "4C0B2A275D6CABA6"
+	order_index: 2
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["A quiet cup and a slice of something sweet. Brew azalea tea and bake an apple pie."]
+			icon: "delightful:azalea_tea"
+			id: "4BCCBF58DEED6690"
+			rewards: [
+				{
+					count: 6
+					id: "4B7D3800AD33FE5C"
+					item: "minecraft:cooked_beef"
+					type: "item"
+				}
+				{
+					id: "44C1FB59C1A551E7"
+					type: "xp"
+					xp: 50
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "3C580CBF74F3179B"
+					item: "delightful:azalea_tea"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "34E04BEA47904234"
+					item: "farmersdelight:apple_pie"
+					type: "item"
+				}
+			]
+			title: "Tea and Pie"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4BCCBF58DEED6690"]
+			description: ["Cook with the heat of the Nether. A blackstone stove and an iron machete are the tools of a Nether cook."]
+			icon: "nethersdelight:blackstone_stove"
+			id: "19EC7600E6C71833"
+			rewards: [
+				{
+					count: 16
+					id: "6B6EF88E364F1B68"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "71406F472E8D55E0"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "4CEB705905B48E3D"
+					item: "nethersdelight:blackstone_stove"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "0917615F3846BDEC"
+					item: {
+						Count: 1
+						id: "nethersdelight:iron_machete"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Nether Kitchen"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["19EC7600E6C71833"]
+			description: ["Hoglins make hearty food. Carve a loin and stuff a roast for the whole hall."]
+			icon: "nethersdelight:hoglin_loin"
+			id: "0FCE56BF5EA2879C"
+			rewards: [
+				{
+					count: 6
+					id: "4445211D1E3C15BA"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "1A4278501D20F99C"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 4L
+					id: "30EB96D20EE65841"
+					item: "nethersdelight:hoglin_loin"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "0741FC0D975BEE86"
+					item: "nethersdelight:stuffed_hoglin"
+					type: "item"
+				}
+			]
+			title: "Hoglin Feast"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0FCE56BF5EA2879C"]
+			description: ["Stews and skewers of strider meat: strange, warm and filling."]
+			icon: "nethersdelight:strider_moss_stew"
+			id: "76CB539304035143"
+			rewards: [
+				{
+					count: 16
+					id: "30EA550DA17E67F4"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "035050927F98450E"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "2FEA7F3F3B2B1141"
+					item: "nethersdelight:strider_moss_stew"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "2F332FC7591907AE"
+					item: "nethersdelight:grilled_strider"
+					type: "item"
+				}
+			]
+			title: "Strider Stew"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["76CB539304035143"]
+			description: ["The End has its own cuisine. Cook an ender paella and a plate of pearl pasta."]
+			icon: "endersdelight:ender_paella"
+			id: "34A3885CB5F44BCC"
+			rewards: [
+				{
+					id: "2368FD81879D554B"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "58C4BA8685552374"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "0E07E2E4545F8FE7"
+					item: "endersdelight:ender_paella"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "71FB5FD67E38C2E6"
+					item: "endersdelight:pearl_pasta"
+					type: "item"
+				}
+			]
+			title: "Void Cuisine"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["34A3885CB5F44BCC"]
+			description: ["Chorus fruit becomes pies and stews. Eat carefully, and keep a bed nearby."]
+			icon: "endersdelight:chorus_pie"
+			id: "70DF97869308294C"
+			rewards: [
+				{
+					id: "40F07986B34E9B90"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "0A96A4BBA88393ED"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "4C670A5385BB5A6E"
+					item: "endersdelight:chorus_pie"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "1480ACCB0E4A16CA"
+					item: "endersdelight:chorus_stew"
+					type: "item"
+				}
+			]
+			title: "Chorus Pie"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["70DF97869308294C"]
+			description: ["Bring the ocean to the table with a guardian soup and a stuffed cod."]
+			icon: "oceansdelight:guardian_soup"
+			id: "6D36457A031A1C9C"
+			rewards: [
+				{
+					count: 6
+					id: "397AA9D934CF7B96"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "2DC833F7949DA8E0"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "2EA3226BDAD894E5"
+					item: "oceansdelight:guardian_soup"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "17C5E9A6B8C82A91"
+					item: "oceansdelight:stuffed_cod"
+					type: "item"
+				}
+			]
+			title: "Taste of the Deep"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6D36457A031A1C9C"]
+			description: ["Squid rings and a fugu roll for the brave. Prepare fugu with care."]
+			icon: "oceansdelight:squid_rings"
+			id: "7A677DF9A74C526B"
+			rewards: [
+				{
+					count: 8
+					id: "5F637B7BF63F4204"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "2CDA955E51EEF5E6"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "09FE34A99D0AC47D"
+					item: "oceansdelight:squid_rings"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "0BD321FA35203D33"
+					item: "oceansdelight:fugu_roll"
+					type: "item"
+				}
+			]
+			title: "From the Kraken's Larder"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["7A677DF9A74C526B"]
+			description: ["Alex's creatures make unusual meals. Grill a bison burger and simmer a kangaroo stew."]
+			icon: "alexsdelight:bison_burger"
+			id: "1F8BAB1316F53982"
+			rewards: [
+				{
+					count: 10
+					id: "3F84D1D138E5CD47"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "2CA1D60037FE743A"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "298EA4DAC5E26A05"
+					item: "alexsdelight:bison_burger"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "595E30BD7E2EC371"
+					item: "alexsdelight:kangaroo_stew"
+					type: "item"
+				}
+			]
+			title: "Beasts of the Wild"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1F8BAB1316F53982"]
+			description: ["The forest of twilight has its own recipes. Bake an aurora pie and roast a venison rib."]
+			icon: "twilightdelight:aurora_pie"
+			id: "4093B534B727D2A4"
+			rewards: [
+				{
+					count: 8
+					id: "7D770AB7A7257420"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "2A1FA8A7CD085E9E"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "6A8335FB1E4B61A3"
+					item: "twilightdelight:aurora_pie"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "272BAA4064323A58"
+					item: "twilightdelight:cooked_venison_rib"
+					type: "item"
+				}
+			]
+			title: "Twilight Dining"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4093B534B727D2A4"]
+			description: ["Cook with the fire of dragons. A spicy taco and a frosty pie are the pride of any dragon cook."]
+			icon: "ice_and_fire_delight:fire_dragon_taco"
+			id: "44BC035F8AFA86D5"
+			rewards: [
+				{
+					count: 2
+					id: "241D548EF36DE9CD"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "762B133F1C66C300"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "17BF921E979C2975"
+					item: "ice_and_fire_delight:fire_dragon_taco"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "4F724ADE20183C0C"
+					item: "ice_and_fire_delight:frost_pie"
+					type: "item"
+				}
+			]
+			title: "Dragon Cuisine"
+			x: 20.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Every realm has its own kitchen."]
+	title: "Delights of Every Realm"
+}

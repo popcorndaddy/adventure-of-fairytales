@@ -1,0 +1,407 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "32_block_factorys_bosses"
+	group: "71E49019A27AF73C"
+	icon: {
+		Count: 1
+		id: "block_factorys_bosses:kraken_trident"
+		tag: {
+			Damage: 0
+		}
+	}
+	id: "515A992C23A54F27"
+	order_index: 2
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Pirate sabers are common among the ghost ships. Take one for yourself."]
+			icon: {
+				Count: 1
+				id: "block_factorys_bosses:pirate_saber"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "0DE43A61A42DDFE3"
+			rewards: [
+				{
+					count: 8
+					id: "16427E6FBE35F99B"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "76F08AB51FDB98F3"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "621AF380735A4D35"
+				item: {
+					Count: 1
+					id: "block_factorys_bosses:pirate_saber"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "A Pirate's Saber"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0DE43A61A42DDFE3"]
+			description: ["Cannonballs are the pirate's greatest tool. Pick up a few from the ships."]
+			icon: "block_factorys_bosses:cannonball"
+			id: "1CB00B7B29E14857"
+			rewards: [
+				{
+					id: "30050508FB4D9C99"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "5BAC7D1810C19F99"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 4L
+				id: "0F35D8DFD4F483DD"
+				item: "block_factorys_bosses:cannonball"
+				type: "item"
+			}]
+			title: "Cannonball"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1CB00B7B29E14857"]
+			description: ["The kraken waits beneath the waves. Bring its tooth home."]
+			icon: "block_factorys_bosses:kraken_tooth"
+			id: "50EBD218E70EE695"
+			rewards: [
+				{
+					count: 16
+					id: "4EB48E7D62F73DBE"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "335B57C51EC3C6A0"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "59847F632B61DF7D"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [
+				{
+					entity: "block_factorys_bosses:kraken"
+					id: "56A9274660757141"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "08F3EBFD279553D9"
+					item: "block_factorys_bosses:kraken_tooth"
+					type: "item"
+				}
+			]
+			title: "The Kraken"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["50EBD218E70EE695"]
+			description: ["The kraken trident is a tool of the sea. Hold it high."]
+			icon: {
+				Count: 1
+				id: "block_factorys_bosses:kraken_trident"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "74A523DC142A1806"
+			rewards: [
+				{
+					count: 3
+					id: "20D7E7C27B874646"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "5A69233746484C14"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "1E55032D85F5371B"
+				item: {
+					Count: 1
+					id: "block_factorys_bosses:kraken_trident"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "Kraken Trident"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["74A523DC142A1806"]
+			description: ["A gauntlet that freezes whatever it strikes. A relic of the frozen boss."]
+			icon: {
+				Count: 1
+				id: "block_factorys_bosses:ice_gauntlet"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "176843CABD85E947"
+			rewards: [
+				{
+					count: 8
+					id: "2B5857B8E006D9BB"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "3ACD3B3D188A6909"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "157BF64FC259BC6F"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "19CCDCEC8E0EEE01"
+				item: {
+					Count: 1
+					id: "block_factorys_bosses:ice_gauntlet"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Ice Gauntlet"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["176843CABD85E947"]
+			description: ["A dragon shank and a skull are the trophies of a dragon slain, hearty proof for any hunter."]
+			icon: "block_factorys_bosses:dragon_shank"
+			id: "6CCBA19E50690C4C"
+			rewards: [
+				{
+					count: 2
+					id: "691A9910FDA1E997"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "67AD245E9D9A0382"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "1E2A5870508DA179"
+					item: "block_factorys_bosses:dragon_shank"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "72455A4830B7A713"
+					item: "block_factorys_bosses:dragon_skull"
+					type: "item"
+				}
+			]
+			title: "The Dragon's Shank"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6CCBA19E50690C4C"]
+			description: ["Dragon bone is light and strong. Craft a chestplate and a pair of boots from the pieces you gather."]
+			icon: {
+				Count: 1
+				id: "block_factorys_bosses:dragon_bones_chestplate"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "3803ABF13A96FF5D"
+			rewards: [
+				{
+					count: 2
+					id: "78C481FF24890792"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "137B74BFA29DCB0D"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "494D20AE9609E1F7"
+					item: {
+						Count: 1
+						id: "block_factorys_bosses:dragon_bones_chestplate"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "21D4DB478B9FE678"
+					item: {
+						Count: 1
+						id: "block_factorys_bosses:dragon_bones_boots"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Dragon Bone Armor"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3803ABF13A96FF5D"]
+			description: ["A gauntlet made from the great sandworm, a prize for the desert."]
+			icon: {
+				Count: 1
+				id: "block_factorys_bosses:sandworm_gauntlet"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "1C0103386A36C457"
+			rewards: [
+				{
+					count: 2
+					id: "034AD81F1B654401"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "17F68022C4BF3C78"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "2CD89288E160A06C"
+				item: {
+					Count: 1
+					id: "block_factorys_bosses:sandworm_gauntlet"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Sandworm Gauntlet"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1C0103386A36C457"]
+			description: ["A knight's sword and helmet from the guard."]
+			icon: {
+				Count: 1
+				id: "block_factorys_bosses:knight_sword"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "0562AC927D2A6FBA"
+			rewards: [
+				{
+					count: 2
+					id: "6BEDFCCA535CE443"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "457FF50627ABAF04"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "0FE1078BCC5070CE"
+					item: {
+						Count: 1
+						id: "block_factorys_bosses:knight_sword"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "73C913E01535002A"
+					item: {
+						Count: 1
+						id: "block_factorys_bosses:knight_helmet"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Knight Gear"
+			x: 16.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Pirates, dragons and the loot they leave."]
+	title: "Block Factory's Bosses"
+}

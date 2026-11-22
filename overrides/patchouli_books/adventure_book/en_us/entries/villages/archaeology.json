@@ -1,0 +1,27 @@
+{
+	"name": "Archaeology",
+	"icon": "minecraft:brush",
+	"category": "patchouli:villages",
+	"sortnum": 3,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Brushing goes deeper here. Better brushes dig faster. You'll turn up fossils, some of which do more than sit there, and $(l:villages/archaeology#artifact_shards)artifact shards$(/l) worth identifying at an $(l:villages/archaeology#archeology_table)Archeology Table$(/l)."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "betterarcheology:archeology_table",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "archeology_table"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "betterarcheology:artifact_shards",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "artifact_shards"
+		}
+	]
+}

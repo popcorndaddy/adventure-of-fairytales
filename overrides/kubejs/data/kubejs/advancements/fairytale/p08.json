@@ -1,0 +1,23 @@
+{
+  "parent": "kubejs:fairytale/p07",
+  "display": {
+    "icon": {
+      "item": "minecraft:paper"
+    },
+    "title": {
+      "text": "The Cold Tower"
+    },
+    "description": {
+      "text": "Taken back from the Night Lich"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "given": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

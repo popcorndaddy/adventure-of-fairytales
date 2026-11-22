@@ -1,0 +1,23 @@
+{
+  "parent": "kubejs:fairytale/p08",
+  "display": {
+    "icon": {
+      "item": "minecraft:paper"
+    },
+    "title": {
+      "text": "The Worm"
+    },
+    "description": {
+      "text": "Taken back from the Sandworm"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "given": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

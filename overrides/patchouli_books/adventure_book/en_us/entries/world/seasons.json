@@ -1,0 +1,27 @@
+{
+	"name": "Seasons",
+	"icon": "sereneseasons:calendar",
+	"category": "patchouli:world",
+	"sortnum": 1,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "The year turns through four seasons, and each crop has its own. Out of season it barely grows. A seed's tooltip lists its seasons.$(br2)Deep underground, below y 48, the seasons don't reach your crops."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Winter brings snow to places that never see it. A $(l:world/seasons#calendar)Calendar$(/l) tells you how long until the next turn."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "sereneseasons:calendar",
+			"text": "Shows the season and how far into it you are.",
+			"link_recipe": true,
+			"anchor": "calendar"
+		}
+	],
+	"extra_recipe_mappings": {
+		"sereneseasons:calendar": 0
+	}
+}

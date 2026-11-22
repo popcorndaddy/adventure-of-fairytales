@@ -1,0 +1,281 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "08_villages_and_bounties"
+	group: "01FA0B74B5D0B1FB"
+	icon: "minecraft:emerald"
+	id: "568405D844CB5312"
+	order_index: 7
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Open a stall: place a fletching table and a loom so villagers set up shop."]
+			icon: "minecraft:fletching_table"
+			id: "3FF18EDFD9A2A12B"
+			rewards: [
+				{
+					count: 8
+					id: "0AF43370268E31B7"
+					item: "minecraft:cooked_porkchop"
+					type: "item"
+				}
+				{
+					id: "134229E4FF4B199F"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "318AB00C0E3A6C67"
+					item: "minecraft:fletching_table"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "59C01D31DA916AF3"
+					item: "minecraft:loom"
+					type: "item"
+				}
+			]
+			title: "Open for Business"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3FF18EDFD9A2A12B"]
+			description: ["Set up a lectern and a bell for your own hall of trades."]
+			icon: "minecraft:lectern"
+			id: "4CE502A307E2C23B"
+			rewards: [
+				{
+					count: 8
+					id: "635968D7AAED43A5"
+					item: "minecraft:cooked_porkchop"
+					type: "item"
+				}
+				{
+					id: "5E944BA5E673DD50"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "1782CEF1E0F26748"
+					item: "minecraft:lectern"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "20A760BB5E7A53A7"
+					item: "minecraft:bell"
+					type: "item"
+				}
+			]
+			title: "The Trading Hall"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4CE502A307E2C23B"]
+			description: ["Craft a bounty board and see what the villages need."]
+			icon: "bountiful:bountyboard"
+			id: "2C7CCD7C81C70D80"
+			rewards: [
+				{
+					count: 6
+					id: "5DEEF976A8A6DB4F"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "15B1E9CC07D5FE5D"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "2803673F8738B576"
+				item: "bountiful:bountyboard"
+				type: "item"
+			}]
+			title: "The Bounty Board"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2C7CCD7C81C70D80"]
+			description: ["A decree tells you what the kingdom asks of its adventurers. Craft one and read it carefully."]
+			icon: "bountiful:decree"
+			id: "29AF052EE3757536"
+			rewards: [
+				{
+					count: 10
+					id: "1FDB63CB8A0AC113"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "26A25878F6162CA0"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "21A245DB39DE209C"
+				item: "bountiful:decree"
+				type: "item"
+			}]
+			title: "A Royal Decree"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["29AF052EE3757536"]
+			description: ["Collect a bounty from the board. Complete it and come back for a reward."]
+			icon: "bountiful:bounty"
+			id: "371180539CC894C1"
+			rewards: [
+				{
+					count: 5
+					id: "2B39EC4C94E715CC"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "4AF78C5D9A5A78A3"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "694B379A04196589"
+				item: "bountiful:bounty"
+				type: "item"
+			}]
+			title: "A Bounty Posted"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["371180539CC894C1"]
+			description: ["Iron golems keep villagers safe. Build two blocks of iron and plant a few flowers for them."]
+			icon: "minecraft:iron_block"
+			id: "7AE7469FBD9D9B7E"
+			rewards: [
+				{
+					count: 10
+					id: "017BE90D0DE7DF2A"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "56E03CCD00AA16C8"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 4L
+					id: "7172625B6FE7A2DF"
+					item: "minecraft:iron_block"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 2L
+					id: "1FA23454B6F33424"
+					item: "minecraft:poppy"
+					type: "item"
+				}
+			]
+			title: "Village Security"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["7AE7469FBD9D9B7E"]
+			description: ["Trade until your purse overflows. Collect blocks of emeralds."]
+			icon: "minecraft:emerald_block"
+			id: "245AC72DCD5E33C5"
+			rewards: [
+				{
+					count: 8
+					id: "58DB16BD26495892"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "22238FE976172896"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 16L
+				id: "1B523FEA34A129E3"
+				item: "minecraft:emerald_block"
+				type: "item"
+			}]
+			title: "Merchant Prince"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["245AC72DCD5E33C5"]
+			description: ["Defend a village from a raid. The villagers will never forget it."]
+			icon: "minecraft:totem_of_undying"
+			id: "619B59A9DD29F55E"
+			rewards: [
+				{
+					count: 3
+					id: "37E93B368016478E"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "3D129168FE05A3CA"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "3FD8584063F53732"
+					item: "minecraft:totem_of_undying"
+					type: "item"
+				}
+				{
+					advancement: "minecraft:adventure/hero_of_the_village"
+					criterion: ""
+					id: "4A0D394265522584"
+					type: "advancement"
+				}
+			]
+			title: "Hero of the Village"
+			x: 14.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Trade, bounties and the business of a kingdom."]
+	title: "Villages and Bounties"
+}

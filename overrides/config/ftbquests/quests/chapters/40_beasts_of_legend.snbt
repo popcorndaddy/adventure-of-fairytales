@@ -1,0 +1,171 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "40_beasts_of_legend"
+	group: "03F7C10E6FAF5CEC"
+	icon: "mowziesmobs:wrought_axe"
+	id: "6FF21F37F4921BD2"
+	order_index: 6
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["It sleeps in a chamber underground. It only takes damage from behind, right after it swings."]
+			icon: "minecraft:iron_block"
+			id: "490CD764A2BB67CE"
+			rewards: [
+				{
+					count: 4
+					id: "45FE0083273DC561"
+					item: "minecraft:iron_block"
+					type: "item"
+				}
+				{
+					id: "29216AAC9B607A4A"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				entity: "mowziesmobs:ferrous_wroughtnaut"
+				id: "7DA4FEAFB1EC1714"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Ferrous Wroughtnaut"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["490CD764A2BB67CE"]
+			description: ["The Wroughtnaut's axe. It never breaks."]
+			icon: "mowziesmobs:wrought_axe"
+			id: "106E326976110488"
+			rewards: [
+				{
+					count: 4
+					id: "4AA72294D6741FC4"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "24FE853048B0B101"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "785074A0616F276B"
+				item: "mowziesmobs:wrought_axe"
+				type: "item"
+			}]
+			title: "Axe of a Thousand Metals"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["106E326976110488"]
+			description: ["A huge ice beast asleep in the snow. It guards an Ice Crystal."]
+			icon: "minecraft:blue_ice"
+			id: "2E55331D7191AA35"
+			rewards: [
+				{
+					count: 8
+					id: "18F7ED05034913FF"
+					item: "minecraft:blue_ice"
+					type: "item"
+				}
+				{
+					id: "10618473461FE7FA"
+					type: "xp"
+					xp: 500
+				}
+			]
+			tasks: [{
+				entity: "mowziesmobs:frostmaw"
+				id: "2B876FE2035D4DF7"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Frostmaw"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2E55331D7191AA35"]
+			description: ["Steal it from a sleeping Frostmaw, or take it after the fight. Either way it wakes up angry."]
+			icon: {
+				Count: 1
+				id: "mowziesmobs:ice_crystal"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "53FAEECDA34F609D"
+			rewards: [
+				{
+					count: 6
+					id: "1CE647E73B50EC81"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "28C1BA693E3D4174"
+					type: "xp"
+					xp: 250
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "4639AE24210E6066"
+				item: {
+					Count: 1
+					id: "mowziesmobs:ice_crystal"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "Ice Crystal"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["53FAEECDA34F609D"]
+			description: ["The ruler of the Umvuthana groves."]
+			icon: "minecraft:sunflower"
+			id: "31024141005DC76C"
+			rewards: [
+				{
+					count: 4
+					id: "33157FA595931ECC"
+					item: "minecraft:gold_block"
+					type: "item"
+				}
+				{
+					id: "66C6118EF7B5B7B5"
+					type: "xp"
+					xp: 600
+				}
+			]
+			tasks: [{
+				entity: "mowziesmobs:umvuthi"
+				id: "27B17A497FFADEDB"
+				type: "kill"
+				value: 1L
+			}]
+			title: "Umvuthi the Sunbird"
+			x: 8.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Mowzie's Mobs: overworld bosses that leave you their powers."]
+	title: "Beasts of Legend"
+}

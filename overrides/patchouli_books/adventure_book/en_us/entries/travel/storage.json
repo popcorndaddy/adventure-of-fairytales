@@ -1,0 +1,36 @@
+{
+	"name": "Storage",
+	"icon": "sophisticatedstorage:chest",
+	"category": "patchouli:travel",
+	"sortnum": 2,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "$(li)$(l)Sophisticated Storage$(): chests and barrels you upgrade where they stand. A $(l:travel/storage#controller)Storage Controller$(/l) reaches every one connected to it."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(li)$(l)Ender Storage$(): match the three colours and chests share one inventory, across any distance.$(li)$(l)Lootr$(): every dungeon chest holds its own loot for each player."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "sophisticatedstorage:chest",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "chest"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "sophisticatedstorage:controller",
+			"text": "Links nearby Sophisticated Storage chests and barrels into one inventory.",
+			"link_recipe": true,
+			"anchor": "controller"
+		}
+	],
+	"extra_recipe_mappings": {
+		"sophisticatedstorage:chest": 0,
+		"sophisticatedstorage:barrel": 0,
+		"sophisticatedstorage:controller": 0
+	}
+}

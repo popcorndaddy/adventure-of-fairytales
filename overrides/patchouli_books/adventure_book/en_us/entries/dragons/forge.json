@@ -1,0 +1,48 @@
+{
+	"name": "The Dragonforge",
+	"icon": "iceandfire:dragonsteel_fire_ingot",
+	"category": "patchouli:dragons",
+	"sortnum": 2,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "$(l:dragons/forge#dragonsteel_fire_ingot)Dragonsteel$(/l) can only be forged with a dragon's own breath.$(br2)Build a $(l:dragons/forge#dragonforge_fire_brick)Dragonforge$(/l) from $(l:dragons/forge#dragonforge_fire_brick)Dragonforge Bricks$(/l) around a $(l:dragons/forge#dragonforge_fire_brick)Core$(/l) made with a dragon heart, add an $(l:dragons/forge#dragonforge_fire_input)Aperture$(/l), and feed it an iron ingot and that dragon's blood."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Then a dragon of that element, stage 3 or older, has to breathe into it."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "iceandfire:dragonsteel_fire_ingot",
+			"text": "Made in a fire Dragonforge. Ice and lightning forges make their own kinds.",
+			"link_recipe": true,
+			"anchor": "dragonsteel_fire_ingot"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "iceandfire:dragonforge_fire_brick",
+			"recipe2": "iceandfire:dragonforge_fire_core_disabled",
+			"anchor": "dragonforge_fire_brick"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "iceandfire:dragonforge_fire_input",
+			"title": "Dragonforge Aperture",
+			"anchor": "dragonforge_fire_input"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "iceandfire:bestiary",
+			"title": "Further Reading",
+			"text": "The $(l)Bestiary$() goes deeper.",
+			"anchor": "bestiary"
+		}
+	],
+	"extra_recipe_mappings": {
+		"iceandfire:dragonsteel_fire_ingot": 0,
+		"iceandfire:dragonsteel_ice_ingot": 0,
+		"iceandfire:dragonforge_fire_brick": 0
+	}
+}

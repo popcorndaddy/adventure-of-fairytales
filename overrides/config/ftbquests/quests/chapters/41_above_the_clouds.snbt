@@ -1,0 +1,418 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "41_above_the_clouds"
+	group: "71E49019A27AF73C"
+	icon: "aether:ambrosium_shard"
+	id: "3118D5FDF80D4954"
+	order_index: 6
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Build a portal frame out of glowstone and light it with a bucket of water."]
+			icon: "minecraft:glowstone"
+			id: "3DA304CE930AF3EE"
+			rewards: [
+				{
+					count: 10
+					id: "59B0813A468E93A6"
+					item: "minecraft:glowstone"
+					type: "item"
+				}
+				{
+					id: "61C285B9BF652D40"
+					type: "xp"
+					xp: 150
+				}
+			]
+			tasks: [{
+				dimension: "aether:the_aether"
+				id: "7CC45FDFE235A44B"
+				type: "dimension"
+			}]
+			title: "A Glowstone Portal"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3DA304CE930AF3EE"]
+			description: ["Aether tools start with skyroot wood."]
+			icon: {
+				Count: 1
+				id: "aether:skyroot_pickaxe"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "74F47E0106AD6370"
+			rewards: [
+				{
+					count: 16
+					id: "63EBA9699DD36646"
+					item: "minecraft:stick"
+					type: "item"
+				}
+				{
+					id: "4CE1277F6D521479"
+					type: "xp"
+					xp: 60
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "3FCDC323DC8D6316"
+				item: {
+					Count: 1
+					id: "aether:skyroot_pickaxe"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "Skyroot Pickaxe"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["74F47E0106AD6370"]
+			description: ["The Aether's stone tier."]
+			icon: {
+				Count: 1
+				id: "aether:holystone_pickaxe"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "52DED8F1674D983B"
+			rewards: [
+				{
+					count: 32
+					id: "4EF8BD09E828A34F"
+					item: "minecraft:cobblestone"
+					type: "item"
+				}
+				{
+					id: "719764D36FDDC13C"
+					type: "xp"
+					xp: 60
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "34A02217487834AA"
+				item: {
+					Count: 1
+					id: "aether:holystone_pickaxe"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "Holystone Pickaxe"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["52DED8F1674D983B"]
+			description: ["Ambrosium is fuel for Aether machines and heals you a little when eaten."]
+			icon: "aether:ambrosium_shard"
+			id: "097E5591C529461E"
+			rewards: [
+				{
+					count: 16
+					id: "47DAD62DCF7BCCCB"
+					item: "minecraft:coal"
+					type: "item"
+				}
+				{
+					id: "38BC7FF7D9003243"
+					type: "xp"
+					xp: 80
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 8L
+				id: "1DF4FE129B22CEA4"
+				item: "aether:ambrosium_shard"
+				type: "item"
+			}]
+			title: "Ambrosium"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["097E5591C529461E"]
+			description: ["Zanite tools get stronger as they wear down."]
+			icon: "aether:zanite_gemstone"
+			id: "24BC2276658B1231"
+			rewards: [
+				{
+					count: 16
+					id: "09D21568A8C5ED1C"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "1951AEDCD24295BF"
+					type: "xp"
+					xp: 100
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 4L
+				id: "44CF1652B0F5956F"
+				item: "aether:zanite_gemstone"
+				type: "item"
+			}]
+			title: "Zanite"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["24BC2276658B1231"]
+			description: ["Enchants Aether gear and turns gravitite into Enchanted Gravitite, powered by ambrosium."]
+			icon: "aether:altar"
+			id: "1EB680565C5E70DD"
+			rewards: [
+				{
+					count: 8
+					id: "4C6767E584D0DC56"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "1A7A06A43630871B"
+					type: "xp"
+					xp: 120
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "54A71865DB611E0F"
+				item: "aether:altar"
+				type: "item"
+			}]
+			title: "The Enchanter"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1EB680565C5E70DD"]
+			description: ["Beat the Slider at the end of a Bronze Dungeon. Its key opens the treasure chest."]
+			icon: "aether:bronze_dungeon_key"
+			id: "3D8778CDC9811AA3"
+			rewards: [
+				{
+					count: 8
+					id: "7DA7CFE433F97062"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "6887D9EB7B615525"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "56C9DD410CE0A7E0"
+				item: "aether:bronze_dungeon_key"
+				type: "item"
+			}]
+			title: "Bronze Key"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3D8778CDC9811AA3"]
+			description: ["The Valkyrie Queen guards the Silver Dungeon."]
+			icon: "aether:silver_dungeon_key"
+			id: "2C3AB1AE1CD330C8"
+			rewards: [
+				{
+					count: 4
+					id: "7C60F5F223B6438B"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "27B73A66DE29D8F5"
+					type: "xp"
+					xp: 600
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "6D05801FB7503E7D"
+				item: "aether:silver_dungeon_key"
+				type: "item"
+			}]
+			title: "Silver Key"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2C3AB1AE1CD330C8"]
+			description: ["The Sun Spirit waits at the top of the Gold Dungeon."]
+			icon: "aether:gold_dungeon_key"
+			id: "57A1D35317967A2F"
+			rewards: [
+				{
+					count: 2
+					id: "7A4FE5142CCDFA0C"
+					item: "minecraft:netherite_scrap"
+					type: "item"
+				}
+				{
+					id: "6602992E67AA9E0F"
+					type: "xp"
+					xp: 800
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "7DB2F4AAC1D58EBD"
+				item: "aether:gold_dungeon_key"
+				type: "item"
+			}]
+			title: "Gold Key"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["57A1D35317967A2F"]
+			description: ["Gravitite floats once mined. Enchant it for the best Aether gear."]
+			icon: "aether:enchanted_gravitite"
+			id: "33094164D542FC56"
+			rewards: [
+				{
+					count: 4
+					id: "790E5D8E32375B7A"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "0BC8CE7CCBBF909B"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "5C5ABC9BFD5AA983"
+				item: "aether:enchanted_gravitite"
+				type: "item"
+			}]
+			title: "Enchanted Gravitite"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["33094164D542FC56"]
+			description: ["A Deep Aether gem for a new tier of tools and armor."]
+			icon: "deep_aether:skyjade"
+			id: "40ED4D9D7C8E53D9"
+			rewards: [
+				{
+					count: 8
+					id: "3BBA6589D4B285A8"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "50A821B86A6980CA"
+					type: "xp"
+					xp: 150
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 4L
+				id: "6A2C21F7E46A2E4A"
+				item: "deep_aether:skyjade"
+				type: "item"
+			}]
+			title: "Skyjade"
+			x: 20.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["40ED4D9D7C8E53D9"]
+			description: ["Deep Aether adds the Brass Dungeon and its storm boss."]
+			icon: "deep_aether:brass_dungeon_key"
+			id: "21B44E556915EAB9"
+			rewards: [
+				{
+					count: 6
+					id: "49FAC1CB30298F54"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "105A17007B9B06BD"
+					type: "xp"
+					xp: 700
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "3E93251CE0CA3F1B"
+				item: "deep_aether:brass_dungeon_key"
+				type: "item"
+			}]
+			title: "Brass Key"
+			x: 22.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["21B44E556915EAB9"]
+			description: ["Redux adds veridium, a new Aether metal for tools."]
+			icon: "aether_redux:veridium_ingot"
+			id: "58F76FE90292CCE1"
+			rewards: [
+				{
+					count: 2
+					id: "431357763928BE73"
+					item: "minecraft:gold_block"
+					type: "item"
+				}
+				{
+					id: "4572713370BDAF91"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 4L
+				id: "7B30DCE81D0EDBDB"
+				item: "aether_redux:veridium_ingot"
+				type: "item"
+			}]
+			title: "Veridium"
+			x: 24.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["The Aether, with Deep Aether and Redux: a floating realm of dungeons and gods."]
+	title: "Above the Clouds"
+}

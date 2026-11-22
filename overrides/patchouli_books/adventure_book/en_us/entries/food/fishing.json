@@ -1,0 +1,17 @@
+{
+	"name": "Aquaculture",
+	"icon": "minecraft:fishing_rod",
+	"category": "patchouli:food",
+	"sortnum": 2,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Aquaculture fills the water with fish that keep to their own biomes."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Rods take a hook, bait, line and bobber, and the better metals last longer. A fillet knife turns a catch into something cookable. Fish long enough and the sea may give up a Neptune's Bounty.$(br2)$(l:food/tide)Tide$(/l) works alongside it. Use whichever rod you like."
+		}
+	]
+}

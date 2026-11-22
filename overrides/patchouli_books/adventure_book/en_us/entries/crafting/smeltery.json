@@ -1,0 +1,55 @@
+{
+	"name": "Tinkers' Smeltery",
+	"icon": "tconstruct:grout",
+	"category": "patchouli:crafting",
+	"sortnum": 0,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Tinkers' metal tools need a smeltery.$(br2)1. Smelt $(l:crafting/smeltery#smeltery_seared_grout)Grout$(/l) into seared bricks.$(br)2. A $(l:crafting/smeltery#smeltery_seared_grout)Seared Melter$(/l) will get you started."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "3. Cast a $(l:crafting/smeltery#smeltery_controller)Smeltery Controller$(/l) from molten copper over seared bricks, then wall it in with seared bricks, a drain and a lava tank.$(br)4. Pour through a $(l:crafting/smeltery#smeltery_seared_faucet)Faucet$(/l) into a $(l:crafting/smeltery#smeltery_seared_faucet)Casting Table$(/l) or basin.$(br2)The $(l:crafting/smeltery#foundry_controller)Foundry$(/l), built from scorched bricks, does the same and gives back byproducts."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "tconstruct:smeltery_controller",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "smeltery_controller"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "tconstruct:smeltery/seared/grout",
+			"recipe2": "tconstruct:smeltery/seared/melter",
+			"anchor": "smeltery_seared_grout"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "tconstruct:smeltery/seared/faucet",
+			"recipe2": "tconstruct:smeltery/seared/table",
+			"anchor": "smeltery_seared_faucet"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "tconstruct:foundry_controller",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "foundry_controller"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "tconstruct:common/materials_and_you",
+			"title": "Further Reading",
+			"text": "The $(l)Materials and You$() goes deeper. The smeltery has books of its own.",
+			"anchor": "common_materials_and_you"
+		}
+	],
+	"extra_recipe_mappings": {
+		"tconstruct:grout": 0,
+		"tconstruct:seared_melter": 0,
+		"tconstruct:seared_faucet": 0
+	}
+}

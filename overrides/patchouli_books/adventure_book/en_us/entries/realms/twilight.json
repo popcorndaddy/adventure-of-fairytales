@@ -1,0 +1,43 @@
+{
+	"name": "The Twilight Forest",
+	"icon": "twilightforest:magic_map",
+	"category": "patchouli:realms",
+	"sortnum": 0,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Dig a small pool, ring it with flowers, and throw in a diamond.$(br2)The Twilight Forest has to be taken in order."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Lands you haven't earned will curse you until the boss before them is dead: the Naga and the Lich, the Minoshroom and the Hydra, the Knight Phantoms and the Ur-Ghast, the Alpha Yeti and the Snow Queen.$(br2)A $(l:realms/twilight#magic_map)Magic Map$(/l) shows the way."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "twilightforest:magic_map",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "magic_map"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "twilightforest:fiery_ingot",
+			"text": "Fiery blood from the Hydra plus iron.",
+			"link_recipe": true,
+			"anchor": "fiery_ingot"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "twilightforest:knightmetal_ingot",
+			"text": "From the Knight Phantoms' stronghold.",
+			"link_recipe": true,
+			"anchor": "knightmetal_ingot"
+		}
+	],
+	"extra_recipe_mappings": {
+		"twilightforest:magic_map": 0,
+		"twilightforest:fiery_ingot": 0,
+		"twilightforest:knightmetal_ingot": 0
+	}
+}

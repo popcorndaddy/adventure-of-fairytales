@@ -1,0 +1,17 @@
+{
+	"name": "The Last Fight",
+	"icon": "minecraft:dragon_head",
+	"category": "patchouli:end",
+	"sortnum": 3,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Twelve eyes in the frame and the portal opens.$(br2)This dragon is far worse than the one you remember. Bring your best, bring healing, and have a plan for the crystals."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Its death tips the world into $(l)Master$() difficulty, and there are older things out on the End islands."
+		}
+	]
+}

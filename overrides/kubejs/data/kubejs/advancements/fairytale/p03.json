@@ -1,0 +1,23 @@
+{
+  "parent": "kubejs:fairytale/p02",
+  "display": {
+    "icon": {
+      "item": "minecraft:paper"
+    },
+    "title": {
+      "text": "The Grove"
+    },
+    "description": {
+      "text": "Taken back from Umvuthi"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "given": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

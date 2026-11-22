@@ -1,0 +1,24 @@
+{
+	"name": "Claims and Mining",
+	"icon": "minecraft:filled_map",
+	"category": "patchouli:travel",
+	"sortnum": 3,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "$(li)$(l)FTB Chunks$(): claim land on the map. Claimed chunks are yours, and can stay loaded while you're away.$(li)$(l)FTB Ultimine$(): hold the key while mining to take a whole vein or tree at once. Hungry work."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(li)$(l:travel/chunks#elevator_white)Elevators$(/l): stack two in a column. Jump to rise, sneak to drop."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "elevatorid:elevator_white,elevatorid:elevator_orange,elevatorid:elevator_magenta,elevatorid:elevator_light_blue,elevatorid:elevator_yellow,elevatorid:elevator_lime,elevatorid:elevator_pink,elevatorid:elevator_gray,elevatorid:elevator_light_gray,elevatorid:elevator_cyan,elevatorid:elevator_purple,elevatorid:elevator_blue,elevatorid:elevator_brown,elevatorid:elevator_green,elevatorid:elevator_red,elevatorid:elevator_black",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "elevator_white"
+		}
+	]
+}

@@ -1,0 +1,421 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "23_deeper_and_darker"
+	group: "0367FDC07E543102"
+	icon: "deeperdarker:heart_of_the_deep"
+	id: "591FBE8F2651F270"
+	order_index: 4
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["A strange heart opens a door to a deeper world. Find the ancient city and its core."]
+			icon: "deeperdarker:heart_of_the_deep"
+			id: "4B67EF30D078EA24"
+			rewards: [
+				{
+					count: 2
+					id: "578BF3A86292FDE0"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "0C7755149206ED48"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "15BCF4B3CBD48495"
+				item: "deeperdarker:heart_of_the_deep"
+				type: "item"
+			}]
+			title: "The Heart of the Deep"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4B67EF30D078EA24"]
+			description: ["Soul crystals power deep tools. Find one and a soul dust."]
+			icon: "deeperdarker:soul_crystal"
+			id: "13FFAE792BE9EBB4"
+			rewards: [
+				{
+					count: 2
+					id: "63506A29A2C5D20A"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "20482933BDCD9FA2"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "66E4FB8635D354FF"
+					item: "deeperdarker:soul_crystal"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "0CD4F3C51DC589E6"
+					item: "deeperdarker:soul_dust"
+					type: "item"
+				}
+			]
+			title: "Soul Crystals"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["13FFAE792BE9EBB4"]
+			description: ["Cross into the Otherside, a dimension of echoes and rivers of ink."]
+			icon: "minecraft:book"
+			id: "1B298E508A270031"
+			rewards: [
+				{
+					count: 2
+					id: "46F6D7304EF95474"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "5234455BB0684770"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				dimension: "deeperdarker:otherside"
+				id: "36BE9428741ACBBF"
+				type: "dimension"
+			}]
+			title: "Into the Otherside"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1B298E508A270031"]
+			description: ["Stalkers hunt by sound. Stay still and strike when they come close."]
+			icon: "minecraft:book"
+			id: "58A7E876C40A9D4F"
+			rewards: [
+				{
+					count: 2
+					id: "128A7BE36D92FE3C"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "2092EA1F2693E132"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				entity: "deeperdarker:stalker"
+				id: "13C566BC8FE8A950"
+				type: "kill"
+				value: 1L
+			}]
+			title: "Stalkers of the Dark"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["58A7E876C40A9D4F"]
+			description: ["Sculk leeches cling to the unwary. Burn them away."]
+			icon: "minecraft:book"
+			id: "6D9B09581784FD6F"
+			rewards: [
+				{
+					count: 2
+					id: "38E26FBDBEA4E43C"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "5E47912B530D2DE8"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				entity: "deeperdarker:sculk_leech"
+				id: "38D81B19DBD549B6"
+				type: "kill"
+				value: 4L
+			}]
+			title: "Sculk Leeches"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6D9B09581784FD6F"]
+			description: ["The shattered is a creature of tremors. Defeat it and take what it holds."]
+			icon: "minecraft:book"
+			id: "1E6930F2B7702101"
+			rewards: [
+				{
+					count: 16
+					id: "4BDE0C532D1DF1A8"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "2400F01CFE5ECDF8"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "02EC54226AC0B5C9"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				entity: "deeperdarker:shattered"
+				id: "6B159B815410A4FF"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Shattered"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1E6930F2B7702101"]
+			description: ["Resonarium plates are a rare metal. Craft a pickaxe and a sword from it."]
+			icon: {
+				Count: 1
+				id: "deeperdarker:resonarium_pickaxe"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "6C1E1CC89445F32E"
+			rewards: [
+				{
+					count: 3
+					id: "4BAC34285B5F5568"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "2BCF7E6A7AB4AE87"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "1ADDC404C2BA864B"
+					item: {
+						Count: 1
+						id: "deeperdarker:resonarium_pickaxe"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "0DBC1860921ECBCA"
+					item: {
+						Count: 1
+						id: "deeperdarker:resonarium_sword"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Resonarium"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6C1E1CC89445F32E"]
+			description: ["A full chestplate and helmet in resonarium."]
+			icon: {
+				Count: 1
+				id: "deeperdarker:resonarium_chestplate"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "0A0A20BA22BA2F03"
+			rewards: [
+				{
+					count: 16
+					id: "4A4D6B80A67CE5A5"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "13CED1B7967BF6B4"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "7D2E61594A36615C"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "7187543D4DE61F90"
+					item: {
+						Count: 1
+						id: "deeperdarker:resonarium_chestplate"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "0ED69449A6A8AF84"
+					item: {
+						Count: 1
+						id: "deeperdarker:resonarium_helmet"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Resonarium Armor"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0A0A20BA22BA2F03"]
+			description: ["A warden axe and boots from the creature itself. Not for the faint-hearted."]
+			icon: {
+				Count: 1
+				id: "deeperdarker:warden_axe"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "073E996A66F54A48"
+			rewards: [
+				{
+					id: "64F732CD420B72E9"
+					item: "minecraft:netherite_scrap"
+					type: "item"
+				}
+				{
+					count: 2
+					id: "5E2D223BA7AC2965"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "3F67E5E3C706C8F4"
+					type: "xp"
+					xp: 550
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "6D7E3BFA2534BFB3"
+					item: {
+						Count: 1
+						id: "deeperdarker:warden_axe"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "7916D10DBDFF8E5C"
+					item: {
+						Count: 1
+						id: "deeperdarker:warden_boots"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Warden Gear"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["073E996A66F54A48"]
+			description: ["A staff that makes the Warden listen. The final tool of the deep."]
+			icon: {
+				Count: 1
+				id: "deeperdarker:sonorous_staff"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "6B252875DC685FDE"
+			rewards: [
+				{
+					id: "42C5660E315AECD0"
+					item: "minecraft:netherite_scrap"
+					type: "item"
+				}
+				{
+					count: 2
+					id: "02BAE1E201EBBD61"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "42104921EDEA9D22"
+					type: "xp"
+					xp: 550
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "124368C48FFFE305"
+				item: {
+					Count: 1
+					id: "deeperdarker:sonorous_staff"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Sonorous Staff"
+			x: 18.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Beyond the Ancient City lies a darker world."]
+	title: "Deeper and Darker"
+}

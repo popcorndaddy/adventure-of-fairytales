@@ -1,0 +1,22 @@
+{
+	"name": "The Frozen Sea",
+	"icon": "minecraft:paper",
+	"category": "patchouli:notes",
+	"sortnum": 7,
+	"read_by_default": false,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "I only know this one secondhand, so bear with me."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "There's a forest where it's always dusk. You get there through a small pool ringed with flowers, if you throw a diamond in. Deep inside there's a lich at the top of a tower. The tower won't open until you've beaten the great snake first."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(o)The Twilight Lich hoards the Magical Eye at the top of his tower in the Twilight Forest. Beat the Naga first, or the door stays shut.$()"
+		}
+	],
+	"advancement": "kubejs:fairytale/p06"
+}

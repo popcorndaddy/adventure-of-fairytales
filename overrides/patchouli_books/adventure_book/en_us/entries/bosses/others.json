@@ -1,0 +1,13 @@
+{
+	"name": "Other Bosses",
+	"icon": "twilightforest:lich_tower_miniature_structure",
+	"category": "patchouli:bosses",
+	"sortnum": 6,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "The Twilight Forest's bosses, the Dead King, the Soulslike lords, the Wither and the Warden all have something you'll need. Some of them can be fought again."
+		}
+	]
+}

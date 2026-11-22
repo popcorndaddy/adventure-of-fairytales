@@ -1,0 +1,42 @@
+{
+	"name": "Mystical Farming",
+	"icon": "mysticalagriculture:infusion_altar",
+	"category": "patchouli:magic",
+	"sortnum": 7,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Mystical Agriculture grows resources like crops. Here, every tier has to be earned elsewhere in the world first."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Seeds are made on an $(l:magic/mystical#mystical_infusion_altar)Infusion Altar$(/l) ringed by eight $(l:magic/mystical#mystical_infusion_altar)Pedestals$(/l). Every resource seed starts as a $(l:magic/mystical#mystical_prosperity_seed_base)Prosperity Seed Base$(/l), and every base needs a mandrake root. Crops only drop a second seed on Essence Farmland, more often on their own tier's. An $(l:magic/mystical#mystical_prosperity_seed_base)Infusion Crystal$(/l) wears out."
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "kubejs:mystical/infusion_altar",
+			"recipe2": "kubejs:mystical/infusion_pedestal",
+			"anchor": "mystical_infusion_altar"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "mysticalagriculture:wand",
+			"text": "Starts an infusion.",
+			"link_recipe": true,
+			"anchor": "wand"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "kubejs:mystical/prosperity_seed_base",
+			"recipe2": "kubejs:mystical/infusion_crystal",
+			"anchor": "mystical_prosperity_seed_base"
+		}
+	],
+	"extra_recipe_mappings": {
+		"mysticalagriculture:infusion_altar": 0,
+		"mysticalagriculture:infusion_pedestal": 0,
+		"mysticalagriculture:prosperity_seed_base": 0,
+		"mysticalagriculture:infusion_crystal": 0
+	}
+}

@@ -1,0 +1,31 @@
+{
+	"name": "A Varied Diet",
+	"icon": "farmersdelight:beef_stew",
+	"category": "patchouli:world",
+	"sortnum": 2,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Eat the same meal day after day and it stops doing much for you. Each repeat fills you a little less, down to almost nothing."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Keep a few dishes in rotation and you'll hardly notice. A food's tooltip shows how tired of it you are. The $(l:world/food_health#food_history_book)Food History Book$(/l) remembers what you've eaten, and a $(l:world/food_health#wicker_basket)Wicker Basket$(/l) feeds you from whatever you've packed.$(br2)Golden apples, kelp, honey and chorus fruit never grow stale."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "solclassic:wicker_basket",
+			"text": "Holds 9 stacks of food. Right-click to eat the best one; sneak + right-click to open.",
+			"link_recipe": true,
+			"anchor": "wicker_basket"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "solclassic:food_history_book",
+			"text": "Shows every food you have eaten.",
+			"link_recipe": true,
+			"anchor": "food_history_book"
+		}
+	]
+}

@@ -1,0 +1,48 @@
+{
+	"name": "Two Schools",
+	"icon": "irons_spellbooks:arcane_essence",
+	"category": "patchouli:magic",
+	"sortnum": 5,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "The two schools of magic lean on each other. A mage who ignores one will stall in the other.$(br2)$(li)Iron's $(l:magic/irons#ars_bond_inscription_table)Inscription Table$(/l) is bound with a Worn Notebook, and its $(l:magic/irons2#ars_bond_scroll_forge)Scroll Forge$(/l) is built around Source."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(li)Amethyst steeped in Source, with lapis on a pedestal beside it, becomes $(l:magic/ars2#arcane_essence)Arcane Essence$(/l).$(li)Ars essences can etch Iron's runes.$(li)Ars's greater spell books ask for Iron's essence and ingots."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "irons_spellbooks:arcane_essence",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "arcane_essence"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "kubejs:ars_bond/fire_rune",
+			"recipe2": "kubejs:ars_bond/ice_rune",
+			"anchor": "ars_bond_fire_rune"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "ars_nouveau:apprentice_spell_book_upgrade",
+			"recipe2": "ars_nouveau:archmage_spell_book_upgrade",
+			"anchor": "apprentice_spell_book_upgrade"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "ars_nouveau:worn_notebook",
+			"title": "Further Reading",
+			"text": "The $(l)Worn Notebook$() goes deeper.",
+			"anchor": "worn_notebook"
+		}
+	],
+	"extra_recipe_mappings": {
+		"ars_nouveau:fire_essence": 0,
+		"ars_nouveau:apprentice_spell_book": 0,
+		"ars_nouveau:archmage_spell_book": 0
+	}
+}

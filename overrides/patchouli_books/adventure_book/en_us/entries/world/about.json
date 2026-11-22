@@ -1,0 +1,22 @@
+{
+	"name": "Using This Book",
+	"icon": "minecraft:book",
+	"category": "patchouli:world",
+	"sortnum": -1,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Notes on how this world works, gathered as I went. Not everything is written down. Some things you'll have to find out the hard way.$(br2)$(li)Hover anything pictured and press $(l)R$() for its recipe, $(l)U$() for its uses."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(li)Lost the book? A book and a compass will bind another."
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "kubejs:adventure_book",
+			"anchor": "adventure_book"
+		}
+	]
+}

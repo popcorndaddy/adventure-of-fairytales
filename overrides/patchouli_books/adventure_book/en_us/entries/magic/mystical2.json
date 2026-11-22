@@ -1,0 +1,131 @@
+{
+	"name": "Climbing the Tiers",
+	"icon": "mysticalagriculture:supremium_essence",
+	"category": "patchouli:magic",
+	"sortnum": 8,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Higher essence isn't crafted here. It's brewed in a $(l:crafting/create#crafting_kinetics_mechanical_press)Create mixer$(/l): four of one tier around an $(l:magic/mystical#mystical_prosperity_seed_base)Infusion Crystal$(/l) make four of the next. Each mix spends one of the crystal's 500 uses, and the mixer hands the crystal back with the essence."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Supremium and Insanium need the $(l:magic/mystical2#mystical_machine_frame)Master Infusion Crystal$(/l), which never wears out. It takes Imperium and a Nether Star. Imperium and Supremium need a heated mixer; Insanium needs a superheated one."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "The $(l:magic/mystical2#mystical_machine_frame)Machine Frame$(/l) is Create brass. The $(l:magic/mystical2#mystical_awakening_altar)Awakening Altar$(/l) needs Ignitium.$(br2)Insanium ends the climb."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Two $(l:magic/mystical2#insanium_gear_insanium_chestplate)Insanium Ingots$(/l) and two $(l:magic/mystical2#insanium_gear_insanium_chestplate)Insanium Gemstones$(/l) around a piece of Awakened Supremium gear make its $(l)Mystical Adaptations$() Insanium version, the strongest armor and tools in the mod."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "The piece keeps its enchantments, gems, quality, augments and name. Kill the Wither or the Ender Dragon with an Insanium weapon and it drops Insanium Essence."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Every tier also makes an $(l:magic/mystical2#mystical_staff_inferium_staff)Essence Staff$(/l). Here they are spell staves: they hit hard, raise spell power and mana regeneration, and hold imbued spells, one at Inferium and four at Insanium. Put a scroll on one at an Arcane Anvil to imbue it; each scroll fills the next slot."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "mysticalagriculture:inferium_essence",
+			"text": "Grown, not mixed: Inferium crops drop it. Every tier above starts here.",
+			"link_recipe": true,
+			"anchor": "inferium_essence"
+		},
+		{
+			"type": "patchouli:fairytale_mixer",
+			"title": "Prudentium Essence",
+			"item": "mysticalagriculture:prudentium_essence",
+			"lower": "mysticalagriculture:inferium_essence",
+			"crystal": "mysticalagriculture:infusion_crystal",
+			"out": "mysticalagriculture:prudentium_essence#4",
+			"heat": "minecraft:air",
+			"text": "Four Inferium round an Infusion Crystal, in any mixer. One crystal use per four essence.",
+			"anchor": "prudentium_essence"
+		},
+		{
+			"type": "patchouli:fairytale_mixer",
+			"title": "Tertium Essence",
+			"item": "mysticalagriculture:tertium_essence",
+			"lower": "mysticalagriculture:prudentium_essence",
+			"crystal": "mysticalagriculture:infusion_crystal",
+			"out": "mysticalagriculture:tertium_essence#4",
+			"heat": "minecraft:air",
+			"text": "Four Prudentium round an Infusion Crystal, in any mixer. One crystal use per four essence.",
+			"anchor": "tertium_essence"
+		},
+		{
+			"type": "patchouli:fairytale_mixer",
+			"title": "Imperium Essence",
+			"item": "mysticalagriculture:imperium_essence",
+			"lower": "mysticalagriculture:tertium_essence",
+			"crystal": "mysticalagriculture:infusion_crystal",
+			"out": "mysticalagriculture:imperium_essence#4",
+			"heat": "create:blaze_burner",
+			"text": "Four Tertium round an Infusion Crystal, heated. One crystal use per four essence.",
+			"anchor": "imperium_essence"
+		},
+		{
+			"type": "patchouli:fairytale_mixer",
+			"title": "Supremium Essence",
+			"item": "mysticalagriculture:supremium_essence",
+			"lower": "mysticalagriculture:imperium_essence",
+			"crystal": "mysticalagriculture:master_infusion_crystal",
+			"out": "mysticalagriculture:supremium_essence#4",
+			"heat": "create:blaze_burner",
+			"text": "Four Imperium round the Master Crystal, heated. It never wears out.",
+			"anchor": "supremium_essence"
+		},
+		{
+			"type": "patchouli:fairytale_mixer",
+			"title": "Insanium Essence",
+			"item": "mysticalagradditions:insanium_essence",
+			"lower": "mysticalagriculture:supremium_essence",
+			"crystal": "mysticalagriculture:master_infusion_crystal",
+			"out": "mysticalagradditions:insanium_essence#4",
+			"heat": "create:blaze_cake",
+			"text": "Four Supremium round the Master Crystal, superheated with a Blaze Cake.",
+			"anchor": "insanium_essence"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "kubejs:mystical/machine_frame",
+			"recipe2": "kubejs:mystical/master_infusion_crystal",
+			"anchor": "mystical_machine_frame"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "kubejs:mystical/awakening_altar",
+			"anchor": "mystical_awakening_altar"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "kubejs:insanium_gear/insanium_chestplate",
+			"recipe2": "kubejs:insanium_gear/insanium_sword",
+			"title": "Insanium Gear",
+			"anchor": "insanium_gear_insanium_chestplate"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "kubejs:mystical/staff/inferium_staff",
+			"recipe2": "kubejs:mystical/staff/prudentium_staff",
+			"title": "Essence Staffs",
+			"anchor": "mystical_staff_inferium_staff"
+		}
+	],
+	"extra_recipe_mappings": {
+		"mysticalagriculture:inferium_essence": 0,
+		"mysticalagriculture:prudentium_essence": 0,
+		"mysticalagriculture:tertium_essence": 0,
+		"mysticalagriculture:imperium_essence": 0,
+		"mysticalagriculture:supremium_essence": 0,
+		"mysticalagradditions:insanium_essence": 0,
+		"mysticalagriculture:machine_frame": 0,
+		"mysticalagradditions:insanium_ingot": 0,
+		"mysticalagradditions:insanium_gemstone": 0
+	}
+}

@@ -1,0 +1,240 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "36_tides_and_journals"
+	group: "01FA0B74B5D0B1FB"
+	icon: "tide:fishing_journal"
+	id: "40766A96BE10B99F"
+	order_index: 8
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Every fish you catch with Tide gets written into this journal, along with where it bites. Filling it is half the fun."]
+			icon: "tide:fishing_journal"
+			id: "3CF5494756342223"
+			rewards: [
+				{
+					count: 4
+					id: "35C9F6A0CB6DBDE0"
+					item: "minecraft:cod"
+					type: "item"
+				}
+				{
+					id: "7985538592A16AFB"
+					type: "xp"
+					xp: 40
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "453959A225BB48FC"
+				item: "tide:fishing_journal"
+				type: "item"
+			}]
+			title: "The Fishing Journal"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3CF5494756342223"]
+			description: ["The Angling Table is where you fit gear like hooks onto Tide's rods."]
+			icon: "tide:angling_table"
+			id: "2830CF3788F9A423"
+			rewards: [
+				{
+					count: 8
+					id: "5429AC17B8558921"
+					item: "minecraft:string"
+					type: "item"
+				}
+				{
+					id: "564455FF2E0DEC4A"
+					type: "xp"
+					xp: 50
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "4225EAC970788E76"
+				item: "tide:angling_table"
+				type: "item"
+			}]
+			title: "The Angling Table"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2830CF3788F9A423"]
+			description: ["Bait goes into a rod and makes fish bite sooner."]
+			icon: "tide:bait"
+			id: "791FCAD60F977143"
+			rewards: [
+				{
+					count: 16
+					id: "3D94586DC8FEDCBB"
+					item: "minecraft:wheat_seeds"
+					type: "item"
+				}
+				{
+					id: "1F438CB3964F6876"
+					type: "xp"
+					xp: 40
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 4L
+				id: "23C1143D7D76F898"
+				item: "tide:bait"
+				type: "item"
+			}]
+			title: "Bait"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["791FCAD60F977143"]
+			description: ["Tide's rods get tougher the further you take them. Repair them on an anvil with string."]
+			icon: {
+				Count: 1
+				id: "tide:iron_fishing_rod"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "7DF430C2B8AF7830"
+			rewards: [
+				{
+					count: 6
+					id: "49CD50E95495EDAE"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "64C55306CA816271"
+					type: "xp"
+					xp: 80
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "1754955EAA7C98AA"
+				item: {
+					Count: 1
+					id: "tide:iron_fishing_rod"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "Iron Fishing Rod"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["7DF430C2B8AF7830"]
+			description: ["Catch ten different kinds of fish, then open your journal to see where the rest are hiding. Claim this when you have."]
+			icon: "minecraft:tropical_fish"
+			id: "6288A4E8B6EA8A5C"
+			rewards: [
+				{
+					count: 6
+					id: "690B3EBBCC08D755"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "6D158FE4930BE6C9"
+					type: "xp"
+					xp: 120
+				}
+			]
+			tasks: [{
+				id: "405442AEAA3B427A"
+				type: "checkmark"
+			}]
+			title: "A Full Net"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6288A4E8B6EA8A5C"]
+			description: ["A rarer, stronger Tide rod. Your Aquaculture rods still work too, so use whichever suits you."]
+			icon: {
+				Count: 1
+				id: "tide:crystal_fishing_rod"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "365EEF4763A94694"
+			rewards: [
+				{
+					count: 2
+					id: "2BD26B1D516BCAED"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "48BDD3032872F44B"
+					type: "xp"
+					xp: 150
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "4A4CF914EB02C3AD"
+				item: {
+					Count: 1
+					id: "tide:crystal_fishing_rod"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "Crystal Fishing Rod"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["365EEF4763A94694"]
+			description: ["Fish long enough with any rod and the sea sometimes coughs up Neptune's Bounty, a sealed chest from the deep. Open it for Neptunium."]
+			icon: "aquaculture:neptunium_ingot"
+			id: "4990DA67115BCA15"
+			rewards: [
+				{
+					count: 3
+					id: "2C9857814A897DE1"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "60D2D4B341923F17"
+					type: "xp"
+					xp: 250
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "0ECAE8DE84349782"
+				item: "aquaculture:neptunium_ingot"
+				type: "item"
+			}]
+			title: "Neptunium"
+			x: 12.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Tide fishing: rods you build, fish you collect and a journal to fill."]
+	title: "Tides and Journals"
+}

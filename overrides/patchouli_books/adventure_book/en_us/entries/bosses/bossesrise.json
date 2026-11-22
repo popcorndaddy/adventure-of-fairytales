@@ -1,0 +1,27 @@
+{
+	"name": "Bosses'Rise",
+	"icon": "block_factorys_bosses:knight_sword",
+	"category": "patchouli:bosses",
+	"sortnum": 2,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "The Underworld Knight, the Sandworm, the Yeti, the Infernal Dragon and the Kraken. Each keeps its own ground and fights like it means it.$(br2)Press $(l)Z$() to roll."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "block_factorys_bosses:knight_sword",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "knight_sword"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "block_factorys_bosses:sandworm_gauntlet",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "sandworm_gauntlet"
+		}
+	]
+}

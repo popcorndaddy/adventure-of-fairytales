@@ -1,0 +1,31 @@
+{
+	"name": "Soulslike Weaponry",
+	"icon": "minecraft:netherite_sword",
+	"category": "patchouli:gear",
+	"sortnum": 4,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Mjolnir, the Leviathan Axe, the Moonlight Greatsword. Marium's Soulslike Weaponry forges legends from the remains of its bosses: the Draugr, the Accursed Lord, the Moonknight, the Chaos Monarch and others."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "JEI will tell you which boss each weapon needs."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "soulsweapons:leviathan_axe",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "leviathan_axe"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "soulsweapons:mjolnir",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "mjolnir"
+		}
+	]
+}

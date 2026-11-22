@@ -1,0 +1,67 @@
+{
+	"name": "The Other Six",
+	"icon": "endrem:nether_eye",
+	"category": "patchouli:end",
+	"sortnum": 1,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "$(li)$(l:end/eyes2#magical_eye)Magical Eye$(/l): the Twilight Lich$(li)$(l:end/eyes2#evil_eye)Evil Eye$(/l): the Night Lich$(li)$(l:end/eyes2#exotic_eye)Exotic Eye$(/l): the Sandworm$(li)$(l:end/eyes2#old_eye)Old Eye$(/l): the Ancient Remnant$(li)$(l:end/eyes2#guardian_eye)Guardian Eye$(/l): the Leviathan"
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(li)$(l:end/eyes2#nether_eye)Nether Eye$(/l): the Netherite Monstrosity$(br2)$(l:notes/start)Apollo's Notes$(/l) lead from one to the next."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "endrem:magical_eye",
+			"text": "From the Twilight Lich.",
+			"link_recipe": true,
+			"anchor": "magical_eye"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "endrem:evil_eye",
+			"text": "From the Night Lich.",
+			"link_recipe": true,
+			"anchor": "evil_eye"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "endrem:exotic_eye",
+			"text": "From the Sandworm.",
+			"link_recipe": true,
+			"anchor": "exotic_eye"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "endrem:old_eye",
+			"text": "From the Ancient Remnant.",
+			"link_recipe": true,
+			"anchor": "old_eye"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "endrem:guardian_eye",
+			"text": "From the Leviathan.",
+			"link_recipe": true,
+			"anchor": "guardian_eye"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "endrem:nether_eye",
+			"text": "From the Netherite Monstrosity.",
+			"link_recipe": true,
+			"anchor": "nether_eye"
+		}
+	],
+	"extra_recipe_mappings": {
+		"endrem:magical_eye": 0,
+		"endrem:evil_eye": 0,
+		"endrem:exotic_eye": 0,
+		"endrem:old_eye": 0,
+		"endrem:guardian_eye": 0,
+		"endrem:nether_eye": 0
+	}
+}

@@ -1,0 +1,53 @@
+{
+	"name": "Create",
+	"icon": "create:cogwheel",
+	"category": "patchouli:crafting",
+	"sortnum": 2,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Everything in Create turns. A water wheel or windmill spins shafts and cogwheels, and machines draw on that motion. Ask too much of a source and the whole line stalls. Engineer's Goggles show the strain."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(li)$(l:crafting/create#crafting_kinetics_mechanical_press)Mechanical Press$(/l): sheets, and compacting over a basin.$(li)$(l:crafting/create#crafting_kinetics_mechanical_press)Mechanical Mixer$(/l) over a $(l:crafting/create#crafting_kinetics_basin)Basin$(/l): mixing, some of it needing heat.$(li)$(l:crafting/create#crafting_kinetics_basin)Millstone$(/l): crushed ore, which means more metal."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(li)$(l:crafting/create#crafting_kinetics_encased_fan)Encased Fan$(/l): smelts through lava, washes through water, smokes through fire.$(br2)Hold $(l)W$() over a Create item to watch it work."
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "create:crafting/materials/andesite_alloy",
+			"recipe2": "create:crafting/kinetics/water_wheel",
+			"anchor": "crafting_materials_andesite_alloy"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "create:crafting/kinetics/mechanical_press",
+			"recipe2": "create:crafting/kinetics/mechanical_mixer",
+			"anchor": "crafting_kinetics_mechanical_press"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "create:crafting/kinetics/basin",
+			"recipe2": "create:crafting/kinetics/millstone",
+			"anchor": "crafting_kinetics_basin"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "create:crafting/kinetics/encased_fan",
+			"recipe2": "create:crafting/kinetics/empty_blaze_burner",
+			"anchor": "crafting_kinetics_encased_fan"
+		}
+	],
+	"extra_recipe_mappings": {
+		"create:andesite_alloy": 0,
+		"create:mechanical_press": 0,
+		"create:mechanical_mixer": 0,
+		"create:basin": 0,
+		"create:millstone": 0,
+		"create:encased_fan": 0
+	}
+}

@@ -1,0 +1,18 @@
+{
+	"name": "The Sunken City",
+	"icon": "minecraft:paper",
+	"category": "patchouli:notes",
+	"sortnum": 12,
+	"read_by_default": false,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "The last eye is in the Nether.$(br2)There's a forge down there that was built for souls. Something made of netherite still works it. It doesn't like visitors."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(o)The Netherite Monstrosity still works the Soul Forge, with the Nether Eye close at hand. Somewhere in the Nether.$()"
+		}
+	],
+	"advancement": "kubejs:fairytale/p11"
+}

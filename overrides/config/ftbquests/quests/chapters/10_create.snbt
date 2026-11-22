@@ -1,0 +1,662 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "10_create"
+	group: "5A734B321110FED6"
+	icon: "create:cogwheel"
+	id: "21C6EFFA8415B1D1"
+	order_index: 1
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Create runs on rotation. Make andesite alloy and a few shafts to carry it."]
+			icon: "create:andesite_alloy"
+			id: "5C6202805EEEE499"
+			rewards: [
+				{
+					count: 3
+					id: "04F8C519E8E6D645"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "02DD4EC3A306B23F"
+					type: "xp"
+					xp: 50
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 8L
+					id: "3538B5E791BA724F"
+					item: "create:andesite_alloy"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 4L
+					id: "62B301B6E5DFA3BC"
+					item: "create:shaft"
+					type: "item"
+				}
+			]
+			title: "The First Gear"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5C6202805EEEE499"]
+			description: ["Goggles show you what your machines are doing and a wrench rotates every part. Both belong in your pocket."]
+			icon: "create:goggles"
+			id: "2473191C0293D633"
+			rewards: [
+				{
+					count: 32
+					id: "1CCCC4EE73776EEA"
+					item: "minecraft:arrow"
+					type: "item"
+				}
+				{
+					id: "70FD93F39D4633B8"
+					type: "xp"
+					xp: 50
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "5A2644738C05BDB9"
+					item: "create:goggles"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "6127455B17CBE222"
+					item: "create:wrench"
+					type: "item"
+				}
+			]
+			title: "Goggles and Wrench"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2473191C0293D633"]
+			description: ["A water wheel and cogwheels turn the flow of a river into usable power."]
+			icon: "create:water_wheel"
+			id: "6172B15D70EEB173"
+			rewards: [
+				{
+					count: 8
+					id: "1798D4C4BAF07BE6"
+					item: "minecraft:cooked_porkchop"
+					type: "item"
+				}
+				{
+					id: "394F863667EAB51B"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "5621DEAC99644D24"
+					item: "create:water_wheel"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 4L
+					id: "7F89B319739EF521"
+					item: "create:cogwheel"
+					type: "item"
+				}
+			]
+			title: "Turning Wheels"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6172B15D70EEB173"]
+			description: ["A windmill bearing harvests the wind and a hand crank makes power on demand."]
+			icon: "create:windmill_bearing"
+			id: "0655FF82B7348856"
+			rewards: [
+				{
+					count: 3
+					id: "539CAE678364F505"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "65A565CB7C323D23"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "376640AF648B0DBA"
+					item: "create:windmill_bearing"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "118B44D5C48138A8"
+					item: "create:hand_crank"
+					type: "item"
+				}
+			]
+			title: "Wind and Hand"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0655FF82B7348856"]
+			description: ["Crush ore and grain at a millstone. Crushed ore doubles when washed or smelted."]
+			icon: "create:millstone"
+			id: "1DD3581104184AE3"
+			rewards: [
+				{
+					count: 8
+					id: "2262F0F8924A9064"
+					item: "minecraft:cooked_porkchop"
+					type: "item"
+				}
+				{
+					id: "28BC970EC8C7A8BD"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "3918FDF91B16AA9A"
+					item: "create:millstone"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 8L
+					id: "419E4E637CABFEFC"
+					item: "create:crushed_raw_iron"
+					type: "item"
+				}
+			]
+			title: "The Millstone"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1DD3581104184AE3"]
+			description: ["A press flattens ingots into sheets, the building blocks of casings and brass."]
+			icon: "create:mechanical_press"
+			id: "7DDDAC1B4137166A"
+			rewards: [
+				{
+					count: 10
+					id: "389D56032EA4571C"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "671A48C8BC52F515"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "07CA6DAF98B739A1"
+					item: "create:mechanical_press"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 4L
+					id: "7B058F06F84E23EC"
+					item: "create:iron_sheet"
+					type: "item"
+				}
+			]
+			title: "The Mechanical Press"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["7DDDAC1B4137166A"]
+			description: ["Andesite casings hold machines together and fans push, wash and smoke items."]
+			icon: "create:andesite_casing"
+			id: "4908F059AC57F6A8"
+			rewards: [
+				{
+					count: 6
+					id: "502B2E1281752278"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "5F711A1260552BB8"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 4L
+					id: "3E21EF0E35CA4CC2"
+					item: "create:andesite_casing"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "1D03041C6F20F342"
+					item: "create:encased_fan"
+					type: "item"
+				}
+			]
+			title: "Casings and Fans"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4908F059AC57F6A8"]
+			description: ["Brass takes copper and zinc through a mixer and blaze burner. It is the key to everything advanced."]
+			icon: "create:brass_ingot"
+			id: "0F895D1AB46F7220"
+			rewards: [
+				{
+					count: 6
+					id: "52403590943E59B6"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "2C3747A9FBA1D00A"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 8L
+					id: "221FFACB4EEA5C82"
+					item: "create:brass_ingot"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 4L
+					id: "041B34E1E8869FAD"
+					item: "create:brass_sheet"
+					type: "item"
+				}
+			]
+			title: "Brass"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0F895D1AB46F7220"]
+			description: ["Belts carry items between machines and depots hold them for processing."]
+			icon: "create:belt_connector"
+			id: "07A64353C4F2ED74"
+			rewards: [
+				{
+					count: 6
+					id: "3769E41DA4735A35"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "1CB9A76CD9E217F2"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 8L
+					id: "7EDA99E01F48E628"
+					item: "create:belt_connector"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "04854F64C91BE003"
+					item: "create:depot"
+					type: "item"
+				}
+			]
+			title: "Belts and Depots"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["07A64353C4F2ED74"]
+			description: ["A mixer and a basin combine ingredients into alloys."]
+			icon: "create:mechanical_mixer"
+			id: "1536C37571E713A6"
+			rewards: [
+				{
+					count: 10
+					id: "78DC19F3AE8E9A99"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "117336F8D114EC8E"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "28E6410C31115799"
+					item: "create:mechanical_mixer"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "3FF4D7A27B825C1E"
+					item: "create:basin"
+					type: "item"
+				}
+			]
+			title: "The Mechanical Mixer"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1536C37571E713A6"]
+			description: ["Mechanical drills and saws automate the mine and the lumber yard."]
+			icon: "create:mechanical_drill"
+			id: "513B029B667291EA"
+			rewards: [
+				{
+					count: 10
+					id: "75C74A55734A7F99"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "4AE673E594525EBB"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "625B3FDDCC8CF0C5"
+					item: "create:mechanical_drill"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "58A2D2231372BE75"
+					item: "create:mechanical_saw"
+					type: "item"
+				}
+			]
+			title: "Drills and Saws"
+			x: 20.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["513B029B667291EA"]
+			description: ["Precision mechanisms are the heart of advanced machines. A deployer uses tools for you."]
+			icon: "create:precision_mechanism"
+			id: "5F65B27AFB41001E"
+			rewards: [
+				{
+					count: 8
+					id: "41C47728219A4F17"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "5671F9338BCBEFE7"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "61B94B880F7B461C"
+					item: "create:precision_mechanism"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "5AF61ABEDF53C385"
+					item: "create:deployer"
+					type: "item"
+				}
+			]
+			title: "Precision Work"
+			x: 22.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5F65B27AFB41001E"]
+			description: ["A blaze burner heats your mixer and basin hot enough for brass and superheated crafts."]
+			icon: "create:blaze_burner"
+			id: "040968124C8264A7"
+			rewards: [
+				{
+					count: 8
+					id: "21C30A1C3266688C"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "4E1DC3BB80602A81"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "73B27FF90891C4A3"
+					item: "create:blaze_burner"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 4L
+					id: "2F4C1E5C3998FA99"
+					item: "create:brass_casing"
+					type: "item"
+				}
+			]
+			title: "The Blaze Burner"
+			x: 24.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["040968124C8264A7"]
+			description: ["Fluid pipes, pumps and spouts let you move liquids anywhere."]
+			icon: "create:fluid_pipe"
+			id: "79B91886382A0A7E"
+			rewards: [
+				{
+					count: 8
+					id: "1944745C80B03E28"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "40C0C90AEF874580"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 8L
+					id: "32F68459D3130BCC"
+					item: "create:fluid_pipe"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "511B75A6F2B90F67"
+					item: "create:mechanical_pump"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "518EA366A6C61857"
+					item: "create:spout"
+					type: "item"
+				}
+			]
+			title: "Plumbing"
+			x: 26.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["79B91886382A0A7E"]
+			description: ["A schematic table and cannon let you copy and rebuild any structure in minutes."]
+			icon: "create:schematic_table"
+			id: "163E499C2E643AF0"
+			rewards: [
+				{
+					id: "13AA71E2A3884319"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "1907F7C1E9A5AD85"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "513C9FF8AAF37FF3"
+					item: "create:schematic_table"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "77E8DF88792D465A"
+					item: "create:schematicannon"
+					type: "item"
+				}
+			]
+			title: "Blueprints"
+			x: 28.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["163E499C2E643AF0"]
+			description: ["Rails with railway casings let you build trains that carry players and cargo across the world."]
+			icon: "create:railway_casing"
+			id: "75D1638211DD2942"
+			rewards: [
+				{
+					count: 2
+					id: "642C610A43D58AE4"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "291A97C4A5E96B98"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 4L
+					id: "3ACDEB0B85C8F4FB"
+					item: "create:railway_casing"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 8L
+					id: "0E0360A289960F68"
+					item: "create:track"
+					type: "item"
+				}
+			]
+			title: "The Railway"
+			x: 30.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["75D1638211DD2942"]
+			description: ["A steam engine on a boiler gives you power at a scale water and wind cannot match."]
+			icon: "create:steam_engine"
+			id: "7056B754D712E2FC"
+			rewards: [
+				{
+					count: 2
+					id: "4B3514F52143699E"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "4866D8109A06A261"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "2537281A2C77FE21"
+					item: "create:steam_engine"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 4L
+					id: "2755BA4198318E55"
+					item: "create:fluid_tank"
+					type: "item"
+				}
+			]
+			title: "Steam Power"
+			x: 32.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Gears, belts and the engines of a kingdom."]
+	title: "Create"
+}

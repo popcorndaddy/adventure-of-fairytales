@@ -1,0 +1,555 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "33_end_remastered"
+	group: "71E49019A27AF73C"
+	icon: "endrem:ancient_portal_frame"
+	id: "134900601520FE9E"
+	order_index: 3
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["A portal frame of an older age, built into the ground where the old roads end. Find one and look at it; it takes twelve eyes, and in this world every one of them is held by a boss."]
+			icon: "endrem:ancient_portal_frame"
+			id: "3CE071E08EDBD9EE"
+			rewards: [
+				{
+					id: "18A054A4C8D87155"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "3F58FD08DEB2F6D3"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				id: "7FCD262240C3E726"
+				observe_type: 0
+				timer: 0L
+				title: "Find an Ancient Portal Frame"
+				to_observe: "endrem:ancient_portal_frame"
+				type: "observation"
+			}]
+			title: "The Ancient Portal Frame"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3CE071E08EDBD9EE"]
+			description: ["The Frostmaw keeps the Cold Eye. It sleeps in the snowfields."]
+			icon: {
+				Count: 1
+				id: "endrem:cold_eye"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "56F619AC58544870"
+			rewards: [
+				{
+					id: "41B1F7AEE9C951E4"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "16BFBF92BB414C28"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "5338A708D34A29FB"
+				item: {
+					Count: 1
+					id: "endrem:cold_eye"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Cold Eye"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["56F619AC58544870"]
+			description: ["The Twilight Lich keeps the Magical Eye, at the top of its tower in the Twilight Forest."]
+			icon: {
+				Count: 1
+				id: "endrem:magical_eye"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "748C8B9F3F27ED6F"
+			rewards: [
+				{
+					count: 8
+					id: "39F6E41303C89421"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "2D8D587F9BBCE0D2"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "0EF072A61728FCE0"
+				item: {
+					Count: 1
+					id: "endrem:magical_eye"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Magical Eye"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["748C8B9F3F27ED6F"]
+			description: ["Sir Pumpkinhead keeps the Witch Eye. Break the evil pumpkin in the ring of candles to call him."]
+			icon: {
+				Count: 1
+				id: "endrem:witch_eye"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "6E2B5BB291E7DB2F"
+			rewards: [
+				{
+					count: 8
+					id: "478A259716B8080F"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "0CAA5464437EE6F8"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "6E2A40826DF88A8C"
+				item: {
+					Count: 1
+					id: "endrem:witch_eye"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Witch Eye"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6E2B5BB291E7DB2F"]
+			description: ["Umvuthi keeps the Rogue Eye, on his throne in a savanna grove."]
+			icon: {
+				Count: 1
+				id: "endrem:rogue_eye"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "50DBC6578F65DF06"
+			rewards: [
+				{
+					count: 2
+					id: "6E04380185BAB320"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "29579D319A3382E7"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "4C12AE3235AD2E76"
+				item: {
+					Count: 1
+					id: "endrem:rogue_eye"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Rogue Eye"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["50DBC6578F65DF06"]
+			description: ["The Leviathan keeps the Guardian Eye, down in the Sunken City."]
+			icon: {
+				Count: 1
+				id: "endrem:guardian_eye"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "409F6C2D9ADE1AA1"
+			rewards: [
+				{
+					count: 2
+					id: "3C601C4C03997F9B"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "16BCCCC6596BCDF9"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "06E53B5196BDA206"
+				item: {
+					Count: 1
+					id: "endrem:guardian_eye"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Guardian Eye"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["409F6C2D9ADE1AA1"]
+			description: ["Captain Cornelia keeps the Black Eye. Blow a Shell Horn near open water in the Ice Maze to call her."]
+			icon: {
+				Count: 1
+				id: "endrem:black_eye"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "497CE3BD3B356F78"
+			rewards: [
+				{
+					count: 8
+					id: "41A6B24AD6AAF3FE"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "536F1D3D18A27783"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "0419665E5AD4E544"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "02172988D952B945"
+				item: {
+					Count: 1
+					id: "endrem:black_eye"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Black Eye"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["497CE3BD3B356F78"]
+			description: ["The Night Lich keeps the Evil Eye, in its tower out in the cold."]
+			icon: {
+				Count: 1
+				id: "endrem:evil_eye"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "558D11AA652D187F"
+			rewards: [
+				{
+					count: 8
+					id: "24EAE3C3FC13EFAB"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "10DC112D4984CF6A"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "60D4A05A46671EF0"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "3EADE381B3274333"
+				item: {
+					Count: 1
+					id: "endrem:evil_eye"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Evil Eye"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["558D11AA652D187F"]
+			description: ["The Netherite Monstrosity keeps the Nether Eye, in the Soul Forge."]
+			icon: {
+				Count: 1
+				id: "endrem:nether_eye"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "36F6F9C1642B27EC"
+			rewards: [
+				{
+					count: 8
+					id: "2D26433FC1FB4AD9"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "117212A58EA8532A"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "322B265C661F1058"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "24156A74E6C4D499"
+				item: {
+					Count: 1
+					id: "endrem:nether_eye"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Nether Eye"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["36F6F9C1642B27EC"]
+			description: ["The Ferrous Wroughtnaut keeps the Lost Eye, asleep in a chamber under the hills."]
+			icon: {
+				Count: 1
+				id: "endrem:lost_eye"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "38ACC6FAEA7D2C4C"
+			rewards: [
+				{
+					count: 3
+					id: "68DBBA072134075E"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "4D8456F69E5CF7C1"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "4893F182A559D169"
+				item: {
+					Count: 1
+					id: "endrem:lost_eye"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Lost Eye"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["38ACC6FAEA7D2C4C"]
+			description: ["The Ancient Remnant keeps the Old Eye, inside the Cursed Pyramid."]
+			icon: {
+				Count: 1
+				id: "endrem:old_eye"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "7A1E3E140A1A0932"
+			rewards: [
+				{
+					count: 3
+					id: "4FDD461BC973C0DB"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "7F3A713FA474F3FF"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "5EFA36B6BC31B65A"
+				item: {
+					Count: 1
+					id: "endrem:old_eye"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Old Eye"
+			x: 20.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["7A1E3E140A1A0932"]
+			description: ["The Dead King keeps the Undead Eye, in the deepest room of the catacombs."]
+			icon: {
+				Count: 1
+				id: "endrem:undead_eye"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "7C2C860E4094E917"
+			rewards: [
+				{
+					count: 16
+					id: "2A80DC073031E3CF"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "3F4E2EA0CA99C311"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "22D24CE07FC43707"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "22F6C9700CA1273A"
+				item: {
+					Count: 1
+					id: "endrem:undead_eye"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Undead Eye"
+			x: 22.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["7C2C860E4094E917"]
+			description: ["The Sandworm keeps the Exotic Eye. It hunts under the desert sand; hit it when it surfaces."]
+			icon: {
+				Count: 1
+				id: "endrem:exotic_eye"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "6F1E2D3C4B5A6978"
+			rewards: [
+				{
+					count: 16
+					id: "6F1E2D3C4B5A697A"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "6F1E2D3C4B5A697B"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "6F1E2D3C4B5A6979"
+				item: {
+					Count: 1
+					id: "endrem:exotic_eye"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Exotic Eye"
+			x: 24.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Twelve eyes open the End, and each one is held by a boss."]
+	title: "End Remastered"
+}

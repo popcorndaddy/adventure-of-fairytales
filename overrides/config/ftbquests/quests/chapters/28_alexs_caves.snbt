@@ -1,0 +1,451 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "28_alexs_caves"
+	group: "03F7C10E6FAF5CEC"
+	icon: {
+		Count: 1
+		id: "alexscaves:galena_gauntlet"
+		tag: {
+			Damage: 0
+		}
+	}
+	id: "4F18DCD66103B8DE"
+	order_index: 4
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Rich in iron and neodymium, the magnetic caves are a place of constant motion. Craft a galena gauntlet."]
+			icon: {
+				Count: 1
+				id: "alexscaves:galena_gauntlet"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "7690EDBAACF46B49"
+			rewards: [
+				{
+					id: "1A28C88C9E6BA69C"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "1BCCBCD046C4F4A7"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "677B4455DE1E4586"
+					item: {
+						Count: 1
+						id: "alexscaves:galena_gauntlet"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "397580A0771524E1"
+					item: "alexscaves:azure_neodymium_ingot"
+					type: "item"
+				}
+			]
+			title: "The Magnetic Caves"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["7690EDBAACF46B49"]
+			description: ["Dinosaurs and ancient plants thrive in the prehistoric caves. Take a dinosaur chop home."]
+			icon: "alexscaves:cooked_dinosaur_chop"
+			id: "6CD435DEC9102F71"
+			rewards: [
+				{
+					id: "1102F5562164B736"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "538FE6AFE6DCDA92"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "1C951B183D323B82"
+					item: "alexscaves:cooked_dinosaur_chop"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "4ECB14325D251265"
+					item: "alexscaves:dinosaur_nugget"
+					type: "item"
+				}
+			]
+			title: "Prehistoric Caves"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6CD435DEC9102F71"]
+			description: ["Acid pools and radioactive creatures fill the toxic caves. Bring a good suit."]
+			icon: "alexscaves:acid_bucket"
+			id: "30FA4FEB74F74CF2"
+			rewards: [
+				{
+					count: 2
+					id: "4217B8EDAE68F1E2"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "3D9CE08554041E4D"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "54D614DA505B48E3"
+					item: "alexscaves:acid_bucket"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "7C3B7439593D42A5"
+					item: "alexscaves:fissile_core"
+					type: "item"
+				}
+			]
+			title: "Toxic Caves"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["30FA4FEB74F74CF2"]
+			description: ["The deep sea hides weird creatures and rare treasure. Craft a diving suit."]
+			icon: {
+				Count: 1
+				id: "alexscaves:diving_helmet"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "3B26489CAB340B02"
+			rewards: [
+				{
+					count: 2
+					id: "77FAF94CAC2E586E"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "05B4E44C7765DEAD"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "222A5A89B550866F"
+					item: {
+						Count: 1
+						id: "alexscaves:diving_helmet"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "4EB1F146A4E973F0"
+					item: {
+						Count: 1
+						id: "alexscaves:diving_chestplate"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "The Abyssal Chasm"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3B26489CAB340B02"]
+			description: ["A cave of sweets. Eat and collect candy, but beware the gummy bears."]
+			icon: "alexscaves:caramel_apple"
+			id: "5ACAAF8984DEA3BB"
+			rewards: [
+				{
+					id: "74EDA23C69B38291"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "0120E43F5755A412"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "2F42D093192FF351"
+					item: "alexscaves:caramel_apple"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "4039F833FAD57813"
+					item: "alexscaves:chocolate_ice_cream"
+					type: "item"
+				}
+			]
+			title: "Candy Cavities"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5ACAAF8984DEA3BB"]
+			description: ["A dark cave of deadly depths. Bring a bow and a lantern."]
+			icon: {
+				Count: 1
+				id: "alexscaves:dreadbow"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "770ECB9A3EAEBB58"
+			rewards: [
+				{
+					count: 8
+					id: "07FA7CF8DA9D3C42"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "1B5BAB85BA7425D9"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "1B79870B23D94C69"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "098649A698ABED88"
+					item: {
+						Count: 1
+						id: "alexscaves:dreadbow"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "1910232B98D8DD0C"
+					item: "alexscaves:forsaken_idol"
+					type: "item"
+				}
+			]
+			title: "Forlorn Hollows"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["770ECB9A3EAEBB58"]
+			description: ["The great tyrant of the prehistoric caves. Defeat him with magnets and patience."]
+			icon: "minecraft:book"
+			id: "09DC3E2B5A374FBB"
+			rewards: [
+				{
+					id: "492E6920FFBB7C07"
+					item: "minecraft:netherite_scrap"
+					type: "item"
+				}
+				{
+					count: 2
+					id: "2EF5336D9B56EF61"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "54D9F41812F7C9FB"
+					type: "xp"
+					xp: 550
+				}
+			]
+			tasks: [{
+				entity: "alexscaves:luxtructosaurus"
+				id: "7F8C0A7EECC79570"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Luxtructosaurus"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["09DC3E2B5A374FBB"]
+			description: ["The hullbreaker rules the abyss. Come in a submarine and with plenty of oxygen."]
+			icon: "minecraft:book"
+			id: "2439CC4492B8FE53"
+			rewards: [
+				{
+					id: "2BE6041A60FCCF76"
+					item: "minecraft:netherite_scrap"
+					type: "item"
+				}
+				{
+					count: 2
+					id: "262A6B4841168518"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "09B7DE83377935CE"
+					type: "xp"
+					xp: 550
+				}
+			]
+			tasks: [{
+				entity: "alexscaves:hullbreaker"
+				id: "0B13974C5F74E20A"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Hullbreaker"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2439CC4492B8FE53"]
+			description: ["A nuclear creeper in the toxic cave. Defeat it from a distance."]
+			icon: "minecraft:book"
+			id: "3533C16D32D70BDD"
+			rewards: [
+				{
+					count: 16
+					id: "0EF85A70CF5D8EB1"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "2280004FE62A5DD4"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "2A9851052A721708"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				entity: "alexscaves:nucleeper"
+				id: "353B79870B89F661"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Nucleeper"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3533C16D32D70BDD"]
+			description: ["A freezing spear for hunters of the candy cave."]
+			icon: "alexscaves:frostmint_spear"
+			id: "153DA51BEAEF2CAF"
+			rewards: [
+				{
+					count: 2
+					id: "316FA4338F8FEC3E"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "6BA2EA4D39F6FEBD"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "0EA03A6B6116081A"
+				item: "alexscaves:frostmint_spear"
+				type: "item"
+			}]
+			title: "Frostmint Spear"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["153DA51BEAEF2CAF"]
+			description: ["Master every cave and craft the enigmatic engine to complete the set."]
+			icon: "alexscaves:enigmatic_engine"
+			id: "6CABE7430A1BE202"
+			rewards: [
+				{
+					id: "76384BEA73421DB5"
+					item: "minecraft:enchanted_golden_apple"
+					type: "item"
+				}
+				{
+					count: 16
+					id: "3D508F29DFCDAA1F"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "4645DE9C09D969C1"
+					type: "xp"
+					xp: 900
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "187B74A65ACDFE34"
+				item: "alexscaves:enigmatic_engine"
+				type: "item"
+			}]
+			title: "The Final Cave"
+			x: 20.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Seven strange caves beneath your feet."]
+	title: "Alex's Caves"
+}

@@ -1,0 +1,63 @@
+{
+	"name": "Tide",
+	"icon": "tide:fishing_journal",
+	"category": "patchouli:food",
+	"sortnum": 3,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Tide brings new rods, more than a hundred new fish, and a $(l:food/tide#fishing_journal)Fishing Journal$(/l) that remembers every catch."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Fish keep to their own waters, depths and weather. When one bites, a bar appears: click on the light zone and it's yours, on the dark zone and it's gone. Hooks and lines go on at the $(l:food/tide#angling_table)Angling Table$(/l), and $(l:food/tide#bait)Bait$(/l) goes in the rod."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Tide's own rods, $(l:food/tide#crystal_fishing_rod)Crystal$(/l) among them, last longer than plain ones. Your $(l:food/fishing)Aquaculture$(/l) rods still work."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "tide:fishing_journal",
+			"text": "Records every fish you catch.",
+			"link_recipe": true,
+			"anchor": "fishing_journal"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "tide:angling_table",
+			"text": "Fits gear onto Tide rods.",
+			"link_recipe": true,
+			"anchor": "angling_table"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "tide:bait",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "bait"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "tide:crystal_fishing_rod",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "crystal_fishing_rod"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "kubejs:guide_books/fishing_journal",
+			"title": "Further Reading",
+			"text": "The $(l)Fishing Journal$() goes deeper.",
+			"anchor": "guide_books_fishing_journal"
+		}
+	],
+	"extra_recipe_mappings": {
+		"tide:fishing_journal": 0,
+		"tide:angling_table": 0,
+		"tide:crystal_fishing_rod": 0,
+		"tide:iron_fishing_rod": 0,
+		"tide:bait": 0
+	}
+}

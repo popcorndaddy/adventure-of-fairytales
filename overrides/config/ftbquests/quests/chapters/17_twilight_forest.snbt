@@ -1,0 +1,597 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "17_twilight_forest"
+	group: "5A734B321110FED6"
+	icon: "twilightforest:magic_map"
+	id: "693557209DA4C079"
+	order_index: 8
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Throw a diamond into a pool surrounded by flowers and the portal opens. Step through into the Twilight Forest."]
+			icon: "minecraft:book"
+			id: "577EDAC3FF4B7C79"
+			rewards: [
+				{
+					count: 5
+					id: "6D267813AA59F424"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "5BF43A4ED11F3078"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				dimension: "twilightforest:twilight_forest"
+				id: "794FCE98DFB34390"
+				type: "dimension"
+			}]
+			title: "A Pool of Flowers"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["577EDAC3FF4B7C79"]
+			description: ["A magic map shows the forest and its structures. Craft one and keep it with you."]
+			icon: "twilightforest:magic_map"
+			id: "2FD00E7DF671C403"
+			rewards: [
+				{
+					count: 16
+					id: "42BCCBF9573B1218"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "5E148D0B169FAAE5"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "63E72B27200DE4EE"
+				item: "twilightforest:magic_map"
+				type: "item"
+			}]
+			title: "A Map of Magic"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2FD00E7DF671C403"]
+			description: ["A giant serpent coils through a courtyard of stone. Defeat the naga and take her scales."]
+			icon: "twilightforest:naga_scale"
+			id: "1314501448CA3540"
+			rewards: [
+				{
+					count: 6
+					id: "019A549B057873BC"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "46DBAE62155D1CE4"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					entity: "twilightforest:naga"
+					id: "164324CE12B58339"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					count: 6L
+					id: "2FA95836575FC31E"
+					item: "twilightforest:naga_scale"
+					type: "item"
+				}
+			]
+			title: "The Naga Courtyard"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1314501448CA3540"]
+			description: ["Naga scales make a strong set of armor. Craft the chestplate."]
+			icon: {
+				Count: 1
+				id: "twilightforest:naga_chestplate"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "4DAEF47D6CE5781B"
+			rewards: [
+				{
+					count: 16
+					id: "1A9E1B9F685EB499"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "4B2A3CB26E0E9F66"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "0DD937E880E8734C"
+				item: {
+					Count: 1
+					id: "twilightforest:naga_chestplate"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "Scales of Victory"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4DAEF47D6CE5781B"]
+			description: ["Four lich clones guard a wizard's tower. Break through them and the Lich himself."]
+			icon: "minecraft:book"
+			id: "679820C339FAF218"
+			rewards: [
+				{
+					count: 8
+					id: "13CC59D12D5073BB"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "6C2081C5256FE687"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				entity: "twilightforest:lich"
+				id: "713F0468748BAC56"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Lich Tower"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["679820C339FAF218"]
+			description: ["The Lich leaves behind scepters of power. Craft the lifedrain scepter."]
+			icon: {
+				Count: 1
+				id: "twilightforest:lifedrain_scepter"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "4102763F3B4869BB"
+			rewards: [
+				{
+					count: 8
+					id: "51BFE0D81ECCF571"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "1450CA202DF848C3"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "3822D0210A6B8F98"
+				item: {
+					Count: 1
+					id: "twilightforest:lifedrain_scepter"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "A Scepter of Power"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4102763F3B4869BB"]
+			description: ["Knightmetal comes from the Knight Phantoms. Smelt it and craft a sword."]
+			icon: "twilightforest:knightmetal_ingot"
+			id: "20E9C2FA7FA08F81"
+			rewards: [
+				{
+					count: 8
+					id: "3244165BB09DFD9B"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "635BFF1B6F8F157F"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 4L
+					id: "50287966D26572DB"
+					item: "twilightforest:knightmetal_ingot"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "51E62944BB8E0440"
+					item: {
+						Count: 1
+						id: "twilightforest:knightmetal_sword"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Knightmetal"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["20E9C2FA7FA08F81"]
+			description: ["A maze of stone hides a bull-headed beast. Find the minotaur and put him down."]
+			icon: "twilightforest:meef_stroganoff"
+			id: "4B34FC9C8418FB61"
+			rewards: [
+				{
+					id: "649D5145160574D1"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "54E3A126AF2AD1E0"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					entity: "twilightforest:minoshroom"
+					id: "04D9FEF19FBF1F1D"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "24FC423F27F9A7B4"
+					item: "twilightforest:meef_stroganoff"
+					type: "item"
+				}
+			]
+			title: "The Labyrinth"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4B34FC9C8418FB61"]
+			description: ["A many-headed hydra lurks in the swamp. Bring ice and a good shield."]
+			icon: "twilightforest:hydra_chop"
+			id: "23EC5FA567466DFF"
+			rewards: [
+				{
+					count: 2
+					id: "4A678DA2A9B8252F"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "35BF0A42C2A25FEE"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					entity: "twilightforest:hydra"
+					id: "3C9E497020AA6626"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "66EA89F51A568FB5"
+					item: "twilightforest:hydra_chop"
+					type: "item"
+				}
+			]
+			title: "The Fire Swamp Hydra"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["23EC5FA567466DFF"]
+			description: ["Six ghostly knights guard the stronghold. Defeat them all to claim the trophy."]
+			icon: "minecraft:book"
+			id: "7ABF6C755DCE11B9"
+			rewards: [
+				{
+					count: 2
+					id: "4153289EE4DCEF4E"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "1BBF30F17B373636"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				entity: "twilightforest:knight_phantom"
+				id: "07BAA094BF692A00"
+				type: "kill"
+				value: 3L
+			}]
+			title: "Knight Phantoms"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["7ABF6C755DCE11B9"]
+			description: ["A tower of dark wood hides the ghastly Ur-Ghast. Bring a bow and a ghast trap."]
+			icon: "twilightforest:fiery_ingot"
+			id: "08241F9C4FF56DDC"
+			rewards: [
+				{
+					count: 8
+					id: "74F820B3BB15F841"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "73BE4A5A2828CAAF"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "4BE5AEECF716E436"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					entity: "twilightforest:ur_ghast"
+					id: "0A13A38F10867B4A"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "4223F8ED5E97A7CE"
+					item: "twilightforest:fiery_ingot"
+					type: "item"
+				}
+			]
+			title: "The Dark Tower"
+			x: 20.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["08241F9C4FF56DDC"]
+			description: ["Yetis rule the frozen lakes. The alpha yeti drops thick fur for the best cold weather armor."]
+			icon: "twilightforest:alpha_yeti_fur"
+			id: "6A6BAF04991F518A"
+			rewards: [
+				{
+					count: 2
+					id: "0BDFD43DF62F88ED"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "6D624603BD01B511"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					entity: "twilightforest:alpha_yeti"
+					id: "204598E4FA10BC63"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "68FB8F02E1B7078E"
+					item: "twilightforest:alpha_yeti_fur"
+					type: "item"
+				}
+			]
+			title: "The Alpha Yeti"
+			x: 22.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6A6BAF04991F518A"]
+			description: ["The queen of the glacier ruled by her ice court. Bring warmth and patience."]
+			icon: "minecraft:book"
+			id: "3F8B0388288F1DB3"
+			rewards: [
+				{
+					count: 16
+					id: "65C1035DA1270BB2"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "3245961E38CDCB5E"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "33F2AF683B766D34"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				entity: "twilightforest:snow_queen"
+				id: "11131DF68361A695"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Snow Queen"
+			x: 24.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3F8B0388288F1DB3"]
+			description: ["Break down items you no longer need into their parts. Craft an uncrafting table."]
+			icon: "twilightforest:uncrafting_table"
+			id: "123A153D48FCD16D"
+			rewards: [
+				{
+					count: 8
+					id: "791A69E802C72DE4"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "01F9489F7A5F3E68"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "4A9931AC68B3166A"
+				item: "twilightforest:uncrafting_table"
+				type: "item"
+			}]
+			title: "The Uncrafting Table"
+			x: 26.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["123A153D48FCD16D"]
+			description: ["Questing rams ask for wool of every color, one after another. Gather a few colors and feed them."]
+			icon: "minecraft:red_wool"
+			id: "74E6CDC2025853CB"
+			rewards: [
+				{
+					count: 8
+					id: "01D6DE6E1BBA4BF3"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "135961A81E42DF40"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "4B840F9ADA4DFB82"
+					item: "minecraft:red_wool"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "2D358F86A40E6D02"
+					item: "minecraft:blue_wool"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "480375E157FF463F"
+					item: "minecraft:yellow_wool"
+					type: "item"
+				}
+			]
+			title: "Questing Rams"
+			x: 28.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["74E6CDC2025853CB"]
+			description: ["The final trophy: the lamp of cinders from the Twilight Forest's treasure."]
+			icon: {
+				Count: 1
+				id: "twilightforest:lamp_of_cinders"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "44C1542E7D76E455"
+			rewards: [
+				{
+					count: 16
+					id: "280463FC03E1FB25"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "23A68CD8DF9351B3"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "2CC6C336E6905399"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "0567A432A4A6B97C"
+				item: {
+					Count: 1
+					id: "twilightforest:lamp_of_cinders"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Lamp of Cinders"
+			x: 30.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["A forest of eternal dusk, and the trophies it holds."]
+	title: "The Twilight Forest"
+}

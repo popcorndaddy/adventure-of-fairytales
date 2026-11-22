@@ -1,0 +1,29 @@
+# Spice of Life: Classic Edition - Adventures of Fairytale defaults
+# Applied to every NEW world (an existing world keeps serverconfig/solclassic-server.toml in its save).
+#
+# One rule: a food's hunger depends on how many of your last 15 meals were that same food.
+#   each of those meals costs 5% until the food is down to 50%, then 10% each, down to nothing:
+#   times in last 15 meals: 0    1   2   3   4   5   6   7   8   9   10  11  12  13  14  15
+#   hunger restored:        100% 95% 90% 85% 80% 75% 70% 65% 60% 55% 50% 40% 30% 20% 10% 0%
+#   Every meal of something else gives every other food two steps back
+#   (kubejs/server_scripts/balance/food_recovery.js): 5 apples = 75%, then bread -> bread 95%, apples 85%.
+# At 100% (15 of your last 15 meals) a food restores nothing, though you can still eat it.
+
+[SolClassicSettings]
+	# meals remembered for the slow, long-term penalty
+	maxFoodHistorySize = 100
+	# meals remembered: the penalty counts how many of these were the same food
+	maxShortFoodHistorySize = 15
+	# the separate slow penalty over the last 100 meals is off: the 15-meal rule above decides everything
+	longFoodDecayModifiers = 0.0
+	# hunger multiplier by how many of the last 15 meals were this food (0 to 15)
+	shortFoodDecayModifiers = [1.0, 0.95, 0.9, 0.85, 0.8, 0.75, 0.7, 0.65, 0.6, 0.55, 0.5, 0.4, 0.3, 0.2, 0.1, 0.0]
+	# not tracked: quick snacks and foods eaten for their effects
+	foodBlacklist = ["minecraft:dried_kelp", "minecraft:golden_apple", "minecraft:enchanted_golden_apple", "minecraft:honey_bottle", "minecraft:chorus_fruit"]
+	basketBlacklist = []
+	enableWickerBasket = true
+	# off: fully depleted food gives 0 hunger instead of a guaranteed 1 point
+	guaranteeMinimumNutrition = false
+	preventEatingFullyDecayedFood = false
+	enableTooltip = true
+	enableItemDescription = true

@@ -1,0 +1,13 @@
+{
+	"name": "When You Die",
+	"icon": "minecraft:skeleton_skull",
+	"category": "patchouli:world",
+	"sortnum": 4,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "When you die, a $(l)corpse$() stays where you fell with everything you carried. Get back to it before something else does."
+		}
+	]
+}

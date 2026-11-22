@@ -1,0 +1,785 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "09_beyond_the_gate"
+	group: "5A734B321110FED6"
+	icon: "minecraft:obsidian"
+	id: "7BC9C761FC429652"
+	order_index: 0
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["A portal needs ten blocks of obsidian and a spark to light it. Cast the frame carefully."]
+			icon: "minecraft:obsidian"
+			id: "3073EAA84AE4C4BE"
+			rewards: [
+				{
+					count: 10
+					id: "39F372693A4945AA"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "15492E25D010FECA"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 10L
+					id: "1BCC5806B37ECC5F"
+					item: "minecraft:obsidian"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "40208E49B522E11F"
+					item: {
+						Count: 1
+						id: "minecraft:flint_and_steel"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Obsidian and Fire"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3073EAA84AE4C4BE"]
+			description: ["Step through the portal. The Nether is hot, hostile and full of treasure."]
+			icon: "minecraft:book"
+			id: "03B1AE09FA604106"
+			rewards: [
+				{
+					count: 10
+					id: "21CFC95406DCBCE0"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "4D43642F19A3893E"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				dimension: "minecraft:the_nether"
+				id: "77866736B81B7E6C"
+				type: "dimension"
+			}]
+			title: "Through the Portal"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["03B1AE09FA604106"]
+			description: ["The fortress of dark brick is home to blazes and skeletons. Find it and keep your fire resistance close."]
+			icon: "minecraft:book"
+			id: "1BD6E2FD67A91ED3"
+			rewards: [
+				{
+					id: "7C313D6B4FCE87FD"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "72FA2A8E4975BC20"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				advancement: "minecraft:nether/find_fortress"
+				criterion: ""
+				id: "1497DAA5E818B262"
+				type: "advancement"
+			}]
+			title: "The Fortress"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1BD6E2FD67A91ED3"]
+			description: ["Fight the blazes of the fortress and bring home their rods. Fire resistance or a water bucket keeps you alive."]
+			icon: "minecraft:blaze_rod"
+			id: "38FD4768AD8882EB"
+			rewards: [
+				{
+					id: "750F768517D38BA8"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "0A8D9B0F4040741E"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					entity: "minecraft:blaze"
+					id: "60DC9F89F2139DAB"
+					type: "kill"
+					value: 6L
+				}
+				{
+					consume_items: false
+					count: 8L
+					id: "504F5A1BC530F631"
+					item: "minecraft:blaze_rod"
+					type: "item"
+				}
+			]
+			title: "Rods of Fire"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["38FD4768AD8882EB"]
+			description: ["Nether wart grows on soul sand and is the base of every potion. Plant a patch."]
+			icon: "minecraft:nether_wart"
+			id: "404160F0E92F1D4B"
+			rewards: [
+				{
+					count: 16
+					id: "6735DB9FBBAFEAC8"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "6EC53A71824F4A51"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 12L
+					id: "155EA6B6B79BE178"
+					item: "minecraft:nether_wart"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 8L
+					id: "23CFB3213E07F02C"
+					item: "minecraft:soul_sand"
+					type: "item"
+				}
+			]
+			title: "The Alchemist's Garden"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["404160F0E92F1D4B"]
+			description: ["Set up a brewing stand with blaze powder and glass bottles."]
+			icon: "minecraft:brewing_stand"
+			id: "7ADF5CD5EA2C978C"
+			rewards: [
+				{
+					id: "7190DCC7F67A29D5"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "6FBE5027B574DD87"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "0CFFD016B7C6BB2A"
+					item: "minecraft:brewing_stand"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 12L
+					id: "37E176CFA7B5AA90"
+					item: "minecraft:blaze_powder"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 6L
+					id: "68047D7E3FE4855D"
+					item: "minecraft:glass_bottle"
+					type: "item"
+				}
+			]
+			title: "The Furnace Heart"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["7ADF5CD5EA2C978C"]
+			description: ["Find a piglin bastion and trade with the piglins. Wear at least one piece of gold armor, or they will attack."]
+			icon: "minecraft:gold_ingot"
+			id: "1EB3BD59620F8747"
+			rewards: [
+				{
+					count: 8
+					id: "32AC9FD9895A4D04"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "2E4A45FCEE36FC21"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					advancement: "minecraft:nether/find_bastion"
+					criterion: ""
+					id: "45107701157D1A8C"
+					type: "advancement"
+				}
+				{
+					consume_items: false
+					count: 16L
+					id: "0BE00EB0D3C7BBDE"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+			]
+			title: "Blackstone and Gold"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1EB3BD59620F8747"]
+			description: ["Ancient debris hides deep in the Nether. Dig it out with beds or a careful strip mine."]
+			icon: "minecraft:ancient_debris"
+			id: "1BA05D8CA6BCA6DC"
+			rewards: [
+				{
+					count: 8
+					id: "6AB262BFCC9BA758"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "1A1611C01BAEA6CC"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "6D50B71C224C7457"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 4L
+					id: "1C8D95E76EDD69C3"
+					item: "minecraft:ancient_debris"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 4L
+					id: "40D1E1F29A8DFDB7"
+					item: "minecraft:netherite_scrap"
+					type: "item"
+				}
+			]
+			title: "Fallen Netherite"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1BA05D8CA6BCA6DC"]
+			description: ["Combine scrap and gold into a netherite ingot, the strongest metal in the vanilla world."]
+			icon: "minecraft:netherite_ingot"
+			id: "38EA44FDE6B78E0F"
+			rewards: [
+				{
+					count: 8
+					id: "07D120B76605E4AA"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "26DA4B2DB31E0048"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "7D3F6F5DBBAD147B"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "4CA041ABD4332521"
+				item: "minecraft:netherite_ingot"
+				type: "item"
+			}]
+			title: "A Blacksmith's Oath"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["38EA44FDE6B78E0F"]
+			description: ["Upgrade a sword and a pickaxe to netherite. Smithing templates can be found in bastions and Nether fortresses."]
+			icon: {
+				Count: 1
+				id: "minecraft:netherite_sword"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "0B4609EFC637CEB0"
+			rewards: [
+				{
+					count: 2
+					id: "4BBFBB6863715808"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "5C00FCA201DC4149"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "71EF6BE2C9A05501"
+					item: {
+						Count: 1
+						id: "minecraft:netherite_sword"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "0C0488C8D69EA7B7"
+					item: {
+						Count: 1
+						id: "minecraft:netherite_pickaxe"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Crown of Netherite"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0B4609EFC637CEB0"]
+			description: ["Hunt wither skeletons in the fortress for their skulls. You will need three, and soul torches to light the way."]
+			icon: "minecraft:wither_skeleton_skull"
+			id: "1CA1C46BADFF0E3E"
+			rewards: [
+				{
+					count: 2
+					id: "342E0B5BB7DC36C5"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "595CF6369FA95204"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 3L
+					id: "0ED9782100BABD90"
+					item: "minecraft:wither_skeleton_skull"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 8L
+					id: "314BD1D89E0573B1"
+					item: "minecraft:soul_torch"
+					type: "item"
+				}
+			]
+			title: "Skulls of the Damned"
+			x: 20.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1CA1C46BADFF0E3E"]
+			description: ["Raise the wither at your own risk. It is the first true test of your gear and nerve."]
+			icon: "minecraft:book"
+			id: "264B6102A678D17A"
+			rewards: [
+				{
+					count: 3
+					id: "55C4316F2EEFC727"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "12A951E8DE7343CA"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				entity: "minecraft:wither"
+				id: "2569833CB45886CD"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Wither"
+			x: 22.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["264B6102A678D17A"]
+			description: ["A nether star becomes a beacon, a pillar of light over your kingdom."]
+			icon: "minecraft:beacon"
+			id: "40A0532F6BF413F9"
+			rewards: [
+				{
+					count: 16
+					id: "6786979F716F2AEE"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "0CB4448863A845E8"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "294E976D1286236B"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "06945D6F8919C9BF"
+				item: "minecraft:beacon"
+				type: "item"
+			}]
+			title: "The Beacon"
+			x: 24.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["40A0532F6BF413F9"]
+			description: ["Combine pearls and blaze powder into eyes of ender. They point the way to the stronghold."]
+			icon: "minecraft:ender_eye"
+			id: "5F17E95CDEF63D3D"
+			rewards: [
+				{
+					count: 2
+					id: "1F65B554D926DD3A"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "7A1651D254F2CD18"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 12L
+				id: "40201336C2522A28"
+				item: "minecraft:ender_eye"
+				type: "item"
+			}]
+			title: "Eyes of Ender"
+			x: 26.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5F17E95CDEF63D3D"]
+			description: ["Follow the eyes underground until you find the stronghold and its portal room."]
+			icon: "minecraft:book"
+			id: "4E6C59F7F609C379"
+			rewards: [
+				{
+					count: 2
+					id: "712199F381522A76"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "543A8D040B773CBC"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				advancement: "minecraft:story/follow_ender_eye"
+				criterion: ""
+				id: "14510D5052CCC981"
+				type: "advancement"
+			}]
+			title: "The Stronghold"
+			x: 28.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4E6C59F7F609C379"]
+			description: ["Light the portal and step into the End, the dark home of the dragon and the endermen."]
+			icon: "minecraft:book"
+			id: "1E306D8F4A9D5D81"
+			rewards: [
+				{
+					count: 2
+					id: "16916D355E22416B"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "743BEF37F2992D82"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				dimension: "minecraft:the_end"
+				id: "6B88605E3793E7A7"
+				type: "dimension"
+			}]
+			title: "The Far Portal"
+			x: 30.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1E306D8F4A9D5D81"]
+			description: ["Pack spectral arrows, a water bucket and a carved pumpkin to wear against the endermen. There is no turning back easily."]
+			icon: "minecraft:spectral_arrow"
+			id: "597529D3EFFEACD7"
+			rewards: [
+				{
+					count: 2
+					id: "63B19BE88971E784"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "2745B4E9227FBF76"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 32L
+					id: "3FAFE25A8785B8F1"
+					item: "minecraft:spectral_arrow"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "0D039EC3A4305389"
+					item: "minecraft:water_bucket"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "385BBB5FD9A5C8B3"
+					item: "minecraft:carved_pumpkin"
+					type: "item"
+				}
+			]
+			title: "Last Preparations"
+			x: 32.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["597529D3EFFEACD7"]
+			description: ["The dragon circles the central island. Destroy the crystals, then bring it down."]
+			icon: "minecraft:book"
+			id: "69D48BD7C03C473B"
+			rewards: [
+				{
+					id: "0A9FF06DCAE93CE4"
+					item: "minecraft:netherite_scrap"
+					type: "item"
+				}
+				{
+					count: 2
+					id: "54B31D133A62BE4E"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "1B739602EA5A670A"
+					type: "xp"
+					xp: 550
+				}
+			]
+			tasks: [{
+				entity: "minecraft:ender_dragon"
+				id: "36303708466B222B"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Ender Dragon"
+			x: 34.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["69D48BD7C03C473B"]
+			description: ["Cross the outer islands and find a city of purpur, where ships and elytra wait."]
+			icon: "minecraft:book"
+			id: "4BCECDF601A22DEC"
+			rewards: [
+				{
+					count: 3
+					id: "00882F3609A91B73"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "67565E61A66F568D"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				advancement: "minecraft:end/find_end_city"
+				criterion: ""
+				id: "4EBDC1CD7910F7FD"
+				type: "advancement"
+			}]
+			title: "The City at the End"
+			x: 36.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4BCECDF601A22DEC"]
+			description: ["Take wings from a city ship, and the sky is yours."]
+			icon: {
+				Count: 1
+				id: "minecraft:elytra"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "1AB228E6C0B8AC00"
+			rewards: [
+				{
+					count: 3
+					id: "5F37A99AFB792C6B"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "7BB33B13518E8F77"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "425BD9C39A85A838"
+				item: {
+					Count: 1
+					id: "minecraft:elytra"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "Wings of the End"
+			x: 38.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1AB228E6C0B8AC00"]
+			description: ["Shulker shells make shulker boxes, the best portable storage in the vanilla game."]
+			icon: "minecraft:shulker_shell"
+			id: "1A0C28B4AFEA2BFF"
+			rewards: [
+				{
+					count: 16
+					id: "06F96EC18A7F4B53"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "0D2BA7591C4D6E3E"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "1F0D399F97A23B48"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 4L
+					id: "64FF320559B4550A"
+					item: "minecraft:shulker_shell"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "3948F06B06302B6D"
+					item: "minecraft:shulker_box"
+					type: "item"
+				}
+			]
+			title: "Vaults of Shulkers"
+			x: 40.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["The Nether, the End and the dragon that guards it."]
+	title: "Beyond the Gate"
+}

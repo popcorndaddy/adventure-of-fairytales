@@ -1,0 +1,18 @@
+{
+	"name": "The Black Fortress",
+	"icon": "minecraft:paper",
+	"category": "patchouli:notes",
+	"sortnum": 14,
+	"read_by_default": false,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "That's the band. The rest was built on it.$(br2)The jewel is somewhere much worse. At the very bottom of the world there are caves hardly anyone finds, and something grows down there. Void lilies point the way."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(o)The Jewel of the Crown is tangled in the Void Blossom, in rare caves at the very bottom of the Overworld.$()"
+		}
+	],
+	"advancement": "kubejs:fairytale/p13"
+}

@@ -1,0 +1,329 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "14_builders_workshop"
+	group: "5A734B321110FED6"
+	icon: "supplementaries:rope"
+	id: "6CCF6933E4ECBB6C"
+	order_index: 5
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Supplementaries adds ropes and pulleys. Craft a long rope and a pulley block."]
+			icon: "supplementaries:rope"
+			id: "58EF2261C9776D9A"
+			rewards: [
+				{
+					count: 3
+					id: "1A678872568F7BF0"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "32B5F35903E4B686"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 8L
+					id: "7B1FC06F62BFC19A"
+					item: "supplementaries:rope"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "683AD19E44DA8852"
+					item: "supplementaries:pulley_block"
+					type: "item"
+				}
+			]
+			title: "Ropes and Pulleys"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["58EF2261C9776D9A"]
+			description: ["A safe locks your valuables behind a key. Craft one."]
+			icon: "supplementaries:safe"
+			id: "35BF04287429EE37"
+			rewards: [
+				{
+					count: 8
+					id: "2A64DE1125136F3E"
+					item: "minecraft:cooked_porkchop"
+					type: "item"
+				}
+				{
+					id: "5BCEDFE4F10096A2"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "672B22A8351CDF36"
+				item: "supplementaries:safe"
+				type: "item"
+			}]
+			title: "The Safe"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["35BF04287429EE37"]
+			description: ["A sack and a jar for loose goods and little creatures."]
+			icon: "supplementaries:sack"
+			id: "4AF65ED9C2701E3B"
+			rewards: [
+				{
+					count: 8
+					id: "711D366DEA8E65A8"
+					item: "minecraft:cooked_porkchop"
+					type: "item"
+				}
+				{
+					id: "666F10B5C9F9ADEA"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "177E7E820FCC78B9"
+					item: "supplementaries:sack"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "045F39914E963F66"
+					item: "supplementaries:jar"
+					type: "item"
+				}
+			]
+			title: "A Sack and a Jar"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4AF65ED9C2701E3B"]
+			description: ["A candle holder and a sconce for a hall at night."]
+			icon: "supplementaries:candle_holder"
+			id: "20C37AC1C2DFDC29"
+			rewards: [
+				{
+					count: 8
+					id: "450BAA9B4D63C784"
+					item: "minecraft:golden_carrot"
+					type: "item"
+				}
+				{
+					id: "5F9D0B5AAFB6FBA3"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "3E3771B62ABBA935"
+					item: "supplementaries:candle_holder"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "1DBC9AFCFD5189C0"
+					item: "supplementaries:sconce"
+					type: "item"
+				}
+			]
+			title: "Lights and Lanterns"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["20C37AC1C2DFDC29"]
+			description: ["A notice board for the village's news. A good place for bounties."]
+			icon: "supplementaries:notice_board"
+			id: "21671FB6867B2FE9"
+			rewards: [
+				{
+					count: 8
+					id: "7082CD24252ED5E4"
+					item: "minecraft:golden_carrot"
+					type: "item"
+				}
+				{
+					id: "65409EA11EAA9391"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "32909339015EE152"
+				item: "supplementaries:notice_board"
+				type: "item"
+			}]
+			title: "The Notice Board"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["21671FB6867B2FE9"]
+			description: ["A wind vane tells which way the storm comes from."]
+			icon: "supplementaries:wind_vane"
+			id: "5B3B4C29D9D0195C"
+			rewards: [
+				{
+					count: 6
+					id: "3A156C6C94121798"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "1A1DF5338C2DE6F6"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "0D6247E506148CCD"
+				item: "supplementaries:wind_vane"
+				type: "item"
+			}]
+			title: "A Wind Vane"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5B3B4C29D9D0195C"]
+			description: ["A globe of the world. Spin it while you plan the next trip."]
+			icon: "supplementaries:globe"
+			id: "48E0F6A5CA7748BE"
+			rewards: [
+				{
+					count: 10
+					id: "1B264C43DD43F1C4"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "0120B9C297D8CCD2"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "662367153334474C"
+				item: "supplementaries:globe"
+				type: "item"
+			}]
+			title: "The Globe"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["48E0F6A5CA7748BE"]
+			description: ["Bellows push air. Use them to power fires and blow things around."]
+			icon: "supplementaries:bellows"
+			id: "33C0E305D249531A"
+			rewards: [
+				{
+					count: 10
+					id: "007E9B05C58CAFF5"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "014063F972A3629B"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "4940A61EF5776DCC"
+				item: "supplementaries:bellows"
+				type: "item"
+			}]
+			title: "The Bellows"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["33C0E305D249531A"]
+			description: ["A speaker block lets you send messages through the walls."]
+			icon: "supplementaries:speaker_block"
+			id: "32243F8B0E3930D6"
+			rewards: [
+				{
+					count: 10
+					id: "1FC327AC60F47251"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "5877B7BD593DA181"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "3161620DA359CF0C"
+				item: "supplementaries:speaker_block"
+				type: "item"
+			}]
+			title: "A Speaker Block"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["32243F8B0E3930D6"]
+			description: ["A clock block tells time at a glance. Hang it in your main hall."]
+			icon: "supplementaries:clock_block"
+			id: "0AB70FC8E678000F"
+			rewards: [
+				{
+					count: 16
+					id: "3B64E0C0CC4D6F3F"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "436F571F952358C5"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "10061BEA82710197"
+				item: "supplementaries:clock_block"
+				type: "item"
+			}]
+			title: "The Clock Block"
+			x: 18.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Ropes, lamps and the details that make a hall."]
+	title: "Builder's Workshop"
+}

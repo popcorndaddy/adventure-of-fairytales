@@ -1,0 +1,72 @@
+{
+	"name": "The Aether",
+	"icon": "aether:ambrosium_shard",
+	"category": "patchouli:realms",
+	"sortnum": 3,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Build a frame of $(l)glowstone$() and pour water into it."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "The Aether is a realm of floating islands. Mind the edges. Tools climb from skyroot and holystone to $(l:realms/aether#zanite_gemstone)Zanite$(/l) and gravitite. $(l:realms/aether#ambrosium_shard)Ambrosium$(/l) fuels the $(l:realms/aether#altar)Altar$(/l), and $(l:realms/aether#enchanted_gravitite)Enchanted Gravitite$(/l) makes the finest gear.$(br2)Three dungeons, each with a guardian and a key: $(l:realms/aether#bronze_dungeon_key)Bronze Key$(/l), $(l:realms/aether#silver_dungeon_key)Silver Key$(/l), $(l:realms/aether#gold_dungeon_key)Gold Key$(/l)."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "aether:zanite_gemstone",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "zanite_gemstone"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "aether:ambrosium_shard",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "ambrosium_shard"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "aether:altar",
+			"text": "Enchants Aether gear, fuelled by ambrosium.",
+			"link_recipe": true,
+			"anchor": "altar"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "aether:enchanted_gravitite",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "enchanted_gravitite"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "aether:bronze_dungeon_key",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "bronze_dungeon_key"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "aether:silver_dungeon_key",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "silver_dungeon_key"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "aether:gold_dungeon_key",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "gold_dungeon_key"
+		}
+	],
+	"extra_recipe_mappings": {
+		"aether:altar": 0,
+		"aether:zanite_gemstone": 0,
+		"aether:ambrosium_shard": 0,
+		"aether:enchanted_gravitite": 0
+	}
+}

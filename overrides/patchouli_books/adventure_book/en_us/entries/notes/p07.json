@@ -1,0 +1,18 @@
+{
+	"name": "The Dusk Forest",
+	"icon": "minecraft:paper",
+	"category": "patchouli:notes",
+	"sortnum": 8,
+	"read_by_default": false,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "There's another lich, and he's nothing to do with that forest.$(br2)He lives up in the cold, in a tower of his own. The undead out here sometimes drop a little star. Throw it and it flies toward the tower. Put four on the altars inside and he'll come."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(o)Whispers say the Night Lich keeps the Evil Eye, in his tower out in the cold biomes.$()"
+		}
+	],
+	"advancement": "kubejs:fairytale/p07"
+}

@@ -1,0 +1,13 @@
+{
+	"name": "Skill Trees",
+	"icon": "irons_spellbooks:arcane_essence",
+	"category": "patchouli:world",
+	"sortnum": 3,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Casting spells earns experience in four magic skill trees. Open them with the skills key and spend points to strengthen your magic.$(br2)Resetting a tree costs nothing, so experiment."
+		}
+	]
+}

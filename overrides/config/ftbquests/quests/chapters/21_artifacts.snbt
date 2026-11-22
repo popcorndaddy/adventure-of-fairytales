@@ -1,0 +1,391 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "21_artifacts"
+	group: "0367FDC07E543102"
+	icon: "artifacts:night_vision_goggles"
+	id: "485CB7AD13F8E853"
+	order_index: 2
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Running shoes make you faster on foot. Find a pair in a chest or from a mimic."]
+			icon: "artifacts:running_shoes"
+			id: "5A908E0A91A823AF"
+			rewards: [
+				{
+					count: 16
+					id: "25C252BF5066458A"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "394426BA61F487FC"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "594A7A4A26C1A528"
+				item: "artifacts:running_shoes"
+				type: "item"
+			}]
+			title: "A Runner's Shoes"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5A908E0A91A823AF"]
+			description: ["Swim with a snorkel and flippers. Dive deeper and stay longer."]
+			icon: "artifacts:snorkel"
+			id: "5D6F4226F2EC538B"
+			rewards: [
+				{
+					count: 16
+					id: "0C4DB7C479AAD23B"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "253911DE9F6FB73B"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "560A33DF130135D4"
+					item: "artifacts:snorkel"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "613F717899EFA72B"
+					item: "artifacts:flippers"
+					type: "item"
+				}
+			]
+			title: "Snorkel and Flippers"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5D6F4226F2EC538B"]
+			description: ["Night vision goggles show the world as day. A boon in caves."]
+			icon: "artifacts:night_vision_goggles"
+			id: "5BC0C804DF462253"
+			rewards: [
+				{
+					count: 16
+					id: "754B8896BBBA989C"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "4DB30E8B2E1C9E6A"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "7F6821371837C57F"
+				item: "artifacts:night_vision_goggles"
+				type: "item"
+			}]
+			title: "Seeing in the Dark"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5BC0C804DF462253"]
+			description: ["A cross necklace and a flame pendant protect against damage and fire."]
+			icon: "artifacts:cross_necklace"
+			id: "3ECD177614FE8B7D"
+			rewards: [
+				{
+					id: "4DF20F0FC0F81C9C"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "71DD752C13ACC5DB"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "712325348062E710"
+					item: "artifacts:cross_necklace"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "18D186D97450C533"
+					item: "artifacts:flame_pendant"
+					type: "item"
+				}
+			]
+			title: "Cross and Flame"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3ECD177614FE8B7D"]
+			description: ["A shock pendant and a thorn pendant strike back at attackers."]
+			icon: "artifacts:shock_pendant"
+			id: "39BBCBCCF85AF1DE"
+			rewards: [
+				{
+					id: "67E3ECC5174FF63C"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "5A9235668E005106"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "6A3E215FAD8233E5"
+					item: "artifacts:shock_pendant"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "23B11CF273B300E8"
+					item: "artifacts:thorn_pendant"
+					type: "item"
+				}
+			]
+			title: "Shocks and Thorns"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["39BBCBCCF85AF1DE"]
+			description: ["Some chests bite back. Break open a mimic and take what is inside."]
+			icon: "minecraft:book"
+			id: "4B3EACB40776DC1C"
+			rewards: [
+				{
+					id: "731999473387D70B"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "1868FDF800E16465"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				entity: "artifacts:mimic"
+				id: "006B1133BF88DF86"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Mimic"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4B3EACB40776DC1C"]
+			description: ["A power glove and a fire gauntlet make your punches powerful."]
+			icon: "artifacts:power_glove"
+			id: "11B343B95659B749"
+			rewards: [
+				{
+					count: 2
+					id: "6FF09E74931FC67E"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "2577F16A2BB27EF9"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "08CDC30E1A6B5D3C"
+					item: "artifacts:power_glove"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "2D6F8C0D7C4E3F11"
+					item: "artifacts:fire_gauntlet"
+					type: "item"
+				}
+			]
+			title: "The Power Glove"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["11B343B95659B749"]
+			description: ["A cloud in a bottle gives you a second jump. Pair it with a pair of snow shoes."]
+			icon: "artifacts:cloud_in_a_bottle"
+			id: "44AC1F27E64CAB86"
+			rewards: [
+				{
+					count: 2
+					id: "4FD9666C83101D03"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "3C4DC7CA9C9567A2"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "7182FE2B191FBD18"
+					item: "artifacts:cloud_in_a_bottle"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "530CB1749CDFC800"
+					item: "artifacts:snowshoes"
+					type: "item"
+				}
+			]
+			title: "Cloud in a Bottle"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["44AC1F27E64CAB86"]
+			description: ["An eternal steak and everlasting beef never run out. Make a friend of a farmer."]
+			icon: "artifacts:eternal_steak"
+			id: "1B1B307203AD67E3"
+			rewards: [
+				{
+					count: 8
+					id: "4F6EE00F60E896C0"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "618BBF4243A2169D"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "43BA49424786407F"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "3000E93D9C8E3E7B"
+					item: "artifacts:eternal_steak"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "6CDB7409B9C3A60F"
+					item: "artifacts:everlasting_beef"
+					type: "item"
+				}
+			]
+			title: "Everlasting Food"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1B1B307203AD67E3"]
+			description: ["A flamingo float lets you drift across water. The strangest item in the mod."]
+			icon: "artifacts:helium_flamingo"
+			id: "7B5E505FCD662893"
+			rewards: [
+				{
+					count: 2
+					id: "32D2F6BDAE918253"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "446DD2171F604705"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "73EDBBC65D97473E"
+				item: "artifacts:helium_flamingo"
+				type: "item"
+			}]
+			title: "The Helium Flamingo"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["7B5E505FCD662893"]
+			description: ["A lucky scarf and a villager's hat. Style and substance."]
+			icon: "artifacts:lucky_scarf"
+			id: "16CA3D5772ECAB67"
+			rewards: [
+				{
+					count: 2
+					id: "723BAD530C9FDA25"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "0DA77B228E4A3B9A"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "01FDE9470F5F696C"
+					item: "artifacts:lucky_scarf"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "399ED0259406D8FD"
+					item: "artifacts:villager_hat"
+					type: "item"
+				}
+			]
+			title: "Scarves and Hats"
+			x: 20.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Hidden treasures with strange powers."]
+	title: "Artifacts"
+}

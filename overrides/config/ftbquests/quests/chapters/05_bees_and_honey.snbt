@@ -1,0 +1,576 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "05_bees_and_honey"
+	group: "01FA0B74B5D0B1FB"
+	icon: "minecraft:honeycomb"
+	id: "2358666473C76B23"
+	order_index: 4
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Craft a beehive and a soul campfire to keep the bees calm. Smoke from below makes harvesting safe."]
+			icon: "minecraft:beehive"
+			id: "4730CC2D6163741C"
+			rewards: [
+				{
+					count: 6
+					id: "44F07C74F9037E18"
+					item: "minecraft:cooked_beef"
+					type: "item"
+				}
+				{
+					id: "242645AFDEFDC840"
+					type: "xp"
+					xp: 50
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "5B326D955A64CA94"
+					item: "minecraft:beehive"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "49118A2408191108"
+					item: "minecraft:soul_campfire"
+					type: "item"
+				}
+			]
+			title: "A Hive to Start"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4730CC2D6163741C"]
+			description: ["Collect honeycomb from your hive. Hay bales below cushion any fall."]
+			icon: "minecraft:honeycomb"
+			id: "1EC5947ADCD512C3"
+			rewards: [
+				{
+					count: 32
+					id: "371B1E9D487C19B0"
+					item: "minecraft:arrow"
+					type: "item"
+				}
+				{
+					id: "5D5220D4179CB882"
+					type: "xp"
+					xp: 50
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 16L
+					id: "29D485D7C332BFE9"
+					item: "minecraft:honeycomb"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 2L
+					id: "07D43FD2769EE051"
+					item: "minecraft:hay_block"
+					type: "item"
+				}
+			]
+			title: "Comb Harvest"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1EC5947ADCD512C3"]
+			description: ["Fill bottles with honey straight from the hive. They also cure poison."]
+			icon: "minecraft:honey_bottle"
+			id: "223E26418B1881F7"
+			rewards: [
+				{
+					count: 32
+					id: "24A4B619150EB75B"
+					item: "minecraft:arrow"
+					type: "item"
+				}
+				{
+					id: "23430860F95B06D4"
+					type: "xp"
+					xp: 50
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 8L
+				id: "76F353985917E5AA"
+				item: "minecraft:honey_bottle"
+				type: "item"
+			}]
+			title: "Honey for the Road"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["223E26418B1881F7"]
+			description: ["Compress your harvest into honey blocks and honeycomb blocks."]
+			icon: "minecraft:honey_block"
+			id: "33F843ACDD728945"
+			rewards: [
+				{
+					count: 8
+					id: "15822FD57FBE54D0"
+					item: "minecraft:golden_carrot"
+					type: "item"
+				}
+				{
+					id: "50B0E8162CF43418"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 4L
+					id: "56CF9429B3150CB6"
+					item: "minecraft:honey_block"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 2L
+					id: "210CC2D4EF72DFF1"
+					item: "minecraft:honeycomb_block"
+					type: "item"
+				}
+			]
+			title: "Sweet Blocks"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["33F843ACDD728945"]
+			description: ["Candles light every hall. Craft a stack and a bag of sugar for the winter."]
+			icon: "minecraft:candle"
+			id: "7C6DC91CC3DBDF50"
+			rewards: [
+				{
+					count: 6
+					id: "249B9A48597FC219"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "6B08AE2EB8B4E892"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 8L
+					id: "11BAE2AABF84F9BE"
+					item: "minecraft:candle"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 32L
+					id: "36C75782100DA5D6"
+					item: "minecraft:sugar"
+					type: "item"
+				}
+			]
+			title: "Beeswax Candles"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["7C6DC91CC3DBDF50"]
+			description: ["Productive Bees adds hundreds of bee types. A bee cage and a catcher let you move and collect them."]
+			icon: "productivebees:bee_cage"
+			id: "72ECC46D15E31ED5"
+			rewards: [
+				{
+					count: 8
+					id: "726065821D44FE4A"
+					item: "minecraft:golden_carrot"
+					type: "item"
+				}
+				{
+					id: "6232DD506A313367"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "5471C6AFA0CB9F11"
+					item: "productivebees:bee_cage"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "1BA3AA72D820DAFD"
+					item: "productivebees:catcher"
+					type: "item"
+				}
+			]
+			title: "A Bee Cage"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["72ECC46D15E31ED5"]
+			description: ["A centrifuge spins honeycomb into its parts: honey, wax and more."]
+			icon: "productivebees:centrifuge"
+			id: "6B413503F9899751"
+			rewards: [
+				{
+					count: 5
+					id: "0E7CD7AF2D14086D"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "688384871CEACF29"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "5DA802D39152BFE4"
+				item: "productivebees:centrifuge"
+				type: "item"
+			}]
+			title: "The Centrifuge"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6B413503F9899751"]
+			description: ["Advanced hives hold many more bees. Add an expansion box for even more room."]
+			icon: "productivebees:advanced_acacia_beehive"
+			id: "0D8A5C6E5313F96F"
+			rewards: [
+				{
+					count: 16
+					id: "2922B0D2CE69C735"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "69507B820C7FE67A"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "055ABD81C27B73CE"
+					item: "productivebees:advanced_acacia_beehive"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "04BBA77D545DF64B"
+					item: "productivebees:expansion_box_acacia"
+					type: "item"
+				}
+			]
+			title: "Advanced Hive"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0D8A5C6E5313F96F"]
+			description: ["Honey treats improve your bees and feeders keep them fed. Healthy bees are productive bees."]
+			icon: "productivebees:honey_treat"
+			id: "03948D98A65AFB5D"
+			rewards: [
+				{
+					count: 5
+					id: "0EC6F5AC31BEC461"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "7B4C3CB17AC90A35"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "3BE6E8B6D6E16843"
+					item: "productivebees:honey_treat"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "65886267E78B7F08"
+					item: "productivebees:feeder"
+					type: "item"
+				}
+			]
+			title: "Treats and Feeders"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["03948D98A65AFB5D"]
+			description: ["A breeding chamber and incubator let you create entirely new species of bee."]
+			icon: "productivebees:breeding_chamber"
+			id: "0E88AD58DE45BC4E"
+			rewards: [
+				{
+					count: 8
+					id: "3F0682FC5652D4BB"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "69332190153FFA9D"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "109135A7C7402848"
+					item: "productivebees:breeding_chamber"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "401AF7A0FB2795B4"
+					item: "productivebees:incubator"
+					type: "item"
+				}
+			]
+			title: "Breeding and Incubating"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0E88AD58DE45BC4E"]
+			description: ["Fill bottles automatically and turn honey into power."]
+			icon: "productivebees:bottler"
+			id: "35ED45696C1E8760"
+			rewards: [
+				{
+					count: 8
+					id: "6CBE39B5D6FD6487"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "2C46EB7093C756AC"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "0D9D92344CB9C4B2"
+					item: "productivebees:bottler"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "2463FEE9273E559A"
+					item: "productivebees:honey_generator"
+					type: "item"
+				}
+			]
+			title: "Bottler and Generator"
+			x: 20.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["35ED45696C1E8760"]
+			description: ["Productivity and breeding upgrades improve your hives. Add them to a hive and watch the output climb."]
+			icon: "productivebees:upgrade_productivity"
+			id: "6EAC752FE91A95B9"
+			rewards: [
+				{
+					id: "48573A61755AECEC"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "5E8E59A2902D727F"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "1248EA32C49A6A1A"
+					item: "productivebees:upgrade_productivity"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "1E75E47595E7B03F"
+					item: "productivebees:upgrade_breeding"
+					type: "item"
+				}
+			]
+			title: "Bee Upgrades"
+			x: 22.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6EAC752FE91A95B9"]
+			description: ["Powered and heated centrifuges process combs faster and with better yields."]
+			icon: "productivebees:heated_centrifuge"
+			id: "26B0657FBD4ABA93"
+			rewards: [
+				{
+					count: 2
+					id: "6AF42899E2D844C2"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "48D518E99434B9A1"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "143D295A6F3D1CD6"
+					item: "productivebees:heated_centrifuge"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "56CE44D4BF3D064C"
+					item: "productivebees:powered_centrifuge"
+					type: "item"
+				}
+			]
+			title: "The Heated Centrifuge"
+			x: 24.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["26B0657FBD4ABA93"]
+			description: ["Pass through a beehive's portal into a world of honey. A bee bread and bee soup keep you fed."]
+			icon: "the_bumblezone:bee_bread"
+			id: "1222B25E453A51B6"
+			rewards: [
+				{
+					count: 2
+					id: "60CBD8EF653463CA"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "07717461D3B97F61"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					dimension: "the_bumblezone:the_bumblezone"
+					id: "5F062C66A0ABE22A"
+					type: "dimension"
+				}
+				{
+					consume_items: false
+					id: "67DB264657865CF3"
+					item: "the_bumblezone:bee_bread"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "59F3327C96B84EE6"
+					item: "the_bumblezone:bee_soup"
+					type: "item"
+				}
+			]
+			title: "The Bumblezone"
+			x: 26.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1222B25E453A51B6"]
+			description: ["A bee cannon and a buzzing briefcase mark a master beekeeper."]
+			icon: {
+				Count: 1
+				id: "the_bumblezone:bee_cannon"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "2C4DB739934984E3"
+			rewards: [
+				{
+					count: 2
+					id: "72679A4C9BE4F3D9"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "62864EEEF26367A0"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "70A7A0D9B00A5472"
+					item: {
+						Count: 1
+						id: "the_bumblezone:bee_cannon"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "7661598650B602B0"
+					item: "the_bumblezone:buzzing_briefcase"
+					type: "item"
+				}
+			]
+			title: "Royal Beekeeper"
+			x: 28.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["From a single hive to a full apiary."]
+	title: "Bees and Honey"
+}

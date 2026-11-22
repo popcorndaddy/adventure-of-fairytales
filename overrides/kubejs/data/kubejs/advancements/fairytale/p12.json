@@ -1,0 +1,23 @@
+{
+  "parent": "kubejs:fairytale/p11",
+  "display": {
+    "icon": {
+      "item": "minecraft:paper"
+    },
+    "title": {
+      "text": "Twelve"
+    },
+    "description": {
+      "text": "Taken back from the Netherite Monstrosity"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "given": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+	"name": "Adventure Book",
+	"landing_text": "How this world works, and the way to the End.$(br2)$(l)Purple words$() lead somewhere. Hover an item for $(l)R$() and $(l)U$().",
+	"version": 2,
+	"creative_tab": "minecraft:tools_and_utilities",
+	"use_resource_pack": true,
+	"show_progress": false,
+	"use_blocky_font": true,
+	"book_texture": "kubejs:textures/gui/adventure_book.png",
+	"crafting_texture": "kubejs:textures/gui/adventure_crafting.png",
+	"model": "patchouli:book_purple",
+	"subtitle": "Adventures of Fairytale",
+	"text_color": "2A1A10",
+	"header_color": "4A2418",
+	"nameplate_color": "E8C77A",
+	"link_color": "7A2FA8",
+	"link_hover_color": "C062F0",
+	"progress_bar_color": "C9A35A",
+	"progress_bar_background": "4A2A40"
+}

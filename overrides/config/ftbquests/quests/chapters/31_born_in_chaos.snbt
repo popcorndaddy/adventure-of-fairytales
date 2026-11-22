@@ -1,0 +1,398 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "31_born_in_chaos"
+	group: "71E49019A27AF73C"
+	icon: "born_in_chaos_v1:dark_metal_ingot"
+	id: "2F6ACE8DC0010885"
+	order_index: 1
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["A dark metal waits under the earth. Mine it and smelt it into ingots."]
+			icon: "born_in_chaos_v1:dark_metal_ingot"
+			id: "6E0DCD77DE23DE9E"
+			rewards: [
+				{
+					id: "136253FD78B6D8C0"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "6C13B85673B5CA4B"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 4L
+				id: "05EDA4C582813596"
+				item: "born_in_chaos_v1:dark_metal_ingot"
+				type: "item"
+			}]
+			title: "Dark Metal"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6E0DCD77DE23DE9E"]
+			description: ["A chestplate and helmet of dark metal. Strong against the horrors of the night."]
+			icon: {
+				Count: 1
+				id: "born_in_chaos_v1:dark_metal_armor_chestplate"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "7B572AA59A04D49F"
+			rewards: [
+				{
+					id: "06313CF3E993BED7"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "78C8C31AC4D0F575"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "0870F1094380A71B"
+					item: {
+						Count: 1
+						id: "born_in_chaos_v1:dark_metal_armor_chestplate"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "188F7075ED0CAA0C"
+					item: {
+						Count: 1
+						id: "born_in_chaos_v1:dark_metal_armor_helmet"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Dark Metal Armor"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["7B572AA59A04D49F"]
+			description: ["The evilometer shows how evil an area has become. Craft one and be careful."]
+			icon: "born_in_chaos_v1:evilometer"
+			id: "21E359C661DCD48F"
+			rewards: [
+				{
+					id: "4AE4E1C890E85125"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "22E2E563C3C67BFD"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "7919DC3819E040DF"
+				item: "born_in_chaos_v1:evilometer"
+				type: "item"
+			}]
+			title: "The Evilometer"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["21E359C661DCD48F"]
+			description: ["Bone imps rise from the dead. Break them and take their bones."]
+			icon: "minecraft:book"
+			id: "15CDC92526D94097"
+			rewards: [
+				{
+					id: "01EE94C9E2C9034C"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "36AF113B3D48FF09"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				entity: "born_in_chaos_v1:bone_imp"
+				id: "67170E0A36096F13"
+				type: "kill"
+				value: 6L
+			}]
+			title: "Bone Imps"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["15CDC92526D94097"]
+			description: ["The bonescaller commands the dead. Defeat him and take his staff."]
+			icon: {
+				Count: 1
+				id: "born_in_chaos_v1:bonescaller_staff"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "7EBAC2B791B85817"
+			rewards: [
+				{
+					count: 2
+					id: "1EF017AAE74B42FC"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "6768D6FD285D4596"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					entity: "born_in_chaos_v1:bonescaller"
+					id: "678BDEEB1E1F6D46"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "1B81F79082612158"
+					item: {
+						Count: 1
+						id: "born_in_chaos_v1:bonescaller_staff"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Bonescaller"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["7EBAC2B791B85817"]
+			description: ["Charms of fury and endurance give small boosts. Craft both."]
+			icon: {
+				Count: 1
+				id: "born_in_chaos_v1:charmof_fury"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "3F4C43F54353E696"
+			rewards: [
+				{
+					count: 2
+					id: "2018847332068703"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "0F11743E7F2B7CA4"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "71A77C7B683EBCAE"
+					item: {
+						Count: 1
+						id: "born_in_chaos_v1:charmof_fury"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "45956D7EE97D8254"
+					item: {
+						Count: 1
+						id: "born_in_chaos_v1:charmof_endurance"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Charms of Power"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3F4C43F54353E696"]
+			description: ["An elixir of ice barrier and an elixir of wither resistance."]
+			icon: "born_in_chaos_v1:elixirof_ice_barrier"
+			id: "6F91813CB2A8107D"
+			rewards: [
+				{
+					count: 8
+					id: "21B6306C8CCA428D"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "157FBC0A566A5E96"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "2EDECC344C80ED74"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "29F773D48EFA44EA"
+					item: "born_in_chaos_v1:elixirof_ice_barrier"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "57B6866962B57D84"
+					item: "born_in_chaos_v1:elixirof_wither_resistance"
+					type: "item"
+				}
+			]
+			title: "Elixirs of Defense"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6F91813CB2A8107D"]
+			description: ["A dagger for dark rituals. Handle with care."]
+			icon: {
+				Count: 1
+				id: "born_in_chaos_v1:dark_ritual_dagger"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "7F7E1A38CCEA6028"
+			rewards: [
+				{
+					count: 2
+					id: "4D117E84CA188039"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "25861227C3BBAB32"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "1BEF6C0CDBFA5B35"
+				item: {
+					Count: 1
+					id: "born_in_chaos_v1:dark_ritual_dagger"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Dark Ritual Dagger"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["7F7E1A38CCEA6028"]
+			description: ["Diamond termites drop shards used for powerful armor."]
+			icon: "born_in_chaos_v1:diamond_termite_shard"
+			id: "747D6CD0716349AF"
+			rewards: [
+				{
+					count: 2
+					id: "7EC11A4DEE326433"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "717AF75AED761C50"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "6AF038F2F8E3ABDA"
+				item: "born_in_chaos_v1:diamond_termite_shard"
+				type: "item"
+			}]
+			title: "Termite Shards"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["747D6CD0716349AF"]
+			description: ["An all-seeing charm closes the chapter on the nightmare lands."]
+			icon: "born_in_chaos_v1:all_charm"
+			id: "5EBC663823AD2B78"
+			rewards: [
+				{
+					count: 3
+					id: "3EEB3DCEB29ABCB9"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "4ABE9441D16FD34E"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "36BA94F938C810F3"
+				item: "born_in_chaos_v1:all_charm"
+				type: "item"
+			}]
+			title: "A Nightmare's End"
+			x: 18.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Nightmares and the metal that fights them."]
+	title: "Born in Chaos"
+}

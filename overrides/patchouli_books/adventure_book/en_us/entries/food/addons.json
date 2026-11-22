@@ -1,0 +1,24 @@
+{
+	"name": "Delight Add-ons",
+	"icon": "farmersdelight:ratatouille",
+	"category": "patchouli:food",
+	"sortnum": 1,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Nearly every creature and realm has dishes of its own: $(l)Alex's Delight$(), $(l)Nether's Delight$() and its $(l:food/addons#blackstone_stove)Blackstone Stove$(/l), $(l)Ender's Delight$(), $(l)Ocean's Delight$(), $(l)Ice and Fire Delight$(), $(l)Twilight's Flavors & Delight$(), and more."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Go hungry for something new now and then."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "nethersdelight:blackstone_stove",
+			"text": "A stove for Nether cooking.",
+			"link_recipe": true,
+			"anchor": "blackstone_stove"
+		}
+	]
+}

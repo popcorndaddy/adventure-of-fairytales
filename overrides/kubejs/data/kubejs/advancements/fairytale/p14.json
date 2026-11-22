@@ -1,0 +1,23 @@
+{
+  "parent": "kubejs:fairytale/p13",
+  "display": {
+    "icon": {
+      "item": "minecraft:paper"
+    },
+    "title": {
+      "text": "Bottom of the World"
+    },
+    "description": {
+      "text": "Taken back from the Void Blossom"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "given": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

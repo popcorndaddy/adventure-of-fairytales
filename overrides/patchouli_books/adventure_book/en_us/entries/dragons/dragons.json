@@ -1,0 +1,35 @@
+{
+	"name": "Dragons",
+	"icon": "iceandfire:dragonscales_blue",
+	"category": "patchouli:dragons",
+	"sortnum": 0,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Fire dragons nest where it's warm, ice dragons where it's cold, lightning dragons in jungles and badlands. Young ones keep roosts on the surface. The old ones sleep in caves, on bigger hoards."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "No wild dragon can be tamed. The $(l:dragons/dragons#bestiary)Bestiary$(/l) fills in the rest."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "iceandfire:bestiary",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "bestiary"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "iceandfire:bestiary",
+			"title": "Further Reading",
+			"text": "The $(l)Bestiary$() goes deeper.",
+			"anchor": "bestiary_2"
+		}
+	],
+	"extra_recipe_mappings": {
+		"iceandfire:bestiary": 0,
+		"iceandfire:dragonscales_blue": 0
+	}
+}

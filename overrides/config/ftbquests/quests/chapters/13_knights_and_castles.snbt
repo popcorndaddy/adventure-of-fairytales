@@ -1,0 +1,539 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "13_knights_and_castles"
+	group: "5A734B321110FED6"
+	icon: {
+		Count: 1
+		id: "magistuarmory:greathelm"
+		tag: {
+			Damage: 0
+		}
+	}
+	id: "3F10B924B52BAFCC"
+	order_index: 4
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["A small round shield for dueling. Light enough to carry everywhere."]
+			icon: {
+				Count: 1
+				id: "magistuarmory:iron_buckler"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "2C1D0A2AC623AEE1"
+			rewards: [
+				{
+					count: 8
+					id: "4AD291DE57F42FFC"
+					item: "minecraft:golden_carrot"
+					type: "item"
+				}
+				{
+					id: "70E7D65AC2346EF7"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "1591360ECB8B8510"
+				item: {
+					Count: 1
+					id: "magistuarmory:iron_buckler"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Buckler"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2C1D0A2AC623AEE1"]
+			description: ["The classic knight's shield. Forged from iron as a heater shield, it can hold off a charge."]
+			icon: {
+				Count: 1
+				id: "magistuarmory:iron_heatershield"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "40CA8CF8C5931B06"
+			rewards: [
+				{
+					count: 3
+					id: "7EF2F522496F0295"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "0CF37654A52FB588"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "65ABA4145298B9D6"
+				item: {
+					Count: 1
+					id: "magistuarmory:iron_heatershield"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Heater Shield"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["40CA8CF8C5931B06"]
+			description: ["A kite shield guards the whole left side. Craft one in bronze."]
+			icon: {
+				Count: 1
+				id: "magistuarmory:bronze_kiteshield"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "343C39BFF5F82B21"
+			rewards: [
+				{
+					count: 8
+					id: "5E73C49A9512FACC"
+					item: "minecraft:golden_carrot"
+					type: "item"
+				}
+				{
+					id: "63114B5D468F26C8"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "7C154FE19F77F599"
+				item: {
+					Count: 1
+					id: "magistuarmory:bronze_kiteshield"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Kite Shield"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["343C39BFF5F82B21"]
+			description: ["A great helm covers the whole head. Heavy, but nothing gets through."]
+			icon: {
+				Count: 1
+				id: "magistuarmory:greathelm"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "0CC526B3DC167681"
+			rewards: [
+				{
+					count: 5
+					id: "0948BC1DB2EA1567"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "6C3FEE0E0ECE99ED"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "0E68155FF78A4AD0"
+				item: {
+					Count: 1
+					id: "magistuarmory:greathelm"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Great Helm"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0CC526B3DC167681"]
+			description: ["A hand-and-a-half sword for a knight on foot, and a claymore for a knight with a bigger plan."]
+			icon: {
+				Count: 1
+				id: "magistuarmory:iron_bastardsword"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "1768BB46C857F0CA"
+			rewards: [
+				{
+					count: 10
+					id: "174453D6169AAB8C"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "5F3BE460A8055AEF"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "3BDC1073001FAF2F"
+					item: {
+						Count: 1
+						id: "magistuarmory:iron_bastardsword"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "426088882F3D8F00"
+					item: {
+						Count: 1
+						id: "magistuarmory:iron_claymore"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "The Bastard Sword"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1768BB46C857F0CA"]
+			description: ["A guisarme and an ahlspiess for guards and the front rank."]
+			icon: {
+				Count: 1
+				id: "magistuarmory:iron_guisarme"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "40B86D8465323E99"
+			rewards: [
+				{
+					count: 5
+					id: "48CA884195CB1B70"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "3A5A960DD420D1E5"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "246C7E0587072AB1"
+					item: {
+						Count: 1
+						id: "magistuarmory:iron_guisarme"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "7E54ECB0E241F258"
+					item: {
+						Count: 1
+						id: "magistuarmory:iron_ahlspiess"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Polearms of the Court"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["40B86D8465323E99"]
+			description: ["A thrusting sword to pierce plate. Fight dragon knights with the right weapon."]
+			icon: {
+				Count: 1
+				id: "magistuarmory:iron_estoc"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "2004E9E57107D44E"
+			rewards: [
+				{
+					count: 8
+					id: "589186052FFDE0F2"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "39C73325CE50C4E8"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "23173030A9FC26AB"
+				item: {
+					Count: 1
+					id: "magistuarmory:iron_estoc"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Estoc"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2004E9E57107D44E"]
+			description: ["A flamebladed sword for ceremonial duels and dark halls."]
+			icon: {
+				Count: 1
+				id: "magistuarmory:iron_flamebladedsword"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "1EA2026F4C65E1AB"
+			rewards: [
+				{
+					count: 8
+					id: "41D93200D240E6CF"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "3430196DB4FCF815"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "6D805F8A91F7669B"
+				item: {
+					Count: 1
+					id: "magistuarmory:iron_flamebladedsword"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Flame Blade"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1EA2026F4C65E1AB"]
+			description: ["A jousting lance for a charge on horseback. Practice before you meet a real foe."]
+			icon: {
+				Count: 1
+				id: "magistuarmory:iron_chivalrylance"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "0FAEF8B4F29159E5"
+			rewards: [
+				{
+					count: 8
+					id: "10AC61E27D634921"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "493329492DD77096"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "5B1BFD31D8946F02"
+				item: {
+					Count: 1
+					id: "magistuarmory:iron_chivalrylance"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Chivalry Lance"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0FAEF8B4F29159E5"]
+			description: ["Knight Quest adds legendary swords. Find a paladin sword in the wild."]
+			icon: {
+				Count: 1
+				id: "knightquest:paladin_sword"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "08288184E2E74BEA"
+			rewards: [
+				{
+					id: "4205D29B5345CFDB"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "597D617438940BE4"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "557A62A5BEC72DA7"
+				item: {
+					Count: 1
+					id: "knightquest:paladin_sword"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "Knight Quest"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["08288184E2E74BEA"]
+			description: ["A blade of true steel, balanced for a knight. Forge one and carry it into the dungeon."]
+			icon: {
+				Count: 1
+				id: "knightquest:steel_sword"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "384294BEDF8899A5"
+			rewards: [
+				{
+					count: 2
+					id: "53F46DC4DA6F3507"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "7EDF441AD4047838"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "1BC725C28629F8AF"
+				item: {
+					Count: 1
+					id: "knightquest:steel_sword"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Steel Blade"
+			x: 20.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["384294BEDF8899A5"]
+			description: ["Epic Knights has dragon-forged gear. A dragonbone claymore is the weapon of a true dragon knight."]
+			icon: {
+				Count: 1
+				id: "epic_knights_ice_and_fire:dragon_claymore"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "57299F92A40C2406"
+			rewards: [
+				{
+					count: 3
+					id: "5EE14DB696635BD9"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "2BC8CF492A3AB59D"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "30039030ED5C4BBD"
+				item: {
+					Count: 1
+					id: "epic_knights_ice_and_fire:dragon_claymore"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "Dragon Knight"
+			x: 22.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Heraldry, plate and the weapons of a medieval court."]
+	title: "Knights and Castles"
+}

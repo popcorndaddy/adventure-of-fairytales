@@ -1,0 +1,775 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "12_spartan_weaponry"
+	group: "5A734B321110FED6"
+	icon: {
+		Count: 1
+		id: "spartanweaponry:iron_longsword"
+		tag: {
+			Damage: 0
+		}
+	}
+	id: "5DFDC13E2E771156"
+	order_index: 3
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Daggers and throwing knives are fast and hard to notice. Craft one of each."]
+			icon: {
+				Count: 1
+				id: "spartanweaponry:iron_dagger"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "31D7AC52643FD01C"
+			rewards: [
+				{
+					count: 6
+					id: "39C034F6F8B8B3DF"
+					item: "minecraft:cooked_beef"
+					type: "item"
+				}
+				{
+					id: "00FA425529030BBD"
+					type: "xp"
+					xp: 50
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "15082B633C815835"
+					item: {
+						Count: 1
+						id: "spartanweaponry:iron_dagger"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "0A5B47F29C75F990"
+					item: {
+						Count: 1
+						id: "spartanweaponry:iron_throwing_knife"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "A Dagger at Your Hip"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["31D7AC52643FD01C"]
+			description: ["A parrying dagger and a rapier make a duelist's pair. Turn aside blows and strike through gaps."]
+			icon: {
+				Count: 1
+				id: "spartanweaponry:iron_parrying_dagger"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "37B0C5B80CA05FD1"
+			rewards: [
+				{
+					count: 8
+					id: "0380548F4E255201"
+					item: "minecraft:golden_carrot"
+					type: "item"
+				}
+				{
+					id: "293C75AD8956E388"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "1CB791994392C192"
+					item: {
+						Count: 1
+						id: "spartanweaponry:iron_parrying_dagger"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "2C38AE5BBD26F5F7"
+					item: {
+						Count: 1
+						id: "spartanweaponry:iron_rapier"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Fencing"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["37B0C5B80CA05FD1"]
+			description: ["A saber and a katana are lighter than a longsword and quicker to strike."]
+			icon: {
+				Count: 1
+				id: "spartanweaponry:iron_saber"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "23BE71E14F723E98"
+			rewards: [
+				{
+					count: 6
+					id: "5F47A815B2EC5201"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "17D9C57D2C16B927"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "2B3AAF7AA9AAB186"
+					item: {
+						Count: 1
+						id: "spartanweaponry:iron_saber"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "156942C8C67859F9"
+					item: {
+						Count: 1
+						id: "spartanweaponry:iron_katana"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Curved Blades"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["23BE71E14F723E98"]
+			description: ["A longsword and a greatsword. One for a steady hand and one for crowds."]
+			icon: {
+				Count: 1
+				id: "spartanweaponry:iron_longsword"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "009976EBB031C980"
+			rewards: [
+				{
+					count: 6
+					id: "12A747E5F761C923"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "6AE470E05969AE80"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "249B299E69600DDA"
+					item: {
+						Count: 1
+						id: "spartanweaponry:iron_longsword"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "6227EA4F11919A8F"
+					item: {
+						Count: 1
+						id: "spartanweaponry:iron_greatsword"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "The Longsword"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["009976EBB031C980"]
+			description: ["Pikes and halberds hold enemies at a distance. Hold the line."]
+			icon: {
+				Count: 1
+				id: "spartanweaponry:iron_pike"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "222ECB09905BC832"
+			rewards: [
+				{
+					count: 10
+					id: "5D4B8E76606D4C21"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "2B1FB06D214EE158"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "27B0B92F6FFD4090"
+					item: {
+						Count: 1
+						id: "spartanweaponry:iron_pike"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "1CB49DCD1739FA3A"
+					item: {
+						Count: 1
+						id: "spartanweaponry:iron_halberd"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Reach"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["222ECB09905BC832"]
+			description: ["A glaive for sweeping cuts and a lance for a charge on horseback."]
+			icon: {
+				Count: 1
+				id: "spartanweaponry:iron_glaive"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "3C90B6D7245BB5F9"
+			rewards: [
+				{
+					count: 5
+					id: "1714FB5D93A2CEBC"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "7272B517CC3CFBDF"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "1AA11D1E51121286"
+					item: {
+						Count: 1
+						id: "spartanweaponry:iron_glaive"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "0F606B0FE4CE6C7F"
+					item: {
+						Count: 1
+						id: "spartanweaponry:iron_lance"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Glaive and Lance"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3C90B6D7245BB5F9"]
+			description: ["A battle hammer and a flanged mace break armor and bone alike."]
+			icon: {
+				Count: 1
+				id: "spartanweaponry:iron_battle_hammer"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "5A9A1EF8CF246F5C"
+			rewards: [
+				{
+					count: 6
+					id: "5E0B0E8F92969E1C"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "2D9A064094C35B96"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "33E49A43E152FBB8"
+					item: {
+						Count: 1
+						id: "spartanweaponry:iron_battle_hammer"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "62C4F802860BDBCB"
+					item: {
+						Count: 1
+						id: "spartanweaponry:iron_flanged_mace"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Crushing Weapons"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5A9A1EF8CF246F5C"]
+			description: ["A battleaxe with a staff for balance. Heavy, but rewarding."]
+			icon: {
+				Count: 1
+				id: "spartanweaponry:iron_battleaxe"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "245A5003E7579FAA"
+			rewards: [
+				{
+					count: 10
+					id: "6E2D13D1B6ED72B5"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "4126613B171D2F6C"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "3CD467DB208E8796"
+					item: {
+						Count: 1
+						id: "spartanweaponry:iron_battleaxe"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "05EDF86FCE51B144"
+					item: {
+						Count: 1
+						id: "spartanweaponry:iron_quarterstaff"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "The Battleaxe"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["245A5003E7579FAA"]
+			description: ["Javelins and boomerangs strike from afar and return or can be retrieved."]
+			icon: {
+				Count: 1
+				id: "spartanweaponry:iron_javelin"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "38680F7E32C97C8A"
+			rewards: [
+				{
+					count: 3
+					id: "1BCCC87F82E1FCF0"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "4FB363963072C198"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "68BCCC60AA57C5D9"
+					item: {
+						Count: 1
+						id: "spartanweaponry:iron_javelin"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "6B30F4795DDA9703"
+					item: {
+						Count: 1
+						id: "spartanweaponry:iron_boomerang"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Thrown Weapons"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["38680F7E32C97C8A"]
+			description: ["A longbow has range and power. Pair it with a good quiver of iron arrows."]
+			icon: {
+				Count: 1
+				id: "spartanweaponry:iron_longbow"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "2CB9102B95B96A57"
+			rewards: [
+				{
+					count: 16
+					id: "7B66E610A894FA54"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "6979E49A1A63686F"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "0563722EF961D79C"
+					item: {
+						Count: 1
+						id: "spartanweaponry:iron_longbow"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 32L
+					id: "55962BD71ECB5FC5"
+					item: "spartanweaponry:iron_arrow"
+					type: "item"
+				}
+			]
+			title: "The Longbow"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2CB9102B95B96A57"]
+			description: ["A heavy crossbow is slow to load and devastating on impact. Hold the line while you reload."]
+			icon: {
+				Count: 1
+				id: "spartanweaponry:iron_heavy_crossbow"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "197105008545EE46"
+			rewards: [
+				{
+					count: 8
+					id: "2071B10C6AE18C73"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "69A81E48AD36E308"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "118E0FE16C57C26E"
+				item: {
+					Count: 1
+					id: "spartanweaponry:iron_heavy_crossbow"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Heavy Crossbow"
+			x: 20.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["197105008545EE46"]
+			description: ["Bronze weapons are cheap and sturdy. A bronze longsword shows how far your craft has come."]
+			icon: {
+				Count: 1
+				id: "spartanweaponry:bronze_longsword"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "16B06CF536DDAF11"
+			rewards: [
+				{
+					count: 5
+					id: "31CCE95042B406BF"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "3E874409C0A86678"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "577BF80A08EC74E1"
+					item: {
+						Count: 1
+						id: "spartanweaponry:bronze_longsword"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "592034433381706F"
+					item: {
+						Count: 1
+						id: "spartanweaponry:bronze_spear"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Bronze Age"
+			x: 22.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["16B06CF536DDAF11"]
+			description: ["Diamond weapons hold their edge. A diamond katana and greatsword are tools of a veteran."]
+			icon: {
+				Count: 1
+				id: "spartanweaponry:diamond_katana"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "003816D661F34013"
+			rewards: [
+				{
+					id: "13D6A2F09B2D47FB"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "40EE454DD5D193C7"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "0CABEEE657ACE3BD"
+					item: {
+						Count: 1
+						id: "spartanweaponry:diamond_katana"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "78041E878CA6E6A4"
+					item: {
+						Count: 1
+						id: "spartanweaponry:diamond_greatsword"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Diamond Edge"
+			x: 24.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["003816D661F34013"]
+			description: ["Netherite weapons are the finest. A halberd and a longbow cover every range."]
+			icon: {
+				Count: 1
+				id: "spartanweaponry:netherite_halberd"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "0692A847680F3D33"
+			rewards: [
+				{
+					count: 16
+					id: "27A92B9D4DAE50E8"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "5EC6594CF6E812D9"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "18304F5DE81FD26A"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "4C2CD50F54D3E2C3"
+					item: {
+						Count: 1
+						id: "spartanweaponry:netherite_halberd"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "5340C8CE0D005061"
+					item: {
+						Count: 1
+						id: "spartanweaponry:netherite_longbow"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "The Royal Arsenal"
+			x: 26.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["A weapon for every hand and every foe."]
+	title: "Spartan Weaponry"
+}
