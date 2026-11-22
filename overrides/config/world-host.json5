@@ -3,7 +3,7 @@
 	onlineStatusLocation: "right",
 	enableFriends: true,
 	enableReconnectionToasts: false,
-	UPnP: false,
+	UPnP: true,
 	useShortIp: false,
 	showOutdatedWorldHost: true,
 	shareButton: true,
