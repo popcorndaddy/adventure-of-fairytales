@@ -17,6 +17,7 @@ const $AABB = Java.loadClass('net.minecraft.world.phys.AABB')
 const $BossEvent = Java.loadClass('net.minecraft.server.level.ServerBossEvent')
 const $BarColor = Java.loadClass('net.minecraft.world.BossEvent$BossBarColor')
 const $BarOverlay = Java.loadClass('net.minecraft.world.BossEvent$BossBarOverlay')
+const $Vec3 = Java.loadClass('net.minecraft.world.phys.Vec3')
 
 const WS = 'withered_sentinel'
 const WS_ANIM = n => `animation.${WS}.${n}`
@@ -53,10 +54,12 @@ StartupEvents.registry('entity_type', event => {
       a.add($Attributes.FOLLOW_RANGE, 48)
       a.add($Attributes.ATTACK_DAMAGE, 14)
     })
-    // base layer: idle / combat stance / walk / death
+    // one controller for everything: idle / combat stance / walk / death from the predicate, and every attack
+    // as a triggerable animation on the same controller, so an attack fully takes over while it plays
     .addAnimationController('base', 6, ev => {
       // the predicate must return true/false; the then*() calls pick the animation
       try {
+        WS_ACTIONS.forEach(n => ev.addTriggerableAnimation(n, WS_ANIM(n), WS_LOOPS[n] || 'PLAY_ONCE'))
         let e = ev.entity
         if (e.isDeadOrDying()) ev.thenPlayAndHold(WS_ANIM('death'))
         else if (ev.isMoving()) ev.thenLoop(WS_ANIM('walk'))
@@ -87,8 +90,6 @@ StartupEvents.registry('entity_type', event => {
     .setHurtSound(ctx => 'minecraft:entity.skeleton.hurt')
     .setDeathSound('minecraft:entity.wither_skeleton.death')
     .setSoundVolume(2.0)
-  // one-shot actions layered over the base, started from the server with triggerAnim
-  WS_ACTIONS.forEach(n => b.addTriggerableAnimationController(`c_${n}`, n === 'summon_loop' ? 0 : 4, n, WS_ANIM(n), WS_LOOPS[n] || 'PLAY_ONCE'))
 })
 
 // his AI goals (targeting players, looking around) are in server_scripts/bosses/withered_sentinel_goals.js;
@@ -135,7 +136,7 @@ function wsHit(e, range, arc, dmg, push, lift) {
     let nx = d > 0.01 ? dx / d : f[0], nz = d > 0.01 ? dz / d : f[1]
     if (arc > -1 && nx * f[0] + nz * f[1] < arc) return
     x.attack(e.damageSources().mobAttack(e), dmg)
-    x.setDeltaMovement(nx * push, lift, nz * push)
+    x.setDeltaMovement(new $Vec3(nx * push, lift, nz * push))
     x.hurtMarked = true
     hit++
   })
@@ -146,10 +147,10 @@ function wsStart(e, action) {
   let d = e.persistentData
   d.putString('ws_act', action); d.putInt('ws_t', 0)
   e.getNavigation().stop()
-  e.triggerAnim(`c_${action}`, action)
+  e.triggerAnim('base', action)
 }
 
-function wsStopAll(e) { WS_ACTIONS.forEach(n => { try { e.stopTriggeredAnimation(`c_${n}`, n) } catch (err) {} }) }
+function wsStopAll(e) { WS_ACTIONS.forEach(n => { try { e.stopTriggeredAnimation('base', n) } catch (err) {} }) }
 
 function wsBar(e) {
   let id = wsId(e), bar = global.wsBars[id]
@@ -242,11 +243,10 @@ global.wsTick = e => {
         })
         d.putBoolean('ws_guarded', true)
       }
-      if (t >= WS_LEN.summon_start) { d.putString('ws_act', 'summon_hold'); d.putInt('ws_t', 0); e.triggerAnim('c_summon_loop', 'summon_loop') }
+      if (t >= WS_LEN.summon_start) { d.putString('ws_act', 'summon_hold'); d.putInt('ws_t', 0); e.triggerAnim('base', 'summon_loop') }
     } else if (act == 'summon_hold') {
       if (t % 20 == 0) wsCmd(e, 'particle minecraft:soul ~ ~0.5 ~ 1.5 0.2 1.5 0.01 8 force')
       if (t % 10 == 0 && wsMinionsAlive(e) == 0) {
-        try { e.stopTriggeredAnimation('c_summon_loop', 'summon_loop'); e.stopTriggeredAnimation('c_summon_start', 'summon_start') } catch (err) {}
         d.putBoolean('ws_guarded', false)
         wsStart(e, 'summon_end')
         d.putInt('cd_summon', 900)
@@ -271,7 +271,7 @@ global.wsTick = e => {
       if (t == 8) wsCmd(e, 'playsound minecraft:entity.ravager.roar hostile @a ~ ~ ~ 3 0.7')
       if (t >= 9 && t <= 16) {
         let f = wsFwd(e)
-        e.setDeltaMovement(f[0] * 1.35, e.getDeltaMovement().y(), f[1] * 1.35)
+        e.setDeltaMovement(new $Vec3(f[0] * 1.35, e.getDeltaMovement().y(), f[1] * 1.35))
         e.hurtMarked = true
         if (!d.getBoolean('ws_dash_hit') && wsHit(e, 3.0, 0.2, 18, 1.4, 0.4) > 0) d.putBoolean('ws_dash_hit', true)
       }
@@ -297,5 +297,5 @@ global.wsTick = e => {
   if (d.getInt('cd_sweep') == 0 && dist < 5.6) { wsStart(e, 'sweep'); d.putInt('cd_sweep', 50); return }
 
   if (dist > 4.2) e.getNavigation().moveTo(target, 1.0)
-  else { e.getNavigation().stop(); e.getLookControl().setLookAt(target, 30, 30) }
+  else { e.getNavigation().stop(); wsFace(e, target) }
 }
