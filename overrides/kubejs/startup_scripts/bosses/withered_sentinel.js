@@ -112,17 +112,39 @@ function wsLogOnce(where, err) {
   global.wsLogged[where] = true
   console.error(`[Withered Sentinel] ${where}: ${err}`)
 }
-function wsDist(a, b) { let dx = a.x - b.x, dz = a.z - b.z; return Math.sqrt(dx * dx + dz * dz) }
+// Rhino in this pack can't read entity.x/.y/.z (getX has two overloads and the wrong one wins),
+// so positions are read through position() and checked before use.
+function wsNum(v) { try { if (typeof v == 'function') return NaN; let n = Number(v); return isFinite(n) ? n : NaN } catch (err) { return NaN } }
+function wsVec(v) {
+  let x = wsNum(v.x), y = wsNum(v.y), z = wsNum(v.z)
+  if (isFinite(x) && isFinite(y) && isFinite(z)) return { x: x, y: y, z: z }
+  try { x = wsNum(v.x()); y = wsNum(v.y()); z = wsNum(v.z()) } catch (err) {}
+  if (isFinite(x) && isFinite(y) && isFinite(z)) return { x: x, y: y, z: z }
+  return null
+}
+function wsP(o) {
+  let r = null
+  try { r = wsVec(o.position()) } catch (err) {}
+  if (!r) try { let x = wsNum(o.getX()), y = wsNum(o.getY()), z = wsNum(o.getZ()); if (isFinite(x) && isFinite(y) && isFinite(z)) r = { x: x, y: y, z: z } } catch (err) {}
+  if (!r) try { let b = o.blockPosition(); r = { x: b.getX() + 0.5, y: b.getY(), z: b.getZ() + 0.5 } } catch (err) {}
+  if (!r) { wsLogOnce('position', 'could not read a position'); r = { x: 0, y: 0, z: 0, bad: true } }
+  return r
+}
+function wsDist(a, b) { let p = wsP(a), q = wsP(b); if (p.bad || q.bad) return 999; let dx = p.x - q.x, dz = p.z - q.z; return Math.sqrt(dx * dx + dz * dz) }
 function wsFace(e, t) {
-  let yaw = Math.atan2(t.z - e.z, t.x - e.x) * 180 / Math.PI - 90
+  let p = wsP(e), q = wsP(t)
+  if (p.bad || q.bad) return
+  let yaw = Math.atan2(q.z - p.z, q.x - p.x) * 180 / Math.PI - 90
+  if (!isFinite(yaw)) return
   e.setYRot(yaw); e.setYHeadRot(yaw); e.setYBodyRot(yaw)
 }
-function wsFwd(e) { let r = e.getYRot() * Math.PI / 180; return [-Math.sin(r), Math.cos(r)] }
+function wsFwd(e) { let r = wsNum(e.getYRot()) * Math.PI / 180; if (!isFinite(r)) r = 0; return [-Math.sin(r), Math.cos(r)] }
 function wsNear(e, r) {
-  let box = new $AABB(e.x - r, e.y - 3, e.z - r, e.x + r, e.y + 10, e.z + r)
+  let p = wsP(e)
+  let box = new $AABB(p.x - r, p.y - 3, p.z - r, p.x + r, p.y + 10, p.z + r)
   return e.level.getEntities(e, box)
 }
-function wsCmd(e, c) { e.server.runCommandSilent(`execute in ${e.level.dimension} positioned ${e.x} ${e.y} ${e.z} run ${c}`) }
+function wsCmd(e, c) { let p = wsP(e); e.server.runCommandSilent(`execute in ${e.level.dimension} positioned ${p.x} ${p.y} ${p.z} run ${c}`) }
 function wsIsMinion(e, x) { try { return x.getTags().contains('wsm_' + wsId(e)) } catch (err) { return false } }
 
 // hit every living thing (not his own minions) in range; arc = cosine of half-angle in front (-1 = all round)
@@ -131,7 +153,9 @@ function wsHit(e, range, arc, dmg, push, lift) {
   wsNear(e, range + 2).forEach(x => {
     if (!x.isLiving() || !x.isAlive() || wsIsMinion(e, x)) return
     if (x.isPlayer() && (x.isCreative() || x.isSpectator())) return
-    let dx = x.x - e.x, dz = x.z - e.z, d = Math.sqrt(dx * dx + dz * dz)
+    let px = wsP(x), pe = wsP(e)
+    if (px.bad || pe.bad) return
+    let dx = px.x - pe.x, dz = px.z - pe.z, d = Math.sqrt(dx * dx + dz * dz)
     if (d > range + x.getBbWidth() / 2) return
     let nx = d > 0.01 ? dx / d : f[0], nz = d > 0.01 ? dz / d : f[1]
     if (arc > -1 && nx * f[0] + nz * f[1] < arc) return
@@ -175,7 +199,7 @@ global.wsOnDeath = e => {
 
 // the ground heaves in a ring around him and settles again
 function wsQuake(e) {
-  let tag = `wsq_${wsId(e)}_${e.tickCount}`, cx = Math.floor(e.x), cz = Math.floor(e.z), y = Math.floor(e.y) - 1
+  let tag = `wsq_${wsId(e)}_${e.tickCount}`, pe = wsP(e), cx = Math.floor(pe.x), cz = Math.floor(pe.z), y = Math.floor(pe.y) - 1
   for (let dx = -5; dx <= 5; dx++) for (let dz = -5; dz <= 5; dz++) {
     let r = Math.sqrt(dx * dx + dz * dz)
     if (r < 1.5 || r > 4.8) continue
@@ -200,6 +224,7 @@ global.wsTick = e => {
   let d = e.persistentData
   if (!d.contains('ws_home')) {
     d.putBoolean('ws_home', true)
+    try { console.info(`[Withered Sentinel] awake at ${JSON.stringify(wsP(e))}`) } catch (err) {}
     d.putInt('cd_sweep', 20); d.putInt('cd_push', 120); d.putInt('cd_summon', 300); d.putInt('cd_stomp', 60); d.putInt('cd_dash', 160)
   }
   if (e.tickCount % 5 == 0) wsBar(e)
@@ -236,10 +261,11 @@ global.wsTick = e => {
         wsCmd(e, 'particle minecraft:soul_fire_flame ~ ~0.5 ~ 3 0.2 3 0.05 120 force')
         let tag = 'wsm_' + wsId(e), mobs = ['minecraft:wither_skeleton', 'minecraft:wither_skeleton', 'minecraft:skeleton']
         if (p2) mobs.push('minecraft:wither_skeleton')
+        let pe = wsP(e)
         mobs.forEach((m, i) => {
-          let a = (i / mobs.length) * Math.PI * 2, x = e.x + Math.cos(a) * 5, z = e.z + Math.sin(a) * 5
-          e.server.runCommandSilent(`execute in ${e.level.dimension} run summon ${m} ${x} ${e.y} ${z} {Tags:["${tag}","ws_minion"],PersistenceRequired:1b}`)
-          e.server.runCommandSilent(`execute in ${e.level.dimension} run particle minecraft:soul ${x} ${e.y + 1} ${z} 0.4 0.8 0.4 0.02 30 force`)
+          let a = (i / mobs.length) * Math.PI * 2, x = pe.x + Math.cos(a) * 5, z = pe.z + Math.sin(a) * 5
+          e.server.runCommandSilent(`execute in ${e.level.dimension} run summon ${m} ${x} ${pe.y} ${z} {Tags:["${tag}","ws_minion"],PersistenceRequired:1b}`)
+          e.server.runCommandSilent(`execute in ${e.level.dimension} run particle minecraft:soul ${x} ${pe.y + 1} ${z} 0.4 0.8 0.4 0.02 30 force`)
         })
         d.putBoolean('ws_guarded', true)
       }
@@ -271,7 +297,8 @@ global.wsTick = e => {
       if (t == 8) wsCmd(e, 'playsound minecraft:entity.ravager.roar hostile @a ~ ~ ~ 3 0.7')
       if (t >= 9 && t <= 16) {
         let f = wsFwd(e)
-        e.setDeltaMovement(new $Vec3(f[0] * 1.35, e.getDeltaMovement().y(), f[1] * 1.35))
+        let vy = 0; try { let v = wsVec(e.getDeltaMovement()); if (v) vy = v.y } catch (err) {}
+        e.setDeltaMovement(new $Vec3(f[0] * 1.35, vy, f[1] * 1.35))
         e.hurtMarked = true
         if (!d.getBoolean('ws_dash_hit') && wsHit(e, 3.0, 0.2, 18, 1.4, 0.4) > 0) d.putBoolean('ws_dash_hit', true)
       }
