@@ -288,14 +288,14 @@ def free_arm(r, S, hand_px, point, palm, elbow):
 def fingers(r, S, curl, spread=0.0, thumb=0.5, wobble=(0.0, 0.0, 0.0)):
     """Curl each finger (0 = straight, 1 = fist around a grip); spread fans them; wobble = per-finger offsets."""
     hand = r.rot(f"hand_{S}") @ r.base[f"hand_{S}"].inverted()
-    axis = hand @ Vector((0, 1 if S == "R" else -1, 0))                     # curl toward the palm
+    axis = hand @ Vector((0, -1 if S == "R" else 1, 0))                     # curl toward the palm (+X right / -X left at rest)
     fan = hand @ Vector((1 if S == "R" else -1, 0, 0))
     for i, fi in enumerate(("index", "middle", "ring")):
         c = max(-0.2, curl + wobble[i])
-        r.rotate(f"{fi}1_{S}", Matrix.Rotation(math.radians(80 * c), 3, axis) @ Matrix.Rotation(math.radians((i - 1) * 12 * spread), 3, fan))
-        r.rotate(f"{fi}2_{S}", Matrix.Rotation(math.radians(75 * c), 3, axis))
-    r.rotate(f"thumb1_{S}", Matrix.Rotation(math.radians(55 * thumb), 3, axis))
-    r.rotate(f"thumb2_{S}", Matrix.Rotation(math.radians(45 * thumb), 3, axis))
+        r.rotate(f"{fi}1_{S}", Matrix.Rotation(math.radians(92 * c), 3, axis) @ Matrix.Rotation(math.radians((i - 1) * 12 * spread), 3, fan))
+        r.rotate(f"{fi}2_{S}", Matrix.Rotation(math.radians(100 * c), 3, axis))
+    r.rotate(f"thumb1_{S}", Matrix.Rotation(math.radians(62 * thumb), 3, axis))
+    r.rotate(f"thumb2_{S}", Matrix.Rotation(math.radians(60 * thumb), 3, axis))
 
 
 def head_look(r, yaw, pitch, tilt):

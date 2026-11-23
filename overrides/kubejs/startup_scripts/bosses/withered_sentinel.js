@@ -322,6 +322,31 @@ function wsQuake(e) {
 }
 function wsMinionsAlive(e) { let n = 0; wsNear(e, 64).forEach(x => { if (x.isAlive() && wsIsMinion(e, x)) n++ }); return n }
 
+// heavy-weapon sound layers (the Ancient Gatekeeper's formula: its whoosh and impact pitched low, plus a steel drag
+// on the wind-up), each with a vanilla layer underneath so it still sounds heavy if that mod is ever missing
+function sndWindup(e) {
+  wsCmd(e, 'playsound aof_gatekeeper:gatekeeper.drag hostile @a ~ ~ ~ 1.8 0.75')
+  wsCmd(e, 'playsound minecraft:item.armor.equip_netherite hostile @a ~ ~ ~ 1.4 0.5')
+}
+function sndSwing(e, pitch) {
+  wsCmd(e, `playsound aof_gatekeeper:gatekeeper.whoosh hostile @a ~ ~ ~ 2.4 ${pitch}`)
+  wsCmd(e, `playsound minecraft:entity.player.attack.sweep hostile @a ~ ~ ~ 2.0 ${(pitch * 0.8).toFixed(2)}`)
+}
+function sndImpact(e, pitch, vol) {
+  wsCmd(e, `playsound aof_gatekeeper:gatekeeper.impact hostile @a ~ ~ ~ ${vol || 2.6} ${pitch}`)
+  wsCmd(e, `playsound minecraft:entity.iron_golem.attack hostile @a ~ ~ ~ 1.6 ${(pitch * 0.8).toFixed(2)}`)
+}
+
+// the armour is thousands of years old: now and then a tiny breath of dust and smoke escapes a joint
+const WS_JOINTS = [[0, 66, 0], [18, 60, 2], [-18, 60, 2], [16, 44, -2], [-16, 44, -2], [9, 36, 0], [-9, 36, 0], [7, 22, -3], [-7, 22, -3]]
+function fxArmorBreath(e, strength) {
+  let j = WS_JOINTS[Math.floor(Math.random() * WS_JOINTS.length)]
+  let q = wsLocal(e, j[0], j[1], j[2])
+  wsAt(e, q, `particle minecraft:smoke ~ ~ ~ 0.06 0.04 0.06 0.008 ${Math.max(1, Math.round(2 * strength))} force`)
+  wsAt(e, q, `particle minecraft:white_ash ~ ~ ~ 0.12 0.08 0.12 0.01 ${Math.max(1, Math.round(3 * strength))} force`)
+  if (Math.random() < 0.15) wsAt(e, q, 'playsound minecraft:block.fire.extinguish hostile @a ~ ~ ~ 0.12 0.55')
+}
+
 // heavy armoured footsteps while he walks: a deep step, a plate clank and chain mail, on each foot strike
 // (the walk cycle is 48 ticks with a strike every 24, alternating feet)
 function wsFootsteps(e, d, act) {
@@ -356,6 +381,7 @@ global.wsTick = e => {
   if (!d.getBoolean('ws_awake') && act != 'awaken') {
     e.getNavigation().stop(); e.setAggressive(false)
     if (e.tickCount % 40 == 0) { fxHeart(e, 0.4); fxGoldPulse(e, 0.35) }
+    if (Math.random() < 0.006) fxArmorBreath(e, 0.6)
     let wake = false
     e.server.players.forEach(p => { if (!p.isCreative() && !p.isSpectator() && p.level == e.level && wsDist(p, e) < 16) wake = true })
     if (wake || target) { d.putBoolean('ws_guarded', true); wsStart(e, 'awaken') }
@@ -368,6 +394,7 @@ global.wsTick = e => {
   if (act == '' && e.tickCount % 31 == 0) fxDust(e, wsLocal(e, (Math.random() - 0.5) * 16, 2, -2), WS_DARK, 1.2, 0.35, 3, 0.01)
   if (e.tickCount % (target ? 12 : 30) == 0) { fxHeart(e, target ? 1.0 : 0.5); fxGoldPulse(e, target ? 1.0 : 0.55) }
   wsFootsteps(e, d, act)
+  if (Math.random() < 0.022) fxArmorBreath(e, 1.0)                    // about once every 2-3 seconds
 
   if (act != '') {
     d.putInt('ws_t', t + 1)
@@ -383,6 +410,8 @@ global.wsTick = e => {
       // deep war horns: the raid horn and a goat horn played at half speed sound like a huge Viking horn
       if (t == E.stir) { wsCmd(e, 'playsound minecraft:event.raid.horn hostile @a ~ ~ ~ 4 0.5'); wsCmd(e, 'playsound minecraft:item.goat_horn.sound.6 hostile @a ~ ~ ~ 3 0.5') }
       if (t == E.stir + 14) wsCmd(e, 'playsound minecraft:item.goat_horn.sound.7 hostile @a ~ ~ ~ 2.5 0.5')
+      if (t == E.stir) { let v = wsLocal(e, 0, 72, -6); wsAt(e, v, 'particle minecraft:smoke ~ ~ ~ 0.15 0.05 0.15 0.02 6 force'); wsAt(e, v, 'particle minecraft:white_ash ~ ~ ~ 0.3 0.1 0.3 0.02 8 force') }
+      if (t >= E.rise && t <= E.rise + 24 && t % 3 == 0) fxArmorBreath(e, 1.6)   // centuries of dust shaken off
       if (t == E.rise) { wsCmd(e, 'playsound minecraft:entity.warden.emerge hostile @a ~ ~ ~ 3 0.7'); wsCmd(e, 'playsound minecraft:event.raid.horn hostile @a ~ ~ ~ 4 0.56') }
       if (t == E.flare - 2) wsCmd(e, 'playsound minecraft:item.goat_horn.sound.3 hostile @a ~ ~ ~ 3 0.5')
       if (t == E.draw) { wsAt(e, wsLocal(e, -2, 1, 22), 'playsound minecraft:block.stone.break hostile @a ~ ~ ~ 3 0.4'); fxShards(e, wsLocal(e, -2, 1, 22), 0.6, 18) }
@@ -397,12 +426,13 @@ global.wsTick = e => {
     } else if (act == 'sweep') {
       // telegraph: he turns to the target and coils the blade back over his shoulder, trembling, before the whip
       if (t <= E.telegraph + 4 && target) wsAim(e, target)
-      if (t == E.telegraph) wsCmd(e, 'playsound minecraft:item.trident.return hostile @a ~ ~ ~ 2 0.5')
-      if (t == E.sound_whoosh) wsCmd(e, 'playsound minecraft:entity.player.attack.sweep hostile @a ~ ~ ~ 3 0.4')
+      if (t == E.telegraph) sndWindup(e)
+      if (t == E.sound_whoosh) sndSwing(e, 0.6)
       // trail along the blade's real arc (azimuth + = his left), only while the blade is moving fast
       let taz = E.trail_az || [-150, 110]
       if (t >= E.trail[0] && t <= E.trail[1]) fxBlade(e, taz[0] + (taz[1] - taz[0]) * (t - E.trail[0]) / (E.trail[1] - E.trail[0]), 44, 20, 80)
       if (t == E.impact) {
+        sndImpact(e, 0.62)
         wsHit(e, 6.5, -0.75, 17, 1.7, 0.35)                              // the long arc reaches round to his flanks
         let f = wsFwd(e)
         wsCmd(e, `particle minecraft:sweep_attack ~${f[0] * 3} ~3 ~${f[1] * 3} 2 0.4 2 0 10 force`)
@@ -419,7 +449,7 @@ global.wsTick = e => {
           let q = wsLocal(e, 0, 44, 30 + i * 18)
           e.server.scheduleInTicks(i, () => { fxCubes(e, q, 0.3 + i * 0.25, 10 + i * 3); fxShards(e, q, 0.3 + i * 0.2, 4) })
         }
-        wsCmd(e, 'playsound minecraft:entity.warden.sonic_boom hostile @a ~ ~ ~ 3 0.7')
+        wsCmd(e, 'playsound minecraft:entity.warden.sonic_boom hostile @a ~ ~ ~ 3 0.7'); sndImpact(e, 0.7, 2.2)
         wsHit(e, 9, 0.5, 7, 2.6, 0.55)
       }
     } else if (act == 'stomp') {
@@ -427,7 +457,7 @@ global.wsTick = e => {
       if (t == E.telegraph) wsCmd(e, 'playsound minecraft:block.anvil.place hostile @a ~ ~ ~ 2 0.4')
       if (t >= E.apex[0] && t <= E.apex[1] && t % 2 == 0) fxDust(e, wsLocal(e, -7, 18, 2), WS_DARK, 1.3, 0.3, 2, 0.01)
       if (t == E.impact) {
-        wsCmd(e, 'playsound minecraft:entity.generic.explode hostile @a ~ ~ ~ 3 0.6')
+        wsCmd(e, 'playsound minecraft:entity.generic.explode hostile @a ~ ~ ~ 3 0.6'); sndImpact(e, 0.55, 3.0)
         let q = wsLocal(e, -7, 1, 2)
         fxShards(e, q, 1.2, 40); fxRing(e, 2.5, WS_DARK, 2.2, 28, 0.2); fxRing(e, 4.5, WS_VIOLET, 1.6, 40, 0.2)
         e.server.scheduleInTicks(3, () => fxRing(e, 5.5, WS_DARK, 1.8, 44, 0.2))
@@ -448,7 +478,8 @@ global.wsTick = e => {
         e.setDeltaMovement(new $Vec3(f[0] * 1.3, vy, f[1] * 1.3)); e.hurtMarked = true
         fxDust(e, wsLocal(e, 0, 6, -10), WS_DARK, 1.8, 0.4, 4, 0.01)    // voxel trail behind him
         fxBlade(e, 0, 48, 30, 90)                                         // the extended blade leads the charge
-        if (!d.getBoolean('ws_dash_hit') && wsHit(e, 4.5, 0.5, 18, 1.4, 0.4) > 0) d.putBoolean('ws_dash_hit', true)
+        if (t == (E.thrust || 12)) sndSwing(e, 0.7)
+        if (!d.getBoolean('ws_dash_hit') && wsHit(e, 4.5, 0.5, 18, 1.4, 0.4) > 0) { d.putBoolean('ws_dash_hit', true); sndImpact(e, 0.75, 2.2) }
       }
       if (t == E.brake) {                                                // brakes on planted feet, purple burst
         let f = wsFwd(e), vy = 0; try { let v = wsVec(e.getDeltaMovement()); if (v) vy = v.y } catch (err) {}

@@ -32,34 +32,31 @@ def action(fn):
 
 
 # ====================================================================== IDLE (5 s loop)
-# A commanding rest: the blade's point is planted in the stone, the right fist loose on the grip. His weight rolls slowly
-# from foot to foot, the planted sword rocks with it, the left arm hangs relaxed and swings a little behind the body.
-# Midway he lifts the left hand onto the pommel over the right (a knight's rest), breathes there, and lets it fall again.
+# The guardian at rest: the greatsword stands planted point-down in front of him, BOTH fists closed round the handle
+# (right at the guard, left above it), elbows out, square stance. He breathes, his weight settles from foot to foot,
+# the grip tightens and eases, and once a loop he rolls the blade a few degrees in his hands. Ready, never relaxed.
 @action
 def idle():
     N = 100
-    TIP = (-19.0, -36.0, 0.8)                        # the sword point stays planted on the stone
+    TIP = (-1.5, -27.0, -1.5)                         # the point bites into the stone between his feet
 
     def fn(r, f):
-        br = wave(f, N, (1.0, 2, 0.0), (0.35, 3, 0.7), (0.2, 1, 1.4))          # uneven breathing
-        sway = wave(f, N, (1.0, 1, 0.0), (0.25, 3, 0.4))                         # slow weight shift (+ = onto his left foot)
-        lag = wave(f, N, (1.0, 1, -0.9), (0.25, 3, -0.5))                        # the free arm trails the body
-        rest = smooth((f - 26) / 14) * (1 - smooth((f - 64) / 14))               # left hand up on the pommel
-        G = (-13.0 + 7.0 * rest + 0.9 * sway, -20.0 + 6.0 * rest, 50.0 + 0.6 * br)
+        br = wave(f, N, (1.0, 2, 0.0), (0.35, 3, 0.7), (0.2, 1, 1.4))          # slow, heavy breathing
+        sway = wave(f, N, (1.0, 1, 0.0), (0.25, 3, 0.4))                         # weight settles side to side
+        roll = bump(f, 62, 10)                                                    # rolls the blade in his hands
+        squeeze = 0.06 * wave(f, N, (1, 2, 0.6)) + 0.08 * roll                   # the grip tightens and eases
+        G = (-1.5 + 0.6 * sway, -10.0 - 0.3 * br, 51.0 + 0.6 * br)
+        d = (Vector(TIP) - Vector(G)).normalized()
+        flat = Vector((math.cos(math.radians(6 * roll)), math.sin(math.radians(6 * roll)), 0.0))
         hs, gs = heartbeat(f / 20.0, 36, 0.8)
-        hang = dict(hand=(15.0 - 0.8 * lag, -6.0 - 1.6 * lag + 0.6 * br, 36.5 + 0.5 * br), point=(0.15, -0.3 - 0.12 * lag, -0.94),
-                    palm=(-0.95, 0.15, 0.0), elbow=(0.45, 0.85, -0.2))
-        top = dict(hand=(G[0] + 1.5, G[1] - 2.0, G[2] + 4.2 + 0.3 * br), point=(-0.75, -0.55, -0.35), palm=(-0.15, 0.1, -0.98),
-                   elbow=(0.85, 0.3, -0.45))
         K.pose(r, merged(
-            body=(1.1 * sway, 0.3 - 0.4 * rest, -0.8 + 0.35 * br - 0.3 * rest), hips=(4.0 + 1.5 * rest, -1.6 * sway, -6.0 + 1.5 * sway + 3 * rest),
-            spine=(1.0 - 0.6 * br + 1.5 * rest, 0.5 * sway, 1.5 - 1.5 * rest), chest=(2.0 - 1.6 * br + 1.5 * rest, 0.4 * sway, 2.0 - 1.5 * rest),
-            head=(0.0, 7.0, 0.0), shrug_R=0.8 + 1.4 * br, shrug_L=1.6 * br + 2.0 * rest,
-            foot_R=((-7.0, 1.5), 0, -14, 0), foot_L=((7.5, -2.0), 0, 9, 0),
-            sword=dict(planted_sword(G, TIP, (0.95, -0.3, 0.0)), elbow_R=(-0.85, 0.55, -0.2)),
-            arm_L=lerpP(hang, top, rest),
-            curl_R=0.85 + 0.1 * rest, curl_L=0.3 + 0.06 * wave(f, N, (1, 2, 0.5)) + 0.45 * rest, spread_L=0.25 * (1 - rest), thumb_L=0.35 + 0.35 * rest,
-            wobble_L=(0.06 * wave(f, N, (1, 3, 0)), 0.05 * wave(f, N, (1, 4, 1)), 0.07 * wave(f, N, (1, 5, 2))),
+            body=(0.9 * sway, 0.4, -1.2 + 0.35 * br), hips=(5.0, -1.4 * sway, 1.2 * sway),
+            spine=(1.5 - 0.6 * br, 0.4 * sway, 0.0), chest=(2.5 - 1.6 * br, 0.3 * sway, 0.0),
+            head=(0.0, 9.0, 0.0), shrug_R=0.8 + 1.4 * br, shrug_L=0.8 + 1.4 * br,
+            foot_R=((-8.5, 1.0), 0, -12, 0), foot_L=((8.5, -1.0), 0, 12, 0),
+            sword=dict(grip=G, dir=tuple(d), flat=tuple(flat), two=True,
+                       elbow_R=(-0.85, 0.25, -0.45), elbow_L=(0.85, 0.25, -0.45)),
+            curl_R=1.0 + squeeze, curl_L=1.0 + squeeze, thumb_R=0.9, thumb_L=0.9,
             heart=(hs, gs)))
     return N, fn, "true"
 

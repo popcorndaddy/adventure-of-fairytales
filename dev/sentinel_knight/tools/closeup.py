@@ -6,7 +6,7 @@ from mathutils import Vector
 args = sys.argv[sys.argv.index("--") + 1:]
 out, act_name, frames = os.path.abspath(args[0]), args[1], [int(x) for x in args[2].split(",")]
 view = {"side": Vector((1, 0.05, 0.12)), "front": Vector((0.55, -1, 0.3)), "back": Vector((-0.6, 1, 0.35)), "front_straight": Vector((0.12, -1, 0.05))}[args[3] if len(args) > 3 else "side"]
-TZ = float(args[4]) if len(args) > 4 else 2.4
+TZ_ARG = args[4] if len(args) > 4 else "2.4"          # a height in metres, or bone:<name> to aim at a bone
 DIST = float(args[5]) if len(args) > 5 else 9.0
 scene = bpy.context.scene
 rig = next(o for o in bpy.data.objects if o.type == "ARMATURE")
@@ -25,7 +25,7 @@ tiles = []
 tmp = os.path.join(os.path.dirname(out), "_c.png")
 for f in frames:
     scene.frame_set(f)
-    c = Vector((0, 0, TZ))
+    c = (rig.matrix_world @ rig.pose.bones[TZ_ARG[5:]].head) if TZ_ARG.startswith("bone:") else Vector((0, 0, float(TZ_ARG)))
     cam.location = c + view.normalized() * DIST; cam.data.lens = 50
     cam.rotation_euler = (c - cam.location).to_track_quat("-Z", "Y").to_euler()
     scene.render.filepath = tmp; bpy.ops.render.render(write_still=True)
