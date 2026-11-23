@@ -22,11 +22,11 @@ const $Vec3 = Java.loadClass('net.minecraft.world.phys.Vec3')
 const WS = 'withered_sentinel'
 const WS_ANIM = n => `animation.${WS}.${n}`
 const WS_TEX = n => `kubejs:textures/entity/${n}.png`
-const WS_ACTIONS = ['sweep', 'push', 'summon_start', 'summon_loop', 'summon_end', 'awaken', 'stomp', 'dash']
+const WS_ACTIONS = ['sweep', 'push', 'summon_start', 'summon_loop', 'summon_end', 'awaken', 'stomp', 'dash', 'howl']
 const WS_LOOPS = { summon_start: 'HOLD_ON_LAST_FRAME', summon_loop: 'LOOP' }
 
 // action lengths and hit frames in ticks (20 per second), matched to the animations
-const WS_LEN = { sweep: 56, push: 40, summon_start: 32, summon_end: 28, awaken: 68, stomp: 38, dash: 32 }
+const WS_LEN = { sweep: 56, push: 40, summon_start: 32, summon_end: 28, awaken: 68, stomp: 38, dash: 32, howl: 64 }
 
 StartupEvents.registry('entity_type', event => {
   let b = event.create(WS, 'entityjs:mob')
@@ -238,9 +238,10 @@ global.wsTick = e => {
     d.putBoolean('ws_home', true)
     try { console.info(`[Withered Sentinel] awake at ${JSON.stringify(wsP(e))}`) } catch (err) {}
     d.putInt('cd_sweep', 20); d.putInt('cd_push', 120); d.putInt('cd_summon', 300); d.putInt('cd_stomp', 60); d.putInt('cd_dash', 160)
+    d.putInt('cd_howl', 0)
   }
   if (e.tickCount % 5 == 0) wsBar(e)
-  ;['cd_sweep', 'cd_push', 'cd_summon', 'cd_stomp', 'cd_dash'].forEach(k => { if (d.getInt(k) > 0) d.putInt(k, d.getInt(k) - 1) })
+  ;['cd_sweep', 'cd_push', 'cd_summon', 'cd_stomp', 'cd_dash', 'cd_howl'].forEach(k => { if (d.getInt(k) > 0) d.putInt(k, d.getInt(k) - 1) })
 
   let target = e.getTarget()
   if (target) { try { wsNote('target_' + wsId(e), `locked on to ${target.getType()}`) } catch (err) {} }
@@ -315,6 +316,22 @@ global.wsTick = e => {
         e.hurtMarked = true
         if (!d.getBoolean('ws_dash_hit') && wsHit(e, 3.0, 0.2, 18, 1.4, 0.4) > 0) d.putBoolean('ws_dash_hit', true)
       }
+    } else if (act == 'howl') {
+      // gathers (0-12), rears back (12-20), howls and trembles (20-48): the howl swallows the light and slows the brave
+      if (t < 12 && target) wsFace(e, target)
+      if (t == 2) wsCmd(e, 'playsound minecraft:entity.warden.sniff hostile @a ~ ~ ~ 3 0.5')
+      if (t == 16) {
+        wsCmd(e, 'playsound minecraft:entity.warden.roar hostile @a ~ ~ ~ 5 0.5')
+        wsCmd(e, 'playsound minecraft:entity.wither.ambient hostile @a ~ ~ ~ 4 0.4')
+        wsCmd(e, 'playsound minecraft:entity.ghast.hurt hostile @a ~ ~ ~ 3 0.4')
+        wsCmd(e, 'effect give @a[distance=..18,gamemode=!creative,gamemode=!spectator] minecraft:darkness 6 0 true')
+        wsCmd(e, 'effect give @a[distance=..18,gamemode=!creative,gamemode=!spectator] minecraft:slowness 3 1 true')
+      }
+      if (t >= 18 && t <= 46 && t % 3 == 0) {
+        wsCmd(e, 'particle minecraft:sculk_soul ~ ~6 ~ 1.2 0.6 1.2 0.06 12 force')
+        wsCmd(e, 'particle minecraft:soul ~ ~1 ~ 3 0.2 3 0.04 10 force')
+      }
+      if (t == 30) wsCmd(e, 'playsound minecraft:entity.wither.ambient hostile @a ~ ~ ~ 3 0.35')
     }
     let len = WS_LEN[act]
     if (len && t >= len && act != 'summon_start') { d.putString('ws_act', ''); d.putBoolean('ws_dash_hit', false) }
@@ -330,12 +347,25 @@ global.wsTick = e => {
   let dist = wsDist(e, target)
   let r = Math.random()
 
+  // the first time he sees you he howls; afterwards now and then, when you keep your distance
+  if (!d.getBoolean('ws_howled') && dist < 24) { d.putBoolean('ws_howled', true); wsStart(e, 'howl'); d.putInt('cd_howl', 700); return }
+  if (d.getInt('cd_howl') == 0 && dist > 7 && dist < 20 && r < 0.02) { wsStart(e, 'howl'); d.putInt('cd_howl', 700); return }
   if (d.getInt('cd_summon') == 0 && e.getHealth() < e.getMaxHealth() * 0.8 && dist < 24) { wsStart(e, 'summon_start'); return }
   if (p2 && d.getInt('cd_stomp') == 0 && dist < 5) { wsStart(e, 'stomp'); d.putInt('cd_stomp', 160); return }
   if (p2 && d.getInt('cd_dash') == 0 && dist > 7 && dist < 18 && r < 0.04) { wsStart(e, 'dash'); d.putInt('cd_dash', 300); return }
   if (d.getInt('cd_push') == 0 && dist < 6 && r < 0.35) { wsStart(e, 'push'); d.putInt('cd_push', 200); return }
   if (d.getInt('cd_sweep') == 0 && dist < 5.6) { wsStart(e, 'sweep'); d.putInt('cd_sweep', 50); return }
 
-  if (dist > 4.2) wsWalkTo(e, target)
+  if (dist > 4.2) {
+    wsWalkTo(e, target)
+    // the blade he drags behind him grinds on the stone and throws sparks
+    if (e.tickCount % 6 == 0) {
+      let f = wsFwd(e), rx = -f[1], rz = f[0]
+      let x = -f[0] * 3.2 + rx * 1.4, z = -f[1] * 3.2 + rz * 1.4
+      wsCmd(e, `particle minecraft:electric_spark ~${x.toFixed(2)} ~0.15 ~${z.toFixed(2)} 0.2 0.05 0.2 0.25 6 force`)
+      wsCmd(e, `particle minecraft:small_flame ~${x.toFixed(2)} ~0.1 ~${z.toFixed(2)} 0.15 0.02 0.15 0.01 2 force`)
+    }
+    if (e.tickCount % 16 == 0) wsCmd(e, 'playsound minecraft:block.grindstone.use hostile @a ~ ~ ~ 0.9 0.45')
+  }
   else { e.getNavigation().stop(); wsFace(e, target) }
 }
