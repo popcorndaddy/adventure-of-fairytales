@@ -1,6 +1,6 @@
 """Pose maths, a right-arm/sword solver and frame-sheet previews for the Withered Sentinel animations."""
 import sys, math, numpy as np
-sys.path.insert(0, __import__('os').path.dirname(__import__('os').path.abspath(__file__)))
+sys.path.insert(0, '/home/claude/wk2/py')
 import model3 as M
 from model3 import rot_m
 from scipy.optimize import minimize
@@ -77,7 +77,7 @@ def sample(an, t):
 def sheet(an, times, out, yaw=30, pitch=8, scale=4.2, tex='withered_sentinel.png', size=(360, 400), oy=0):
     import build3 as BB, render
     from PIL import Image, ImageDraw
-    T = Image.open(__import__('os').path.join(__import__('os').path.dirname(__import__('os').path.abspath(__file__)), '..', 'blender', 'withered_king.png')).convert('RGBA')
+    T = Image.open('/home/claude/wk2/out/' + tex.replace('withered_sentinel', 'withered_sentinel')).convert('RGBA')
     ims = []
     for t in times:
         im = render.render(BB.M, BB.place, T, pose=sample(an, t), yaw=yaw, pitch=pitch, scale=scale, size=size,

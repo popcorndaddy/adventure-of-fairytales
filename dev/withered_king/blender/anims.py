@@ -1,4 +1,4 @@
-"""The Withered King - all 10 actions, authored from scratch against the brief.
+"""The Withered King (model v3) - all 10 actions.
 Run in Blender on withered_king_rig.blend:  blender -b withered_king_rig.blend --python anims.py [-- name ...]
 Units: Blockbench pixels (8 px = 1 block, he is ~8.6 blocks tall), degrees on top of his rest pose, seconds.
 Conventions: body/torso rot x+ = lean back, y+ = turn to HIS left, z+ = lean to his left; head x+ = look up; jaw x+ = open.
@@ -13,6 +13,21 @@ def want(n): return not ONLY or n in ONLY
 Z = (0, 0, 0); sin, cos, pi = math.sin, math.cos, math.pi
 V = Vector
 
+# overlapping action: in one-shot actions every torso part reaches its poses a little after the part below it, so a
+# move starts in the hips and rolls up through the spine to the head (and settles the same way)
+LAG = {'body': 0.0, 'waist': 0.025, 'chest': 0.05, 'neck': 0.075, 'head': 0.1, 'jaw': 0.06, 'right_clavicle': 0.07, 'left_clavicle': 0.07}
+_fk = L.fk
+def fk(n, keys):
+    c = L.CUR
+    if n in LAG and c.get('loop') != 'loop' and LAG[n] > 0:
+        Lend = c['length']; out = []
+        for k in keys:
+            t = k[0]
+            if 1e-6 < t < Lend - 1e-6: t = min(Lend - 0.02, t + LAG[n])
+            out.append((t,) + tuple(k[1:]))
+        keys = out
+    _fk(n, keys)
+
 # ================================================================== shared poses
 BLADE = 41.8
 def drag(grip_pt, heading, ground=-0.4, mode='cane', roll=0.0):
@@ -22,55 +37,55 @@ def drag(grip_pt, heading, ground=-0.4, mode='cane', roll=0.0):
     return dict(grip=grip_pt, tip=tip, mode=mode, roll=roll)
 def ride_pt(space, p): return tuple((K_now(space) @ V((*p, 1))).xyz)
 
-# combat neutral: hunched, sword hanging in the right hand with the point dragging the ground behind him
-STAND = dict(body=((-2, 0, -2.5), (0.6, -1.6, 0.3)), waist=((-4, 0, 0), Z), chest=((-6, -2, -3), Z), neck=((-5, 0, 1), Z),
-             head=((7, 2, 1), Z), jaw=((3, 0, 0), Z), right_clavicle=((0, 2, -7), Z), left_clavicle=((0, 0, 2), Z))
-DRAG_GRIP = (16.4, 26.0, 4.0); DRAG_HEAD = 166
+# combat neutral: a heavy, slightly crouched stance, spine bowed under the armour, head low and watching; the right
+# shoulder hangs lower under the sword, whose point rests on the ground behind his right heel
+STAND = dict(body=((-3, -4, 0), (0.4, -1.8, 0.5)), waist=((-4, 2, 0), Z), chest=((-7, 2, -2), Z), neck=((-6, 0, 1), Z),
+             head=((10, -2, 0), Z), jaw=((2, 0, 0), Z), right_clavicle=((0, 0, -4), Z), left_clavicle=((0, 0, 2), Z))
+DRAG_GRIP = (11.9, 26.6, 3.4); DRAG_HEAD = 162
 STAND_SWORD = drag(DRAG_GRIP, DRAG_HEAD)
+STAND_FEET = {'L': dict(d=Z), 'R': dict(d=Z)}
 def st(n, t, d=Z, p=Z, e='smooth'):
     r, ps = STAND[n]; return (t, L.add3(r, d), L.add3(ps, p), e)
 def stand_all(t, e='smooth', skip=()):
     for n in STAND:
         if n not in skip: fk(n, [st(n, t, e=e)])
-LEFT_RELAX = {'off': ((0.5, 1.5, -1.0), (-6, 0, -4)), 'space': 'chest'}
+LEFT_RELAX = {'off': ((0.8, 1.2, -1.6), (-10, 0, -5)), 'space': 'chest'}
 
 # ================================================================== 01 idle (6.0 s loop)
 if want('withered_king_idle'):
     begin('withered_king_idle', 6.0, 'loop')
-    # the same stance every attack starts and ends in (sword point resting on the ground at his side), so idle, walk and
-    # attacks blend into each other without the sword jumping; the breathing/looking is layered on top of it
-    IB = {'body': ((-1, 0, 0), (0, -0.6, 0)), 'waist': ((-3, 0, 0), Z), 'chest': ((-7, 0, 0), Z), 'neck': ((-4, 0, 0), Z), 'head': ((6, 0, 0), Z),
-          'jaw': ((2, 0, 0), Z), 'right_clavicle': ((0, 0, -3), Z), 'left_clavicle': ((0, 0, 1), Z)}
-    def fk_i(n, keys):
-        out = []
-        for k in keys:
-            r = L.add3(STAND[n][0], tuple(x - y for x, y in zip(k[1], IB[n][0])))
-            p = L.add3(STAND[n][1], tuple(x - y for x, y in zip(k[2] if len(k) > 2 and k[2] else Z, IB[n][1])))
-            out.append((k[0], r, p, k[3] if len(k) > 3 else 'smooth'))
-        fk(n, out)
-    # labored breathing: a long rattling inhale, a held top, a slow collapse - then one shallower breath
-    fk_i('body', [(0, (-1, 0, 0), (0, -0.6, 0)), (1.6, (-1, -0.5, 0.4), (0.45, -0.75, 0)), (3.0, (-1, -0.7, 0.5), (0.55, -0.8, 0)),
-                (4.6, (-1, 0.3, -0.3), (-0.25, -0.6, 0)), (6.0, (-1, 0, 0), (0, -0.6, 0))])
-    fk_i('waist', [(0, (-3, 0, 0)), (1.4, (-2.4, 0, 0)), (2.9, (-3.3, 0, 0)), (4.3, (-2.7, 0, 0)), (6.0, (-3, 0, 0))])
-    fk_i('chest', [(0, (-7, 0, 0), Z), (1.3, (-5.2, 0.4, 0), (0, 0.4, 0.1)), (1.75, (-5.0, 0.4, 0), (0, 0.45, 0.1)), (3.2, (-7.6, 0, 0), (0, -0.05, 0)),
-                 (4.35, (-5.9, -0.3, 0), (0, 0.3, 0.1)), (5.1, (-6.8, -0.2, 0), (0, 0.05, 0)), (6.0, (-7, 0, 0), Z)])
-    fk_i('right_clavicle', [(0, (0, 0, -3)), (1.4, (0, 0.6, -1.6)), (3.2, (0, 0, -3.4)), (4.0, (0, -1.2, -2.0), None, 'inout'), (4.4, (0, 0, -3)), (6.0, (0, 0, -3))])
-    fk_i('left_clavicle', [(0, (0, 0, 1)), (1.4, (0, 0, -0.6)), (3.2, (0, 0, 1.4)), (6.0, (0, 0, 1))])
-    # watching: a slow turn toward the player, then stillness; a neck twitch; a slow cock of the head
-    fk_i('neck', [(0, (-4, 0, 0)), (0.8, (-4, 0, 0)), (1.8, (-4.5, -5, 0), None, 'out'), (3.55, (-4.5, -5, 0)), (3.62, (-4.0, -6.2, 1.2), None, 'out'),
-                (3.8, (-4.5, -5, 0)), (5.3, (-4, -1, 0), None, 'inout'), (6.0, (-4, 0, 0))])
-    fk_i('head', [(0, (6, 0, 0)), (0.9, (6, 0, 0)), (1.9, (5.5, -5, -1), None, 'out'), (3.9, (5.5, -5.5, -1)), (4.5, (6.5, -4, 4.5), None, 'inout'),
-                (5.2, (6.5, -3, 4)), (5.8, (6, -0.5, 0.5), None, 'inout'), (6.0, (6, 0, 0))])
-    fk_i('jaw', [(0, (2, 0, 0)), (1.3, (4.5, 0, 0)), (2.0, (4, 0, 0)), (3.0, (1.5, 0, 0)), (4.4, (3.5, 0, 0)), (6.0, (2, 0, 0))])
-    feet('L', [(0, dict(d=Z), 'smooth'), (6.0, dict(d=Z), 'smooth')]); feet('R', [(0, dict(d=Z), 'smooth'), (6.0, dict(d=Z), 'smooth')])
-    # the greatsword stands planted at his side; his fist rests on the hilt and re-settles its grip
+    # almost a statue: slow laboured breaths (a long inhale that lifts the chest and shoulders, a held top, a sagging
+    # exhale), weight easing from the back foot to the front and back, the head tracking slowly then going still
+    B = [(0, 0.0), (1.7, 1.0), (2.3, 1.0), (3.6, -0.1), (4.5, 0.55), (5.2, 0.5), (6.0, 0.0)]          # breath curve
+    W = [(0, 0.0), (2.4, 1.0), (3.4, 1.0), (5.4, 0.0), (6.0, 0.0)]                                      # weight shift
+    def at(curve, t):
+        for (t0, v0), (t1, v1) in zip(curve, curve[1:]):
+            if t0 <= t <= t1: return v0 + (v1 - v0) * smooth((t - t0) / (t1 - t0))
+        return curve[-1][1]
+    TS = [k * 0.25 for k in range(25)]
+    for n in ('body', 'waist', 'chest', 'right_clavicle', 'left_clavicle', 'jaw'):
+        ks = []
+        for t in TS:
+            b, w = at(B, t), at(W, t)
+            d, p = {'body': ((0.4 * b, -1.6 * w, 0.8 * w), (0.5 * w, -0.25 * b, -0.3 * w)), 'waist': ((0.5 * b, 0.6 * w, -0.3 * w), Z),
+                    'chest': ((1.8 * b, 0.4 * w, -0.5 * w), (0, 0.35 * b, 0.1 * b)), 'right_clavicle': ((0, 0, 1.6 * b), Z),
+                    'left_clavicle': ((0, 0, -1.6 * b), Z), 'jaw': ((2.5 * max(0, b), 0, 0), Z)}[n]
+            ks.append(st(n, t, d=d, p=p, e='linear'))
+        fk(n, ks)
+    # the head: still, then a slow turn toward something on his left, a small settle, a slow return; a neck tic
+    fk('neck', [st('neck', 0), st('neck', 0.9), st('neck', 2.0, d=(0, 6, 0), e='inout'), st('neck', 3.4, d=(0, 6.5, 0)), st('neck', 3.47, d=(0.6, 7.6, 1.0), e='out'),
+                st('neck', 3.65, d=(0, 6.5, 0)), st('neck', 5.2, d=(0, 1, 0), e='inout'), st('neck', 6.0)])
+    fk('head', [st('head', 0), st('head', 1.0), st('head', 2.1, d=(-1, 8, 1), e='inout'), st('head', 2.4, d=(-1.2, 7.3, 1), e='inout'),
+                st('head', 4.0, d=(-1, 7.6, 3.5), e='inout'), st('head', 5.3, d=(0, 1, 0.5), e='inout'), st('head', 6.0)])
+    feet('L', [(0, STAND_FEET['L'], 'smooth'), (6.0, STAND_FEET['L'], 'smooth')]); feet('R', [(0, STAND_FEET['R'], 'smooth'), (6.0, STAND_FEET['R'], 'smooth')])
     sword([(0, STAND_SWORD, 'smooth'), (6.0, STAND_SWORD, 'smooth')])
     grip('R', [(0, 'cane', 0)]); grip('L', [(0, 'free', 0)])
-    fingers('R', [(0, 0, 0, 'smooth'), (2.2, 0, 0, 'smooth'), (2.45, -12, 0, 'out'), (2.75, 6, 0, 'inout'), (3.0, 0, 0, 'smooth'), (6.0, 0, 0, 'smooth')])
-    hands('L', [(0, LEFT_RELAX, 'smooth'), (2.0, {'off': ((0.5, 1.7, -1.0), (-6, 0, 1)), 'space': 'chest'}, 'smooth'),
-                (4.85, {'off': ((0.5, 1.6, -1.0), (-6, 0, -2)), 'space': 'chest'}, 'in'), (4.95, {'off': ((0.8, 1.9, -1.3), (-10, 0, 6)), 'space': 'chest'}, 'out'),
-                (5.4, {'off': ((0.6, 1.6, -1.1), (-7, 0, -2)), 'space': 'chest'}, 'smooth'), (6.0, LEFT_RELAX, 'smooth')])
-    fingers('L', [(0, 22, 0, 'smooth'), (2.0, 34, 2, 'smooth'), (3.6, 28, 0, 'smooth'), (4.85, 26, 0, 'in'), (4.95, 46, 4, 'out'), (5.4, 30, 0, 'smooth'), (6.0, 22, 0, 'smooth')])
+    fingers('R', [(0, 4, 0, 'smooth'), (2.6, 4, 0, 'smooth'), (2.85, -10, 0, 'out'), (3.15, 9, 0, 'inout'), (3.4, 4, 0, 'smooth'), (6.0, 4, 0, 'smooth')])
+    def lh(t):
+        b, w = at(B, t), at(W, t)
+        return {'off': ((0.8 + 0.3 * w, 1.2 + 0.4 * b, -1.6 - 0.4 * w), (-10 - 2 * b, 0, -5 + 2 * b)), 'space': 'chest'}
+    hands('L', [(t, lh(t), 'linear') for t in TS])
+    fingers('L', [(0, 24, 0, 'smooth'), (1.7, 30, 2, 'smooth'), (3.6, 26, 0, 'smooth'), (4.6, 36, 3, 'inout'), (5.2, 27, 0, 'smooth'), (6.0, 24, 0, 'smooth')])
     finish()
 
 # ================================================================== 02 walk with sword drag (2.4 s loop = 14 px/s = speed 0.20)
@@ -82,7 +97,7 @@ if want('withered_king_walk_drag'):
     def hermite(p0, p1, m0, m1, u):
         return (2 * u ** 3 - 3 * u ** 2 + 1) * p0 + (u ** 3 - 2 * u ** 2 + u) * m0 + (-2 * u ** 3 + 3 * u ** 2) * p1 + (u ** 3 - u ** 2) * m1
     def foot_at(ph, side):
-        ph %= 1.0; x = -1.4 if side == 'R' else 1.4; yaw = -8 if side == 'R' else 8
+        ph %= 1.0; x = -0.6 if side == 'R' else 0.6; yaw = -6 if side == 'R' else 6
         if ph < ST:
             z = ZC + STRIDE * ph
             pit = 15 * (1 - smoother(ph / 0.09)) if ph < 0.09 else (0 if ph < 0.45 else -30 * smoother((ph - 0.45) / (ST - 0.45)))
@@ -102,14 +117,15 @@ if want('withered_king_walk_drag'):
         bob = 0.4 * -cos(2 * pi * s) + dip
         sway = 1.2 * sin(2 * pi * ph - 0.25)
         yaw = 4.5 * cos(2 * pi * ph)                                         # hips swing with the leg
-        return dict(body=((-3 + 1.2 * dip, yaw, -2.5 + 2.0 * sin(2 * pi * ph - 0.3)), (sway + 0.5, -2.2 + bob, 0)),
-                    waist=((-3 + 0.6 * dip, -1.6 * cos(2 * pi * ph - 0.2), -0.6 * sin(2 * pi * ph)), Z),
-                    chest=((-5 + 2.4 * dip, -6.0 * cos(2 * pi * ph - 0.35) - 2, -3 - 2.2 * sin(2 * pi * ph - 0.4)), Z),
-                    neck=((-5 + 1.0 * dip, 2.5 * cos(2 * pi * ph - 0.5), 1.0 * sin(2 * pi * ph - 0.5)), Z),
-                    head=((7 + 1.6 * dip, 3.5 * cos(2 * pi * ph - 0.55) + 2, 1 + 1.2 * sin(2 * pi * ph - 0.55)), Z),
-                    jaw=((3 - 5 * dip, 0, 0), Z),
-                    right_clavicle=((0, 2 + 1.5 * cos(2 * pi * ph - 0.6), -7 + 1.5 * dip), Z),
-                    left_clavicle=((0, -1.5 * cos(2 * pi * ph - 0.6), 2 - 1.0 * dip), Z))
+        def S(n, d, p=Z): r0, p0 = STAND[n]; return (L.add3(r0, d), L.add3(p0, p))
+        return dict(body=S('body', (1.2 * dip, yaw + 4, 2.0 * sin(2 * pi * ph - 0.3)), (sway, -0.6 + bob, 0)),
+                    waist=S('waist', (0.6 * dip, -1.6 * cos(2 * pi * ph - 0.2) - 2, -0.6 * sin(2 * pi * ph))),
+                    chest=S('chest', (1 + 2.4 * dip, -6.0 * cos(2 * pi * ph - 0.35) - 2, -1 - 2.2 * sin(2 * pi * ph - 0.4))),
+                    neck=S('neck', (1.0 * dip, 2.5 * cos(2 * pi * ph - 0.5), 1.0 * sin(2 * pi * ph - 0.5))),
+                    head=S('head', (-2 + 1.6 * dip, 3.5 * cos(2 * pi * ph - 0.55) + 2, 1.2 * sin(2 * pi * ph - 0.55))),
+                    jaw=S('jaw', (1 - 5 * dip, 0, 0)),
+                    right_clavicle=S('right_clavicle', (0, 1.5 * cos(2 * pi * ph - 0.6), 1.5 * dip)),
+                    left_clavicle=S('left_clavicle', (0, -1.5 * cos(2 * pi * ph - 0.6), -1.0 * dip)))
     M = 24
     for n in ('body', 'waist', 'chest', 'neck', 'head', 'jaw', 'right_clavicle', 'left_clavicle'):
         fk(n, [(T * k / M, *torso(k / M)[n], 'smooth') for k in range(M + 1)])
@@ -186,25 +202,27 @@ if want('withered_king_sweep'):
     def sweep_sword(t):
         if t <= 0.8:              # windup: hips turn away, the point is scraped round from behind to his right-back
             u = smooth(t / 0.8)
-            return sw_spec(GA0 + (112 - GA0) * u, DRAG_HEAD + (128 - DRAG_HEAD) * u, 25.5 - 1.5 * u, -0.3 + 0.5 * u, RG0 + (14.0 - RG0) * u)
+            return sw_spec(GA0 + (112 - GA0) * u, DRAG_HEAD + (128 - DRAG_HEAD) * u, 25.5 - 1.0 * u, -0.3 + 0.5 * u, RG0 + (12.5 - RG0) * u)
         if t <= 1.25:             # swing: accelerating; the blade trails the hands, then whips past them
             u = (t - 0.8) / 0.45; w = 0.55 * (u * u * (3 - 2 * u)) + 0.45 * u ** 1.6
             ga = 112 + (-78 - 112) * w
             heading = 128 + (-100 - 128) * w - 16 * sin(pi * u) * 0 + 14 * sin(pi * min(1, u * 1.4)) * (1 - u)
-            return sw_spec(ga, heading, 24 - 3 * sin(pi * u), 0.2 + 1.6 * sin(pi * u), 14 + 2 * sin(pi * u))
+            return sw_spec(ga, heading, 24.5 - 2 * sin(pi * u), 0.2 + 1.6 * sin(pi * u), 12.5 + 1.0 * sin(pi * u))
         if t <= 1.9:              # follow-through: momentum carries the blade on round to his left and it slows
             u = smooth((t - 1.25) / 0.65)
-            return sw_spec(-78 + (-90 + 78) * u, -100 + (-124 + 100) * u, 24 + 1.0 * u, 0.2 - 0.5 * u, 14 - 1.2 * u)
+            return sw_spec(-78 + (-90 + 78) * u, -100 + (-124 + 100) * u, 24.5 + 1.0 * u, 0.2 - 0.5 * u, 12.5 - 0.5 * u)
         u = smooth((t - 1.9) / 0.95)                         # recovery: lifted a little, carried back across to his side
         lift = 5.0 * sin(pi * u)
-        return sw_spec(-90 + (GA0 + 90) * u, -124 + (DRAG_HEAD + 124) * u, 25.0 + 0.5 * u + 2.5 * sin(pi * u), -0.3 + lift, 12.8 + (RG0 - 12.8) * u)
+        return sw_spec(-90 + (GA0 + 90) * u, -124 + (DRAG_HEAD + 124) * u, 25.0 + 0.5 * u + 2.5 * sin(pi * u), -0.3 + lift, 12.0 + (RG0 - 12.0) * u)
     sword_dense(sweep_sword, 0.0, 2.85)
     event(0.8, 'swing_begin'); event(0.9, 'sound', id='whoosh'); event(1.25, 'follow_through_begin'); event(1.9, 'recovery_begin'); event(2.85, 'recovery_end')
     grip('R', [(0, 'cane', 0)])
-    grip('L', [(0, 'free', 0), (0.25, 'cane', 0.45), (2.25, 'free', 0.4)])
-    hands('L', [(0, LEFT_RELAX, 'smooth'), (0.3, {'off': ((4, 4, -8), (-30, 0, -10)), 'space': 'chest'}, 'smooth'),
-                (2.25, {'off': ((4, 2, -6), (-20, 0, -8)), 'space': 'chest'}, 'smooth'), (2.85, LEFT_RELAX, 'smooth')])
-    fingers('L', [(0, 22, 0, 'smooth'), (0.3, 20, 6, 'smooth'), (0.6, 72, 0, 'out'), (2.25, 72, 0, 'smooth'), (2.5, 26, 2, 'smooth'), (2.85, 22, 0, 'smooth')])
+    # the free hand balances the swing: reaches forward as he winds up, flings out behind as the blade comes through
+    grip('L', [(0, 'free', 0)])
+    hands('L', [(0, LEFT_RELAX, 'smooth'), (0.7, {'off': ((-1.5, 6.0, -7.0), (-40, 0, -25)), 'space': 'chest'}, 'inout'),
+                (0.85, {'off': ((-1.5, 6.4, -7.4), (-42, 0, -26)), 'space': 'chest'}, 'in'), (1.25, {'off': ((-3.0, 5.0, 5.0), (30, 0, -35)), 'space': 'chest'}, 'out'),
+                (1.7, {'off': ((-2.6, 4.0, 4.0), (24, 0, -30)), 'space': 'chest'}, 'smooth'), (2.6, LEFT_RELAX, 'inout'), (2.85, LEFT_RELAX, 'smooth')])
+    fingers('L', [(0, 22, 0, 'smooth'), (0.7, 6, 14, 'smooth'), (1.25, 10, 18, 'out'), (2.0, 30, 4, 'smooth'), (2.85, 22, 0, 'smooth')])
     fingers('R', [(0, 0, 0, 'smooth'), (0.75, 6, 0, 'smooth'), (2.85, 0, 0, 'smooth')])
     finish()
 
@@ -361,15 +379,15 @@ if want('withered_king_phase_transition'):
             u = smooth((t - 1.25) / 0.7)
             s0 = drag(tuple(V(DRAG_GRIP) + V((0.4, -2.4, 1.2))), DRAG_HEAD + 6)
             g0 = V(s0['grip']); b0 = (V(s0['tip']) - g0).normalized()
-            g1 = V(PLANT['grip']) + V((0.5, 14.0, 1.0)); b1 = V(norm((0.0, -1, -0.04)))
+            g1 = V(PLANT['grip']) + V((0.5, 11.0, 1.0)); b1 = V(norm((0.0, -1, -0.04)))
             mid = V(norm((0.75, -0.25, -0.6)))
             b = b0.slerp(mid, min(1, u * 2)) if u < 0.5 else mid.slerp(b1, (u - 0.5) * 2)
             return dict(grip=tuple(g0.lerp(g1, u) + V((3.0, 3.0, -4.0)) * sin(pi * u)), blade=tuple(b), mode='cane')
         if t <= 2.25:            # raised: gathered strength
-            u = smooth((t - 1.95) / 0.3); g = V(PLANT['grip']) + V((0.5, 14.0 + 2.0 * u, 1.0))
+            u = smooth((t - 1.95) / 0.3); g = V(PLANT['grip']) + V((0.5, 11.0 + 1.5 * u, 1.0))
             return dict(grip=tuple(g), blade=norm((0.0, -1, -0.04)), mode='cane')
         if t <= 2.35:            # driven down
-            u = ((t - 2.25) / 0.1) ** 2; g = V(PLANT['grip']) + V((0.5, 16.0, 1.0)).lerp(V((0, 0, 0)), u)
+            u = ((t - 2.25) / 0.1) ** 2; g = V(PLANT['grip']) + V((0.5, 12.5, 1.0)).lerp(V((0, 0, 0)), u)
             return dict(grip=tuple(g), blade=norm((0.0, -1, -0.04)), mode='cane')
         return dict(grip=PLANT['grip'], blade=norm((0.0, -1, -0.04)), mode='cane')
     sword_dense(pt_sword, 0.0, 4.5)
@@ -427,9 +445,9 @@ if want('withered_king_phase_two_roar'):
     def roar_sword(t):
         if t <= 2.45: return dict(PLANT)
         if t <= 2.9:                                             # wrenched up out of the earth
-            u = smooth((t - 2.45) / 0.45); g = V(PLANT['grip']) + V((6.0 * u, 12.0 * u - 2.0 * sin(pi * u), 6.0 * u))
+            u = smooth((t - 2.45) / 0.45); g = V(PLANT['grip']) + V((4.0 * u, 8.0 * u - 2.0 * sin(pi * u), 4.0 * u))
             return dict(grip=tuple(g), blade=norm((0.15 * u, -1, -0.04 + 0.1 * u)), mode='cane')
-        g2 = V(PLANT['grip']) + V((6.0, 12.0, 6.0))
+        g2 = V(PLANT['grip']) + V((4.0, 8.0, 4.0))
         if t <= 3.15:                                            # lowered to his side as the howl begins: point down, arm spread
             u = smooth((t - 2.9) / 0.25); g3 = V((20.0, 31.0, -3.0)); return dict(grip=tuple(g2.lerp(g3, u)), blade=norm((0.25 * u + 0.15 * (1 - u), -1, 0.05)), mode='cane')
         if t <= 4.6: return dict(grip=(20.0, 31.0, -3.0), blade=norm((0.25, -1, 0.05)), mode='cane')
@@ -437,7 +455,7 @@ if want('withered_king_phase_two_roar'):
         b = V(norm((0.25, -1, 0.05))).slerp((V(s1['tip']) - V(s1['grip'])).normalized(), u)
         return dict(grip=tuple(g), blade=tuple(b), mode='cane')
     sword_dense(roar_sword, 0.0, 5.2)
-    grip('R', [(0, 'cane', 0)]); grip('L', [(0, 'cane', 0), (2.7, 'free', 0.4)])
+    grip('R', [(0, 'cane', 0)]); grip('L', [(0, 'cane', 0), (2.3, 'free', 0.4)])
     hands('L', [(0, {'off': ((3, 3, -6), (-24, 0, -8)), 'space': 'chest'}, 'smooth'), (2.75, {'off': ((3, 3, -6), (-24, 0, -8)), 'space': 'chest'}, 'smooth'),
                 (3.15, {'off': ((-6.0, 6.0, 1.0), (10, 0, -38)), 'space': 'chest'}, 'out'), (4.6, {'off': ((-6.5, 6.5, 1.0), (10, 0, -40)), 'space': 'chest'}, 'smooth'), (5.2, LEFT_RELAX, 'smooth')])
     fingers('L', [(0, 80, 0, 'smooth'), (0.4, 92, 0, 'smooth'), (2.7, 92, 0, 'smooth'), (3.1, -10, 14, 'out'), (4.6, -6, 12, 'smooth'), (5.2, 22, 0, 'smooth')])
@@ -577,7 +595,7 @@ if want('withered_king_death'):
     grip('R', [(0, 'cane', 0), (5.6, 'free', 0.6)])
     grip('L', [(0, 'free', 0), (3.0, 'cane', 0.6), (4.25, 'free', 0.4)])
     hands('R', [(0, {'off': ((1, 2, -3), (-10, 0, 0)), 'space': 'chest'}, 'smooth'), (5.6, {'off': ((2, 2, -4), (-12, 0, 4)), 'space': 'chest'}, 'smooth'),
-                (6.4, {'off': ((3.0, -4.0, -6.0), (-6, 0, 8)), 'space': 'chest'}, 'inout'), (9.6, {'off': ((3.0, -4.5, -6.0), (-6, 0, 8)), 'space': 'chest'}, 'smooth'),
+                (6.4, {'off': ((2.5, -2.0, -4.0), (-6, 0, 8)), 'space': 'chest'}, 'inout'), (9.6, {'off': ((2.5, -2.5, -4.0), (-6, 0, 8)), 'space': 'chest'}, 'smooth'),
                 (10.1, {'off': ((2.5, -5.5, -3.5), (4, 0, 10)), 'space': 'chest'}, 'out'), (10.5, {'off': ((2.5, -5.5, -3.5), (4, 0, 10)), 'space': 'chest'}, 'smooth')])
     hands('L', [(0, LEFT_RELAX, 'smooth'), (0.15, {'off': ((-6, 8, 4), (16, 0, -40)), 'space': 'chest'}, 'out'), (1.3, {'off': ((1.5, -1.5, 1.0), (8, 0, 2)), 'space': 'chest'}, 'smooth'),
                 (3.2, {'off': ((4, 4, -8), (-28, 0, -10)), 'space': 'chest'}, 'smooth'), (4.25, {'off': ((4, 3, -7), (-22, 0, -8)), 'space': 'chest'}, 'smooth'),
@@ -588,7 +606,7 @@ if want('withered_king_death'):
     T_GRAB, T_PLACE, T_REL = 5.3, 7.55, 7.75
     CROWN_REST = L.WREST['crown']
     # crown space -> sword space when it sits on the guard: crown up (+y) along the handle (+z), centred on the handle
-    c_piv = V(L.BONES['crown']['pivot']); s_axis = V((L.GRIP_L.x, L.GRIP_L.y, -7.8))   # crown pivot sits 5.3 px under its rim: rim rests on the guard top
+    c_piv = V(L.BONES['crown']['pivot']); s_axis = V((L.GRIP_L.x, L.GRIP_L.y, L.GRIP_L.z - 2.7))   # crown pivot = rim bottom, set on the guard's top face
     ON_SWORD = Matrix.Translation(s_axis) @ Matrix(((1, 0, 0), (0, 0, -1), (0, 1, 0))).to_4x4() @ Matrix.Translation(-c_piv)
     # where the left hand takes hold: palm against the left side of the crown, fingers over the rim
     GRASP = L.frame_from(L.palm_local('left'), V((c_piv.x - 7.0, c_piv.y + 3.0, c_piv.z)), (V((0, -1, 0)), V((1, 0, 0))), (V(norm((0.2, 1, 0))), V((1, 0, 0))))
@@ -616,10 +634,10 @@ if want('withered_king_death'):
         Kc = ctx['crown']; Wc = Kc @ CROWN_REST
         hand_on = Wc @ GRASP @ L.WREST['left_hand'].inverted()
         if 4.75 <= t < T_GRAB:                     # the hand closes in on the crown
-            return L._blend_K(keyed, hand_on, smooth((t - 4.75) / (T_GRAB - 4.75)))
+            return L._blend_K(keyed, hand_on, smooth((t - 4.75) / (T_GRAB - 4.75)), L._palm_rest('L'))
         if T_GRAB <= t < T_REL: return hand_on
         if T_REL <= t < 8.4:                        # released; the arm sinks
-            return L._blend_K(hand_on, keyed, smooth((t - T_REL) / (8.4 - T_REL)))
+            return L._blend_K(hand_on, keyed, smooth((t - T_REL) / (8.4 - T_REL)), L._palm_rest('L'))
         return None
     L.free_override('L', left_override)
     fingers('L', [(0, 22, 0, 'smooth'), (0.15, 0, 10, 'out'), (1.3, 20, 0, 'smooth'), (3.3, 74, 0, 'out'), (4.25, 74, 0, 'smooth'), (4.45, 10, 6, 'smooth'),

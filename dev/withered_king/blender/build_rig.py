@@ -27,19 +27,19 @@ TAIL = {'body': heads['waist'], 'waist': heads['chest'], 'chest': heads['head'],
         'right_leg': heads['right_shin'], 'right_shin': heads['right_foot'], 'left_leg': heads['left_shin'], 'left_shin': heads['left_foot'],
         'cape': heads['cape_mid_low'], 'cape_mid': heads['cape_mid_low'], 'cape_left': heads['cape_left_low'], 'cape_right': heads['cape_right_low'],
         'neck': heads['head'], 'right_clavicle': heads['right_arm'], 'left_clavicle': heads['left_arm']}
-for k in range(4): TAIL[f'left_finger{k}'] = wpt(f'left_finger{k}', (-11.4, BONES[f'left_finger{k}']['pivot'][1] - 7.0, BONES[f'left_finger{k}']['pivot'][2]))
-TAIL['left_thumb'] = wpt('left_thumb', (-10.8, BONES['left_thumb']['pivot'][1] - 4.6, -2.6))
-TAIL['right_fingers'] = wpt('right_fingers', (12.0, BONES['right_fingers']['pivot'][1] - 4.0, 0.0))
-TAIL['right_thumb'] = wpt('right_thumb', (12.2, BONES['right_thumb']['pivot'][1] - 1.5, -0.3))
-TAIL['crown'] = wpt('crown', (0.0, BONES['crown']['pivot'][1] + 8.0, -2.8))
+for k in range(4): TAIL[f'left_finger{k}'] = heads[f'left_finger{k}'] + Vector((0, -4.0, 0))
+TAIL['left_thumb'] = heads['left_thumb'] + Vector((0, -3.0, -0.3))
+TAIL['right_fingers'] = heads['right_fingers'] + Vector((0, -3.0, 0))
+TAIL['right_thumb'] = heads['right_thumb'] + Vector((0, -1.6, -0.2))
+TAIL['crown'] = heads['crown'] + Vector((0, 6.0, 0))
 TAIL['right_foot'] = wpt('right_foot', D['foot']['right']['toe']); TAIL['left_foot'] = wpt('left_foot', D['foot']['left']['toe'])
-TAIL['sword'] = wpt('sword', (12.5, D['sword']['grip'][1], -41.8))
+TAIL['sword'] = wpt('sword', (D['sword']['grip'][0], D['sword']['grip'][1], D['sword']['grip'][2] - 41.8))
 TAIL['left_hand'] = wpt('left_hand', (BONES['left_hand']['pivot'][0], BONES['left_hand']['pivot'][1] - 6, BONES['left_hand']['pivot'][2]))
 def tail_of(n):
     if n in TAIL: return TAIL[n]
     h = heads[n]
     return {'root': h + Vector((0, 0, -6)), 'head': h + Vector((0, 10, 0)), 'jaw': h + Vector((0, -3, -4)), 'skirt': h + Vector((0, -10, 0)),
-            'hood_drape': h + Vector((0, -8, 0.5)), 'banner': h + Vector((3, 6, -6)), 'drape_left': h + Vector((0, -8, 0)), 'drape_right': h + Vector((0, -8, 0)),
+            'hood_drape': h + Vector((0, -8, 0.5)), 'banner': h + Vector((0, -11, 0)), 'drape_left': h + Vector((0, -8, 0)), 'drape_right': h + Vector((0, -8, 0)),
             'tabard_front': h + Vector((0, -24, -0.5)), 'tabard_back': h + Vector((0, -28, 0.5)), 'tabard_right': h + Vector((0.5, -20, 0)), 'tabard_left': h + Vector((-0.5, -20, 0))}.get(n, h + Vector((0, -16, 0)))
 eb = {}
 for n in BM.ORDER:

@@ -2,8 +2,7 @@
 motion for tabards, mantle drapes, hood drape and banner, wrist despike, key reduction.  Writes the final GeckoLib set.
 python3 post.py king_baked.json king_final.json [names...]"""
 import sys, json, math, os, numpy as np
-sys.path.insert(0, __import__('os').path.dirname(__import__('os').path.abspath(__file__)))
-import rig2                                    # v2 skeleton (must come before model3 users)
+sys.path.insert(0, '/home/claude/wk2/py')
 import animtools as A, model3 as M, capes as CP
 from model3 import rot_m
 from scipy.optimize import minimize
@@ -36,6 +35,7 @@ def skirt_cost(W, rx, rz):
     return floor * 3 + inside * 0.6
 def solve_skirt(an):
     n = len(an['bones']['body']['rot']); base = an['bones']['skirt']['rot']; out = []; prev = None
+    if not SKIRT: return [list(r) for r in base]                 # v4: the skirt bone carries only the tassets (springs)
     for k in range(n):
         if k % 2 == 1 and k < n - 1: out.append(None); continue
         W = A.fk(pose_at(an, k)); bx, by, bz = base[k]; best = None

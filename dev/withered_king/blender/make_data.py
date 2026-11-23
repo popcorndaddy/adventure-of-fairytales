@@ -1,10 +1,9 @@
 """Export the Withered Sentinel rig (bones, rest transforms, textured cubes) to JSON for the Blender build."""
-import sys; sys.path.insert(0, __import__('os').path.join(__import__('os').path.dirname(__import__('os').path.abspath(__file__)), '..', 'pipeline')); import rig2
 import sys, json, numpy as np
-sys.path.insert(0, __import__('os').path.join(__import__('os').path.dirname(__import__('os').path.abspath(__file__)), '..', 'pipeline'))
+sys.path.insert(0, '/home/claude/wk2/py')
 import io, contextlib
 with contextlib.redirect_stdout(io.StringIO()):
-    import rig2; import build3 as BB
+    import build3 as BB
 import model3 as M, animtools as A
 from model3 import rot_m
 
@@ -52,9 +51,9 @@ for side in ('right', 'left'):
 sw = np.array([p for c in M.CUBES if c['bone'] == 'sword' for p in M.cube_corners_local(c)])
 tipc = sw[sw[:, 1] > -1e9]
 data = dict(tex_w=BB.TW, tex_h=BB.TH, bones=bones, cubes=cubes, foot=foot,
-            sword=dict(grip=[12.5, float(M._b['sword']['pivot'][1]), 0.0]),
+            sword=dict(grip=[float(v) for v in M._b['sword']['pivot']]),
             materials=sorted(set(c['mat'] for c in M.CUBES)))
-json.dump(data, open(__import__('os').path.join(__import__('os').path.dirname(__import__('os').path.abspath(__file__)), 'king_data.json'), 'w'))
+json.dump(data, open('/home/claude/wk2/bl/king_data.json', 'w'))
 print('bones', len(bones), 'cubes', len(cubes), 'tex', BB.TW, BB.TH, foot)
 # sword extent in sword-local space, along its blade axis
 print('sword local min/max', sw.min(0).round(2), sw.max(0).round(2))

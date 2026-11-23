@@ -54,6 +54,7 @@ def begin(name, length, loop):
     for pb in PB:
         pb.location = (0, 0, 0); pb.rotation_euler = (0, 0, 0); pb.rotation_quaternion = (1, 0, 0, 0); pb.scale = (1, 1, 1)
     PB['crown'].constraints['Crown'].influence = 0.0
+    _LROLL['prev'] = None
     CUR.clear(); CUR.update(name=name, length=length, loop=loop, eases={}, action=A, grips={'R': [], 'L': []}, crown=None, events=[],
                             free_fn={'R': None, 'L': None})
     PB['crown'].constraints['Crown'].keyframe_insert('influence', frame=0)
@@ -192,7 +193,7 @@ def _hand_rel_right(mode):
     """right hand rest-frame transform relative to sword space for a grip mode: W_hand = W_sword @ rel."""
     return local_bb('sword', sword_add(mode)).inverted()
 _LREL = {}
-def _hand_rel_left(mode, slide=5.5):
+def _hand_rel_left(mode, slide=4.0):
     """left hand on the handle below the right fist, palm on the opposite side, fingers wrapping the other way."""
     key = (mode, slide)
     if key not in _LREL:
@@ -204,10 +205,27 @@ def _hand_rel_left(mode, slide=5.5):
         Wl = frame_from(palm_local('left'), pl, (V(0, -1, 0), V(1, 0, 0)), (-fr, -nr))
         _LREL[key] = Wl
     return _LREL[key]
+_LROLL = {'prev': None}
+def _left_roll_K(Ws, mode):
+    """the left hand may turn around the handle (a real off-hand does): pick the roll whose wrist-to-palm line points
+    back toward the shoulder, so the wrist isn't wrenched; the choice is kept close to the previous frame's."""
+    base = _hand_rel_left(mode); a = V(GRIP_L.x, GRIP_L.y, 0)
+    Hinv = WREST['left_hand'].inverted(); pr = _palm_rest('L')
+    up_rest = (WREST['left_hand'].to_3x3() @ V(0, 1, 0)).normalized()
+    sh = (K_now('left_clavicle') @ V(*(WREST['left_arm'] @ V(*BONES['left_arm']['pivot'], 1)).xyz, 1)).xyz
+    best = None; prev = _LROLL['prev']
+    for th in range(-110, 111, 2):
+        rel = Matrix.Translation(a) @ Matrix.Rotation(math.radians(th), 4, 'Z') @ Matrix.Translation(-a) @ base
+        K = Ws @ rel @ Hinv
+        p = (K @ V(pr.x, pr.y, pr.z, 1)).xyz; up = (K.to_3x3() @ up_rest).normalized()
+        sc_ = up.dot((sh - p).normalized()) - 0.0015 * abs(th) - (0.004 * abs(th - prev) if prev is not None else 0)
+        if best is None or sc_ > best[0]: best = (sc_, th, K)
+    _LROLL['prev'] = best[1]
+    return best[2]
 def hand_from_sword(side, Ws, mode):
-    rel = _hand_rel_right(mode) if side == 'R' else _hand_rel_left(mode)
-    s = 'right' if side == 'R' else 'left'
-    return Ws @ rel @ WREST[f'{s}_hand'].inverted()             # skin transform K of the hand
+    if side == 'L': return _left_roll_K(Ws, mode)
+    rel = _hand_rel_right(mode)
+    return Ws @ rel @ WREST['right_hand'].inverted()             # skin transform K of the hand
 def grip(side, keys):
     """grip states over time: [(t, state, blend_seconds)] with state 'cane' | 'normal' | 'free'."""
     CUR['grips'][side] = sorted(keys, key=lambda k: k[0])
@@ -218,7 +236,8 @@ def hand_K_from_palm(side, palm, fingers_dir, normal):
 def hand_K_offset(side, d=(0, 0, 0), r=(0, 0, 0)):
     s = 'right' if side == 'R' else 'left'
     pc = (WREST[f'{s}_hand'] @ V(*palm_local(s), 1)).xyz
-    return Matrix.Translation(pc + V(*d)) @ rot_bb(r).to_4x4() @ Matrix.Translation(-pc)
+    d = V(*d) + V(0, 2.5, -1.5)          # the rest arm is straight; free-hand targets keep a relaxed bend in the elbow
+    return Matrix.Translation(pc + d) @ rot_bb(r).to_4x4() @ Matrix.Translation(-pc)
 def hands(side, keys):
     """free hand targets (used whenever the hand is not gripping): [(t, spec, ease)] spec {'palm':..}|{'off':(d,r)}|
     {'crown': rel} ; 'space': torso bone to ride."""
@@ -258,9 +277,18 @@ def _clear_keys(A, bone):
             try: fc.keyframe_points.clear()
             except Exception:
                 while len(fc.keyframe_points): fc.keyframe_points.remove(fc.keyframe_points[0])
-def _blend_K(Ka, Kb, u):
-    la, qa, _ = Ka.decompose(); lb, qb, _ = Kb.decompose()
-    return Matrix.Translation(la.lerp(lb, u)) @ qa.slerp(qb, u).to_matrix().to_4x4()
+def _blend_K(Ka, Kb, u, pivot=None):
+    """blend two skin transforms; with a pivot (a rest-world point, e.g. the palm) the point travels straight between
+    its two positions while the rotation turns about it, instead of swinging round the world origin"""
+    qa, qb = Ka.to_quaternion(), Kb.to_quaternion()
+    if pivot is None:
+        la, lb = Ka.translation, Kb.translation
+        return Matrix.Translation(la.lerp(lb, u)) @ qa.slerp(qb, u).to_matrix().to_4x4()
+    p = V(*pivot); pa = (Ka @ V(p.x, p.y, p.z, 1)).xyz; pb = (Kb @ V(p.x, p.y, p.z, 1)).xyz
+    return Matrix.Translation(pa.lerp(pb, u)) @ qa.slerp(qb, u).to_matrix().to_4x4() @ Matrix.Translation(-p)
+def _palm_rest(side):
+    s = 'right' if side == 'R' else 'left'
+    return (WREST[f'{s}_hand'] @ V(*palm_local(s), 1)).xyz
 
 def _grip_weights(side, t):
     """[(state, weight)] for the hand at time t."""
@@ -284,7 +312,7 @@ def hand_target(side, t, free_K):
         parts.append((free_K if st == 'free' else hand_from_sword(side, Ws, st), w))
     if len(parts) == 1: return parts[0][0]
     (Ka, wa), (Kb, wb) = parts[0], parts[1]
-    return _blend_K(Ka, Kb, wb / (wa + wb))
+    return _blend_K(Ka, Kb, wb / (wa + wb), _palm_rest(side))
 
 # ------------------------------------------------------------------ per-frame solving
 def solve_frames():

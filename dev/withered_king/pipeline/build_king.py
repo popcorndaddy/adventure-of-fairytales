@@ -2,8 +2,7 @@ import json, math, uuid, base64, io, random, sys, os
 import numpy as np
 from PIL import Image
 from scipy.ndimage import gaussian_filter
-sys.path.insert(0, __import__('os').path.dirname(__import__('os').path.abspath(__file__)))
-import rig2                                   # Withered King v2 skeleton (edits model3 in place)
+sys.path.insert(0, '/home/claude/wk2/py')
 import model3 as M
 class _Anims: pass
 A = _Anims()
@@ -19,7 +18,7 @@ NAME = 'withered_king'
 D = 3                                   # texels per model unit
 rng = random.Random(11)
 nrng = np.random.default_rng(11)
-OUT = os.environ.get('WK_OUT', os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out')); os.makedirs(OUT, exist_ok=True)
+OUT = os.environ.get('WK_OUT', '/home/claude/wk2/export/out'); os.makedirs(OUT, exist_ok=True)
 
 GLOW_P1 = (38, 112, 106); GLOW_P2 = (96, 255, 232); GLOW_MASK = (120, 255, 240)
 EYE_P1 = (92, 220, 206); EYE_P2 = (196, 255, 250)

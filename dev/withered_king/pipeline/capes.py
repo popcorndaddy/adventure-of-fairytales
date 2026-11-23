@@ -1,7 +1,7 @@
 """Cape 'cloth': for every sampled frame of every animation, hang each cape strip with gravity and bend it
 (upper + lower piece) out of the body, legs, armour, sword and ground. Writes capes.json."""
 import sys, json, math, numpy as np
-sys.path.insert(0, __import__('os').path.dirname(__import__('os').path.abspath(__file__)))
+sys.path.insert(0, '/home/claude/wk2/py')
 import animtools as A, model3 as M
 from model3 import rot_m
 
