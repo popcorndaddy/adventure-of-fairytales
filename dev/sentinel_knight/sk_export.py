@@ -487,7 +487,7 @@ def studs(t, g, w, h, step, r):
         g[..., :3] = np.maximum(g[..., :3], k[..., None] * STUD * 1.2); g[..., 3] = np.maximum(g[..., 3], (k > 0.02).astype(np.float32))
 
 
-def scheme_paint(mat, bone, w, h, face):
+def scheme_paint(mat, bone, w, h, face, with_studs=True):
     side = face in ("north", "south", "east", "west")
     gold_piece = bone.startswith(GAUNTLET) or bone.startswith(BOOT)
     if mat in ("plate", "trim") and gold_piece:                          # gauntlets and boots: gold plate, purple studs
@@ -496,7 +496,8 @@ def scheme_paint(mat, bone, w, h, face):
         t[..., :3] *= (1 + mottle(h, w, 5 * SC, 0.14))[..., None]
         grain(t, 0.012); scratches(t, max(1, (w * h) // (700 * SC * SC)), 0.08, (4, 12)); wear(t, 0.18, 0.5)
         g = np.zeros((h, w, 4), dtype=np.float32)
-        studs(t, g, w, h, 3.0 * TPX, 0.4 * TPX)
+        if with_studs:
+            studs(t, g, w, h, 3.0 * TPX, 0.4 * TPX)
         return np.clip(t, 0, 1), g
     t, g = gk_paint(mat, w, h, face)
     if mat in ("plate", "rune", "emblem"):                               # dark purple armour
@@ -527,8 +528,171 @@ def scheme_paint(mat, bone, w, h, face):
     return np.clip(t, 0, 1), g
 
 
+# ------------------------------------------------------------------ v6 knight patterns
+GOLD = np.array([0.95, 0.7, 0.22]); GOLD_HI = np.array([1.0, 0.88, 0.5]); PURPLE = np.array([0.3, 0.12, 0.48]); DEEP = np.array([0.16, 0.05, 0.27])
+FLEUR = ["......#......",
+         ".....###.....",
+         "....#####....",
+         "....#####....",
+         ".##..###..##.",
+         "#..#.###.#..#",
+         "#...#####...#",
+         ".#..#####..#.",
+         "..##.###.##..",
+         "#############",
+         "..##.###.##..",
+         ".#...###...#.",
+         ".....###.....",
+         "....#####....",
+         ".....###....."]
+FLEUR_M = np.array([[c == "#" for c in row] for row in FLEUR], dtype=np.float32)
+
+
+def stamp(t, g, mask_tpl, cx, cy, height, col, glow=None, outline=True):
+    """Stamp a pixel motif (scaled, anti-aliased by supersampling) centred at cx, cy, `height` texels tall."""
+    h, w = t.shape[:2]
+    th, tw = mask_tpl.shape
+    sc = height / th
+    yy, xx = np.mgrid[0:h, 0:w]
+    acc = np.zeros((h, w), np.float32)
+    for oy in (0.25, 0.75):
+        for ox in (0.25, 0.75):
+            u = ((xx + ox - cx) / sc + tw / 2); v = ((yy + oy - cy) / sc + th / 2)
+            ok = (u >= 0) & (u < tw) & (v >= 0) & (v < th)
+            ui = np.clip(u.astype(int), 0, tw - 1); vi = np.clip(v.astype(int), 0, th - 1)
+            acc += np.where(ok, mask_tpl[vi, ui], 0.0)
+    m = acc / 4.0
+    if outline:                                                          # a dark engraved edge round the motif
+        sh = np.roll(np.roll(m, 1, 0), 1, 1)
+        t[..., :3] *= (1 - 0.55 * np.clip(sh - m, 0, 1))[..., None]
+    t[..., :3] = t[..., :3] * (1 - m[..., None]) + np.array(col) * m[..., None]
+    if glow is not None:
+        g[..., :3] = np.maximum(g[..., :3], m[..., None] * np.array(glow)); g[..., 3] = np.maximum(g[..., 3], (m > 0.05).astype(np.float32))
+    return m
+
+
+def fluting(t, w, h, period):
+    """Gothic fluted plate: hammered vertical ridges catching the light."""
+    xx = np.arange(w)
+    ph = 2 * math.pi * xx / period
+    t[..., :3] *= (1 + 0.16 * np.cos(ph) + 0.06 * np.cos(2 * ph))[None, :, None]
+    groove = (np.abs(((xx + period / 2) % period) - period / 2) < 0.6)
+    t[:, groove, :3] *= 0.62
+
+
+def etched_border(t, g, w, h, inset, width):
+    """Gilt etching: a dark band just inside the edge with a gold vine scrolling along it (damascened border)."""
+    yy, xx = np.mgrid[0:h, 0:w]
+    dx = np.minimum(xx - inset, (w - 1 - inset) - xx); dy = np.minimum(yy - inset, (h - 1 - inset) - yy)
+    d = np.minimum(dx, dy)
+    band = (d >= 0) & (d <= width)
+    t[band, :3] = t[band, :3] * 0.45 + DEEP * 0.55
+    per = width * 2.2; amp = width * 0.32
+    along = np.where(dx < dy, yy, xx).astype(np.float32)               # run the vine along whichever edge is nearer
+    centre = width / 2 + amp * np.sin(2 * math.pi * along / per)
+    vine = band & (np.abs(d - centre) < max(0.9, width * 0.13))
+    leaf = band & (((along + per / 4) % (per / 2)) < max(1.2, width * 0.18)) & (np.abs(d - width / 2) < width * 0.36)
+    edge = (np.abs(d) < 0.8) | (np.abs(d - width) < 0.8)
+    gold = vine | leaf | edge
+    t[gold, :3] = GOLD * (0.8 + 0.2 * np.sin(along[gold] * 0.7))[:, None]
+    g[gold, :3] = np.maximum(g[gold, :3], NEON * 0.28); g[gold, 3] = 1
+
+
+def lames(t, g, w, h, period, rivet_r):
+    """Articulated lames (overlapping bands) with a purple rivet at each end: gauntlets and sabatons."""
+    yy = np.arange(h)
+    ph = (yy % period) / period
+    shade = 1.15 - 0.55 * ph                                             # each lame bright at its top, shadowed under the next
+    t[..., :3] *= shade[:, None, None]
+    edge = (yy % period) < 1.2
+    t[edge, :, :3] = t[edge, :, :3] * 0.35 + GOLD_HI * 0.65
+    if w >= 6 * rivet_r:
+        for y0 in np.arange(period * 0.55, h - 1, period):
+            for x0 in (2.6 * rivet_r, w - 1 - 2.6 * rivet_r):
+                rivet(t, x0, y0, rivet_r, tuple(STUD * 1.7))
+                yy2, xx2 = np.mgrid[0:h, 0:w]
+                k = np.clip(1.15 - np.sqrt((xx2 - x0) ** 2 + (yy2 - y0) ** 2) / rivet_r, 0, 1)
+                g[..., :3] = np.maximum(g[..., :3], k[..., None] * STUD); g[..., 3] = np.maximum(g[..., 3], (k > 0.02).astype(np.float32))
+
+
+def rope(t, w, h, period):
+    """Roped (twisted) edging on the gold trim."""
+    yy, xx = np.mgrid[0:h, 0:w]
+    s_ = ((xx + yy) % period) / period
+    t[..., :3] *= (0.72 + 0.5 * np.sin(math.pi * s_))[..., None]
+
+
+def breaths(t, w, h, slot_w, slot_h, gap):
+    """Breathing slots of a great-helm visor."""
+    yy, xx = np.mgrid[0:h, 0:w]
+    cols = ((xx % (slot_w + gap)) < slot_w) & (xx > gap) & (xx < w - gap)
+    rows = ((yy % (slot_h + gap)) < slot_h) & (yy > h * 0.45) & (yy < h - gap)
+    hole = cols & rows
+    t[hole, :3] = np.array([0.015, 0.008, 0.02])
+    lip = np.roll(hole, -1, 0) & ~hole
+    t[lip, :3] = t[lip, :3] * 0.5 + GOLD * 0.5
+
+
+# the largest plate block of these bones carries a heraldic fleur-de-lis on its outer faces
+FLEUR_BONES = ("upperarm_L", "upperarm_R", "tasset_F")
+_big = {}
+for o_ in blocks:
+    if o_["sk_mat"] == "plate" and o_["sk_bone"] in FLEUR_BONES:
+        vol = o_.matrix_world.to_scale().x * o_.matrix_world.to_scale().y * o_.matrix_world.to_scale().z
+        if vol > _big.get(o_["sk_bone"], (0, None))[0]:
+            _big[o_["sk_bone"]] = (vol, o_.name)
+BIG = {v[1] for v in _big.values()}
+
+
+def knight_paint(o, mat, w, h, face):
+    bone = o["sk_bone"]
+    # the breastplate is painted as plate (its fleur replaces the old chevron lines); lames bring their own rivets
+    t, g = scheme_paint("plate" if mat == "emblem" else mat, bone, w, h, face, with_studs=False)
+    side = face in ("north", "south", "east", "west")
+    gold_piece = bone.startswith(GAUNTLET) or bone.startswith(BOOT)
+    big = min(w, h) >= 4 * TPX
+    if mat in ("plate", "trim") and gold_piece:
+        g[...] = 0
+        if side and h >= 2.5 * TPX:
+            lames(t, g, w, h, 1.6 * TPX, 0.3 * TPX)
+        else:
+            rope(t, w, h, 1.0 * TPX)
+    elif mat in ("plate", "emblem") and side:
+        if big and bone not in ("head",):
+            fluting(t, w, h, 2.2 * TPX)
+        if min(w, h) >= 5 * TPX:
+            etched_border(t, g, w, h, 0.5 * TPX, 1.1 * TPX)
+        z = o.matrix_world.translation.z * 16
+        if bone == "head" and face == "north" and z < 73.5 and w >= 4 * TPX:
+            breaths(t, w, h, int(0.45 * TPX), int(0.3 * TPX), int(0.45 * TPX))
+        if mat == "emblem" and face == "north":                          # the breastplate: a gold fleur-de-lis
+            stamp(t, g, FLEUR_M, w / 2, h * 0.46, min(h * 0.5, w * 0.95), GOLD * 0.9, glow=NEON * 0.22)
+        if o.name in BIG and face != "south" and min(w, h) >= 5 * TPX:
+            stamp(t, g, FLEUR_M, w / 2, h / 2, min(w, h) * 0.62, GOLD * 0.9, glow=NEON * 0.2)
+    elif mat == "trim":
+        rope(t, w, h, 1.1 * TPX)
+    elif mat == "cloth":
+        lum = t[..., :3].mean(-1, keepdims=True)
+        if side or face == "up":
+            yy, xx = np.mgrid[0:h, 0:w]
+            # semé-de-lis: small purple fleurs on a diamond grid over the dark gold
+            step = 3.6 * TPX
+            for j, cy in enumerate(np.arange(step / 2, h, step * 0.75)):
+                for cx in np.arange(step / 2 + (step / 2 if j % 2 else 0), w, step):
+                    stamp(t, g, FLEUR_M, cx, cy, 1.7 * TPX, PURPLE * 1.1, outline=False)
+            if bone.startswith("cape_") and bone != "cape_root":         # a purple heraldic border down each panel edge
+                d = np.minimum(xx, w - 1 - xx).astype(np.float32)
+                if bone.endswith("3"):
+                    d = np.minimum(d, (h - 1 - yy).astype(np.float32))
+                band = d < 1.3 * TPX
+                t[band, :3] = DEEP * (0.8 + 1.5 * lum[band])
+                line = np.abs(d - 1.3 * TPX) < 0.6
+                t[line, :3] = GOLD
+    return np.clip(t, 0, 1), g
+
+
 for (o, face, x, y, w, h, mat) in regions:
-    t, g = scheme_paint(mat, o["sk_bone"], w, h, face)
+    t, g = knight_paint(o, mat, w, h, face)
     alb[y:y + h, x:x + w] = t
     glw[y:y + h, x:x + w] = g
 

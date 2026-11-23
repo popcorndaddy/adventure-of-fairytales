@@ -322,6 +322,23 @@ function wsQuake(e) {
 }
 function wsMinionsAlive(e) { let n = 0; wsNear(e, 64).forEach(x => { if (x.isAlive() && wsIsMinion(e, x)) n++ }); return n }
 
+// heavy armoured footsteps while he walks: a deep step, a plate clank and chain mail, on each foot strike
+// (the walk cycle is 48 ticks with a strike every 24, alternating feet)
+function wsFootsteps(e, d, act) {
+  let sp = 0
+  try { let v = wsVec(e.getDeltaMovement()); if (v) sp = Math.sqrt(v.x * v.x + v.z * v.z) } catch (err) {}
+  if (act != '' || sp < 0.015) { d.putInt('ws_step', 0); return }
+  let n = d.getInt('ws_step') + 1
+  d.putInt('ws_step', n)
+  if (n % 24 != 4) return
+  let q = wsLocal(e, (Math.floor(n / 24) % 2 == 0) ? -7 : 7, 0, 2)
+  wsAt(e, q, 'playsound minecraft:entity.iron_golem.step hostile @a ~ ~ ~ 1.6 0.55')
+  wsAt(e, q, 'playsound minecraft:item.armor.equip_netherite hostile @a ~ ~ ~ 1.0 0.6')
+  wsAt(e, q, 'playsound minecraft:block.chain.step hostile @a ~ ~ ~ 0.9 0.7')
+  if (Math.random() < 0.5) wsAt(e, q, 'playsound minecraft:item.armor.equip_iron hostile @a ~ ~ ~ 0.7 0.5')
+  fxDust(e, q, WS_DARK, 1.0, 0.25, 3, 0.01)
+}
+
 // ------------------------------------------------------------------ the fight
 global.wsTick = e => {
   let d = e.persistentData
@@ -350,6 +367,7 @@ global.wsTick = e => {
   if (act == '' && e.tickCount % 23 == 0) fxRunes(e, wsLocal(e, (Math.random() < 0.5 ? -1 : 1) * 16, 62, 0), 0.4, 3)
   if (act == '' && e.tickCount % 31 == 0) fxDust(e, wsLocal(e, (Math.random() - 0.5) * 16, 2, -2), WS_DARK, 1.2, 0.35, 3, 0.01)
   if (e.tickCount % (target ? 12 : 30) == 0) { fxHeart(e, target ? 1.0 : 0.5); fxGoldPulse(e, target ? 1.0 : 0.55) }
+  wsFootsteps(e, d, act)
 
   if (act != '') {
     d.putInt('ws_t', t + 1)
@@ -362,7 +380,11 @@ global.wsTick = e => {
         let a = t * 0.4, q = wsLocal(e, Math.cos(a) * 30, 30 + (t % 30), Math.sin(a) * 30)
         fxRunes(e, q, 0.3, 4); fxDust(e, q, WS_DARK, 1.4, 0.2, 2, 0)
       }
-      if (t == E.rise) wsCmd(e, 'playsound minecraft:entity.warden.emerge hostile @a ~ ~ ~ 3 0.7')
+      // deep war horns: the raid horn and a goat horn played at half speed sound like a huge Viking horn
+      if (t == E.stir) { wsCmd(e, 'playsound minecraft:event.raid.horn hostile @a ~ ~ ~ 4 0.5'); wsCmd(e, 'playsound minecraft:item.goat_horn.sound.6 hostile @a ~ ~ ~ 3 0.5') }
+      if (t == E.stir + 14) wsCmd(e, 'playsound minecraft:item.goat_horn.sound.7 hostile @a ~ ~ ~ 2.5 0.5')
+      if (t == E.rise) { wsCmd(e, 'playsound minecraft:entity.warden.emerge hostile @a ~ ~ ~ 3 0.7'); wsCmd(e, 'playsound minecraft:event.raid.horn hostile @a ~ ~ ~ 4 0.56') }
+      if (t == E.flare - 2) wsCmd(e, 'playsound minecraft:item.goat_horn.sound.3 hostile @a ~ ~ ~ 3 0.5')
       if (t == E.draw) { wsAt(e, wsLocal(e, -2, 1, 22), 'playsound minecraft:block.stone.break hostile @a ~ ~ ~ 3 0.4'); fxShards(e, wsLocal(e, -2, 1, 22), 0.6, 18) }
       if (t == E.flare) {
         let q = wsLocal(e, 0, 58, 4)
