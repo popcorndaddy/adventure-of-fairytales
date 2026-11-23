@@ -7,6 +7,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from mathutils import Vector, Matrix
 import sk_pose as K
 from sk_pose import track, wave, bump, smooth, ease_in, ease_out, dir_az_el, heartbeat, merged
+from mathutils import Quaternion
 
 args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
 ONLY = set(args[0].split(",")) if args and args[0] else None
@@ -31,27 +32,33 @@ def action(fn):
 
 
 # ====================================================================== IDLE (5 s loop)
+# A commanding rest: the blade's point is planted in the stone, the right fist loose on the grip. His weight rolls slowly
+# from foot to foot, the planted sword rocks with it, the left arm hangs relaxed and swings a little behind the body.
+# Midway he lifts the left hand onto the pommel over the right (a knight's rest), breathes there, and lets it fall again.
 @action
 def idle():
     N = 100
-    TIP = (-19.0, -27.0, 0.8)                        # sword point rests on the stone (fixed)
+    TIP = (-19.0, -36.0, 0.8)                        # the sword point stays planted on the stone
 
     def fn(r, f):
         br = wave(f, N, (1.0, 2, 0.0), (0.35, 3, 0.7), (0.2, 1, 1.4))          # uneven breathing
-        sway = wave(f, N, (1.0, 1, 0.0), (0.25, 3, 0.4))                         # slow weight shift
-        look_y = track([(0, 0), (12, 0), (30, 13, "c"), (44, 14, "c"), (58, -7, "c"), (72, -9, "c"), (86, 0), (100, 0)], f)
-        tilt = track([(0, 0), (40, 0), (48, 7), (62, 8), (72, 0), (100, 0)], f)   # studies the player
-        clench = smooth((f - 60) / 5) * (1 - smooth((f - 78) / 8))               # senses something: claw tightens
-        G = (-11.0 + 0.3 * sway, -12.0, 53.0 + 0.5 * br)
+        sway = wave(f, N, (1.0, 1, 0.0), (0.25, 3, 0.4))                         # slow weight shift (+ = onto his left foot)
+        lag = wave(f, N, (1.0, 1, -0.9), (0.25, 3, -0.5))                        # the free arm trails the body
+        rest = smooth((f - 26) / 14) * (1 - smooth((f - 64) / 14))               # left hand up on the pommel
+        G = (-13.0 + 7.0 * rest + 0.9 * sway, -20.0 + 6.0 * rest, 50.0 + 0.6 * br)
         hs, gs = heartbeat(f / 20.0, 36, 0.8)
+        hang = dict(hand=(15.0 - 0.8 * lag, -6.0 - 1.6 * lag + 0.6 * br, 36.5 + 0.5 * br), point=(0.15, -0.3 - 0.12 * lag, -0.94),
+                    palm=(-0.95, 0.15, 0.0), elbow=(0.45, 0.85, -0.2))
+        top = dict(hand=(G[0] + 1.5, G[1] - 2.0, G[2] + 4.2 + 0.3 * br), point=(-0.75, -0.55, -0.35), palm=(-0.15, 0.1, -0.98),
+                   elbow=(0.85, 0.3, -0.45))
         K.pose(r, merged(
-            body=(0.8 * sway, 0.3, -0.8 + 0.35 * br), hips=(4.0, -1.2 * sway, -6.0 + 1.5 * sway),
-            spine=(1.0 - 0.6 * br, 0.4 * sway, 1.5), chest=(2.0 - 1.6 * br, 0.3 * sway, 2.0),
-            head=(look_y - 4, 7 - 1.2 * br, tilt), shrug_R=1.0 + 1.2 * br, shrug_L=1.6 * br,
+            body=(1.1 * sway, 0.3 - 0.4 * rest, -0.8 + 0.35 * br - 0.3 * rest), hips=(4.0 + 1.5 * rest, -1.6 * sway, -6.0 + 1.5 * sway + 3 * rest),
+            spine=(1.0 - 0.6 * br + 1.5 * rest, 0.5 * sway, 1.5 - 1.5 * rest), chest=(2.0 - 1.6 * br + 1.5 * rest, 0.4 * sway, 2.0 - 1.5 * rest),
+            head=(0.0, 7.0, 0.0), shrug_R=0.8 + 1.4 * br, shrug_L=1.6 * br + 2.0 * rest,
             foot_R=((-7.0, 1.5), 0, -14, 0), foot_L=((7.5, -2.0), 0, 9, 0),
-            sword=dict(planted_sword(G, TIP, (0.95, -0.3, 0.0)), elbow_R=(-0.8, 0.5, -0.4)),
-            arm_L=dict(hand=(14.5 - 0.3 * sway, -3.5, 33.5 + 0.4 * br), point=(0.12, -0.25, -1.0), palm=(-1, 0.1, 0), elbow=(0.5, 0.6, -0.2)),
-            curl_R=1.0, curl_L=0.35 + 0.12 * wave(f, N, (1, 2, 0.5)) + 0.55 * clench, spread_L=0.3 - 0.3 * clench, thumb_L=0.4 + 0.4 * clench,
+            sword=dict(planted_sword(G, TIP, (0.95, -0.3, 0.0)), elbow_R=(-0.85, 0.55, -0.2)),
+            arm_L=lerpP(hang, top, rest),
+            curl_R=0.85 + 0.1 * rest, curl_L=0.3 + 0.06 * wave(f, N, (1, 2, 0.5)) + 0.45 * rest, spread_L=0.25 * (1 - rest), thumb_L=0.35 + 0.35 * rest,
             wobble_L=(0.06 * wave(f, N, (1, 3, 0)), 0.05 * wave(f, N, (1, 4, 1)), 0.07 * wave(f, N, (1, 5, 2))),
             heart=(hs, gs)))
     return N, fn, "true"

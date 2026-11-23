@@ -81,6 +81,6 @@ for name in names:
     print(f"  elbow straightness R {min(elbow['R']):.0f}..{max(elbow['R']):.0f} deg, L {min(elbow['L']):.0f}..{max(elbow['L']):.0f} deg (180 = straight)")
     cf = sorted(set(f for f, _ in clip))
     print(f"  blade inside body: {len(cf)} frames {cf[:12]} {sorted(set(b for _, b in clip))}")
-    if name == "dash":
-        print("  dash elbows by tick R:", [round(x) for x in elbow['R']], "L:", [round(x) for x in elbow['L']])
+    if name in ("dash", "sweep", "idle"):
+        print(f"  {name} elbows by tick R:", [round(x) for x in elbow['R']], "L:", [round(x) for x in elbow['L']])
 print("CHECK_OK")

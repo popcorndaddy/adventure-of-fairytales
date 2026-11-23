@@ -491,24 +491,58 @@ if DO_ANIMS:
         f0, f1 = int(act.frame_range[0]), int(act.frame_range[1])
         tracks = {b: {"rotation": {}, "position": {}, "scale": {}} for b in order_b}
         prev_e = {b: None for b in order_b}
-        for f in range(f0, f1 + 1):
-            scene.frame_set(f)
-            Wd = world_delta()
-            t = f"{(f - f0) / 20.0:.4f}".rstrip("0").rstrip(".") if f > f0 else "0.0"
-            if "." not in t:
-                t += ".0"
+        def sample(fr, sub=0.0):
+            """Pose of every bone at frame fr (+ subframe): (file rotation, prev euler), position, scale per bone."""
+            scene.frame_set(fr, subframe=sub)
+            Wd = world_delta(); out = {}
             for name in order_b:
                 pb = rig.pose.bones[name]
                 Q = (Wd[pb.parent.name].inverted() @ Wd[name]) if pb.parent else Wd[name].copy()
                 loc, quat, scl = Q.decompose()
-                D = quat.to_matrix()
                 p = heads[name]
                 pos = (Q @ p) - p
-                ri = M3 @ D @ M3i
-                tracks[name]["rotation"][t], prev_e[name] = file_rot_cont(ri, prev_e[name])
                 pi = M3 @ pos
-                tracks[name]["position"][t] = [R6(-pi.x), R6(pi.y), R6(pi.z)]
-                tracks[name]["scale"][t] = [R6(scl.x), R6(scl.z), R6(scl.y)]
+                out[name] = (M3 @ quat.to_matrix() @ M3i, [R6(-pi.x), R6(pi.y), R6(pi.z)], [R6(scl.x), R6(scl.z), R6(scl.y)])
+            return out
+
+        def tkey(x):
+            t = f"{x / 20.0:.5f}".rstrip("0").rstrip(".") if x > 0 else "0.0"
+            return t if "." in t else t + ".0"
+
+        n_mid = [0]
+
+        def sample_t(t):
+            fl = math.floor(t + 1e-9)
+            return sample(int(fl), t - fl)
+
+        def write(t, vals):
+            for name in order_b:
+                r_, pos_, scl_ = vals[name]
+                tracks[name]["rotation"][tkey(t - f0)], prev_e[name] = file_rot_cont(r_, prev_e[name])
+                tracks[name]["position"][tkey(t - f0)] = pos_
+                tracks[name]["scale"][tkey(t - f0)] = scl_
+
+        def span(ta, tb, depth=0):
+            """Write keys from ta (already written) to tb. Where Euler numbers swing far (fast turns, or near gimbal
+            lock) GeckoLib's straight blend between keys drifts from the true rotation, so such intervals are split
+            in half (down to 1/8 tick) with keys sampled from the real, quaternion-interpolated motion."""
+            vb = sample_t(tb)
+            if depth < 3:
+                trial = {n: file_rot_cont(vb[n][0], prev_e[n])[0] for n in order_b}
+                last = {n: tracks[n]["rotation"][tkey(ta - f0)] for n in order_b}
+                if max(max(abs(a_ - b_) for a_, b_ in zip(trial[n], last[n])) for n in order_b) > 25.0:
+                    n_mid[0] += 1
+                    tm = (ta + tb) / 2
+                    span(ta, tm, depth + 1)
+                    span(tm, tb, depth + 1)
+                    return
+            write(tb, vb)
+
+        write(f0, sample(f0))
+        for f in range(f0 + 1, f1 + 1):
+            span(f - 1, f)
+        if n_mid[0]:
+            print("  sub-tick splits", act.name, n_mid[0], flush=True)
         lp = act.get("sk_loop", "false")
         sampled[act.name] = (tracks, (f1 - f0) / 20.0, lp)
     # a channel used by a bone in ANY animation is written in EVERY animation (even if it rests there), so no clip
