@@ -447,8 +447,88 @@ def gk_paint(mat, w, h, face):
     return np.clip(t, 0, 1), g
 
 
-for (o, face, x, y, w, h, mat) in regions:
+# ------------------------------------------------------------------ v5 colour scheme: dark purple plate, gold, neon gold
+GAUNTLET = ("hand_", "forearm_", "index", "middle", "ring", "thumb")
+BOOT = ("foot_", "toe_")
+NEON = np.array([1.0, 0.76, 0.22])                     # neon gold (glowmask)
+STUD = np.array([0.42, 0.12, 0.66])                    # purple studs
+
+
+def recolour(t, tint, k0, k1):
+    """Keep the tile's light/dark detail, give it a new colour: tint * (k0 + k1 * luminance)."""
+    lum = t[..., :3].mean(-1, keepdims=True)
+    t[..., :3] = np.array(tint) * (k0 + k1 * lum)
+
+
+def neon_edges(g, w, h, inset, width, strength=1.0):
+    """A thin glowing line running round a face, just inside its edge."""
+    yy, xx = np.mgrid[0:h, 0:w]
+    d = np.minimum.reduce([xx - inset, (w - 1 - inset) - xx, yy - inset, (h - 1 - inset) - yy])
+    v = soft_line_mask(d, width) * strength
+    g[..., :3] = np.maximum(g[..., :3], v[..., None] * NEON); g[..., 3] = np.maximum(g[..., 3], (v > 0.02).astype(np.float32))
+    return v
+
+
+def studs(t, g, w, h, step, r):
+    """Purple glowing studs spaced round the border of a face."""
+    if w < 4 * r or h < 4 * r:
+        return
+    m = 2.2 * r
+    pts = []
+    for x in np.arange(m, w - m + 1e-6, step):
+        pts += [(x, m), (x, h - 1 - m)]
+    for y in np.arange(m + step, h - m - step + 1e-6, step):
+        pts += [(m, y), (w - 1 - m, y)]
+    yy, xx = np.mgrid[0:h, 0:w]
+    for (cx, cy) in pts:
+        rivet(t, cx, cy, r, tuple(STUD * 1.6))
+        d = np.sqrt((xx - cx) ** 2 + (yy - cy) ** 2) / r
+        k = np.clip(1.1 - d, 0, 1)
+        g[..., :3] = np.maximum(g[..., :3], k[..., None] * STUD * 1.2); g[..., 3] = np.maximum(g[..., 3], (k > 0.02).astype(np.float32))
+
+
+def scheme_paint(mat, bone, w, h, face):
+    side = face in ("north", "south", "east", "west")
+    gold_piece = bone.startswith(GAUNTLET) or bone.startswith(BOOT)
+    if mat in ("plate", "trim") and gold_piece:                          # gauntlets and boots: gold plate, purple studs
+        t, _, _ = sample(GK["WeatheredBronze_Albedo"], w, h); t[..., 3] = 1
+        recolour(t, (0.95, 0.68, 0.2), 0.35, 1.9 if mat == "plate" else 2.3)
+        t[..., :3] *= (1 + mottle(h, w, 5 * SC, 0.14))[..., None]
+        grain(t, 0.012); scratches(t, max(1, (w * h) // (700 * SC * SC)), 0.08, (4, 12)); wear(t, 0.18, 0.5)
+        g = np.zeros((h, w, 4), dtype=np.float32)
+        studs(t, g, w, h, 3.0 * TPX, 0.4 * TPX)
+        return np.clip(t, 0, 1), g
     t, g = gk_paint(mat, w, h, face)
+    if mat in ("plate", "rune", "emblem"):                               # dark purple armour
+        recolour(t, (0.30, 0.12, 0.48), 0.25, 1.45)
+        if mat == "rune" and side:                                       # carved glyphs now burn gold
+            on = g[..., 3] > 0
+            t[on, :3] = np.array([0.55, 0.38, 0.1]); g[on, :3] = g[on, :3].max(-1, keepdims=True) * 3.2 * NEON
+        if mat == "emblem":                                              # chest tracery in neon gold
+            on = g[..., 3] > 0
+            t[on, :3] = np.array([0.85, 0.62, 0.2]) * np.clip(g[on, :3].max(-1, keepdims=True) * 1.6, 0.3, 1.0)
+            g[on, :3] = g[on, :3].max(-1, keepdims=True) * 1.25 * NEON
+    elif mat == "trim":                                                  # gold edging with a neon line
+        recolour(t, (0.95, 0.7, 0.22), 0.3, 2.4)
+        if side and min(w, h) >= 3 * SC:
+            neon_edges(g, w, h, 0.9 * SC, 0.6 * SC, 0.8)
+    elif mat == "bronze":                                                # buckles, fittings: bright gold
+        recolour(t, (1.0, 0.75, 0.25), 0.35, 2.1)
+    elif mat == "cloth":                                                 # cape and scarf: dark gold
+        lum = t[..., :3].mean(-1, keepdims=True)
+        t[..., :3] = np.array([0.5, 0.34, 0.05]) * (0.42 + 2.2 * lum)                # rich dark gold
+        if side or face == "up":                                         # a bright gold thread along the edges
+            yy, xx = np.mgrid[0:h, 0:w]
+            d = np.minimum.reduce([xx - 1.0 * SC, (w - 1 - 1.0 * SC) - xx, yy - 1.0 * SC])
+            v = soft_line_mask(d, 0.7 * SC)
+            t[..., :3] = t[..., :3] * (1 - v[..., None]) + np.array([0.95, 0.72, 0.22]) * v[..., None]
+    elif mat == "eye":                                                   # dark purple eyes, still glowing
+        t[..., :3] = np.array([0.2, 0.03, 0.34]); g[..., :3] = np.array([0.3, 0.04, 0.58]); g[..., 3] = 1
+    return np.clip(t, 0, 1), g
+
+
+for (o, face, x, y, w, h, mat) in regions:
+    t, g = scheme_paint(mat, o["sk_bone"], w, h, face)
     alb[y:y + h, x:x + w] = t
     glw[y:y + h, x:x + w] = g
 

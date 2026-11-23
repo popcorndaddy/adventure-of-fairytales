@@ -222,12 +222,22 @@ function wsHit(e, range, arc, dmg, push, lift) {
 // ------------------------------------------------------------------ purple voxel magic (temporary, event driven)
 // dust particles render as small squares: the voxel cubes / blocky smoke. 'enchant' are rune glyphs.
 const WS_DARK = 'minecraft:dust 0.32 0.04 0.55', WS_VIOLET = 'minecraft:dust 0.72 0.32 1.0', WS_PALE = 'minecraft:dust 0.9 0.7 1.0'
+const WS_GOLD = 'minecraft:dust 1.0 0.78 0.2', WS_GOLD_HOT = 'minecraft:dust 1.0 0.92 0.55'
 function fxDust(e, q, col, size, spread, n, speed) { wsAt(e, q, `particle ${col} ${size} ~ ~ ~ ${spread} ${spread} ${spread} ${speed || 0} ${n} force`) }
 function fxCubes(e, q, spread, n) { fxDust(e, q, WS_DARK, 1.6, spread, Math.ceil(n * 0.6), 0.02); fxDust(e, q, WS_VIOLET, 1.1, spread, Math.ceil(n * 0.4), 0.02) }
 function fxRunes(e, q, spread, n) { wsAt(e, q, `particle minecraft:enchant ~ ~ ~ ${spread} ${spread} ${spread} 0.6 ${n} force`) }
 function fxShards(e, q, spread, n) {
   wsAt(e, q, `particle minecraft:block crying_obsidian ~ ~ ~ ${spread} 0.3 ${spread} 0.4 ${n} force`)
   wsAt(e, q, `particle minecraft:block obsidian ~ ~ ~ ${spread} 0.3 ${spread} 0.4 ${Math.ceil(n / 2)} force`)
+}
+// the neon gold in his armour pulses with the heart: a beat of gold light along the trim, gauntlets and boots
+const WS_GOLD_POINTS = [[16, 62, 0], [-16, 62, 0], [0, 52, -6], [5, 72, -4], [-5, 72, -4], [14, 36, -4], [-14, 36, -4], [7, 4, -2], [-7, 4, -2]]
+function fxGoldPulse(e, strength) {
+  WS_GOLD_POINTS.forEach(p => {
+    let q = wsLocal(e, p[0], p[1], p[2])
+    fxDust(e, q, WS_GOLD, 0.6 + 0.35 * strength, 0.18, Math.max(1, Math.round(strength)), 0.004)
+    if (strength > 0.9 && Math.random() < 0.35) fxDust(e, q, WS_GOLD_HOT, 0.45, 0.1, 1, 0.01)
+  })
 }
 function fxHeart(e, strength) {           // energy escaping between the ribs
   let q = wsLocal(e, 0, 58, 4)
@@ -328,7 +338,7 @@ global.wsTick = e => {
   // ---- dormant: kneeling on his sword until a player comes close (or hits him)
   if (!d.getBoolean('ws_awake') && act != 'awaken') {
     e.getNavigation().stop(); e.setAggressive(false)
-    if (e.tickCount % 40 == 0) fxHeart(e, 0.4)
+    if (e.tickCount % 40 == 0) { fxHeart(e, 0.4); fxGoldPulse(e, 0.35) }
     let wake = false
     e.server.players.forEach(p => { if (!p.isCreative() && !p.isSpectator() && p.level == e.level && wsDist(p, e) < 16) wake = true })
     if (wake || target) { d.putBoolean('ws_guarded', true); wsStart(e, 'awaken') }
@@ -339,7 +349,7 @@ global.wsTick = e => {
   // ---- ambient magic: faint runes near the shoulders, pixels rising from his boots, the heart breathing light
   if (act == '' && e.tickCount % 23 == 0) fxRunes(e, wsLocal(e, (Math.random() < 0.5 ? -1 : 1) * 16, 62, 0), 0.4, 3)
   if (act == '' && e.tickCount % 31 == 0) fxDust(e, wsLocal(e, (Math.random() - 0.5) * 16, 2, -2), WS_DARK, 1.2, 0.35, 3, 0.01)
-  if (e.tickCount % (target ? 12 : 30) == 0) fxHeart(e, target ? 1.0 : 0.5)
+  if (e.tickCount % (target ? 12 : 30) == 0) { fxHeart(e, target ? 1.0 : 0.5); fxGoldPulse(e, target ? 1.0 : 0.55) }
 
   if (act != '') {
     d.putInt('ws_t', t + 1)
