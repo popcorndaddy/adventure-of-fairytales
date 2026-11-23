@@ -122,6 +122,52 @@ def sym(bone, c, size, mat, rot=(0, 0, 0), coll="Sentinel_Armor"):
 import os
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "sk_armor.py")).read())
 
+
+# ---------------------------------------------------------------- v7: bulkier armour (+35% width) around the same skeleton
+# Every block is widened about its own bone's axis, so it stays centred on the joint the animations move:
+# torso pieces get wider and deeper, limbs get more girth, boots get wider (not taller), the cape spans the wider back.
+WIDEN = 1.35
+TORSO = ("pelvis", "spine", "chest", "neck", "cape_root", "clavicle_L", "clavicle_R", "tasset_F", "tasset_B", "tasset_L", "tasset_R", "heart", "heart_glow")
+LIMB = ("upperarm_L", "upperarm_R", "forearm_L", "forearm_R", "thigh_L", "thigh_R", "shin_L", "shin_R", "hand_L", "hand_R")
+
+
+def _widen():
+    n = 0
+    for o in [o for o in bpy.data.objects if "sk_mat" in o]:
+        b = o["sk_bone"]
+        bone = rig.data.bones[b]
+        h = bone.head_local.copy(); a = (bone.tail_local - bone.head_local).normalized()
+        k = WIDEN
+        if b in TORSO or b == "head":
+            if b == "head":
+                k = 1.12                                          # the helm grows a little: the body grows a lot
+            if b in ("clavicle_L", "clavicle_R", "tasset_L", "tasset_R"):
+                h = rig.data.bones["pelvis"].head_local.copy()     # side pieces move out with the wider torso
+            W = Matrix.Diagonal((k, k, 1.0))
+        elif b in LIMB:
+            if b.startswith("hand"):
+                k = 1.2
+            I = Matrix.Identity(3); aa = Matrix(((a.x * a.x, a.x * a.y, a.x * a.z), (a.y * a.x, a.y * a.y, a.y * a.z), (a.z * a.x, a.z * a.y, a.z * a.z)))
+            W = I + (I - aa) * (k - 1)                              # more girth, same length
+        elif b.startswith(("foot_", "toe_")):
+            W = Matrix.Diagonal((k, 1.0, 1.0))                    # wider sabatons, sole stays on the floor
+        elif b.startswith("cape_"):
+            h = Vector((0, h.y, h.z))
+            W = Matrix.Diagonal((k, 1.0, 1.0))
+        else:
+            continue                                              # sword, fingers, thumbs keep their size
+        M = o.matrix_world.copy()
+        loc, rot, scl = M.decompose()
+        R = rot.to_matrix()
+        p = h + W @ (loc - h)
+        s_new = [scl[i] * (W @ R.col[i]).length for i in range(3)]
+        o.matrix_world = Matrix.Translation(p) @ R.to_4x4() @ Matrix.Diagonal((*s_new, 1))
+        n += 1
+    print("WIDENED", n, "blocks", flush=True)
+
+
+_widen()
+
 # ---------------- FX anchors (empties on bones: where effects / hits are spawned)
 def anchor(name, bone, p):
     e = bpy.data.objects.new(name, None); e.empty_display_type = "SPHERE"; e.empty_display_size = 0.12

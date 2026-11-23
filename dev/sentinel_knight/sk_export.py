@@ -691,8 +691,180 @@ def knight_paint(o, mat, w, h, face):
     return np.clip(t, 0, 1), g
 
 
+# ------------------------------------------------------------------ v7 scheme (from the user's reference): black crackled
+# plate, thick gold rims, purple glowing vents, deep purple tattered cloth, gold skulls, purple crest and eyes
+SKULL = ["...#####...",
+         "..#######..",
+         ".#########.",
+         "###########",
+         "##..###..##",
+         "#...###...#",
+         "##..###..##",
+         "###########",
+         ".####.####.",
+         "..#######..",
+         "..#.#.#.#..",
+         "..#######..",
+         "...#.#.#..."]
+SKULL_M = np.array([[c == "#" for c in row] for row in SKULL], dtype=np.float32)
+VIOLET = np.array([0.72, 0.28, 1.0])
+BLACK_TINT = (0.1, 0.085, 0.13)
+
+
+def voronoi_cracks(t, w, h, cell):
+    """Fine crackle over glossy black plate (thin pale lines with a dark core), like fired enamel."""
+    n = max(3, int(w * h / (cell * cell)))
+    pts = rnd.random((n, 2)) * np.array([w, h])
+    yy, xx = np.mgrid[0:h, 0:w]
+    d1 = np.full((h, w), 1e9, np.float32); d2 = np.full((h, w), 1e9, np.float32)
+    for (px, py) in pts:
+        d = np.sqrt((xx - px) ** 2 + (yy - py) ** 2)
+        d2 = np.where(d < d1, d1, np.minimum(d2, d)); d1 = np.minimum(d1, d)
+    edge = d2 - d1
+    line = np.clip(1 - edge / 0.9, 0, 1)
+    t[..., :3] = t[..., :3] * (1 - 0.6 * line[..., None]) + np.array([0.36, 0.31, 0.44]) * 0.55 * line[..., None]
+
+
+def black_plate(w, h, face):
+    t, _, _ = sample(GK["AncientDarkIron_Albedo"], w, h); t[..., 3] = 1
+    recolour(t, BLACK_TINT, 0.45, 1.9)
+    if face in ("north", "south", "east", "west"):                       # glossy: a soft sheen across the upper part
+        yy = np.arange(h)[:, None]
+        t[..., :3] += (0.06 * np.exp(-((yy / max(h, 1) - 0.25) ** 2) / 0.02))[..., None] * np.array([0.8, 0.75, 1.0])
+    voronoi_cracks(t, w, h, 2.6 * TPX)
+    grain(t, 0.008)
+    wear(t, 0.08, 0.5)
+    return t
+
+
+def gold_metal(w, h, k1=2.1):
+    t, _, _ = sample(GK["WeatheredBronze_Albedo"], w, h); t[..., 3] = 1
+    recolour(t, (0.86, 0.62, 0.2), 0.3, k1 * 0.88)
+    t[..., :3] *= (1 + mottle(h, w, 4 * SC, 0.16))[..., None]
+    grain(t, 0.012); wear(t, 0.14, 0.45)
+    return t
+
+
+def gold_rim(t, w, h, width):
+    """A thick gold rim round the face with a jagged (chipped, toothed) inner edge."""
+    yy, xx = np.mgrid[0:h, 0:w]
+    d = np.minimum.reduce([xx, w - 1 - xx, yy, h - 1 - yy]).astype(np.float32)
+    along = np.where(np.minimum(xx, w - 1 - xx) < np.minimum(yy, h - 1 - yy), yy, xx).astype(np.float32)
+    teeth = width * (0.75 + 0.35 * np.abs(((along / (width * 1.6)) % 2) - 1)) + rnd.random((h, w)) * 0.8
+    m = d < teeth
+    gm = gold_metal(w, h)
+    bev = np.clip(1.25 - d / np.maximum(teeth, 1) * 0.6, 0.6, 1.25)        # rounded: brighter at the outer edge
+    t[m, :3] = gm[m, :3] * bev[m, None]
+    inner = (d >= teeth) & (d < teeth + 1.2)
+    t[inner, :3] *= 0.35                                                  # dark seam where the rim meets the plate
+    return m
+
+
+def vents(t, g, w, h, n, horizontal=True):
+    """Glowing purple vents / seams."""
+    yy, xx = np.mgrid[0:h, 0:w]
+    if horizontal:
+        for i in range(n):
+            cy = h * (0.42 + 0.13 * i); m = (np.abs(yy - cy) < 0.2 * TPX) & (xx > w * 0.18) & (xx < w * 0.82)
+            t[m, :3] = VIOLET * 0.55; g[m, :3] = VIOLET * 0.55; g[m, 3] = 1
+    else:
+        m = (np.abs(xx - w / 2) < 0.28 * TPX) & (yy > h * 0.15) & (yy < h * 0.85)
+        t[m, :3] = VIOLET * 0.55; g[m, :3] = VIOLET * 0.6; g[m, 3] = 1
+        halo = (np.abs(xx - w / 2) < 0.9 * TPX) & (yy > h * 0.15) & (yy < h * 0.85) & ~m
+        g[halo, :3] = np.maximum(g[halo, :3], VIOLET * 0.25); g[halo, 3] = 1
+
+
+def purple_cloth(w, h, face, bone):
+    t, _, _ = sample(GK["TatteredCloth_Albedo"], w, h)
+    lum = t[..., :3].mean(-1, keepdims=True)
+    t[..., :3] = np.array([0.27, 0.07, 0.4]) * (0.42 + 2.4 * lum)
+    t[..., 3] = 1
+    yy, xx = np.mgrid[0:h, 0:w]
+    t[..., :3] *= (1 - 0.35 * (yy / max(h, 1)) ** 2)[..., None]          # darker towards the hem
+    grain(t, 0.01)
+    if bone.endswith("3") and face in ("north", "south", "up", "down", "east", "west"):
+        # tattered hem: ragged notches cut out of the bottom (alpha 0 = see-through in game)
+        cut = (h - 1 - yy) < (1.2 * TPX * (0.5 + 0.5 * np.abs(np.sin(xx * 0.37) * np.cos(xx * 0.13 + 1.0))) + rnd.random(w)[None, :] * 0.9 * TPX)
+        t[cut, 3] = 0.0
+    return t
+
+
+SKULL_BONES = {"shin_L", "shin_R"}
+_kn = {}
+for o_ in blocks:
+    if o_["sk_mat"] == "plate" and o_["sk_bone"] in SKULL_BONES:
+        z = o_.matrix_world.translation.z
+        if z > _kn.get(o_["sk_bone"], (-1e9, None))[0]:
+            _kn[o_["sk_bone"]] = (z, o_.name)                             # the top plate of the shin is the kneepad
+KNEES = {v[1] for v in _kn.values()}
+_sc = [o_ for o_ in blocks if o_["sk_mat"] == "cloth" and o_["sk_bone"] == "chest"]
+SCARF = max(_sc, key=lambda o_: o_.matrix_world.to_scale().x * o_.matrix_world.to_scale().z).name if _sc else None
+
+
+RIM_BONES = ("upperarm_L", "upperarm_R", "chest", "shin_L", "shin_R", "tasset_F", "tasset_L", "tasset_R", "tasset_B")
+
+
+def marine_paint(o, mat, w, h, face):
+    bone = o["sk_bone"]
+    g = np.zeros((h, w, 4), dtype=np.float32)
+    side = face in ("north", "south", "east", "west")
+    big = min(w, h) >= 4 * TPX
+    zc = o.matrix_world.translation.z * 16
+    if bone == "head" and zc > 77 and mat in ("plate", "trim"):            # the crest: a stiff purple plume
+        t = purple_cloth(w, h, face, "x")
+        xx = np.arange(w)
+        t[..., :3] *= (0.75 + 0.35 * np.abs(np.sin(xx * 1.3)))[None, :, None]
+        return np.clip(t, 0, 1), g
+    if mat in ("plate", "emblem"):
+        t = black_plate(w, h, face)
+        if bone == "tasset_F" and o.name in BIG and face == "north":         # the front tabard: purple cloth, gold skull
+            t = purple_cloth(w, h, face, "tasset_3")
+            stamp(t, g, SKULL_M, w / 2, h * 0.42, min(w * 0.55, h * 0.3), GOLD * 0.95)
+            return np.clip(t, 0, 1), g
+        if side and big and bone in RIM_BONES:
+            gold_rim(t, w, h, 0.55 * TPX)
+        if mat == "emblem" and face == "north":                          # chest: vents and a gold skull
+            vents(t, g, w, h, 3)
+        if bone.startswith(("forearm", "shin")) and side and big and o.name not in KNEES:
+            vents(t, g, w, h, 1, horizontal=False)
+        if o.name in KNEES and face == "north":                            # kneepad: gold ring and skull
+            yy, xx = np.mgrid[0:h, 0:w]
+            r = np.sqrt((xx - w / 2) ** 2 + (yy - h / 2) ** 2); R0 = min(w, h) * 0.38
+            ring = np.abs(r - R0) < 0.45 * TPX
+            t[ring, :3] = GOLD
+            stamp(t, g, SKULL_M, w / 2, h / 2, R0 * 1.15, GOLD * 0.95)
+        if bone.startswith(("hand_",) + BOOT) and side and h >= 2.5 * TPX:  # articulated lames, gold-edged
+            lames(t, g, w, h, 1.6 * TPX, 0.3 * TPX)
+        return np.clip(t, 0, 1), g
+    if mat == "rune":
+        t = black_plate(w, h, face)
+        if side:
+            vents(t, g, w, h, 2)
+        return np.clip(t, 0, 1), g
+    if mat == "trim":
+        t = gold_metal(w, h, 2.3)
+        return np.clip(t, 0, 1), g
+    if mat == "bronze":                                                  # belt buckle and fittings: gold, skull on the buckle
+        t = gold_metal(w, h, 2.0)
+        if bone == "pelvis" and face == "north" and min(w, h) >= 2 * TPX:
+            stamp(t, g, SKULL_M, w / 2, h / 2, min(w, h) * 0.8, np.array([0.35, 0.25, 0.08]))
+        return np.clip(t, 0, 1), g
+    if mat == "cloth":
+        t = purple_cloth(w, h, face, bone)
+        if o.name == SCARF and face == "north" and min(w, h) >= 3 * TPX:  # the scarf over his chest: one gold skull
+            stamp(t, g, SKULL_M, w / 2, h * 0.5, min(w * 0.7, h * 0.75), GOLD * 0.95)
+        if bone == "cape_M2" and face == "south":                           # the banner on his back: a gold skull
+            stamp(t, g, SKULL_M, w / 2, h * 0.45, min(w * 0.6, h * 0.4), GOLD * 0.95)
+        return np.clip(t, 0, 1), g
+    if mat == "eye":
+        t = np.zeros((h, w, 4), np.float32); t[..., :3] = (0.42, 0.1, 0.72); t[..., 3] = 1
+        g[..., :3] = (0.5, 0.12, 0.92); g[..., 3] = 1
+        return t, g
+    return gk_paint(mat, w, h, face)
+
+
 for (o, face, x, y, w, h, mat) in regions:
-    t, g = knight_paint(o, mat, w, h, face)
+    t, g = marine_paint(o, mat, w, h, face)
     alb[y:y + h, x:x + w] = t
     glw[y:y + h, x:x + w] = g
 
