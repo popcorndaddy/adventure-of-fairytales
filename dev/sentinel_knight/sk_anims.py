@@ -1,0 +1,112 @@
+"""All twelve Withered Sentinel actions, authored on the knight rig with sk_pose.
+Run: blender -b sentinel_knight.blend --python sk_anims.py -- [action,action,...]   (saves sentinel_knight_anim.blend)
+Each action is a function returning (frames, pose_fn, loop) and is baked per frame.
+Timings are in ticks (20 fps); the entity script (withered_sentinel.js) uses the same tick numbers."""
+import bpy, sys, os, math
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from mathutils import Vector, Matrix
+import sk_pose as K
+from sk_pose import track, wave, bump, smooth, ease_in, ease_out, dir_az_el, heartbeat, merged
+
+args = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else []
+ONLY = set(args[0].split(",")) if args and args[0] else None
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sentinel_knight_anim.blend")
+if os.path.exists(OUT):
+    bpy.ops.wm.open_mainfile(filepath=OUT)          # keep previously baked actions
+r = K.Rig()
+SL = 56.0                                          # sword length (grip -> tip), px
+
+
+def planted_sword(grip, tip, flat):
+    d = (Vector(tip) - Vector(grip)).normalized()
+    return dict(grip=grip, dir=tuple(d), flat=flat, two=False)
+
+
+ACTIONS = {}
+
+
+def action(fn):
+    ACTIONS[fn.__name__] = fn
+    return fn
+
+
+# ====================================================================== IDLE (5 s loop)
+@action
+def idle():
+    N = 100
+    TIP = (-19.0, -27.0, 0.8)                        # sword point rests on the stone (fixed)
+
+    def fn(r, f):
+        br = wave(f, N, (1.0, 2, 0.0), (0.35, 3, 0.7), (0.2, 1, 1.4))          # uneven breathing
+        sway = wave(f, N, (1.0, 1, 0.0), (0.25, 3, 0.4))                         # slow weight shift
+        look_y = track([(0, 0), (12, 0), (30, 13, "c"), (44, 14, "c"), (58, -7, "c"), (72, -9, "c"), (86, 0), (100, 0)], f)
+        tilt = track([(0, 0), (40, 0), (48, 7), (62, 8), (72, 0), (100, 0)], f)   # studies the player
+        clench = smooth((f - 60) / 5) * (1 - smooth((f - 78) / 8))               # senses something: claw tightens
+        G = (-11.0 + 0.3 * sway, -12.0, 53.0 + 0.5 * br)
+        hs, gs = heartbeat(f / 20.0, 36, 0.8)
+        K.pose(r, merged(
+            body=(0.8 * sway, 0.3, -0.8 + 0.35 * br), hips=(4.0, -1.2 * sway, -6.0 + 1.5 * sway),
+            spine=(1.0 - 0.6 * br, 0.4 * sway, 1.5), chest=(2.0 - 1.6 * br, 0.3 * sway, 2.0),
+            head=(look_y - 4, 7 - 1.2 * br, tilt), shrug_R=1.0 + 1.2 * br, shrug_L=1.6 * br,
+            foot_R=((-7.0, 1.5), 0, -14, 0), foot_L=((7.5, -2.0), 0, 9, 0),
+            sword=dict(planted_sword(G, TIP, (0.95, -0.3, 0.0)), elbow_R=(-0.8, 0.5, -0.4)),
+            arm_L=dict(hand=(14.5 - 0.3 * sway, -3.5, 33.5 + 0.4 * br), point=(0.12, -0.25, -1.0), palm=(-1, 0.1, 0), elbow=(0.5, 0.6, -0.2)),
+            curl_R=1.0, curl_L=0.35 + 0.12 * wave(f, N, (1, 2, 0.5)) + 0.55 * clench, spread_L=0.3 - 0.3 * clench, thumb_L=0.4 + 0.4 * clench,
+            wobble_L=(0.06 * wave(f, N, (1, 3, 0)), 0.05 * wave(f, N, (1, 4, 1)), 0.07 * wave(f, N, (1, 5, 2))),
+            heart=(hs, gs)))
+    return N, fn, "true"
+
+
+# ====================================================================== IDLE_COMBAT (3 s loop)
+COMBAT = dict(body=(0.0, 1.0, -4.0), hips=(9.0, 0.0, -14.0), spine=(2.0, 0.0, 4.0), chest=(3.0, 0.0, 6.0),
+              foot_R=((-8.0, 5.0), 0, -28, 0), foot_L=((7.0, -7.0), 0, 12, 0),
+              grip=(-3.0, -13.0, 41.0), az=6.0, el=28.0)
+
+
+def combat_base(f=0, N=60, intensity=1.0):
+    """The shared combat guard (frame 0 of idle_combat and the start/end of every attack)."""
+    br = wave(f, N, (1.0, 2, 0.0), (0.3, 4, 0.0))
+    rock = wave(f, N, (1.0, 1, 0.0))
+    weave_a = wave(f, N, (1.0, 1, 0.0), (0.4, 3, 0.0)) * intensity
+    weave_e = wave(f, N, (1.0, 2, 0.0), (0.3, 1, 0.0)) * intensity
+    bx, by, bz = COMBAT["body"]
+    hp, hr, hy = COMBAT["hips"]
+    g = COMBAT["grip"]
+    d = dir_az_el(COMBAT["az"] + 3.5 * weave_a, COMBAT["el"] + 3.0 * weave_e)
+    return dict(
+        body=(bx + 0.7 * rock, by, bz - 0.6 * br), hips=(hp + 0.8 * br, -1.0 * rock, hy + 2.0 * rock),
+        spine=(COMBAT["spine"][0] - 0.5 * br, 0, COMBAT["spine"][2]), chest=(COMBAT["chest"][0] - 1.6 * br, 0, COMBAT["chest"][2] + 1.0 * rock),
+        head=(-hy - COMBAT["spine"][2] - COMBAT["chest"][2] + 22 - 2.0 * rock, 4.0 + 0.8 * br, 0.0),
+        shrug_R=1.5 * br, shrug_L=1.5 * br,
+        foot_R=COMBAT["foot_R"], foot_L=COMBAT["foot_L"],
+        sword=dict(grip=(g[0] + 0.5 * rock, g[1], g[2] + 0.5 * br), dir=tuple(d), flat=(1.0, 0.0, 0.2), two=True,
+                   elbow_R=(-0.8, 0.4, -0.5), elbow_L=(0.7, 0.3, -0.6)),
+        curl_R=1.0 + 0.06 * wave(f, N, (1, 3, 0)), curl_L=1.0 + 0.06 * wave(f, N, (1, 3, 1.5)), thumb_L=0.9)
+
+
+@action
+def idle_combat():
+    N = 60
+
+    def fn(r, f):
+        P = combat_base(f, N)
+        # the front foot re-plants once (a small weight adjustment), seamless
+        shuffle = bump(f, 40, 4.0)
+        P["foot_L"] = ((7.0, -7.0 - 1.2 * shuffle), 1.2 * shuffle, 12, 0)
+        hs, gs = heartbeat(f / 20.0, 100, 1.0)
+        K.pose(r, merged(**P, heart=(hs, gs)))
+    return N, fn, "true"
+
+
+exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "sk_actions_more.py")).read())
+
+
+# ====================================================================== run
+for name, fn in ACTIONS.items():
+    if ONLY and name not in ONLY:
+        continue
+    n, pose_fn, loop = fn()
+    K.bake(r, name, n, pose_fn, loop)
+    print("BAKED", name, n, "frames", flush=True)
+bpy.ops.wm.save_as_mainfile(filepath=OUT)
+print("ANIMS_DONE", OUT)

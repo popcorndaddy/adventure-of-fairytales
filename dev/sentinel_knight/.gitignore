@@ -1,0 +1,4 @@
+preview/
+out_assets/
+*.blend1
+__pycache__/
