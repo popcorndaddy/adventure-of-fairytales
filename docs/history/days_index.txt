@@ -1,0 +1,1 @@
+2026-11-22 | Rootstock v1.65 installed (standard) on feature/rootstock

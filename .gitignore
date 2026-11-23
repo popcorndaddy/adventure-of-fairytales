@@ -1,0 +1,12 @@
+# Rootstock state (per machine)
+.claude/hooks_state.json
+.claude/settings.local.json
+.claude/fanout_state.json
+.claude/diet_state.json
+.claude/verify_state.json
+.claude/lesson_state.json
+.claude/lesson_guard_state.json
+.claude/route_state.json
+.claude/standup_tail.txt
+__pycache__/
+*.blend1
