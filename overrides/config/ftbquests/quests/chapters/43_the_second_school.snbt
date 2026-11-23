@@ -1,0 +1,334 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "43_the_second_school"
+	group: "0367FDC07E543102"
+	icon: "ars_nouveau:novice_spell_book"
+	id: "7B4FC39A03B82484"
+	order_index: 5
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["A book and some lapis make Ars Nouveau's own guide. Iron's Inscription Table is bound with one, so make two."]
+			icon: "ars_nouveau:worn_notebook"
+			id: "651F34CD8679B5C2"
+			rewards: [
+				{
+					count: 8
+					id: "77A15C7579A61461"
+					item: "minecraft:paper"
+					type: "item"
+				}
+				{
+					id: "5B7C3305D27AFAB2"
+					type: "xp"
+					xp: 40
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "703F13C59F985A17"
+				item: "ars_nouveau:worn_notebook"
+				type: "item"
+			}]
+			title: "The Worn Notebook"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["651F34CD8679B5C2"]
+			description: ["Archwood trees grow in their own bright forests. Their planks build most Ars machines."]
+			icon: "ars_nouveau:archwood_planks"
+			id: "30E371D3DA526C02"
+			rewards: [
+				{
+					count: 4
+					id: "1C8C7046F37414CE"
+					item: "minecraft:oak_sapling"
+					type: "item"
+				}
+				{
+					id: "478A885EA7CA5B82"
+					type: "xp"
+					xp: 60
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 16L
+				id: "53B1101B544900FF"
+				item: "ars_nouveau:archwood_planks"
+				type: "item"
+			}]
+			title: "Archwood"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["30E371D3DA526C02"]
+			description: ["Source is the power behind Ars magic. Source Jars store it and feed nearby machines."]
+			icon: "ars_nouveau:source_jar"
+			id: "28757C952ABF4715"
+			rewards: [
+				{
+					count: 8
+					id: "095E3D85ECCE4C23"
+					item: "minecraft:glass"
+					type: "item"
+				}
+				{
+					id: "2C713E01DACF60FA"
+					type: "xp"
+					xp: 60
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "7FE7616B7D38448F"
+				item: "ars_nouveau:source_jar"
+				type: "item"
+			}]
+			title: "A Jar of Source"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["28757C952ABF4715"]
+			description: ["A Volcanic Sourcelink burns fuel into Source. Place it next to your jar and keep it fed."]
+			icon: "ars_nouveau:volcanic_sourcelink"
+			id: "5072956D7DFB61B6"
+			rewards: [
+				{
+					count: 16
+					id: "1741DE92553CDE4D"
+					item: "minecraft:coal"
+					type: "item"
+				}
+				{
+					id: "54AF8D94BA4DCBEF"
+					type: "xp"
+					xp: 80
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "60BA812998E69F5F"
+				item: "ars_nouveau:volcanic_sourcelink"
+				type: "item"
+			}]
+			title: "Making Source"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5072956D7DFB61B6"]
+			description: ["Soaks an item in Source and changes it. Lapis or amethyst becomes a Source Gem. With lapis on a pedestal beside it, an amethyst shard becomes two Arcane Essence for Iron's Spells instead."]
+			icon: "ars_nouveau:imbuement_chamber"
+			id: "70ABA6DB9FEED3D4"
+			rewards: [
+				{
+					count: 4
+					id: "1F2A36453F2FC075"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "2C1297F47B08866D"
+					type: "xp"
+					xp: 100
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "6CB4479251B462E0"
+				item: "ars_nouveau:imbuement_chamber"
+				type: "item"
+			}]
+			title: "The Imbuement Chamber"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["70ABA6DB9FEED3D4"]
+			description: ["Nine Source Gems make a block. Iron's Scroll Forge is built around one."]
+			icon: "ars_nouveau:source_gem_block"
+			id: "3ACB8B218B1AA644"
+			rewards: [
+				{
+					count: 4
+					id: "3D4384CE72B5E114"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "561FC70C3B75A2AF"
+					type: "xp"
+					xp: 120
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "5251600E80EF3A35"
+				item: "ars_nouveau:source_gem_block"
+				type: "item"
+			}]
+			title: "A Block of Source"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3ACB8B218B1AA644"]
+			description: ["A book and four iron tools. Glyphs you learn are written into it."]
+			icon: "ars_nouveau:novice_spell_book"
+			id: "7AD5F234A844DF25"
+			rewards: [
+				{
+					count: 4
+					id: "31A5FABD52742C74"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "78291E4BE1F9CC93"
+					type: "xp"
+					xp: 100
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "2563720F0F847773"
+				item: "ars_nouveau:novice_spell_book"
+				type: "item"
+			}]
+			title: "Your First Spell Book"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["7AD5F234A844DF25"]
+			description: ["Where new glyphs are written, using Source Gems and other items."]
+			icon: "ars_nouveau:scribes_table"
+			id: "6FC84C11C4B7AD97"
+			rewards: [
+				{
+					count: 8
+					id: "03B7152AA635D544"
+					item: "minecraft:feather"
+					type: "item"
+				}
+				{
+					id: "242227178F283DE2"
+					type: "xp"
+					xp: 100
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "2E950D92A82D8391"
+				item: "ars_nouveau:scribes_table"
+				type: "item"
+			}]
+			title: "The Scribe's Table"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6FC84C11C4B7AD97"]
+			description: ["Imbue a Source Gem with three items on pedestals around the chamber. Every element's essence can also etch an Iron's rune with a Blank Rune."]
+			icon: "ars_nouveau:fire_essence"
+			id: "3713E33039571111"
+			rewards: [
+				{
+					count: 4
+					id: "33434F37F7045A0F"
+					item: "minecraft:blaze_powder"
+					type: "item"
+				}
+				{
+					id: "7324223DB115ADB6"
+					type: "xp"
+					xp: 150
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "2592E907F679A5D6"
+				item: "ars_nouveau:fire_essence"
+				type: "item"
+			}]
+			title: "Elemental Essence"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3713E33039571111"]
+			description: ["The first upgrade needs Iron's Arcane Essence, along with diamonds, quartz and blaze rods."]
+			icon: "ars_nouveau:apprentice_spell_book"
+			id: "74729211878AF306"
+			rewards: [
+				{
+					count: 2
+					id: "4426723BE9CFB4B3"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "1C6DAEB2DC83501B"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "6190ACC11F706699"
+				item: "ars_nouveau:apprentice_spell_book"
+				type: "item"
+			}]
+			title: "The Mage's Spell Book"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["74729211878AF306"]
+			description: ["The last upgrade needs a Nether Star, a Wilden Tribute and two of Iron's Arcane Ingots."]
+			icon: "ars_nouveau:archmage_spell_book"
+			id: "4D9CE52D070717D9"
+			rewards: [
+				{
+					count: 2
+					id: "70C5FD36C72ED43A"
+					item: "minecraft:emerald_block"
+					type: "item"
+				}
+				{
+					id: "30C14A9157802FF1"
+					type: "xp"
+					xp: 800
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "4AC8A6A67AE512C1"
+				item: "ars_nouveau:archmage_spell_book"
+				type: "item"
+			}]
+			title: "The Archmage"
+			x: 20.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Ars Nouveau: spells you build yourself, and how they feed Iron's magic."]
+	title: "The Second School"
+}

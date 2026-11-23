@@ -1,0 +1,30 @@
+{
+	"name": "Wildlife",
+	"icon": "alexsmobs:animal_dictionary",
+	"category": "patchouli:creatures",
+	"sortnum": 0,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "The wilds are crowded now: dozens of animals from $(l)Alex's Mobs$(), with more from $(l)Naturalist$(), $(l)Critters and Companions$() and others, spread across a great many new biomes. Some are worth catching. Some are worth avoiding."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "alexsmobs:animal_dictionary",
+			"text": "Read it to learn about every Alex's Mobs creature.",
+			"link_recipe": true,
+			"anchor": "animal_dictionary"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "alexsmobs:animal_dictionary",
+			"title": "Further Reading",
+			"text": "The $(l)Animal Dictionary$() goes deeper.",
+			"anchor": "animal_dictionary_2"
+		}
+	],
+	"extra_recipe_mappings": {
+		"alexsmobs:animal_dictionary": 0
+	}
+}

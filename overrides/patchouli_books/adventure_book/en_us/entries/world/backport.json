@@ -1,0 +1,13 @@
+{
+	"name": "Newer Features",
+	"icon": "minecraft:spyglass",
+	"category": "patchouli:world",
+	"sortnum": 6,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "A few things from newer Minecraft have found their way here: the Pale Garden and the Creaking, armadillos and wolf armor, dyed bundles, happy ghasts and sulfur caves.$(br2)Mobs move with $(l)Fresh Animations$()."
+		}
+	]
+}

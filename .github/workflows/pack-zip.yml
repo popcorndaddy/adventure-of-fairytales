@@ -1,0 +1,32 @@
+# Builds the importable CurseForge pack zip on every push and publishes it on the "Pack: <branch>" release, so the
+# newest pack is always one download away (CurseForge app -> Create Custom Profile -> Import).
+name: Pack zip
+on:
+  push:
+    branches: [main, unpack-pack]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  zip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the zip
+        id: build
+        run: |
+          if [ ! -f manifest.json ] || [ ! -d overrides ]; then echo "no unpacked pack on this branch"; echo "skip=1" >> "$GITHUB_OUTPUT"; exit 0; fi
+          ver=$(python3 -c "import json;print(json.load(open('manifest.json'))['version'])")
+          name="Adventures-of-Fairytale-${ver}-${GITHUB_REF_NAME}.zip"
+          zip -qr "$name" manifest.json modlist.html overrides
+          echo "name=$name" >> "$GITHUB_OUTPUT"
+      - name: Publish
+        if: steps.build.outputs.skip != '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="pack-${GITHUB_REF_NAME}"
+          gh release view "$tag" >/dev/null 2>&1 || gh release create "$tag" --prerelease --title "Pack: ${GITHUB_REF_NAME}" --notes "Built automatically from the ${GITHUB_REF_NAME} branch on every push."
+          gh release view "$tag" --json assets -q '.assets[].name' | while read a; do gh release delete-asset "$tag" "$a" -y; done
+          gh release upload "$tag" "${{ steps.build.outputs.name }}" --clobber
+          gh release edit "$tag" --notes "Built automatically from the ${GITHUB_REF_NAME} branch. Last build: commit ${GITHUB_SHA::7}, $(date -u '+%Y-%m-%d %H:%M UTC')."

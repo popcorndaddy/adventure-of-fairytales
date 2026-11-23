@@ -1,0 +1,62 @@
+{
+	"name": "Ships and Trains",
+	"icon": "smallships:oak_cog",
+	"category": "patchouli:travel",
+	"sortnum": 5,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "$(l)Small Ships$() brings real sailing ships: the sturdy $(l:travel/ships#dockyard)Cog$(/l) and Brigg, the oared Galley, the Dhow, and the shield-hung Drakkar."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Ships are raised at a $(l:travel/ships#dockyard)Dockyard$(/l) by the water. Feed it materials and it builds the hull. $(l:travel/ships#cotton_sails)Cotton Sails$(/l) and other fittings go on there too. Mount $(l:travel/ships#cannon)Cannons$(/l) and keep $(l:travel/ships#cannon_ball)Cannon Balls$(/l) aboard. Mind the wind and your cargo."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "On land, $(l)Steam 'n' Rails$() gives Create trains new tracks, bogeys and $(l:travel/ships#fuel_tank)Fuel Tanks$(/l)."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "smallships:dockyard",
+			"text": "Builds and upgrades ships.",
+			"link_recipe": true,
+			"anchor": "dockyard"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "smallships:cotton_sails",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "cotton_sails"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "smallships:cannon",
+			"text": "Mounts on the side of a ship.",
+			"link_recipe": true,
+			"anchor": "cannon"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "smallships:cannon_ball",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "cannon_ball"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "railways:fuel_tank",
+			"text": "Fuel storage for Create trains.",
+			"link_recipe": true,
+			"anchor": "fuel_tank"
+		}
+	],
+	"extra_recipe_mappings": {
+		"smallships:dockyard": 0,
+		"smallships:cannon": 0,
+		"smallships:cannon_ball": 0,
+		"smallships:cotton_sails": 0
+	}
+}

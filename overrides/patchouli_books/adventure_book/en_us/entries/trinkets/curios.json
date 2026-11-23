@@ -1,0 +1,13 @@
+{
+	"name": "Worn Items",
+	"icon": "minecraft:totem_of_undying",
+	"category": "patchouli:trinkets",
+	"sortnum": 0,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Rings, necklaces and belts go in your $(l)Curios$() slots, behind the button beside your character. End Remastered's eyes can be worn too."
+		}
+	]
+}

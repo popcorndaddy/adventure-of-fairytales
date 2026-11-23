@@ -1,0 +1,17 @@
+{
+	"name": "Apollo's Book",
+	"icon": "minecraft:writable_book",
+	"category": "patchouli:notes",
+	"sortnum": 0,
+	"read_by_default": false,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "This book belongs to Apollo Thorne, map-maker to the King.$(br2)If you found it on me, I'm likely dead, and I'm sorry you had to see that. If you found it somewhere else, then I lost it, which is almost worse."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Either way, keep it. Most of what's in here is how to stay alive out there. The rest is what I know about the Crown."
+		}
+	]
+}

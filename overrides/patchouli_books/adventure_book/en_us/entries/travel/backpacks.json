@@ -1,0 +1,45 @@
+{
+	"name": "Backpacks",
+	"icon": "sophisticatedbackpacks:backpack",
+	"category": "patchouli:travel",
+	"sortnum": 1,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Backpacks come in leather, iron, gold, diamond and netherite. Upgrading one keeps everything inside.$(br2)Wear it and press B, or sneak and set it down. Upgrades pick up, pull in, feed you, craft, and stack deeper."
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "sophisticatedbackpacks:backpack",
+			"recipe2": "sophisticatedbackpacks:iron_backpack",
+			"anchor": "backpack"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "sophisticatedbackpacks:gold_backpack",
+			"recipe2": "sophisticatedbackpacks:diamond_backpack",
+			"anchor": "gold_backpack"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "sophisticatedbackpacks:upgrade_base",
+			"recipe2": "sophisticatedbackpacks:pickup_upgrade",
+			"anchor": "upgrade_base"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "sophisticatedbackpacks:magnet_upgrade",
+			"recipe2": "sophisticatedbackpacks:feeding_upgrade",
+			"anchor": "magnet_upgrade"
+		}
+	],
+	"extra_recipe_mappings": {
+		"sophisticatedbackpacks:backpack": 0,
+		"sophisticatedbackpacks:iron_backpack": 0,
+		"sophisticatedbackpacks:pickup_upgrade": 0,
+		"sophisticatedbackpacks:magnet_upgrade": 0,
+		"sophisticatedbackpacks:feeding_upgrade": 0,
+		"sophisticatedbackpacks:crafting_upgrade": 0
+	}
+}

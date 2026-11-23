@@ -1,0 +1,15 @@
+{
+  "type": "ars_nouveau:book_upgrade",
+  "ingredients": [
+    {"item": "ars_nouveau:novice_spell_book"},
+    {"item": "minecraft:obsidian"},
+    {"item": "minecraft:diamond"},
+    {"item": "minecraft:diamond"},
+    {"item": "irons_spellbooks:arcane_essence"},
+    {"item": "irons_spellbooks:arcane_essence"},
+    {"item": "minecraft:quartz_block"},
+    {"item": "minecraft:blaze_rod"},
+    {"item": "minecraft:blaze_rod"}
+  ],
+  "result": {"item": "ars_nouveau:apprentice_spell_book"}
+}

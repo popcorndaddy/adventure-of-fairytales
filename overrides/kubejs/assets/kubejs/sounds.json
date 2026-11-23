@@ -1,0 +1,10 @@
+{
+  "title_dawn_of_adventure": {
+    "subtitle": "subtitles.kubejs.title_dawn_of_adventure",
+    "sounds": [{ "name": "kubejs:title_dawn_of_adventure" }]
+  },
+  "letter_secret_found": {
+    "subtitle": "subtitles.kubejs.letter_secret_found",
+    "sounds": [{ "name": "kubejs:letter_secret_found" }]
+  }
+}

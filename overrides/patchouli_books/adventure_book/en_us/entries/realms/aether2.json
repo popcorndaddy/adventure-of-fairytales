@@ -1,0 +1,50 @@
+{
+	"name": "Aether Add-ons",
+	"icon": "deep_aether:skyjade",
+	"category": "patchouli:realms",
+	"sortnum": 4,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "$(l)Deep Aether$() adds new lands, $(l:realms/aether2#skyjade)Skyjade$(/l), the $(l:realms/aether2#combiner)Combiner$(/l), and a Brass Dungeon whose storm guards a $(l:realms/aether2#brass_dungeon_key)Brass Key$(/l). Beat a boss without being touched and it gives a little more."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(l)The Aether: Redux$() brings more biomes and $(l:realms/aether2#veridium_ingot)Veridium$(/l)."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "deep_aether:skyjade",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "skyjade"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "deep_aether:combiner",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "combiner"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "deep_aether:brass_dungeon_key",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "brass_dungeon_key"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "aether_redux:veridium_ingot",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "veridium_ingot"
+		}
+	],
+	"extra_recipe_mappings": {
+		"deep_aether:skyjade": 0,
+		"deep_aether:combiner": 0,
+		"aether_redux:veridium_ingot": 0
+	}
+}

@@ -1,0 +1,37 @@
+{
+  "schema_version": "2",
+  "failed_reloads_per_session": 5,
+  "default_packs": [
+    "vanilla",
+    "mod_resources",
+    "Moonlight Mods Dynamic Assets",
+    "builtin/client/golden_swet_ball/DAGoldenSwetBallFixClient",
+    "resource/overrides_pack",
+    "fabric",
+    "file/Better-Leaves-9.6.zip",
+    "file/EclecticTrove-1.20.1-1.3.0.zip",
+    "file/FreshAnimations_v1.11.2_1.20.zip",
+    "file/Lower Shield.zip",
+    "file/Beautiful Enchanted Books - MC 1.20.1 - 8.0.0.zip",
+    "delightful:overhauls",
+    "soulsweapons:fresh_animations_compat"
+  ],
+  "default_overrides": {
+    "force_compatible": true
+  },
+  "pack_overrides": {
+    "fairytale": [
+      "file/Better-Leaves-9.6.zip",
+      "file/EclecticTrove-1.20.1-1.3.0.zip",
+      "file/FreshAnimations_v1.11.2_1.20.zip",
+      "file/Lower Shield.zip",
+      "file/Beautiful Enchanted Books - MC 1.20.1 - 8.0.0.zip",
+      "delightful:overhauls",
+      "soulsweapons:fresh_animations_compat"
+    ],
+    "$$fairytale": {
+      "required": true,
+      "fixed_position": true
+    }
+  }
+}

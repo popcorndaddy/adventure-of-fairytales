@@ -1,0 +1,17 @@
+{
+	"name": "Armor Mods",
+	"icon": "minecraft:netherite_chestplate",
+	"category": "patchouli:gear",
+	"sortnum": 3,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "$(li)$(l)Advanced Netherite$(): netherite can be pushed further with iron, gold, emerald and diamond, each step with its own perk.$(li)$(l)Immersive Armors$(): sets with personalities of their own."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(li)$(l)Cosmetic Armor$(): wear one look over another's stats.$(br2)Most bosses leave armor behind too."
+		}
+	]
+}

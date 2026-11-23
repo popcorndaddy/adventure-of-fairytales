@@ -1,0 +1,178 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "38_lost_paths"
+	group: "5A734B321110FED6"
+	icon: "explorerscompass:explorerscompass"
+	id: "6364326D91342389"
+	order_index: 10
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Pick a structure from the list and the compass points to the nearest one."]
+			icon: "explorerscompass:explorerscompass"
+			id: "384055283C68ADCA"
+			rewards: [
+				{
+					count: 4
+					id: "7ED1F878387CDDE3"
+					item: "minecraft:map"
+					type: "item"
+				}
+				{
+					id: "76669D39DF0F8774"
+					type: "xp"
+					xp: 80
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "5F2B0018049B2E40"
+				item: "explorerscompass:explorerscompass"
+				type: "item"
+			}]
+			title: "Explorer's Compass"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["384055283C68ADCA"]
+			description: ["YUNG's Better Dungeons adds catacombs, spider caves and undead fortresses. Find any of them and claim this."]
+			icon: "minecraft:bone"
+			id: "7ACEB6703F834161"
+			rewards: [
+				{
+					count: 4
+					id: "18F57E9C44F7FACF"
+					item: "minecraft:bone_block"
+					type: "item"
+				}
+				{
+					id: "395819BC36BF41F2"
+					type: "xp"
+					xp: 100
+				}
+			]
+			tasks: [{
+				id: "39058D80807137D3"
+				type: "checkmark"
+			}]
+			title: "The Catacombs"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["7ACEB6703F834161"]
+			description: ["Dungeon Crawl builds huge underground dungeons with random layouts. Find one and claim this."]
+			icon: "minecraft:mossy_cobblestone"
+			id: "57DEE0B70B3FDCF5"
+			rewards: [
+				{
+					count: 32
+					id: "6413549CED8C4860"
+					item: "minecraft:torch"
+					type: "item"
+				}
+				{
+					id: "449CAF0FB15151BC"
+					type: "xp"
+					xp: 120
+				}
+			]
+			tasks: [{
+				id: "7911A29AF9E8A973"
+				type: "checkmark"
+			}]
+			title: "Into the Deep Dark Halls"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["57DEE0B70B3FDCF5"]
+			description: ["Dungeons and Taverns puts taverns, towers and ruins along the roads. Stop at a tavern and claim this."]
+			icon: "minecraft:barrel"
+			id: "2F3C09482C2B92E4"
+			rewards: [
+				{
+					count: 8
+					id: "4E678DA0DA7C30B4"
+					item: "minecraft:cooked_beef"
+					type: "item"
+				}
+				{
+					id: "09E92CD895DAFB5F"
+					type: "xp"
+					xp: 80
+				}
+			]
+			tasks: [{
+				id: "5C9C40CE324EE5E3"
+				type: "checkmark"
+			}]
+			title: "A Warm Tavern"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2F3C09482C2B92E4"]
+			description: ["Strongholds here are YUNG's redesigned ones, full of traps and hidden rooms. Find one and claim this."]
+			icon: "minecraft:end_portal_frame"
+			id: "4416A1AC9AD480DB"
+			rewards: [
+				{
+					count: 4
+					id: "49DBD89D9FA2EB39"
+					item: "minecraft:ender_pearl"
+					type: "item"
+				}
+				{
+					id: "69B0E3B7FB386757"
+					type: "xp"
+					xp: 150
+				}
+			]
+			tasks: [{
+				id: "0EFD6903053A39BD"
+				type: "checkmark"
+			}]
+			title: "The Rebuilt Stronghold"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4416A1AC9AD480DB"]
+			description: ["Vanilla Backport adds the Pale Garden, a grey forest where the Creaking wakes at night. Find one and claim this."]
+			icon: "minecraft:white_wool"
+			id: "5FA1340B91AF27F0"
+			rewards: [
+				{
+					count: 4
+					id: "68347DA94DA91311"
+					item: "minecraft:lantern"
+					type: "item"
+				}
+				{
+					id: "3D98CE80B61E5D44"
+					type: "xp"
+					xp: 120
+				}
+			]
+			tasks: [{
+				id: "1420BDCDFE767388"
+				type: "checkmark"
+			}]
+			title: "The Pale Garden"
+			x: 10.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Catacombs, taverns and forgotten dungeons hidden all over the world."]
+	title: "Lost Paths"
+}

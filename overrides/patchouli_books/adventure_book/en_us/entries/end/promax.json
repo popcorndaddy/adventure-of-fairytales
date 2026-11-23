@@ -1,0 +1,13 @@
+{
+	"name": "Wearing the Eyes",
+	"icon": "endrem:evil_eye",
+	"category": "patchouli:end",
+	"sortnum": 2,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Each eye can also be worn as a $(l)Curio$(), and each has a power of its own. The $(l:end/eyes2#evil_eye)Evil Eye$(/l) turns aside nearly all magic. The $(l:end/eyes2#exotic_eye)Exotic Eye$(/l) makes you a little better at everything.$(br2)Spare eyes are worth keeping."
+		}
+	]
+}

@@ -1,0 +1,35 @@
+{
+	"name": "Cataclysm",
+	"icon": "cataclysm:ignitium_ingot",
+	"category": "patchouli:bosses",
+	"sortnum": 0,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Cataclysm's bosses wait at the bottom of great dungeons in every dimension: the Netherite Monstrosity, the Ender Guardian, the Harbinger, the Ancient Remnant, the Leviathan, Scylla, Maledictus, and Ignis."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Some sleep until you wake them. Craftable eyes point to their lairs."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "cataclysm:ignitium_ingot",
+			"text": "From Ignis. Makes some of the best armor in the pack.",
+			"link_recipe": true,
+			"anchor": "ignitium_ingot"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "cataclysm:ancient_metal_ingot",
+			"text": "From the Ancient Remnant.",
+			"link_recipe": true,
+			"anchor": "ancient_metal_ingot"
+		}
+	],
+	"extra_recipe_mappings": {
+		"cataclysm:ignitium_ingot": 0,
+		"cataclysm:ancient_metal_ingot": 0
+	}
+}

@@ -1,0 +1,459 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "27_cataclysm"
+	group: "03F7C10E6FAF5CEC"
+	icon: "cataclysm:ancient_metal_ingot"
+	id: "1A92553B5A90381D"
+	order_index: 3
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Search the ruins for ancient metal ingots. They are the base of all Cataclysm gear."]
+			icon: "cataclysm:ancient_metal_ingot"
+			id: "0411EC962B6E6C00"
+			rewards: [
+				{
+					count: 8
+					id: "0B5DE27C31417893"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "04CD8B2FA3325EB2"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 2L
+				id: "6685FF1BE0F86AE0"
+				item: "cataclysm:ancient_metal_ingot"
+				type: "item"
+			}]
+			title: "Ancient Metals"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0411EC962B6E6C00"]
+			description: ["A giant of netherite sleeps in the Soul Black Forge. Face him at the end of the soul forge."]
+			icon: "minecraft:book"
+			id: "5D6FFF7E3FB13398"
+			rewards: [
+				{
+					count: 8
+					id: "4A0B744FEF441BEB"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "69FD006770C03C14"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "0135046B00853EA7"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				entity: "cataclysm:netherite_monstrosity"
+				id: "631479ABC0343675"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Netherite Monstrosity"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5D6FFF7E3FB13398"]
+			description: ["Ignis rules the Nether's burning ruins. Defeat him and take the Ignitium."]
+			icon: "cataclysm:ignitium_ingot"
+			id: "38E35C1AD64CDCA0"
+			rewards: [
+				{
+					count: 3
+					id: "7A38DC5435CD8C49"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "0EB80F197779E2E2"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [
+				{
+					entity: "cataclysm:ignis"
+					id: "1AD9E409AAD308F4"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "02BC9BCCA62A5F4D"
+					item: "cataclysm:ignitium_ingot"
+					type: "item"
+				}
+			]
+			title: "The Ignis"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["38E35C1AD64CDCA0"]
+			description: ["The Ender Guardian waits in a sealed temple of the End. Bring a fast sword."]
+			icon: "minecraft:book"
+			id: "180DEDC2D5CB9B36"
+			rewards: [
+				{
+					count: 3
+					id: "30DF79D66813C264"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "2F600CEBE897EF2D"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				entity: "cataclysm:ender_guardian"
+				id: "0EBAC4274C2185C3"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Ender Guardian"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["180DEDC2D5CB9B36"]
+			description: ["A cybernetic nightmare awaits in the void. Craft the void core after."]
+			icon: "cataclysm:void_core"
+			id: "0E4E37896F6995D1"
+			rewards: [
+				{
+					count: 16
+					id: "3B5BE62A3521E016"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "35AF499FF1EC7EB1"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "221F217660F51B90"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [
+				{
+					entity: "cataclysm:the_harbinger"
+					id: "7AD67E63B86A22B7"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "0D17F77D621D5BBB"
+					item: "cataclysm:void_core"
+					type: "item"
+				}
+			]
+			title: "The Harbinger"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0E4E37896F6995D1"]
+			description: ["A sandstorm king wakes in the desert. Break the tomb seal and face him."]
+			icon: "cataclysm:wrath_of_the_desert"
+			id: "40B8198F569A9A39"
+			rewards: [
+				{
+					count: 16
+					id: "6C8A12A5076350C7"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "26E7AA56E1D43E98"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "3A57B5FBA44CD613"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [
+				{
+					entity: "cataclysm:ancient_remnant"
+					id: "68E0EF736899E96B"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "090AD368DC18918A"
+					item: "cataclysm:wrath_of_the_desert"
+					type: "item"
+				}
+			]
+			title: "The Ancient Remnant"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["40B8198F569A9A39"]
+			description: ["The leviathan rules the sunken ruins. Take him on from a boat on a calm sea."]
+			icon: "cataclysm:tidal_claws"
+			id: "07530718E98D72A1"
+			rewards: [
+				{
+					id: "2695782E7C84156F"
+					item: "minecraft:netherite_scrap"
+					type: "item"
+				}
+				{
+					count: 2
+					id: "50E976824F8E67EE"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "68155DB12E517D5D"
+					type: "xp"
+					xp: 550
+				}
+			]
+			tasks: [
+				{
+					entity: "cataclysm:the_leviathan"
+					id: "05DB81261878A1CC"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "19B248421AC39485"
+					item: "cataclysm:tidal_claws"
+					type: "item"
+				}
+			]
+			title: "The Leviathan"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["07530718E98D72A1"]
+			description: ["Cursium comes from drowned ruins. Forge a helmet and chestplate."]
+			icon: "cataclysm:cursium_helmet"
+			id: "2147D03554898710"
+			rewards: [
+				{
+					count: 3
+					id: "43B1328BB2AFC7A3"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "7BA0A8ACC4D2816F"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "21252BD5279196CF"
+					item: "cataclysm:cursium_helmet"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "5F556C81BD2C9308"
+					item: "cataclysm:cursium_chestplate"
+					type: "item"
+				}
+			]
+			title: "Cursium Gear"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2147D03554898710"]
+			description: ["An ignitium chestplate and a helmet. Fire-proof and fast."]
+			icon: "cataclysm:ignitium_chestplate"
+			id: "1D9D013BCD8F119C"
+			rewards: [
+				{
+					id: "5DB3A0F5BEB76AB9"
+					item: "minecraft:netherite_scrap"
+					type: "item"
+				}
+				{
+					count: 2
+					id: "0F2D5914D9A7277C"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "400B3125F033757A"
+					type: "xp"
+					xp: 550
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "564896FF740A8189"
+					item: "cataclysm:ignitium_chestplate"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "5E58478334CAEFFE"
+					item: "cataclysm:ignitium_helmet"
+					type: "item"
+				}
+			]
+			title: "Ignitium Armor"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1D9D013BCD8F119C"]
+			description: ["A bulky cannon from the Netherite Monstrosity's remains, and a weapon of absolute power."]
+			icon: "cataclysm:the_annihilator"
+			id: "2D418AEA506EA816"
+			rewards: [
+				{
+					id: "2E005C6A93CD2EE6"
+					item: "minecraft:netherite_scrap"
+					type: "item"
+				}
+				{
+					count: 2
+					id: "19760248BED20114"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "3D26659C7BCD0C5A"
+					type: "xp"
+					xp: 550
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "669B693D6A3165BB"
+				item: "cataclysm:the_annihilator"
+				type: "item"
+			}]
+			title: "The Annihilator"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2D418AEA506EA816"]
+			description: ["A fusion anvil upgrades your gear with Cataclysm's smithing templates."]
+			icon: "cataclysm:mechanical_fusion_anvil"
+			id: "67E1B67D6D814A24"
+			rewards: [
+				{
+					id: "746417BCE78072E6"
+					item: "minecraft:netherite_scrap"
+					type: "item"
+				}
+				{
+					count: 2
+					id: "724E7D39DD5300B7"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "6F5918CFD5C038B6"
+					type: "xp"
+					xp: 550
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "1FEDFB4560463740"
+				item: "cataclysm:mechanical_fusion_anvil"
+				type: "item"
+			}]
+			title: "The Mechanical Fusion Anvil"
+			x: 20.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["67E1B67D6D814A24"]
+			description: ["The Netherite Monstrosity's hammer is only the start. Fuse the Infernal Forge with a Void Core at the Mechanical Fusion Anvil to make the Void Forge."]
+			icon: "cataclysm:infernal_forge"
+			id: "54C43BFAF1EE45F2"
+			rewards: [
+				{
+					id: "3C4D890924B1A545"
+					item: "minecraft:enchanted_golden_apple"
+					type: "item"
+				}
+				{
+					count: 16
+					id: "78CCA777024FD7F1"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "707ADD5347E26BC8"
+					type: "xp"
+					xp: 900
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "6ADFE6EE97055CC6"
+					item: "cataclysm:infernal_forge"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "3DB52F16076878D9"
+					item: "cataclysm:void_forge"
+					type: "item"
+				}
+			]
+			title: "The Void Forge"
+			x: 22.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Bosses of every biome, and the weapons that come from them."]
+	title: "Cataclysm"
+}

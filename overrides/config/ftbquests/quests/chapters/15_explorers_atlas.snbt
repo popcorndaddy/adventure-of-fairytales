@@ -1,0 +1,399 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "15_explorers_atlas"
+	group: "5A734B321110FED6"
+	icon: "naturescompass:naturescompass"
+	id: "1151A1CEB83F7796"
+	order_index: 6
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["A compass that finds any biome you name. Craft one and set it to a biome you have never seen."]
+			icon: "naturescompass:naturescompass"
+			id: "702EF2166DE21E63"
+			rewards: [
+				{
+					count: 8
+					id: "6FB8AA521D5CA6F1"
+					item: "minecraft:cooked_porkchop"
+					type: "item"
+				}
+				{
+					id: "701BC6FE52CD1EF3"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "523364B370350F3E"
+				item: "naturescompass:naturescompass"
+				type: "item"
+			}]
+			title: "Nature's Compass"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["702EF2166DE21E63"]
+			description: ["An archeology table identifies finds. Craft one and a brush."]
+			icon: "betterarcheology:archeology_table"
+			id: "18F27AA7681B0380"
+			rewards: [
+				{
+					count: 6
+					id: "667E0907348CFA3F"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "4333ACEFB7D1A9A5"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "44D9131088008A35"
+					item: "betterarcheology:archeology_table"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "6DA292130AA90726"
+					item: {
+						Count: 1
+						id: "betterarcheology:iron_brush"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "The Archeology Table"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["18F27AA7681B0380"]
+			description: ["Fossils lie hidden in the dirt. Find a creeper fossil and a chicken fossil."]
+			icon: "betterarcheology:creeper_fossil"
+			id: "6B7687879BE849AA"
+			rewards: [
+				{
+					count: 10
+					id: "73767628B2101EFA"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "75CF43710FC6F9D4"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "3CCC37750A5FE829"
+					item: "betterarcheology:creeper_fossil"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "6CB778BF97D9FB0E"
+					item: "betterarcheology:chicken_fossil"
+					type: "item"
+				}
+			]
+			title: "Fossils"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6B7687879BE849AA"]
+			description: ["An ocelot fossil and a sheep fossil, each from different dirt."]
+			icon: "betterarcheology:ocelot_fossil"
+			id: "16BE6BF70613F9A7"
+			rewards: [
+				{
+					count: 16
+					id: "304AE5EEE68F103E"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "60197371003BA44E"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "613DC8140C880995"
+					item: "betterarcheology:ocelot_fossil"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "622D2DA401E51258"
+					item: "betterarcheology:sheep_fossil"
+					type: "item"
+				}
+			]
+			title: "More Fossils"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["16BE6BF70613F9A7"]
+			description: ["A diamond brush is faster and gentler on fragile finds."]
+			icon: {
+				Count: 1
+				id: "betterarcheology:diamond_brush"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "230D612A91EC7B42"
+			rewards: [
+				{
+					id: "4F1C9CE922F7D903"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "49D30915A5750AF6"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "3C5EC412536645AA"
+				item: {
+					Count: 1
+					id: "betterarcheology:diamond_brush"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "A Diamond Brush"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["230D612A91EC7B42"]
+			description: ["Brush the suspicious blocks in old ruins for artifact shards. An Archeology Table pieces them back into something useful."]
+			icon: "betterarcheology:artifact_shards"
+			id: "78FFFB0EB3425BD8"
+			rewards: [
+				{
+					id: "06CC957AFFE550BC"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "40DE26480AFAF978"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "2912A406B0E74109"
+				item: "betterarcheology:artifact_shards"
+				type: "item"
+			}]
+			title: "Artifact Shards"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["78FFFB0EB3425BD8"]
+			description: ["Old vases hold coins and strange gifts. Find one."]
+			icon: "betterarcheology:loot_vase"
+			id: "60E35FB00251E4AD"
+			rewards: [
+				{
+					count: 5
+					id: "15A5C889F5D7D580"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "52FCBE3F568B7394"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "40828C71501F0701"
+				item: "betterarcheology:loot_vase"
+				type: "item"
+			}]
+			title: "Loot Vases"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["60E35FB00251E4AD"]
+			description: ["Echo shards lead you home. Find an ancient city and craft a recovery compass."]
+			icon: "minecraft:echo_shard"
+			id: "6B17BBA4430FA1DC"
+			rewards: [
+				{
+					count: 8
+					id: "7907E30E61E65993"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "43491FB80513741A"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "37FF70DBA0DC4266"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 4L
+					id: "1F6B75DE56FB5850"
+					item: "minecraft:echo_shard"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "1162EDAF05013C2F"
+					item: "minecraft:recovery_compass"
+					type: "item"
+				}
+			]
+			title: "Recovery Compass"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6B17BBA4430FA1DC"]
+			description: ["A netherite brush never breaks. The best brush for the best finds."]
+			icon: {
+				Count: 1
+				id: "betterarcheology:netherite_brush"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "41D1D8E58BC1AE2C"
+			rewards: [
+				{
+					count: 3
+					id: "25305F56C028B0FC"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "195FF258FAEEFCC9"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "0E6CFE0622F0E635"
+				item: {
+					Count: 1
+					id: "betterarcheology:netherite_brush"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Netherite Brush"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["41D1D8E58BC1AE2C"]
+			description: ["A growth totem makes your crops thrive. A treasure from the earth."]
+			icon: "betterarcheology:growth_totem"
+			id: "6D97FCC68925DAB6"
+			rewards: [
+				{
+					count: 2
+					id: "5CE1B3ABBAD2E85E"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "167E7F6A11988056"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "6C891E4883E7F935"
+				item: "betterarcheology:growth_totem"
+				type: "item"
+			}]
+			title: "Totem of Growth"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6D97FCC68925DAB6"]
+			description: ["A radiance totem lights the way underground. A prize for the boldest."]
+			icon: "betterarcheology:radiance_totem"
+			id: "32A80B2B550C4518"
+			rewards: [
+				{
+					count: 2
+					id: "1B36FB26346A7C96"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "29E89A1AF7AB988F"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "5C5FE34FA66EC36D"
+				item: "betterarcheology:radiance_totem"
+				type: "item"
+			}]
+			title: "Totem of Radiance"
+			x: 20.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Find the biome, the fossil and the road."]
+	title: "Explorer's Atlas"
+}

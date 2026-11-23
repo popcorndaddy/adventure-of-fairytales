@@ -1,0 +1,18 @@
+{
+	"name": "Under the Hills",
+	"icon": "minecraft:paper",
+	"category": "patchouli:notes",
+	"sortnum": 2,
+	"read_by_default": false,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "You got it back. Good. That's one.$(br2)There's a beast up in the snowfields bigger than a house, asleep with something clutched in its hand. Taking it wakes it up. Don't reach for it unless you're ready to fight."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(o)Trappers say the Frostmaw holds the Cold Eye. It sleeps out in the open snow.$()"
+		}
+	],
+	"advancement": "kubejs:fairytale/p01"
+}

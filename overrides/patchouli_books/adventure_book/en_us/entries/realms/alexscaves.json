@@ -1,0 +1,38 @@
+{
+	"name": "Alex's Caves",
+	"icon": "alexscaves:azure_neodymium_ingot",
+	"category": "patchouli:realms",
+	"sortnum": 2,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Six strange biomes hide deep underground: magnetic caves, primordial caves full of dinosaurs, toxic caves, a flooded abyss, the Candy Cavity, and the Forlorn Hollows, which you may wish you hadn't found."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Underground cabins hold $(l:realms/alexscaves#cave_tablet)Cave Tablets$(/l) and a $(l:realms/alexscaves#spelunkery_table)Spelunkery Table$(/l) to translate them."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "alexscaves:cave_tablet",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "cave_tablet"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "alexscaves:spelunkery_table",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "spelunkery_table"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "alexscaves:azure_neodymium_ingot",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "azure_neodymium_ingot"
+		}
+	]
+}

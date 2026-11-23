@@ -1,0 +1,51 @@
+{
+	"name": "Apotheosis",
+	"icon": "apotheosis:gem",
+	"category": "patchouli:gear",
+	"sortnum": 0,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Apotheosis reaches into everything.$(br2)$(li)Gear drops with a rarity and $(l)affixes$().$(li)$(l)Gems$() go into sockets. Cut them at a $(l:gear/apotheosis#gem_cutting_table)Gem Cutting Table$(/l)."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(li)Salvage what you don't want and rework what you keep at the $(l:gear/apotheosis#augmenting_table)Augmenting Table$(/l).$(li)Bookshelves shape your enchantments in ways vanilla never did.$(br2)And some bosses walk the world wearing very good gear."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "apotheosis:gem",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "gem"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "apotheosis:gem_cutting_table",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "gem_cutting_table"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "apotheosis:augmenting_table",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "augmenting_table"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "apotheosis:book",
+			"title": "Further Reading",
+			"text": "The $(l)Chronicle of Shadows$() goes deeper.",
+			"anchor": "book"
+		}
+	],
+	"extra_recipe_mappings": {
+		"apotheosis:gem": 0,
+		"apotheosis:gem_cutting_table": 0,
+		"apotheosis:augmenting_table": 0,
+		"apotheosis:library": 0
+	}
+}

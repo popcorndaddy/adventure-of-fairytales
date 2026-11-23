@@ -1,0 +1,51 @@
+{
+	"name": "Forbidden Rituals",
+	"icon": "forbidden_arcanus:arcane_crystal",
+	"category": "patchouli:magic",
+	"sortnum": 4,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Forbidden & Arcanus is ritual magic, centred on the $(l:magic/forbidden#hephaestus_forge)Hephaestus Forge$(/l). Pedestals hold the offering, and the forge burns four essences: $(l)aureal$(), $(l)souls$(), $(l)blood$() and $(l)experience$()."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Strike it with a $(l:magic/forbidden#wooden_blacksmith_gavel)Blacksmith Gavel$(/l) to begin. The forge grows stronger as you upgrade it."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "forbidden_arcanus:hephaestus_forge",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "hephaestus_forge"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "forbidden_arcanus:wooden_blacksmith_gavel,forbidden_arcanus:stone_blacksmith_gavel,forbidden_arcanus:golden_blacksmith_gavel,forbidden_arcanus:iron_blacksmith_gavel,forbidden_arcanus:diamond_blacksmith_gavel,forbidden_arcanus:netherite_blacksmith_gavel,forbidden_arcanus:reinforced_deorum_blacksmith_gavel",
+			"text": "",
+			"link_recipe": true,
+			"title": "Blacksmith Gavel",
+			"anchor": "wooden_blacksmith_gavel"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "forbidden_arcanus:arcane_crystal",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "arcane_crystal"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "forbidden_arcanus:deorum_ingot",
+			"text": "A golden metal used in a lot of the mod.",
+			"link_recipe": true,
+			"anchor": "deorum_ingot"
+		}
+	],
+	"extra_recipe_mappings": {
+		"forbidden_arcanus:arcane_crystal": 0,
+		"forbidden_arcanus:deorum_ingot": 0,
+		"forbidden_arcanus:hephaestus_forge": 0
+	}
+}

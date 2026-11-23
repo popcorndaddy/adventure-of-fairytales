@@ -1,0 +1,7 @@
+#Sat Nov 21 17:44:15 CST 2026
+SHADOW_ENTITIES=true
+shadowDistance=512.0
+VOXEL_VOLUME_SIZE=256
+shadowMapResolution=4096
+LPV_CLOUDY_FOG=true
+VL_SAMPLES=12

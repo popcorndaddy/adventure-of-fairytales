@@ -1,0 +1,43 @@
+{
+	"name": "Iron's Spells",
+	"icon": "irons_spellbooks:arcane_essence",
+	"category": "patchouli:magic",
+	"sortnum": 0,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Spells draw on your $(l)mana$(). A $(l:magic/irons2#ars_bond_scroll_forge)Scroll$(/l) holds a single spell: cast it once, or bind it into a spellbook at an $(l:magic/irons#ars_bond_inscription_table)Inscription Table$(/l) and keep it.$(br2)Spells come in levels and rarities, across nine schools from fire to eldritch."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(l:magic/irons#mithril_ore)Mithril$(/l) lies deep in the deepslate and needs a netherite pickaxe. Arcane Essence comes from magic mobs, old loot, and Ars Nouveau's Imbuement Chamber."
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "kubejs:ars_bond/inscription_table",
+			"anchor": "ars_bond_inscription_table"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "irons_spellbooks:mithril_ore",
+			"text": "Below y -38. Needs a netherite pickaxe. Blast the raw mithril into scrap; four scraps make an ingot.",
+			"link_recipe": true,
+			"anchor": "mithril_ore"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "irons_spellbooks:patchouli_book",
+			"title": "Further Reading",
+			"text": "The $(l)Iron's Spells Guide$() goes deeper.",
+			"anchor": "patchouli_book"
+		}
+	],
+	"extra_recipe_mappings": {
+		"irons_spellbooks:arcane_essence": 0,
+		"irons_spellbooks:inscription_table": 0,
+		"irons_spellbooks:mithril_ore": 0,
+		"irons_spellbooks:mithril_ingot": 0,
+		"irons_spellbooks:arcane_ingot": 0
+	}
+}

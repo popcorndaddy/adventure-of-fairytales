@@ -1,0 +1,6 @@
+
+["Client Configs for Modern Temperature"]
+	#The method in which the mod displays your temperature.
+	#Acceptable values: GAUGE, NUMBER, NONE, BOTH
+	displayMode = "GAUGE"
+

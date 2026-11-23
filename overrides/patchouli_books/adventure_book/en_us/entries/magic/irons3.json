@@ -1,0 +1,24 @@
+{
+	"name": "Magic Add-ons",
+	"icon": "irons_spellbooks:blank_rune",
+	"category": "patchouli:magic",
+	"sortnum": 2,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Iron's magic runs deeper than its own book: $(l)T.O Magic 'n Extras$(), dragon spells from $(l)Ice and Fire: Spellbooks$(), boss magic from $(l)Cataclysm: Spellbooks$(), and skill trees that grow as you cast."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Wizard towers and the Catacombs are where scrolls collect."
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "irons_spellbooks:patchouli_book",
+			"title": "Further Reading",
+			"text": "The $(l)Iron's Spells Guide$() goes deeper.",
+			"anchor": "patchouli_book"
+		}
+	]
+}

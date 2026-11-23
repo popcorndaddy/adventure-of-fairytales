@@ -1,0 +1,40 @@
+{
+	"name": "Relics",
+	"icon": "relics:magic_mirror",
+	"category": "patchouli:trinkets",
+	"sortnum": 2,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Relics turn up only in chests, and each has abilities of its own. They $(l)level$() as you use them. Hold Left Shift over one to open its screen and spend the points. Hold Left Alt to choose an active ability."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "relics:magic_mirror",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "magic_mirror"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "relics:enders_hand",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "enders_hand"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "relics:magma_walker",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "magma_walker"
+		}
+	],
+	"extra_recipe_mappings": {
+		"relics:magic_mirror": 0,
+		"relics:enders_hand": 0,
+		"relics:magma_walker": 0,
+		"relics:horse_flute": 0
+	}
+}

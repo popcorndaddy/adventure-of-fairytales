@@ -1,0 +1,79 @@
+{
+	"components": [
+		{
+			"type": "patchouli:header",
+			"text": "#title",
+			"x": -1,
+			"y": -1
+		},
+		{
+			"type": "patchouli:item",
+			"item": "#item",
+			"x": 50,
+			"y": 14,
+			"framed": true,
+			"link_recipe": true
+		},
+		{
+			"type": "patchouli:item",
+			"item": "#lower",
+			"x": 26,
+			"y": 40
+		},
+		{
+			"type": "patchouli:item",
+			"item": "#lower",
+			"x": 8,
+			"y": 58
+		},
+		{
+			"type": "patchouli:item",
+			"item": "#crystal",
+			"x": 26,
+			"y": 58
+		},
+		{
+			"type": "patchouli:item",
+			"item": "#lower",
+			"x": 44,
+			"y": 58
+		},
+		{
+			"type": "patchouli:item",
+			"item": "#lower",
+			"x": 26,
+			"y": 76
+		},
+		{
+			"type": "patchouli:item",
+			"item": "create:mechanical_mixer",
+			"x": 70,
+			"y": 49
+		},
+		{
+			"type": "patchouli:item",
+			"item": "create:basin",
+			"x": 70,
+			"y": 67
+		},
+		{
+			"type": "patchouli:item",
+			"item": "#heat",
+			"x": 70,
+			"y": 85
+		},
+		{
+			"type": "patchouli:item",
+			"item": "#out",
+			"x": 96,
+			"y": 58
+		},
+		{
+			"type": "patchouli:text",
+			"text": "#text",
+			"x": 0,
+			"y": 104,
+			"max_width": 116
+		}
+	]
+}

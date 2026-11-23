@@ -1,0 +1,35 @@
+{
+	"name": "Mowzie's Mobs",
+	"icon": "mowziesmobs:wrought_axe",
+	"category": "patchouli:bosses",
+	"sortnum": 7,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "$(li)$(l)Ferrous Wroughtnaut$(): asleep in an iron chamber underground. Only its back can be hurt. It guards the $(l:bosses/mowzie#wrought_axe)Axe of a Thousand Metals$(/l)."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(li)$(l)Frostmaw$(): sleeping in the snow, holding an $(l:bosses/mowzie#ice_crystal)Ice Crystal$(/l). Taking the crystal is a mistake you'll only make once.$(li)$(l)Umvuthi$(): the Sunbird, on a throne in the savanna."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "mowziesmobs:wrought_axe",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "wrought_axe"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "mowziesmobs:ice_crystal",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "ice_crystal"
+		}
+	],
+	"extra_recipe_mappings": {
+		"mowziesmobs:wrought_axe": 0,
+		"mowziesmobs:ice_crystal": 0
+	}
+}

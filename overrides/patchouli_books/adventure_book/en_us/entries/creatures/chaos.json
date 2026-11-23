@@ -1,0 +1,20 @@
+{
+	"name": "Born in Chaos",
+	"icon": "born_in_chaos_v1:dark_metal_ingot",
+	"category": "patchouli:creatures",
+	"sortnum": 1,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Born in Chaos fills the nights with worse things than zombies. What they drop makes $(l:creatures/chaos#dark_metal_ingot)Dark Metal$(/l), charms and elixirs.$(br2)$(l)Seeds of Chaos$() brew into the base for its elixirs."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "born_in_chaos_v1:dark_metal_ingot",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "dark_metal_ingot"
+		}
+	]
+}

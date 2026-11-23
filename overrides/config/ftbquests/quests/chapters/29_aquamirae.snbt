@@ -1,0 +1,416 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "29_aquamirae"
+	group: "03F7C10E6FAF5CEC"
+	icon: "aquamirae:frozen_key"
+	id: "67E9CCFF6FC611FA"
+	order_index: 5
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Frozen ship wrecks litter the cold sea. Search for a key to the frozen chest."]
+			icon: "aquamirae:frozen_key"
+			id: "0931684BA17FB189"
+			rewards: [
+				{
+					count: 8
+					id: "4AA43F79AF7C78BF"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "472021BB08D48E73"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "3F42F9F594CE4D5D"
+				item: "aquamirae:frozen_key"
+				type: "item"
+			}]
+			title: "The Ship Graveyard"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0931684BA17FB189"]
+			description: ["A maze of ice hides a captain and a rose. Find the maze rose to bring home."]
+			icon: {
+				Count: 1
+				id: "aquamirae:maze_rose"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "029AEE7C2FFE5B86"
+			rewards: [
+				{
+					id: "3E6679A9201E366C"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "0693517674EC430E"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "1D95B43DF0280100"
+				item: {
+					Count: 1
+					id: "aquamirae:maze_rose"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "Ice Maze"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["029AEE7C2FFE5B86"]
+			description: ["A bony fish makes a decent meal. Cook it into a sea stew."]
+			icon: "aquamirae:cooked_spinefish"
+			id: "50142C3D7C3AF0DD"
+			rewards: [
+				{
+					count: 5
+					id: "0602C8D89B01D8A8"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "3ED929D12043742B"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "02383C20EE37244F"
+					item: "aquamirae:cooked_spinefish"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "628A72C584C0426D"
+					item: "aquamirae:sea_stew"
+					type: "item"
+				}
+			]
+			title: "Spinefish and Stew"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["50142C3D7C3AF0DD"]
+			description: ["A poisoned blade and a remnants saber from the pirates of the frozen sea."]
+			icon: {
+				Count: 1
+				id: "aquamirae:poisoned_blade"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "0BD6C21A4F787D3B"
+			rewards: [
+				{
+					count: 2
+					id: "0634558B5F8F4582"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "3689EE726E448373"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "5B2DC46BD8434468"
+					item: {
+						Count: 1
+						id: "aquamirae:poisoned_blade"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "0AC3436243DB10BE"
+					item: {
+						Count: 1
+						id: "aquamirae:remnants_saber"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "The Poisoned Blade"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0BD6C21A4F787D3B"]
+			description: ["An oxygen tank lets you dive deeper. Craft one and some oxygelium."]
+			icon: "aquamirae:oxygen_tank"
+			id: "35613A214929A0C7"
+			rewards: [
+				{
+					id: "23C04647D6E0F2BE"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "1D982086F33C1A25"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "1B962EBF426AB1C4"
+					item: "aquamirae:oxygen_tank"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "3B75A02BFB45E56B"
+					item: "aquamirae:oxygelium"
+					type: "item"
+				}
+			]
+			title: "Oxygen Tank"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["35613A214929A0C7"]
+			description: ["A pirate captain rules the ghost ship. Take her ship from her."]
+			icon: "minecraft:book"
+			id: "2CC50714DE670AA9"
+			rewards: [
+				{
+					count: 16
+					id: "6E340CF98542650B"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "1A7889FBA2725641"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "7EDB31C416102E67"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				entity: "aquamirae:captain_cornelia"
+				id: "3572DE2934EC8585"
+				type: "kill"
+				value: 1L
+			}]
+			title: "Captain Cornelia"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2CC50714DE670AA9"]
+			description: ["The Maze Mother guards the heart of the ice maze. Defeat her and take her crown."]
+			icon: "minecraft:book"
+			id: "132E7898BA6535B2"
+			rewards: [
+				{
+					count: 3
+					id: "1B73AD31AC3DF12A"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "063494E873300F8D"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				entity: "aquamirae:maze_mother"
+				id: "3BC3A4B0E1027CB7"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Maze Mother"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["132E7898BA6535B2"]
+			description: ["The deepest armor of the frozen sea. Craft the abyssal heaume and tiara."]
+			icon: {
+				Count: 1
+				id: "aquamirae:abyssal_heaume"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "4D50C6B78E5A3BFA"
+			rewards: [
+				{
+					count: 3
+					id: "04FE99538BF0A18C"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "4AD5FDE1DCDCCA8D"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "0F7FF59DDE4C0C6E"
+					item: {
+						Count: 1
+						id: "aquamirae:abyssal_heaume"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "26625A47AE7E2A4B"
+					item: {
+						Count: 1
+						id: "aquamirae:abyssal_tiara"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Abyssal Gear"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4D50C6B78E5A3BFA"]
+			description: ["The terrible sword is made from the sea's worst creatures."]
+			icon: {
+				Count: 1
+				id: "aquamirae:terrible_sword"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "4F280287BB22E19A"
+			rewards: [
+				{
+					count: 3
+					id: "4A87061FFD3582D5"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "18B92E6515C7926B"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "3D23F09370045B64"
+				item: {
+					Count: 1
+					id: "aquamirae:terrible_sword"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "Terrible Sword"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4F280287BB22E19A"]
+			description: ["A relic of the deepest sea. The last piece of the set."]
+			icon: {
+				Count: 1
+				id: "aquamirae:whisper_of_the_abyss"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "7E90D4040A20F8A9"
+			rewards: [
+				{
+					id: "2CFF623A1A590CF0"
+					item: "minecraft:netherite_scrap"
+					type: "item"
+				}
+				{
+					count: 2
+					id: "33AFF84DDFCBF86A"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "04A3E62799E56209"
+					type: "xp"
+					xp: 550
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "0FDFA00AD2559F83"
+				item: {
+					Count: 1
+					id: "aquamirae:whisper_of_the_abyss"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "Whisper of the Abyss"
+			x: 18.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["A frozen sea and the ghost ships that haunt it."]
+	title: "Aquamirae"
+}

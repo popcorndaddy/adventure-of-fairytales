@@ -1,0 +1,13 @@
+{
+	"name": "Dungeons and Loot",
+	"icon": "minecraft:chest",
+	"category": "patchouli:villages",
+	"sortnum": 2,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Dungeons, towers and ruins are scattered everywhere, and most of them are worth clearing. Each player gets their own loot from every chest.$(br2)Not every chest is a chest. Some bite."
+		}
+	]
+}

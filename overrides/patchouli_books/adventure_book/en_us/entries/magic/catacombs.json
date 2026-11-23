@@ -1,0 +1,28 @@
+{
+	"name": "The Catacombs",
+	"icon": "irons_spellbooks:wayward_compass",
+	"category": "patchouli:magic",
+	"sortnum": 3,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Beneath the world lie the Catacombs, and on a throne at their heart sits the $(l)Dead King$().$(br2)A $(l:magic/catacombs#wayward_compass)Wayward Compass$(/l) points the way. His death leaves a Bone Key for the vaults below."
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "irons_spellbooks:wayward_compass",
+			"anchor": "wayward_compass"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "irons_spellbooks:patchouli_book",
+			"title": "Further Reading",
+			"text": "The $(l)Iron's Spells Guide$() goes deeper.",
+			"anchor": "patchouli_book"
+		}
+	],
+	"extra_recipe_mappings": {
+		"irons_spellbooks:wayward_compass": 0
+	}
+}

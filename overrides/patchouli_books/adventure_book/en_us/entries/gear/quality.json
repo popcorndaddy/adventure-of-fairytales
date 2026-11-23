@@ -1,0 +1,17 @@
+{
+	"name": "Item Quality",
+	"icon": "minecraft:anvil",
+	"category": "patchouli:gear",
+	"sortnum": 1,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Gear often comes with a $(l)quality$() in its name, and it matters. A Rusted blade is a lesser thing than a Keen one, and won't last as long. Legendary weapons and Masterful armor are worth chasing."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Don't like what you got? A $(l)Reforging Station$() will reroll it for the item's repair material, as many times as you can afford."
+		}
+	]
+}

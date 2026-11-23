@@ -1,0 +1,17 @@
+{
+	"name": "Weapon Mods",
+	"icon": "minecraft:iron_axe",
+	"category": "patchouli:gear",
+	"sortnum": 2,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "$(li)$(l)Spartan Weaponry$(): every kind of blade, polearm and throwing weapon, in every metal, dragonbone and dragonsteel included.$(li)$(l)Epic Knights$(): medieval armor, shields and arms."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Weapon types differ a lot in reach, speed and damage. Read before you swing."
+		}
+	]
+}

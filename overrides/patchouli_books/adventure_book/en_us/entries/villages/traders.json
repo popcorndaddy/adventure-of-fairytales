@@ -1,0 +1,13 @@
+{
+	"name": "Traders",
+	"icon": "minecraft:emerald",
+	"category": "patchouli:villages",
+	"sortnum": 1,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Villages have guards now, and you can hand them better gear. Villagers have names. Chefs trade food.$(br2)Deep underground you may meet a $(l)Goblin Trader$(). Don't hit him."
+		}
+	]
+}

@@ -1,0 +1,32 @@
+{
+	"name": "What Dragons Drop",
+	"icon": "iceandfire:dragonbone",
+	"category": "patchouli:dragons",
+	"sortnum": 1,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "A dragon leaves scales, flesh, bones, a skull and its heart. Bottle its blood before you carve it, but take too much and the scales and heart are lost."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Scale armor resists that dragon's element. Bones dipped in blood make elemental weapons."
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "iceandfire:dragonbone_sword",
+			"anchor": "dragonbone_sword"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "iceandfire:bestiary",
+			"title": "Further Reading",
+			"text": "The $(l)Bestiary$() goes deeper.",
+			"anchor": "bestiary"
+		}
+	],
+	"extra_recipe_mappings": {
+		"iceandfire:dragonbone": 0
+	}
+}

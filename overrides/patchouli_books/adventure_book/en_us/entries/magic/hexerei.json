@@ -1,0 +1,65 @@
+{
+	"name": "Hexerei",
+	"icon": "hexerei:mixing_cauldron",
+	"category": "patchouli:magic",
+	"sortnum": 6,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Hexerei is the quieter craft: herbs, candles, cauldrons and brooms.$(br2)Grow and dry herbs like $(l:magic/hexerei#sage_seed)Sage$(/l) and keep them in $(l:magic/hexerei#herb_jar)Herb Jars$(/l). Most of the work happens in the $(l:magic/hexerei#mixing_cauldron)Mixing Cauldron$(/l). The $(l:magic/hexerei#book_of_shadows)Book of Shadows$(/l) holds the rest."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "A $(l:magic/hexerei#willow_broom)Broom$(/l) will fly once it has a brush. Crows can be won over.$(br2)Swamp witches live in proper houses now. Some live in whole villages."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "hexerei:sage_seed",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "sage_seed"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "hexerei:herb_jar",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "herb_jar"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "hexerei:mixing_cauldron",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "mixing_cauldron"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "hexerei:book_of_shadows",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "book_of_shadows"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "hexerei:willow_broom",
+			"text": "One of several brooms.",
+			"link_recipe": true,
+			"anchor": "willow_broom"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "kubejs:guide_books/book_of_shadows",
+			"title": "Further Reading",
+			"text": "The $(l)Book of Shadows$() goes deeper.",
+			"anchor": "guide_books_book_of_shadows"
+		}
+	],
+	"extra_recipe_mappings": {
+		"hexerei:mixing_cauldron": 0,
+		"hexerei:herb_jar": 0,
+		"hexerei:willow_broom": 0,
+		"hexerei:book_of_shadows": 0
+	}
+}

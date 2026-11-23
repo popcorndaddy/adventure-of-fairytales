@@ -1,0 +1,23 @@
+{
+  "parent": "kubejs:fairytale/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:paper"
+    },
+    "title": {
+      "text": "What's Left"
+    },
+    "description": {
+      "text": "Survived your first night"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "given": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}

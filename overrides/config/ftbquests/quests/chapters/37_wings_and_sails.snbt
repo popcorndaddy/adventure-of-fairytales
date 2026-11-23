@@ -1,0 +1,303 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "37_wings_and_sails"
+	group: "5A734B321110FED6"
+	icon: "paraglider:paraglider"
+	id: "6C2433010A979439"
+	order_index: 9
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Hold a Paraglider while falling to glide. Fires make updrafts you can ride upward."]
+			icon: "paraglider:paraglider"
+			id: "342BDD8B511F98A9"
+			rewards: [
+				{
+					count: 8
+					id: "11AD0BEF07129803"
+					item: "minecraft:feather"
+					type: "item"
+				}
+				{
+					id: "4F19BE187E475C71"
+					type: "xp"
+					xp: 60
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "37C1E962334AB1C8"
+				item: "paraglider:paraglider"
+				type: "item"
+			}]
+			title: "A Leap of Faith"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["342BDD8B511F98A9"]
+			description: ["Spirit Orbs drop from mob spawners and turn up in loot. Save them."]
+			icon: "paraglider:spirit_orb"
+			id: "11398BFAD10AC466"
+			rewards: [
+				{
+					count: 4
+					id: "02273B9D05796AE5"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "58AEF340FEBB3238"
+					type: "xp"
+					xp: 80
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 4L
+				id: "78EA713DF20A195A"
+				item: "paraglider:spirit_orb"
+				type: "item"
+			}]
+			title: "Spirit Orbs"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["11398BFAD10AC466"]
+			description: ["Find a Goddess Statue out in the world. It trades your Spirit Orbs for vessels."]
+			icon: "paraglider:goddess_statue"
+			id: "517361102C494C33"
+			rewards: [
+				{
+					count: 4
+					id: "4AD246D18BC1E44C"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "7B4E0D93EDF6CA65"
+					type: "xp"
+					xp: 100
+				}
+			]
+			tasks: [{
+				id: "446EDD29EE6EDB9A"
+				type: "checkmark"
+			}]
+			title: "The Goddess Statue"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["517361102C494C33"]
+			description: ["Raises your maximum stamina, so you can glide and sprint for longer."]
+			icon: "paraglider:stamina_vessel"
+			id: "60E9E5FA9C494CF9"
+			rewards: [
+				{
+					count: 8
+					id: "5AB20853D6C0D319"
+					item: "minecraft:golden_carrot"
+					type: "item"
+				}
+				{
+					id: "563A8CC230DFBBD1"
+					type: "xp"
+					xp: 120
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "69F51ACF1FD6A02A"
+				item: "paraglider:stamina_vessel"
+				type: "item"
+			}]
+			title: "Stamina Vessel"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["60E9E5FA9C494CF9"]
+			description: ["One more heart, for good."]
+			icon: "paraglider:heart_container"
+			id: "2439404BB977A685"
+			rewards: [
+				{
+					id: "16AD043A68135ABC"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "640AB9DFC6BC09CC"
+					type: "xp"
+					xp: 150
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "176A6C200F3E0739"
+				item: "paraglider:heart_container"
+				type: "item"
+			}]
+			title: "Heart Container"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2439404BB977A685"]
+			description: ["Every ship in Small Ships needs sails. Cotton Sails are stitched from wool and string."]
+			icon: "smallships:cotton_sails"
+			id: "427FE2964FB2831A"
+			rewards: [
+				{
+					count: 8
+					id: "421C1A31B4840CC4"
+					item: "minecraft:white_wool"
+					type: "item"
+				}
+				{
+					id: "63567B2E9F5D307D"
+					type: "xp"
+					xp: 60
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "6AC1A0477C6ACD0E"
+				item: "smallships:cotton_sails"
+				type: "item"
+			}]
+			title: "Raise the Sail"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["427FE2964FB2831A"]
+			description: ["Ships are built at a Dockyard now. Place one by the water, feed it planks, wool, string and iron, and it raises the ship for you. Start with a Cog: sturdy, with plenty of cargo room."]
+			icon: "smallships:dockyard"
+			id: "5CC240C8193352BF"
+			rewards: [
+				{
+					count: 2
+					id: "5F01D59BB9C365FC"
+					item: "minecraft:chest"
+					type: "item"
+				}
+				{
+					id: "7386451312EDCA15"
+					type: "xp"
+					xp: 120
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "5BD399B57DD8D2C2"
+				item: "smallships:dockyard"
+				type: "item"
+			}]
+			title: "A Ship of Your Own"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5CC240C8193352BF"]
+			description: ["Cannons mount on the side of a ship and fire Cannon Balls stored aboard."]
+			icon: "smallships:cannon"
+			id: "2447F208895E39BA"
+			rewards: [
+				{
+					count: 8
+					id: "652CA7976DAFED2D"
+					item: "minecraft:gunpowder"
+					type: "item"
+				}
+				{
+					id: "29BC1C15C79EFE92"
+					type: "xp"
+					xp: 100
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "25890F4F27D011F7"
+				item: "smallships:cannon"
+				type: "item"
+			}]
+			title: "Arm the Decks"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2447F208895E39BA"]
+			description: ["Keep a stack on board before you go looking for trouble at sea."]
+			icon: "smallships:cannon_ball"
+			id: "3850FDA0D7A518DA"
+			rewards: [
+				{
+					count: 8
+					id: "714E507732C47F21"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "4DC77A84F585E2AC"
+					type: "xp"
+					xp: 100
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 16L
+				id: "6BB26A226AE03A42"
+				item: "smallships:cannon_ball"
+				type: "item"
+			}]
+			title: "Ammunition"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3850FDA0D7A518DA"]
+			description: ["Steam 'n' Rails adds new parts for Create trains, like fuel tanks for long journeys."]
+			icon: "railways:fuel_tank"
+			id: "39B86FB2F63EDF71"
+			rewards: [
+				{
+					count: 16
+					id: "3A6AD06312497B4C"
+					item: "create:andesite_alloy"
+					type: "item"
+				}
+				{
+					id: "4868C0ED410264E9"
+					type: "xp"
+					xp: 150
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "147D420B4179653F"
+				item: "railways:fuel_tank"
+				type: "item"
+			}]
+			title: "Steam on the Rails"
+			x: 18.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Glide off cliffs, sail the seas and lay down rails."]
+	title: "Wings and Sails"
+}

@@ -1,0 +1,27 @@
+{
+	"name": "Bounties",
+	"icon": "minecraft:bell",
+	"category": "patchouli:villages",
+	"sortnum": 0,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Village $(l:villages/bounties#bountyboard)Bounty Boards$(/l) post jobs: things to fetch, things to kill, all on a timer. $(l:villages/bounties#decree)Decrees$(/l) pinned to the board decide what kind."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "bountiful:bountyboard",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "bountyboard"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "bountiful:decree",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "decree"
+		}
+	]
+}

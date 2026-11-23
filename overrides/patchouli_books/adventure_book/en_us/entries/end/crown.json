@@ -1,0 +1,69 @@
+{
+	"name": "The King's Crown",
+	"icon": "kubejs:kings_crown",
+	"category": "patchouli:end",
+	"sortnum": 3,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Twelve eyes open the End. They don't finish the story.$(br2)The Crown was broken into four pieces, each kept by one of the hardest foes in the world:"
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(li)$(l:end/crown#crown_band)Band of the Crown$(/l): the Underworld Knight$(li)$(l:end/crown#crown_jewel)Jewel of the Crown$(/l): the Void Blossom$(li)$(l:end/crown#crown_crest)Crest of the Crown$(/l): the Wither$(li)$(l:end/crown#crown_setting)Setting of the Crown$(/l): the Harbinger"
+		},
+		{
+			"type": "patchouli:text",
+			"text": "The $(l:end/crown#dragons_heart)Dragon's Heart$(/l) binds them into $(l:end/crown#kings_crown)The King's Crown$(/l). Whoever wears it will understand why it was broken."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "kubejs:crown_band",
+			"text": "From the Underworld Knight.",
+			"link_recipe": true,
+			"anchor": "crown_band"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "kubejs:crown_jewel",
+			"text": "From the Void Blossom.",
+			"link_recipe": true,
+			"anchor": "crown_jewel"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "kubejs:crown_crest",
+			"text": "From the Wither.",
+			"link_recipe": true,
+			"anchor": "crown_crest"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "kubejs:crown_setting",
+			"text": "From the Harbinger.",
+			"link_recipe": true,
+			"anchor": "crown_setting"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "kubejs:dragons_heart",
+			"text": "From the Ender Dragon.",
+			"link_recipe": true,
+			"anchor": "dragons_heart"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "kubejs:kings_crown",
+			"anchor": "kings_crown"
+		}
+	],
+	"extra_recipe_mappings": {
+		"kubejs:crown_band": 0,
+		"kubejs:crown_jewel": 0,
+		"kubejs:crown_crest": 0,
+		"kubejs:crown_setting": 0,
+		"kubejs:dragons_heart": 0,
+		"kubejs:kings_crown": 0
+	}
+}

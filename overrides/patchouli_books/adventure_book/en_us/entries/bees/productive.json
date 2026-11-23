@@ -1,0 +1,28 @@
+{
+	"name": "Productive Bees",
+	"icon": "minecraft:beehive",
+	"category": "patchouli:bees",
+	"sortnum": 0,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Different bees make combs of different things, from honey to diamonds."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Solitary bees live in nests out in the world. They won't live in a hive and make nothing themselves; they're for breeding. Set a nest in the right biome and feed it Honey Treats, and a new bee moves in."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Productive bees live in an Advanced Beehive, and a Centrifuge spins their combs apart. Most come from breeding, and the Big Book of Bees knows every pairing. If a bee won't settle, check its flowers and the weather."
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "productivebees:guide_book",
+			"title": "Further Reading",
+			"text": "The $(l)Big Book of Bees$() goes deeper.",
+			"anchor": "guide_book"
+		}
+	]
+}

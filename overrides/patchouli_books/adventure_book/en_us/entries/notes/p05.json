@@ -1,0 +1,22 @@
+{
+	"name": "The Catacombs",
+	"icon": "minecraft:paper",
+	"category": "patchouli:notes",
+	"sortnum": 6,
+	"read_by_default": false,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Go out past the last of the land, to where the deep sea freezes into a maze."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "There are pirate ships stuck in the ice. Their captain carries a horn made from a shell. Blow it near open water inside the maze and something answers. Her name was Cornelia, once. She has a key, and a page."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(o)Sailors won't say Captain Cornelia's name, but they'll tell you she took the Black Eye down with her. Her ghost haunts the Ice Maze, over the deep frozen ocean.$()"
+		}
+	],
+	"advancement": "kubejs:fairytale/p05"
+}

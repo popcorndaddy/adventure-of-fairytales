@@ -1,0 +1,9 @@
+{
+	chapter_groups: [
+		{ id: "01FA0B74B5D0B1FB", title: "&6The Journey Begins" }
+		{ id: "5A734B321110FED6", title: "&aAdventure and Industry" }
+		{ id: "0367FDC07E543102", title: "&bMagic and Mystery" }
+		{ id: "03F7C10E6FAF5CEC", title: "&cLegends and Beasts" }
+		{ id: "71E49019A27AF73C", title: "&5Realms Beyond" }
+	]
+}

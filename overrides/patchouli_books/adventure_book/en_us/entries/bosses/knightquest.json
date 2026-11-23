@@ -1,0 +1,13 @@
+{
+	"name": "Knight Quest",
+	"icon": "minecraft:iron_chestplate",
+	"category": "patchouli:bosses",
+	"sortnum": 5,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Knight Quest brings more than thirty armor sets, each with a passive of its own, and new creatures to earn them from. Its boss is Netherman, the Architect of Chaos, a fight in three phases."
+		}
+	]
+}

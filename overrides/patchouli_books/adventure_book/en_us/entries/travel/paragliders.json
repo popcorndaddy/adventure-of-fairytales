@@ -1,0 +1,58 @@
+{
+	"name": "Paragliders",
+	"icon": "paraglider:paraglider",
+	"category": "patchouli:travel",
+	"sortnum": 4,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Hold a $(l:travel/paragliders#paraglider)Paraglider$(/l) as you fall and you'll glide. Rising heat from a fire will carry you up."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Gliding wears down your stamina. $(l:travel/paragliders#spirit_orb)Spirit Orbs$(/l) turn up in chests and broken spawners. Bring four to a $(l:travel/paragliders#goddess_statue)Goddess Statue$(/l), usually near a village, for a $(l:travel/paragliders#heart_container)Heart Container$(/l) or a $(l:travel/paragliders#stamina_vessel)Stamina Vessel$(/l)."
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "paraglider:paraglider",
+			"text": "",
+			"link_recipe": true,
+			"anchor": "paraglider"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "paraglider:spirit_orb",
+			"text": "From spawners and loot.",
+			"link_recipe": true,
+			"anchor": "spirit_orb"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "paraglider:goddess_statue",
+			"text": "Trades Spirit Orbs for vessels.",
+			"link_recipe": true,
+			"anchor": "goddess_statue"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "paraglider:heart_container",
+			"text": "One more heart.",
+			"link_recipe": true,
+			"anchor": "heart_container"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "paraglider:stamina_vessel",
+			"text": "More stamina.",
+			"link_recipe": true,
+			"anchor": "stamina_vessel"
+		}
+	],
+	"extra_recipe_mappings": {
+		"paraglider:paraglider": 0,
+		"paraglider:spirit_orb": 0,
+		"paraglider:heart_container": 0,
+		"paraglider:stamina_vessel": 0
+	}
+}

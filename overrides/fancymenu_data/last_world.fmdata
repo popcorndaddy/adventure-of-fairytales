@@ -1,0 +1,7 @@
+type = last_world
+
+last_world {
+  is_server = false
+  world = C:/Users/Colten/curseforge/minecraft/Instances/Adventures of Fairytale (2)/saves/New World (1)
+}
+

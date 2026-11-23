@@ -1,0 +1,595 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "24_soul_weapons"
+	group: "03F7C10E6FAF5CEC"
+	icon: "soulsweapons:moonstone"
+	id: "41EA22E8D8AB3C96"
+	order_index: 0
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Moonstone glows in the deepest caves. Mine it and craft a pickaxe and axe worthy of a hunter."]
+			icon: "soulsweapons:moonstone"
+			id: "420BE57B42BB9983"
+			rewards: [
+				{
+					count: 16
+					id: "0312C0556D99556E"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "5B2350D876BDCBC2"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 8L
+					id: "1078FA31DE6B9474"
+					item: "soulsweapons:moonstone"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "09D4D974925C336D"
+					item: {
+						Count: 1
+						id: "soulsweapons:moonstone_pickaxe"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "0361410691FCBC81"
+					item: {
+						Count: 1
+						id: "soulsweapons:moonstone_axe"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "The Moonstone"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["420BE57B42BB9983"]
+			description: ["Moonstone rings carry a small boon. Craft one and a hoe for your fields."]
+			icon: {
+				Count: 1
+				id: "soulsweapons:moonstone_ring"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "70F3EE9E5DC8A99F"
+			rewards: [
+				{
+					count: 16
+					id: "1A40BD82AD9722D6"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "406D640E0EFA9667"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "3FC3C69C8EA9AFD8"
+					item: {
+						Count: 1
+						id: "soulsweapons:moonstone_ring"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "5D6719A7B9AD3730"
+					item: {
+						Count: 1
+						id: "soulsweapons:moonstone_hoe"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "A Moonstone Ring"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["70F3EE9E5DC8A99F"]
+			description: ["Silver weapons hurt creatures of the dark. Forge a sword and a silver bullet."]
+			icon: {
+				Count: 1
+				id: "soulsweapons:silver_sword"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "54E825C53FAAAFF8"
+			rewards: [
+				{
+					count: 6
+					id: "5A138A0D2A458950"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "5EF4D04775548151"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "18CF8C0D3194B2D1"
+					item: {
+						Count: 1
+						id: "soulsweapons:silver_sword"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "38FC0D2BCDACCFCF"
+					item: "soulsweapons:silver_bullet"
+					type: "item"
+				}
+			]
+			title: "The Silver Sword"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["54E825C53FAAAFF8"]
+			description: ["The hunter's pistol and a boss compass guide you to the creatures worth hunting."]
+			icon: {
+				Count: 1
+				id: "soulsweapons:hunter_pistol"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "4E1E7AB53A2EDD25"
+			rewards: [
+				{
+					count: 5
+					id: "7F174A581DE48A9B"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "45F2ABDC5B2D07F3"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "4DB8A7F99F4DE4D3"
+					item: {
+						Count: 1
+						id: "soulsweapons:hunter_pistol"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "1E13A0E8DAE5B7C4"
+					item: "soulsweapons:boss_compass"
+					type: "item"
+				}
+			]
+			title: "The Hunter's Pistol"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4E1E7AB53A2EDD25"]
+			description: ["A short gun that covers a wide cone. Pack it with silver and watch the ground clear."]
+			icon: {
+				Count: 1
+				id: "soulsweapons:blunderbuss"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "721E085194742586"
+			rewards: [
+				{
+					count: 10
+					id: "3414B09D50912DCA"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "2946E38BB9E6B141"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "1FCDD955E9BE93CA"
+				item: {
+					Count: 1
+					id: "soulsweapons:blunderbuss"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Blunderbuss"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["721E085194742586"]
+			description: ["An ancient draugr rises in cold ruins. Defeat it for a rare drop."]
+			icon: "minecraft:book"
+			id: "6B3B8BF4CABFC9B6"
+			rewards: [
+				{
+					count: 8
+					id: "434649C890086F22"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "03DA712652C8F5F9"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				entity: "soulsweapons:draugr_boss"
+				id: "3240EA352EA49F7D"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Draugr"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6B3B8BF4CABFC9B6"]
+			description: ["The darkin blade drinks blood and grows stronger. Handle with care."]
+			icon: {
+				Count: 1
+				id: "soulsweapons:darkin_blade"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "623628A41B25FAA3"
+			rewards: [
+				{
+					count: 8
+					id: "4A7A612D93DBE810"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "4CD9FDB614D463E2"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "1DEAFFA4F4711F35"
+				item: {
+					Count: 1
+					id: "soulsweapons:darkin_blade"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "Blade of Darkness"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["623628A41B25FAA3"]
+			description: ["Moonlight greatswords shine in the dark and fire waves of light."]
+			icon: {
+				Count: 1
+				id: "soulsweapons:moonlight_greatsword"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "1038068F45816629"
+			rewards: [
+				{
+					id: "247BB9EA3C501D4A"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "0AFD7808642F07FA"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "06B90FECEE4903F1"
+					item: {
+						Count: 1
+						id: "soulsweapons:moonlight_greatsword"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "2F45535C56EC67D3"
+					item: {
+						Count: 1
+						id: "soulsweapons:moonlight_shortsword"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Moonlight"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1038068F45816629"]
+			description: ["The moonknight wields the moon itself. Meet him on the field with a well-prepared pack."]
+			icon: "minecraft:book"
+			id: "38CA1B0E2BDA1243"
+			rewards: [
+				{
+					count: 2
+					id: "31FDFAB7F3C368D6"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "7CAF8092DA390E1A"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				entity: "soulsweapons:moonknight"
+				id: "11AD0A72D3F99FAD"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Moonknight"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["38CA1B0E2BDA1243"]
+			description: ["The accursed lord leads the dead. Take him on in the open, with a clear plan."]
+			icon: "minecraft:book"
+			id: "68436D61A82CC961"
+			rewards: [
+				{
+					count: 8
+					id: "409FC98427E7733E"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "11EE96E468389413"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "1B5732CF3337B419"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				entity: "soulsweapons:accursed_lord_boss"
+				id: "7993019E12B0770E"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Accursed Lord"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["68436D61A82CC961"]
+			description: ["A winged monarch of chaos. Strike when his guard is down and bring his crown home."]
+			icon: {
+				Count: 1
+				id: "soulsweapons:chaos_crown"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "2A769BD47F8B5BA4"
+			rewards: [
+				{
+					count: 3
+					id: "36E2B9EFD723D0B2"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "2CE874348DD16377"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [
+				{
+					entity: "soulsweapons:chaos_monarch"
+					id: "50ED4CEE9E6C9D21"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "272938A8B667AC91"
+					item: {
+						Count: 1
+						id: "soulsweapons:chaos_crown"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "The Chaos Monarch"
+			x: 20.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2A769BD47F8B5BA4"]
+			description: ["Frost giants are cold and huge. Their leviathan axe is one of the heaviest blows in the game."]
+			icon: {
+				Count: 1
+				id: "soulsweapons:leviathan_axe"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "3CEA1D6BDCA0E6C8"
+			rewards: [
+				{
+					count: 3
+					id: "39938611A4E5264E"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "4CAA30964EC1037A"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [
+				{
+					entity: "soulsweapons:frost_giant"
+					id: "7A13F23418FB4055"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "6BA23F50252E4EBA"
+					item: {
+						Count: 1
+						id: "soulsweapons:leviathan_axe"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "The Frost Giant"
+			x: 22.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3CEA1D6BDCA0E6C8"]
+			description: ["Mjolnir answers only to the worthy. Craft the hammer from the legend."]
+			icon: {
+				Count: 1
+				id: "soulsweapons:mjolnir"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "2128E7BC7E1C4DCA"
+			rewards: [
+				{
+					id: "0632F7AC5042778F"
+					item: "minecraft:netherite_scrap"
+					type: "item"
+				}
+				{
+					count: 2
+					id: "3CF6C82586F73879"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "328698C202EAAEEF"
+					type: "xp"
+					xp: 550
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "60CA80A3FC18B03F"
+				item: {
+					Count: 1
+					id: "soulsweapons:mjolnir"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "Thunder Hammer"
+			x: 24.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Legendary blades, bound to the souls of their bosses."]
+	title: "Soul Weapons"
+}

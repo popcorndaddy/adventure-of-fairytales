@@ -1,0 +1,43 @@
+{
+	"name": "Spellcrafting",
+	"icon": "irons_spellbooks:scroll_forge",
+	"category": "patchouli:magic",
+	"sortnum": 1,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "$(li)$(l:magic/irons2#ars_bond_scroll_forge)Scroll Forge$(/l): ink, paper and a focus make new scrolls. Better ink, rarer spells. Its heart is a Source Gem Block.$(li)$(l:magic/irons2#ars_bond_scroll_forge)Alchemist Cauldron$(/l): boils scrolls back down to ink, and brews."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(li)$(l:magic/irons2#arcane_anvil)Arcane Anvil$(/l): merges scrolls, imbues weapons, and sets an $(l:magic/irons2#arcane_anvil)Upgrade Orb$(/l) into armor."
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "kubejs:ars_bond/scroll_forge",
+			"recipe2": "irons_spellbooks:alchemist_cauldron",
+			"anchor": "ars_bond_scroll_forge"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "irons_spellbooks:arcane_anvil",
+			"recipe2": "irons_spellbooks:upgrade_orb",
+			"anchor": "arcane_anvil"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "irons_spellbooks:patchouli_book",
+			"title": "Further Reading",
+			"text": "The $(l)Iron's Spells Guide$() goes deeper.",
+			"anchor": "patchouli_book"
+		}
+	],
+	"extra_recipe_mappings": {
+		"irons_spellbooks:scroll_forge": 0,
+		"irons_spellbooks:alchemist_cauldron": 0,
+		"irons_spellbooks:arcane_anvil": 0,
+		"irons_spellbooks:upgrade_orb": 0,
+		"irons_spellbooks:common_ink": 0
+	}
+}

@@ -1,0 +1,43 @@
+{
+	"name": "Waystones",
+	"icon": "waystones:waystone",
+	"category": "patchouli:travel",
+	"sortnum": 0,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Activate a $(l:travel/waystones#waystone)Waystone$(/l) and you can return to it from any other. The farther you go, the more experience it costs."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "A $(l:travel/waystones#waystone)Warp Stone$(/l) does the same from your pocket. $(l:travel/waystones#return_scroll)Return Scrolls$(/l) and $(l:travel/waystones#return_scroll)Warp Scrolls$(/l) are one-way tickets. $(l:travel/waystones#sharestone)Sharestones$(/l) only link to others of their colour."
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "waystones:waystone",
+			"recipe2": "waystones:warp_stone",
+			"anchor": "waystone"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "waystones:return_scroll",
+			"recipe2": "waystones:warp_scroll",
+			"anchor": "return_scroll"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "waystones:sharestone",
+			"text": "Sharestones only link to other sharestones of the same colour.",
+			"link_recipe": true,
+			"anchor": "sharestone"
+		}
+	],
+	"extra_recipe_mappings": {
+		"waystones:waystone": 0,
+		"waystones:warp_stone": 0,
+		"waystones:return_scroll": 0,
+		"waystones:warp_scroll": 0,
+		"waystones:sharestone": 0
+	}
+}

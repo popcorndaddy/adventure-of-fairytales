@@ -1,0 +1,318 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "20_forbidden_and_arcanus"
+	group: "0367FDC07E543102"
+	icon: "forbidden_arcanus:arcane_crystal"
+	id: "2BA1B1FF39A8312E"
+	order_index: 1
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Crystals hold stored magic. Mine or craft them."]
+			icon: "forbidden_arcanus:arcane_crystal"
+			id: "5ED03CCCA8DF440B"
+			rewards: [
+				{
+					count: 16
+					id: "612654C68BA3A786"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "012B2F45C4885695"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 4L
+				id: "72B66ADAC016ABEB"
+				item: "forbidden_arcanus:arcane_crystal"
+				type: "item"
+			}]
+			title: "Arcane Crystals"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5ED03CCCA8DF440B"]
+			description: ["Grind arcane crystal into dust. It is the base of every ritual tool."]
+			icon: "forbidden_arcanus:arcane_crystal_dust"
+			id: "692C10ABA4B33870"
+			rewards: [
+				{
+					count: 6
+					id: "7E042A6DF34D8C39"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "198E74CE79F540CF"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 4L
+				id: "4ACC2D3B5B2BD64D"
+				item: "forbidden_arcanus:arcane_crystal_dust"
+				type: "item"
+			}]
+			title: "Crystal Dust"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["692C10ABA4B33870"]
+			description: ["Bats make odd ingredients. Prepare bat soup and collect a wing for the ritual."]
+			icon: "forbidden_arcanus:bat_wing"
+			id: "3252FD12B92E9864"
+			rewards: [
+				{
+					count: 6
+					id: "21C2316BADBBAFD5"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "57D5099E6EFA1940"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "3831E41463D0AF9F"
+					item: "forbidden_arcanus:bat_wing"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "2C292DF881F90691"
+					item: "forbidden_arcanus:bat_soup"
+					type: "item"
+				}
+			]
+			title: "Bat Wings and Soup"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3252FD12B92E9864"]
+			description: ["Build the great forge. It's the heart of every ritual in the mod."]
+			icon: "forbidden_arcanus:hephaestus_forge"
+			id: "7F7519239173A3F2"
+			rewards: [
+				{
+					id: "191663632F94DAB2"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "1D08529F10C961B5"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "5C030B37F7847FC1"
+				item: "forbidden_arcanus:hephaestus_forge"
+				type: "item"
+			}]
+			title: "The Hephaestus Forge"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["7F7519239173A3F2"]
+			description: ["Gold ringed with arcane crystal dust, mundabitur dust and charcoal becomes Deorum. Make four ingots and a Deorum Chain."]
+			icon: "forbidden_arcanus:deorum_ingot"
+			id: "79714407F2F9D0E9"
+			rewards: [
+				{
+					count: 8
+					id: "460E472E99E4B720"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "2C318558CEAFDD37"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 4L
+					id: "682AF5F4FD0D88FB"
+					item: "forbidden_arcanus:deorum_ingot"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "0ACAD571D3FD0F4E"
+					item: "forbidden_arcanus:deorum_chain"
+					type: "item"
+				}
+			]
+			title: "Deorum"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["79714407F2F9D0E9"]
+			description: ["Deorum is not only for weapons. Cast a block of it and hang a deorum lantern to light the ritual room."]
+			icon: "forbidden_arcanus:deorum_block"
+			id: "27E27CFA18B1B1C7"
+			rewards: [
+				{
+					id: "123E6C65F6641307"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "4FAB581DBD4663E1"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "6BA573A535EAB577"
+					item: "forbidden_arcanus:deorum_block"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "36BD2BA3E0B107FC"
+					item: "forbidden_arcanus:deorum_lantern"
+					type: "item"
+				}
+			]
+			title: "Deorum Works"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["27E27CFA18B1B1C7"]
+			description: ["Dark matter powers the strongest tools. Collect some from rituals."]
+			icon: "forbidden_arcanus:dark_matter"
+			id: "3FCFD563057A44CF"
+			rewards: [
+				{
+					count: 2
+					id: "3F78807A8440A5DF"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "3047AB83592DF2B1"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "2611544865463B15"
+				item: "forbidden_arcanus:dark_matter"
+				type: "item"
+			}]
+			title: "Dark Matter"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3FCFD563057A44CF"]
+			description: ["A corrupt soul is the price of dark rituals. Gather one and a dark rune."]
+			icon: "forbidden_arcanus:corrupt_soul"
+			id: "47423EAFFF02B839"
+			rewards: [
+				{
+					count: 8
+					id: "6CBF9A69758F5847"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "3BB05C2D8E801562"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "172FFD471A8A49B9"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "6D71FB56E2E3B584"
+					item: "forbidden_arcanus:corrupt_soul"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "5BD5BE661ED3D10B"
+					item: "forbidden_arcanus:dark_rune"
+					type: "item"
+				}
+			]
+			title: "Corrupt Soul"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["47423EAFFF02B839"]
+			description: ["A nether star bleeds and darkens. The result is the centerpiece of the final rituals."]
+			icon: "forbidden_arcanus:dark_nether_star"
+			id: "3017D386F2AED6B1"
+			rewards: [
+				{
+					count: 16
+					id: "358DE3CFDC5A5E81"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "5617820EBB346539"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "45924FD1AF07477C"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "3A82772D55C370A8"
+				item: "forbidden_arcanus:dark_nether_star"
+				type: "item"
+			}]
+			title: "The Dark Nether Star"
+			x: 16.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Dark rituals, arcane crystals and the forge of Hephaestus."]
+	title: "Forbidden and Arcanus"
+}

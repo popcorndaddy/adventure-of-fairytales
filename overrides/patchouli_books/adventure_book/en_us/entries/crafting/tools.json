@@ -1,0 +1,63 @@
+{
+	"name": "Tinkers' Tools",
+	"icon": "tconstruct:pickaxe",
+	"category": "patchouli:crafting",
+	"sortnum": 1,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "A Tinkers tool is the sum of its parts, and every material brings its own traits. Carve parts at a $(l:crafting/tools#tables_pattern)Part Builder$(/l), cast metal ones in the smeltery, assemble them at a $(l:crafting/tools#tables_tinker_station)Tinker Station$(/l)."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(l)Modifiers$() add the rest. Tools level up as you use them and earn more slots.$(br2)$(l:crafting/tools#cobalt_ingot)Cobalt$(/l) from the Nether opens the way to $(l:crafting/tools#manyullyn_ingot)Manyullyn$(/l) and $(l:crafting/tools#hepatizon_ingot)Hepatizon$(/l)."
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "tconstruct:tables/pattern",
+			"recipe2": "tconstruct:tables/part_builder",
+			"anchor": "tables_pattern"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "tconstruct:tables/tinker_station",
+			"anchor": "tables_tinker_station"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "tconstruct:cobalt_ingot",
+			"text": "Mined in the Nether.",
+			"link_recipe": true,
+			"anchor": "cobalt_ingot"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "tconstruct:manyullyn_ingot",
+			"text": "Cobalt and ancient debris, alloyed in the smeltery.",
+			"link_recipe": true,
+			"anchor": "manyullyn_ingot"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "tconstruct:hepatizon_ingot",
+			"text": "Copper, cobalt and quartz, alloyed in the smeltery.",
+			"link_recipe": true,
+			"anchor": "hepatizon_ingot"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "tconstruct:common/materials_and_you",
+			"title": "Further Reading",
+			"text": "The $(l)Materials and You$() goes deeper. The smeltery has books of its own.",
+			"anchor": "common_materials_and_you"
+		}
+	],
+	"extra_recipe_mappings": {
+		"tconstruct:pattern": 0,
+		"tconstruct:part_builder": 0,
+		"tconstruct:tinker_station": 0,
+		"tconstruct:cobalt_ingot": 0,
+		"tconstruct:manyullyn_ingot": 0
+	}
+}

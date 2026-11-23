@@ -1,0 +1,224 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "35_the_fairytale_crown"
+	icon: "minecraft:nether_star"
+	id: "0943796F77AB1442"
+	order_index: 0
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["The Underworld Knight, in his black fortress in the Nether, keeps the Band of the Crown. The rest of the Crown was built on it."]
+			icon: "kubejs:crown_band"
+			id: "02ED84E61CE1C106"
+			rewards: [
+				{
+					count: 3
+					id: "0AF359F300D9759E"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "22F2DFAEFE652D87"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "6C83ECF586361245"
+				item: "kubejs:crown_band"
+				type: "item"
+			}]
+			title: "The Band"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["02ED84E61CE1C106"]
+			description: ["The Void Blossom keeps the Jewel, in the caves at the very bottom of the world."]
+			icon: "kubejs:crown_jewel"
+			id: "1C0D132B4B1F006F"
+			rewards: [
+				{
+					count: 16
+					id: "79BCAB87D0837968"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "54FF3D397E6E9D57"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "0A24A6CBF2133171"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "333A2CDF315F0934"
+				item: "kubejs:crown_jewel"
+				type: "item"
+			}]
+			title: "The Jewel"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1C0D132B4B1F006F"]
+			description: ["The Crest is inside the Wither. Build one far from home."]
+			icon: "kubejs:crown_crest"
+			id: "045870118D83D237"
+			rewards: [
+				{
+					count: 16
+					id: "330570152A7374AD"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "0C4F03436758C4CD"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "0DF5E8F064AF9E57"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "0A5A5D78B73C9036"
+				item: "kubejs:crown_crest"
+				type: "item"
+			}]
+			title: "The Crest"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["045870118D83D237"]
+			description: ["The Harbinger keeps the Setting. Wake it in its underground factory with a Nether Star."]
+			icon: "kubejs:crown_setting"
+			id: "266CB198AEC4B609"
+			rewards: [
+				{
+					id: "41E7CA10CD623196"
+					item: "minecraft:netherite_scrap"
+					type: "item"
+				}
+				{
+					count: 2
+					id: "2BB3BC1346D3FEA8"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "63E0357A77E912EF"
+					type: "xp"
+					xp: 550
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "0A442902C15F0C1D"
+				item: "kubejs:crown_setting"
+				type: "item"
+			}]
+			title: "The Setting"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["266CB198AEC4B609"]
+			description: ["The Ender Dragon's heart is the only thing that will bind the pieces together."]
+			icon: "kubejs:dragons_heart"
+			id: "4B18FBE079A26DBD"
+			rewards: [
+				{
+					id: "02297879552EBFBB"
+					item: "minecraft:netherite_scrap"
+					type: "item"
+				}
+				{
+					count: 2
+					id: "2ABE9E23CD332B9B"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "6163EE50DCBD7271"
+					type: "xp"
+					xp: 550
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "363B390813A33586"
+				item: "kubejs:dragons_heart"
+				type: "item"
+			}]
+			title: "The Dragon's Heart"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4B18FBE079A26DBD"]
+			description: ["Put the four pieces and the Dragon's Heart together, and bring the Crown home."]
+			icon: {
+				Count: 1
+				id: "kubejs:kings_crown"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "78352AA2510F462E"
+			rewards: [
+				{
+					id: "6426E3C4AB1F0653"
+					item: "minecraft:enchanted_golden_apple"
+					type: "item"
+				}
+				{
+					count: 16
+					id: "6A9DB9B0586A7A80"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "676E5705E4029E4F"
+					type: "xp"
+					xp: 900
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "3CF2518CDF75E045"
+				item: {
+					Count: 1
+					id: "kubejs:kings_crown"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The King's Crown"
+			x: 10.0d
+			y: 0.0d
+			shape: "hexagon"
+			size: 2.0d
+		}
+	]
+	subtitle: ["Four pieces, a dragon's heart, and the King's Crown made whole."]
+	title: "The Fairytale Crown"
+}

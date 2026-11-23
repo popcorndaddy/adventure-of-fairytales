@@ -1,0 +1,26 @@
+{
+	"name": "Twelve",
+	"icon": "minecraft:paper",
+	"category": "patchouli:notes",
+	"sortnum": 13,
+	"read_by_default": false,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "That should be twelve. Enough to open the way, if you find the stronghold."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "But you need to know something first. The Crown wasn't just stolen. It was broken. The eyes were its power, and the Crown itself is in four pieces, kept by the four worst things I know of. Go through that portal now and there's nothing waiting for you but a dragon."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "The first piece: there's a black fortress hidden in the Nether, and a knight lives in it. The Underworld Knight, they call him."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(o)Every scout who went after the Band of the Crown came back saying the same thing: the Underworld Knight has it, in his black fortress in the Nether.$()"
+		}
+	],
+	"advancement": "kubejs:fairytale/p12"
+}

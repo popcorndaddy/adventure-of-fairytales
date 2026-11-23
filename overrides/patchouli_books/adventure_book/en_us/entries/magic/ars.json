@@ -1,0 +1,50 @@
+{
+	"name": "Ars Nouveau",
+	"icon": "ars_nouveau:novice_spell_book",
+	"category": "patchouli:magic",
+	"sortnum": 4,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Ars Nouveau lets you write your own spells from $(l)glyphs$(): a form, then effects, then augments.$(br2)$(li)The $(l:magic/ars#worn_notebook)Worn Notebook$(/l) is where it starts. You'll find its recipe at the end of this entry."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "$(li)$(l)Source$() is its power. Sourcelinks gather it and a $(l:magic/ars#source_jar)Source Jar$(/l) holds it.$(li)An $(l:magic/ars#imbuement_chamber)Imbuement Chamber$(/l) steeps items in Source.$(li)Spells are written in a $(l:magic/ars#novice_spell_book)Novice Spell Book$(/l). New glyphs are crafted at a Scribe's Table.$(br2)Look for the bright archwood forests."
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "ars_nouveau:imbuement_chamber",
+			"anchor": "imbuement_chamber"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "ars_nouveau:source_jar",
+			"text": "Stores Source for nearby machines.",
+			"link_recipe": true,
+			"anchor": "source_jar"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "ars_nouveau:novice_spell_book",
+			"anchor": "novice_spell_book"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "ars_nouveau:worn_notebook",
+			"title": "Further Reading",
+			"text": "The $(l)Worn Notebook$() goes deeper.",
+			"anchor": "worn_notebook"
+		}
+	],
+	"extra_recipe_mappings": {
+		"ars_nouveau:worn_notebook": 0,
+		"ars_nouveau:imbuement_chamber": 0,
+		"ars_nouveau:source_jar": 0,
+		"ars_nouveau:novice_spell_book": 0,
+		"ars_nouveau:source_gem": 0,
+		"ars_nouveau:scribes_table": 0,
+		"ars_nouveau:archwood_planks": 0
+	}
+}

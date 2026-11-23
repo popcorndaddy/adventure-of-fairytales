@@ -1,0 +1,458 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "02_farmers_delight"
+	group: "01FA0B74B5D0B1FB"
+	icon: "farmersdelight:cooking_pot"
+	id: "1AE5FF4A1765E41E"
+	order_index: 1
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["A good meal starts at a cutting board. Craft one and a flint knife and prepare your ingredients properly."]
+			icon: "farmersdelight:cutting_board"
+			id: "52C7EDBC33EA89DC"
+			rewards: [
+				{
+					count: 6
+					id: "5139D26770CF2D22"
+					item: "minecraft:cooked_beef"
+					type: "item"
+				}
+				{
+					id: "7F7DDFED97B03178"
+					type: "xp"
+					xp: 50
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "4594ECF90077FD26"
+					item: "farmersdelight:cutting_board"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "0DB9834DFACA7CE3"
+					item: {
+						Count: 1
+						id: "farmersdelight:flint_knife"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "The Cutting Board"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["52C7EDBC33EA89DC"]
+			description: ["Rich soil grows crops faster and lets mushrooms thrive. Make some with organic compost."]
+			icon: "farmersdelight:organic_compost"
+			id: "5C991AA04FE6F527"
+			rewards: [
+				{
+					count: 32
+					id: "3C2424F405D62800"
+					item: "minecraft:arrow"
+					type: "item"
+				}
+				{
+					id: "330D81E4F7659431"
+					type: "xp"
+					xp: 50
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "19046AFD64F0205D"
+					item: "farmersdelight:organic_compost"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 4L
+					id: "208F22B5B83FDF71"
+					item: "farmersdelight:rich_soil"
+					type: "item"
+				}
+			]
+			title: "Rich Soil"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5C991AA04FE6F527"]
+			description: ["Build a stove and an iron skillet. Fry meats and cook on top of an open flame."]
+			icon: "farmersdelight:stove"
+			id: "41471810C24A2071"
+			rewards: [
+				{
+					count: 3
+					id: "709C9FFA887E6952"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "746E42277BEE7D1B"
+					type: "xp"
+					xp: 50
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "495A26616C3D62BA"
+					item: "farmersdelight:stove"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "2225CF125F0ECA6C"
+					item: {
+						Count: 1
+						id: "farmersdelight:skillet"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "A Kitchen Hearth"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["41471810C24A2071"]
+			description: ["Place a cooking pot over a heat source and simmer a stew. It needs bowls and the right ingredients to produce a hearty meal."]
+			icon: "farmersdelight:cooking_pot"
+			id: "5B329E3FD27E07D8"
+			rewards: [
+				{
+					count: 6
+					id: "05DE9AEFF5F92BB1"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "71CF575E5D8AF545"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "7C8F0C29F2E92FE0"
+				item: "farmersdelight:cooking_pot"
+				type: "item"
+			}]
+			title: "The Cooking Pot"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5B329E3FD27E07D8"]
+			description: ["Cook two bowls of vegetable soup. Perfect for a cold night."]
+			icon: "farmersdelight:vegetable_soup"
+			id: "4446BC9F895123B0"
+			rewards: [
+				{
+					count: 6
+					id: "3F5F6267B0F4B8D3"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "6EE80D0EB6203634"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 2L
+				id: "57E9496CD3D0377A"
+				item: "farmersdelight:vegetable_soup"
+				type: "item"
+			}]
+			title: "Comforting Soup"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4446BC9F895123B0"]
+			description: ["Beef stew and chicken soup feed you far better than raw meat. Cook both."]
+			icon: "farmersdelight:beef_stew"
+			id: "57FCA3CA350C0E8E"
+			rewards: [
+				{
+					count: 3
+					id: "5A5A2A56F56D509C"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "3DF1B73BA32B63E4"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "4C3BF41897F40D66"
+					item: "farmersdelight:beef_stew"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "0F954468D3FAA853"
+					item: "farmersdelight:chicken_soup"
+					type: "item"
+				}
+			]
+			title: "A Hearty Stew"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["57FCA3CA350C0E8E"]
+			description: ["Plant rice at the water's edge and harvest it. Rice is the base of several satisfying dishes."]
+			icon: "farmersdelight:rice"
+			id: "2ECE29C859A94AA4"
+			rewards: [
+				{
+					count: 6
+					id: "083FCE09B953BA07"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "51176FAD272942B7"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 16L
+					id: "1EB419D10F01CE59"
+					item: "farmersdelight:rice"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 4L
+					id: "0C2A538D1D27A9A0"
+					item: "farmersdelight:cooked_rice"
+					type: "item"
+				}
+			]
+			title: "Rice Paddies"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2ECE29C859A94AA4"]
+			description: ["A whole roast chicken on the table. It takes a while to cook and a while to eat."]
+			icon: "farmersdelight:roast_chicken"
+			id: "36CDFFD06174C808"
+			rewards: [
+				{
+					count: 6
+					id: "126A347830849A5E"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "735A6238BCEA95DC"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "3B33E5712B06FFDD"
+				item: "farmersdelight:roast_chicken"
+				type: "item"
+			}]
+			title: "Roasted Feast"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["36CDFFD06174C808"]
+			description: ["Bake a pie crust and fill it with something sweet."]
+			icon: "farmersdelight:pie_crust"
+			id: "7C001DB8072830DC"
+			rewards: [
+				{
+					count: 6
+					id: "3A0A339029AFBD29"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "4E8DAA709F8CB651"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 2L
+					id: "5F8844AED085B5BC"
+					item: "farmersdelight:pie_crust"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "7A871F77ECBF8DC0"
+					item: "farmersdelight:sweet_berry_cheesecake"
+					type: "item"
+				}
+			]
+			title: "The Baker's Reward"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["7C001DB8072830DC"]
+			description: ["Roll fresh pasta dough and wrap dumplings. Two dishes that reward patience."]
+			icon: "farmersdelight:raw_pasta"
+			id: "17797698AF41FF7E"
+			rewards: [
+				{
+					count: 10
+					id: "100882A8B05454A0"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "696DAEF4589BC0F6"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 4L
+					id: "3A4F04AF16E4B619"
+					item: "farmersdelight:raw_pasta"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 2L
+					id: "0309238FC803354F"
+					item: "farmersdelight:dumplings"
+					type: "item"
+				}
+			]
+			title: "Noodles and Dumplings"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["17797698AF41FF7E"]
+			description: ["Prepare a pasta with meatballs and a plate of steak and potatoes, a proper supper after a hard day."]
+			icon: "farmersdelight:pasta_with_meatballs"
+			id: "357F5FE961050291"
+			rewards: [
+				{
+					count: 5
+					id: "77E5FC1EE3D22359"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "6B0FE9694E635AE6"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "454BAC5AD616C659"
+					item: "farmersdelight:pasta_with_meatballs"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "6F40B978CDAC416C"
+					item: "farmersdelight:steak_and_potatoes"
+					type: "item"
+				}
+			]
+			title: "Pasta Night"
+			x: 20.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["357F5FE961050291"]
+			description: ["Prepare a banquet of ratatouille, stuffed pumpkin and a cake, enough for every adventurer in the kingdom."]
+			icon: "farmersdelight:ratatouille"
+			id: "1E925D2C0CBAE8DD"
+			rewards: [
+				{
+					id: "33699C441AD86E72"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "681020CDCFD2A595"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "376B63CF16E6B13C"
+					item: "farmersdelight:ratatouille"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "174DD6A61E9440A2"
+					item: "farmersdelight:stuffed_pumpkin"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "42CBA8C1371006C3"
+					item: "minecraft:cake"
+					type: "item"
+				}
+			]
+			title: "Harvest Banquet"
+			x: 22.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["From a cutting board to a banquet."]
+	title: "Farmer's Delight"
+}

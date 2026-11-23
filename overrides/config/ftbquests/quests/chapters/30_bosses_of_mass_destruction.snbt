@@ -1,0 +1,227 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "30_bosses_of_mass_destruction"
+	group: "71E49019A27AF73C"
+	icon: "bosses_of_mass_destruction:soul_star"
+	id: "18403424C91F2AAF"
+	order_index: 0
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["A purple tower hides the first of the great bosses. Bring plenty of arrows, a good shield and room to dodge."]
+			icon: "minecraft:book"
+			id: "4300031BBA0DFB12"
+			rewards: [
+				{
+					count: 2
+					id: "127C76C491455660"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "796FD37444095EC3"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				entity: "bosses_of_mass_destruction:lich"
+				id: "0F3E832D3C995AF8"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Lich"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4300031BBA0DFB12"]
+			description: ["A soul star is a rare, powerful item of the mod. Keep one safe once you have it."]
+			icon: "bosses_of_mass_destruction:soul_star"
+			id: "56C4E24ECBE71F91"
+			rewards: [
+				{
+					count: 8
+					id: "035F95D207C00F70"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "0699CA61D6D9A11C"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "30FDC4EE17D444DA"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "5A36B26D6EEA962C"
+				item: "bosses_of_mass_destruction:soul_star"
+				type: "item"
+			}]
+			title: "Soul Star"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["56C4E24ECBE71F91"]
+			description: ["A great flower of the dark grows in a cave, ringed with thorns. Take it on in its own cave."]
+			icon: "minecraft:book"
+			id: "28A18E8369CB9A91"
+			rewards: [
+				{
+					count: 2
+					id: "4A27F4A0B7BFB368"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "694D8099FD300D3D"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				entity: "bosses_of_mass_destruction:void_blossom"
+				id: "3CD1763EF43A7F76"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Void Blossom"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["28A18E8369CB9A91"]
+			description: ["Thorns of the void are hard to gather. Bring one home as proof of your fight."]
+			icon: "bosses_of_mass_destruction:void_thorn"
+			id: "362CC9296479EF7E"
+			rewards: [
+				{
+					count: 8
+					id: "7C920A41F8387E9E"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "6D45F0594BA7EE36"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "272A350FABC11A3A"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "2E3A85F3C5382F9B"
+				item: "bosses_of_mass_destruction:void_thorn"
+				type: "item"
+			}]
+			title: "Void Thorn"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["362CC9296479EF7E"]
+			description: ["A pillar of obsidian guards the End. Defeat it and prove yourself against ancient stone."]
+			icon: "minecraft:book"
+			id: "3B33B91EE5479ED6"
+			rewards: [
+				{
+					count: 3
+					id: "4F75D6C7ADA59BC4"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "415651B71D971778"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				entity: "bosses_of_mass_destruction:obsidilith"
+				id: "5F1F306E7FE56FB7"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Obsidilith"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3B33B91EE5479ED6"]
+			description: ["An obsidian heart is a trophy of strength. Bring one home."]
+			icon: "bosses_of_mass_destruction:obsidian_heart"
+			id: "2BCE134C8CAA95AC"
+			rewards: [
+				{
+					count: 3
+					id: "7D86E2882E593395"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "155F754EB222C4F1"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "2AF130816F6471ED"
+				item: "bosses_of_mass_destruction:obsidian_heart"
+				type: "item"
+			}]
+			title: "Obsidian Heart"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2BCE134C8CAA95AC"]
+			description: ["A great armored fist guards a fortress in the Nether. Break the fortress open and defeat him."]
+			icon: "minecraft:book"
+			id: "56A87E9C8F03E5FC"
+			rewards: [
+				{
+					count: 3
+					id: "25176AE35089E3F7"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "55B8008AA8F8045F"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				entity: "bosses_of_mass_destruction:gauntlet"
+				id: "504D54590B66F1F0"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Gauntlet"
+			x: 12.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Four towering bosses of the deep and the dark."]
+	title: "Bosses of Mass Destruction"
+}

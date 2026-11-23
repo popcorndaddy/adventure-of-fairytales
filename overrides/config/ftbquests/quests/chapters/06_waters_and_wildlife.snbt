@@ -1,0 +1,599 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "06_waters_and_wildlife"
+	group: "01FA0B74B5D0B1FB"
+	icon: {
+		Count: 1
+		id: "minecraft:fishing_rod"
+		tag: {
+			Damage: 0
+		}
+	}
+	id: "20C8D3C671EBF427"
+	order_index: 5
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Cast a line and catch your first fish. Fishing is the simplest source of food and treasure."]
+			icon: {
+				Count: 1
+				id: "minecraft:fishing_rod"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "07FA7B65AC5E8BAA"
+			rewards: [
+				{
+					count: 4
+					id: "7E557B91627DF553"
+					item: "minecraft:golden_carrot"
+					type: "item"
+				}
+				{
+					id: "5BB8A5816C32CFB2"
+					type: "xp"
+					xp: 50
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "771AF5A1B5CEB471"
+					item: {
+						Count: 1
+						id: "minecraft:fishing_rod"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					advancement: "minecraft:husbandry/fishy_business"
+					criterion: ""
+					id: "7FC75F35E6263816"
+					type: "advancement"
+				}
+			]
+			title: "Catch of the Day"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["07FA7B65AC5E8BAA"]
+			description: ["Set up a lantern-lit camp by the shore with a barrel for the catch."]
+			icon: "minecraft:barrel"
+			id: "6721843AEAF16EDB"
+			rewards: [
+				{
+					count: 32
+					id: "0C13FB587FB2C9D5"
+					item: "minecraft:arrow"
+					type: "item"
+				}
+				{
+					id: "5A2B507D7549B9A8"
+					type: "xp"
+					xp: 50
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "50520C6101DD7024"
+					item: "minecraft:barrel"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 4L
+					id: "6B181436FAA00903"
+					item: "minecraft:lantern"
+					type: "item"
+				}
+			]
+			title: "A Fishing Camp"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6721843AEAF16EDB"]
+			description: ["Aquaculture adds proper fishing gear. Craft an iron rod with a bobber and fishing line."]
+			icon: {
+				Count: 1
+				id: "aquaculture:iron_fishing_rod"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "0E5301494E99C56E"
+			rewards: [
+				{
+					count: 3
+					id: "7EF79FF3844659C7"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "00553ACC084E03A9"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "27D7E2052436F950"
+					item: {
+						Count: 1
+						id: "aquaculture:iron_fishing_rod"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "639CB63E4F8DB55B"
+					item: "aquaculture:bobber"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "125D0C1B96FAA723"
+					item: "aquaculture:fishing_line"
+					type: "item"
+				}
+			]
+			title: "Better Gear"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0E5301494E99C56E"]
+			description: ["Different hooks catch different fish. Craft an iron hook and a gold hook."]
+			icon: "aquaculture:iron_hook"
+			id: "5E4ABDC0AEC2F142"
+			rewards: [
+				{
+					count: 3
+					id: "05D743BFC6C94A88"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "7CE631214459704B"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "55F8E111E0623994"
+					item: "aquaculture:iron_hook"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "1A37C3223E8926DC"
+					item: "aquaculture:gold_hook"
+					type: "item"
+				}
+			]
+			title: "Hooks"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5E4ABDC0AEC2F142"]
+			description: ["Rivers and ponds hold bluegill and carp. Catch a few of each."]
+			icon: "aquaculture:bluegill"
+			id: "0A62A38EFB583875"
+			rewards: [
+				{
+					count: 8
+					id: "2939AC22D9789C8C"
+					item: "minecraft:golden_carrot"
+					type: "item"
+				}
+				{
+					id: "605B550E7454A74C"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "1218331A5AA5844E"
+					item: "aquaculture:bluegill"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "0D68B242A11A4888"
+					item: "aquaculture:carp"
+					type: "item"
+				}
+			]
+			title: "Freshwater Fish"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0A62A38EFB583875"]
+			description: ["A fillet knife turns fish into fillets, good raw material for cooking."]
+			icon: {
+				Count: 1
+				id: "aquaculture:iron_fillet_knife"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "47B39118F038D9F9"
+			rewards: [
+				{
+					count: 8
+					id: "636DC42B726F203F"
+					item: "minecraft:golden_carrot"
+					type: "item"
+				}
+				{
+					id: "50DA9DB87567FB71"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "1E648D756205BE69"
+					item: {
+						Count: 1
+						id: "aquaculture:iron_fillet_knife"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "3ED7DA6122166229"
+					item: "aquaculture:fish_fillet_cooked"
+					type: "item"
+				}
+			]
+			title: "A Fillet Knife"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["47B39118F038D9F9"]
+			description: ["Arapaima and muskellunge are huge and rare. A heavy hook helps."]
+			icon: "aquaculture:arapaima"
+			id: "28877CEFBD72D374"
+			rewards: [
+				{
+					count: 6
+					id: "5C93F159E1AAADF9"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "0BEEE2F73D7A4E88"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "6A3D2B62F8F4472C"
+					item: "aquaculture:arapaima"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "1837A9D09E89D152"
+					item: "aquaculture:muskellunge"
+					type: "item"
+				}
+			]
+			title: "Giants of the River"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["28877CEFBD72D374"]
+			description: ["A gold rod with a double hook doubles your odds of a rare catch."]
+			icon: {
+				Count: 1
+				id: "aquaculture:gold_fishing_rod"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "4F02A642F789A880"
+			rewards: [
+				{
+					count: 6
+					id: "6A2AC129A6CB6F43"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "07AFB1127FC1B73A"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "683E7F66896495BA"
+					item: {
+						Count: 1
+						id: "aquaculture:gold_fishing_rod"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "124912EDBED65580"
+					item: "aquaculture:double_hook"
+					type: "item"
+				}
+			]
+			title: "A Golden Rod"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4F02A642F789A880"]
+			description: ["Neptunium is found in the deep. A neptunium rod and Neptune's bounty mark a master angler."]
+			icon: {
+				Count: 1
+				id: "aquaculture:neptunium_fishing_rod"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "3D4E684A56AE952D"
+			rewards: [
+				{
+					count: 2
+					id: "363812B13CB6EFDF"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "02A9E184470A41C9"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "408AEA0561BFFF5F"
+					item: {
+						Count: 1
+						id: "aquaculture:neptunium_fishing_rod"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "6AAD4A3A434CCEE1"
+					item: "aquaculture:neptunes_bounty"
+					type: "item"
+				}
+			]
+			title: "Neptune's Gear"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3D4E684A56AE952D"]
+			description: ["Dive for shells, hearts of the sea and the trident of a drowned."]
+			icon: "minecraft:nautilus_shell"
+			id: "678D5E898CF817FE"
+			rewards: [
+				{
+					count: 2
+					id: "4E2DF94C5B144EA2"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "389FB0116458E0D2"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 2L
+					id: "355071B56C835983"
+					item: "minecraft:nautilus_shell"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "26502D5727F818A5"
+					item: "minecraft:heart_of_the_sea"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "02F3A042D94B169C"
+					item: {
+						Count: 1
+						id: "minecraft:trident"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Treasures of the Tide"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["678D5E898CF817FE"]
+			description: ["A conduit gives you air and sight underwater. Build one on your ocean monument hunt."]
+			icon: "minecraft:conduit"
+			id: "457CCD8D0CDA12A3"
+			rewards: [
+				{
+					count: 8
+					id: "064E4DB192CB9F00"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "2824FEA20901DD74"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "06F784E70B800DF5"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "77AC2BE3BAD75009"
+					item: "minecraft:conduit"
+					type: "item"
+				}
+				{
+					consume_items: false
+					count: 8L
+					id: "4732190800474AA8"
+					item: "minecraft:prismarine_shard"
+					type: "item"
+				}
+			]
+			title: "The Conduit"
+			x: 20.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["457CCD8D0CDA12A3"]
+			description: ["Naturalist adds butterflies and snails to the world. A bug net lets you catch them gently."]
+			icon: {
+				Count: 1
+				id: "naturalist:bug_net"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "66C310D6648F7987"
+			rewards: [
+				{
+					count: 8
+					id: "61A818A29A317CB8"
+					item: "minecraft:cooked_porkchop"
+					type: "item"
+				}
+				{
+					id: "518CAB3372A97B59"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "63024861E570A00A"
+					item: {
+						Count: 1
+						id: "naturalist:bug_net"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "7421ADEF53D5B1A5"
+					item: "naturalist:snail_shell"
+					type: "item"
+				}
+			]
+			title: "Naturalist's Net"
+			x: 22.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["66C310D6648F7987"]
+			description: ["The forests now hold deer, ducks and lizards. Cook venison and a duck for a hunter's meal."]
+			icon: "naturalist:cooked_venison"
+			id: "5D48090D32A25C99"
+			rewards: [
+				{
+					count: 5
+					id: "3EEB60A6A62BBB9A"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "4C202BD34649764F"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "0E2B4ED256A4DF32"
+					item: "naturalist:cooked_venison"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "0B25182D50867F49"
+					item: "naturalist:cooked_duck"
+					type: "item"
+				}
+			]
+			title: "Game Meat"
+			x: 24.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Rivers, oceans and everything that lives in them."]
+	title: "Waters and Wildlife"
+}

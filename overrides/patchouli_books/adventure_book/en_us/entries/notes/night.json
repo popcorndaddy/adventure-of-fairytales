@@ -1,0 +1,22 @@
+{
+	"name": "What's Left",
+	"icon": "minecraft:paper",
+	"category": "patchouli:notes",
+	"sortnum": 1,
+	"read_by_default": false,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "You'll have noticed the pages. Most of them are gone.$(br2)I didn't do that. Whatever took the Crown came back for my notes. It knew I'd been following it, and it tore out every page that said where to go next."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Then it handed them out, one to each of the things out there big enough to keep them.$(br2)So that's the only way forward now. Find them, beat them, and take back what's mine."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "The first one is the easiest. There's an iron giant asleep in a chamber under the hills. Only its back can be hurt, and only right after it swings.$(br2)$(o)The miners swear the Ferrous Wroughtnaut keeps the Lost Eye, asleep in an iron chamber deep under the Overworld.$()"
+		}
+	],
+	"advancement": "kubejs:fairytale/night"
+}

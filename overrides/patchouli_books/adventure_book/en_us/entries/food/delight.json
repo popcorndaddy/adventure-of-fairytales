@@ -1,0 +1,48 @@
+{
+	"name": "Farmer's Delight",
+	"icon": "farmersdelight:cooking_pot",
+	"category": "patchouli:food",
+	"sortnum": 0,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "Most of the cooking here starts with Farmer's Delight."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "A knife and a $(l:food/delight#flint_knife)Cutting Board$(/l) prepare ingredients. The $(l:food/delight#cooking_pot)Cooking Pot$(/l) sits over heat for soups and stews, and the $(l:food/delight#skillet)Skillet$(/l) works on a stove. $(l:food/delight#rich_soil)Rich Soil$(/l) grows crops faster.$(br2)Big meals leave you $(l)Comforted$() and $(l)Nourished$()."
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "farmersdelight:flint_knife",
+			"recipe2": "farmersdelight:cutting_board",
+			"anchor": "flint_knife"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "farmersdelight:cooking_pot",
+			"recipe2": "farmersdelight:stove",
+			"anchor": "cooking_pot"
+		},
+		{
+			"type": "patchouli:crafting",
+			"recipe": "farmersdelight:skillet",
+			"anchor": "skillet"
+		},
+		{
+			"type": "patchouli:spotlight",
+			"item": "farmersdelight:rich_soil",
+			"text": "Crops on it grow faster.",
+			"link_recipe": true,
+			"anchor": "rich_soil"
+		}
+	],
+	"extra_recipe_mappings": {
+		"farmersdelight:cooking_pot": 0,
+		"farmersdelight:cutting_board": 0,
+		"farmersdelight:flint_knife": 0,
+		"farmersdelight:skillet": 0,
+		"farmersdelight:rich_soil": 0
+	}
+}

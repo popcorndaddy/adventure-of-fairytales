@@ -1,0 +1,13 @@
+{
+	"name": "Chaos Bosses",
+	"icon": "born_in_chaos_v1:bonescaller_staff",
+	"category": "patchouli:bosses",
+	"sortnum": 4,
+	"read_by_default": true,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "$(li)$(l)Sir Pumpkinhead$(): break the evil pumpkin at the heart of his candle shrine. Near Halloween, he may come on his own.$(li)$(l)Lord Pumpkinhead$(): worse. Use a Transmuting Elixir on that same pumpkin."
+		}
+	]
+}

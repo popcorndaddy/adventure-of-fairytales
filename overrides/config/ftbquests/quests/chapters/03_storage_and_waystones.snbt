@@ -1,0 +1,485 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "03_storage_and_waystones"
+	group: "01FA0B74B5D0B1FB"
+	icon: "sophisticatedbackpacks:backpack"
+	id: "5AB2B2785EBC1A8A"
+	order_index: 2
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["A backpack is the first upgrade every adventurer needs. Craft one and fill it with the things you refuse to leave behind."]
+			icon: "sophisticatedbackpacks:backpack"
+			id: "086468A4E3CAA619"
+			rewards: [
+				{
+					count: 3
+					id: "6C4B4C4CB4976164"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "225E7B34F611BF51"
+					type: "xp"
+					xp: 50
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "1CD54BBC4E218988"
+				item: "sophisticatedbackpacks:backpack"
+				type: "item"
+			}]
+			title: "Pack for the Road"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["086468A4E3CAA619"]
+			description: ["Upgrade to an iron backpack for more slots and room for upgrades."]
+			icon: "sophisticatedbackpacks:iron_backpack"
+			id: "26BDF7D56926D243"
+			rewards: [
+				{
+					count: 8
+					id: "0CAB000DC312AE8C"
+					item: "minecraft:cooked_porkchop"
+					type: "item"
+				}
+				{
+					id: "4C0B60F6D6EEC2D3"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "3F7C80C45FEE8572"
+				item: "sophisticatedbackpacks:iron_backpack"
+				type: "item"
+			}]
+			title: "Iron Backpack"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["26BDF7D56926D243"]
+			description: ["Pickup and magnet upgrades gather loot for you, so fighting never has to stop for scavenging."]
+			icon: "sophisticatedbackpacks:pickup_upgrade"
+			id: "27F60423DDDF3C26"
+			rewards: [
+				{
+					count: 3
+					id: "1FBA696EE42D068C"
+					item: "minecraft:emerald"
+					type: "item"
+				}
+				{
+					id: "0EA3FC67335A924A"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "640406DA87186D2A"
+					item: "sophisticatedbackpacks:pickup_upgrade"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "26157D699E7D4311"
+					item: "sophisticatedbackpacks:magnet_upgrade"
+					type: "item"
+				}
+			]
+			title: "Quick Hands"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["27F60423DDDF3C26"]
+			description: ["Feeding and crafting upgrades turn your backpack into a pantry and workbench in one."]
+			icon: "sophisticatedbackpacks:feeding_upgrade"
+			id: "1D48150EA2AAE116"
+			rewards: [
+				{
+					count: 10
+					id: "54141BC297EFEE22"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "62F011C382C5198A"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "4909FE86DF8D03EA"
+					item: "sophisticatedbackpacks:feeding_upgrade"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "179741D941A657FA"
+					item: "sophisticatedbackpacks:crafting_upgrade"
+					type: "item"
+				}
+			]
+			title: "A Pack That Feeds You"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1D48150EA2AAE116"]
+			description: ["Sophisticated chests and barrels keep their contents sorted and can be upgraded as your hoard grows."]
+			icon: "sophisticatedstorage:chest"
+			id: "45F39C28D8922E99"
+			rewards: [
+				{
+					count: 8
+					id: "72EB16C33FB6683C"
+					item: "minecraft:golden_carrot"
+					type: "item"
+				}
+				{
+					id: "6557D08587190CC4"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "78077D9FAFA7BC3F"
+					item: "sophisticatedstorage:chest"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "6D080900CEA5ABAC"
+					item: "sophisticatedstorage:barrel"
+					type: "item"
+				}
+			]
+			title: "Chests That Remember"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["45F39C28D8922E99"]
+			description: ["Upgrade your storage to iron and wire several chests to one controller."]
+			icon: "sophisticatedstorage:basic_to_iron_tier_upgrade"
+			id: "2C1BD39291D46BA7"
+			rewards: [
+				{
+					count: 16
+					id: "1346C849460BA1A0"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "58D33F332B2BB9DC"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "20A6ACF4A95C6BF1"
+					item: "sophisticatedstorage:basic_to_iron_tier_upgrade"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "324037E53928C4F1"
+					item: "sophisticatedstorage:controller"
+					type: "item"
+				}
+			]
+			title: "Tiers of Storage"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2C1BD39291D46BA7"]
+			description: ["Craft a waystone and place it near home. Activate it by right-clicking."]
+			icon: "waystones:waystone"
+			id: "643DAD9C144205AB"
+			rewards: [
+				{
+					count: 16
+					id: "4CA2FA3695859C15"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "6FD23E4FAF9C1453"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "1E5BA44E3C904030"
+				item: "waystones:waystone"
+				type: "item"
+			}]
+			title: "Stones of Return"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["643DAD9C144205AB"]
+			description: ["A warp scroll takes you to any waystone you have found. Keep a few in your pack."]
+			icon: "waystones:warp_scroll"
+			id: "54A623D08971A46E"
+			rewards: [
+				{
+					count: 10
+					id: "5F477F9DA1619CB3"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "74AF3422D5A413FA"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "15707D94A019A8EE"
+				item: "waystones:warp_scroll"
+				type: "item"
+			}]
+			title: "Scroll of the Road"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["54A623D08971A46E"]
+			description: ["The warp stone is a reusable teleport. Craft one and never lose a day to walking."]
+			icon: {
+				Count: 1
+				id: "waystones:warp_stone"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "17669DBB562D626B"
+			rewards: [
+				{
+					id: "00BBA30FD0D3684F"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "01AB303CEBE9F05F"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "485E983401FEC77B"
+				item: {
+					Count: 1
+					id: "waystones:warp_stone"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "The Warp Stone"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["17669DBB562D626B"]
+			description: ["Bind scrolls to your waystones and link your kingdom into one network. Carry a return scroll for the way home."]
+			icon: "waystones:bound_scroll"
+			id: "7B1BA4521503352D"
+			rewards: [
+				{
+					count: 8
+					id: "24F1B968044E2255"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "33B0624E3A0BE0A9"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "3EF58A8A5D39A928"
+					item: "waystones:bound_scroll"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "740BD604E50BCCA2"
+					item: "waystones:return_scroll"
+					type: "item"
+				}
+			]
+			title: "The Long-Distance Network"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["7B1BA4521503352D"]
+			description: ["Sharestones link to others of the same color, so friends can share a gateway. Craft one and some warp dust."]
+			icon: "waystones:sharestone"
+			id: "4E08BB622AADAC62"
+			rewards: [
+				{
+					id: "1127664D833E185D"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "6578198A2EC69A55"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "4322BD5E6A96BB89"
+					item: "waystones:sharestone"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "655CA692D19CFF0A"
+					item: "waystones:warp_dust"
+					type: "item"
+				}
+			]
+			title: "Colors of the Network"
+			x: 20.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4E08BB622AADAC62"]
+			description: ["Elevators carry you up towers and down mines. Craft a few in different colors."]
+			icon: "elevatorid:elevator_white"
+			id: "73ED08DE3F1F84C3"
+			rewards: [
+				{
+					count: 8
+					id: "3F3D2DF67E842E6C"
+					item: "minecraft:cooked_porkchop"
+					type: "item"
+				}
+				{
+					id: "3511077AEE15101A"
+					type: "xp"
+					xp: 90
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "3D636EDBF78F2366"
+					item: "elevatorid:elevator_white"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "3A8FDF0EE1A575BD"
+					item: "elevatorid:elevator_blue"
+					type: "item"
+				}
+			]
+			title: "Lifts and Landings"
+			x: 22.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["73ED08DE3F1F84C3"]
+			description: ["An ender chest shares its contents with every other of its color. Place one at home and one on the road."]
+			icon: "enderstorage:ender_chest"
+			id: "5D302762261FABF7"
+			rewards: [
+				{
+					id: "33D8436B90DEEADD"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "538F570F3397AA7D"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "15E8D9E1C22FBB28"
+				item: "enderstorage:ender_chest"
+				type: "item"
+			}]
+			title: "A Pearl of Space"
+			x: 24.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5D302762261FABF7"]
+			description: ["An ender pouch brings your shared chest with you wherever you go."]
+			icon: "enderstorage:ender_pouch"
+			id: "01FBF08C37ACAE06"
+			rewards: [
+				{
+					count: 2
+					id: "62E40C3040AF550C"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "69B30016348A8858"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "39D64571BD96C445"
+				item: "enderstorage:ender_pouch"
+				type: "item"
+			}]
+			title: "The Ender Pouch"
+			x: 26.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Carry more, store more and never walk home again."]
+	title: "Storage and Waystones"
+}

@@ -1,0 +1,320 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "22_relics"
+	group: "0367FDC07E543102"
+	icon: "relics:magic_mirror"
+	id: "48670E9A0C03B41E"
+	order_index: 3
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["A magic mirror takes you home. Find the pieces and make one."]
+			icon: "relics:magic_mirror"
+			id: "7820E28C5AF6A874"
+			rewards: [
+				{
+					count: 6
+					id: "1B16DF5E283BBFBB"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "68E644E582FECE97"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "070AC671634A77A7"
+				item: "relics:magic_mirror"
+				type: "item"
+			}]
+			title: "The Magic Mirror"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["7820E28C5AF6A874"]
+			description: ["A hunter's belt tracks nearby creatures. Wear it on a long hunt."]
+			icon: "relics:hunter_belt"
+			id: "5E0855AA23388A6C"
+			rewards: [
+				{
+					count: 6
+					id: "3BEFBF645CA99C0D"
+					item: "minecraft:gold_ingot"
+					type: "item"
+				}
+				{
+					id: "47ACDE3D0ACC0ED9"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "1FB58AF801B358F0"
+				item: "relics:hunter_belt"
+				type: "item"
+			}]
+			title: "A Hunter's Belt"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5E0855AA23388A6C"]
+			description: ["Skate across ice at a surprising speed. Great for the Nether roof and frozen lakes."]
+			icon: "relics:ice_skates"
+			id: "281643A8DA6872CE"
+			rewards: [
+				{
+					count: 10
+					id: "12E8DBED1FF094B8"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "41F9D7AA9F3285FA"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "6BFE1D4B4A91230B"
+				item: "relics:ice_skates"
+				type: "item"
+			}]
+			title: "Ice Skates"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["281643A8DA6872CE"]
+			description: ["A flute for calling your horse. Never lose your mount again."]
+			icon: "relics:horse_flute"
+			id: "48AA59162458400E"
+			rewards: [
+				{
+					count: 10
+					id: "77D40CA2A89F6F74"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "1105A463B0B7E20E"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "42F33412263EC323"
+				item: "relics:horse_flute"
+				type: "item"
+			}]
+			title: "Horse Flute"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["48AA59162458400E"]
+			description: ["A quiver that holds more arrows than your inventory."]
+			icon: "relics:arrow_quiver"
+			id: "7DC9854FAA01A2E0"
+			rewards: [
+				{
+					id: "54765F6882019D6B"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "1435323A18B58EA2"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "7BF60F6189298EB9"
+				item: "relics:arrow_quiver"
+				type: "item"
+			}]
+			title: "The Arrow Quiver"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["7DC9854FAA01A2E0"]
+			description: ["The Bastion Ring points the way to bastions and gets more out of piglin trades. The Chorus Inhibitor lets you blink ahead."]
+			icon: "relics:bastion_ring"
+			id: "5F590BB828D22294"
+			rewards: [
+				{
+					id: "3A964C4B605CA01E"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "61DA5C77BC5C4913"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "295ED46041D63629"
+					item: "relics:bastion_ring"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "356D64EAB30EA23B"
+					item: "relics:chorus_inhibitor"
+					type: "item"
+				}
+			]
+			title: "Bastions and Blinks"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5F590BB828D22294"]
+			description: ["A booster lets you go further on elytra. Hold on tight."]
+			icon: "relics:elytra_booster"
+			id: "53A74B2768A346A5"
+			rewards: [
+				{
+					count: 8
+					id: "2F2A70306C70DE04"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "32C75DD60928583E"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "013D0ED987A74128"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "3D142B000B482325"
+				item: "relics:elytra_booster"
+				type: "item"
+			}]
+			title: "Elytra Booster"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["53A74B2768A346A5"]
+			description: ["Magma walker boots let a traveler cross lava as if it were stone. Find a pair in the deep places."]
+			icon: "relics:magma_walker"
+			id: "4882AD42A9DE63A9"
+			rewards: [
+				{
+					count: 8
+					id: "3B2EAEBCD96E7F8E"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "75F918932AC055D5"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "2C312210AB5E30D8"
+				item: "relics:magma_walker"
+				type: "item"
+			}]
+			title: "Walker of Magma"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4882AD42A9DE63A9"]
+			description: ["A ham that never runs out. It can feed a kingdom."]
+			icon: "relics:infinity_ham"
+			id: "051A423D4BE9446E"
+			rewards: [
+				{
+					count: 8
+					id: "710149C5E54EE6AC"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "27188A07DBA6E013"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "6B3EAB4EE7E3DC9D"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "41E46430BF972EDE"
+				item: "relics:infinity_ham"
+				type: "item"
+			}]
+			title: "The Infinity Ham"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["051A423D4BE9446E"]
+			description: ["A hand that reaches across the void. The final relic of the set."]
+			icon: "relics:enders_hand"
+			id: "122900B650CB93AE"
+			rewards: [
+				{
+					count: 3
+					id: "12CD65DD2DA7767C"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "0A8E710C64508281"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "3A13FED7990CFBD6"
+				item: "relics:enders_hand"
+				type: "item"
+			}]
+			title: "Ender's Hand"
+			x: 18.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Ancient relics found in forgotten places."]
+	title: "Relics"
+}

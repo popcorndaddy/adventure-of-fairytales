@@ -1,0 +1,552 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "26_ice_and_fire"
+	group: "03F7C10E6FAF5CEC"
+	icon: "iceandfire:dragon_horn"
+	id: "68BAA6692C29168C"
+	order_index: 2
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["A bestiary describes every creature of the mod. Craft one and read it before the first hunt."]
+			icon: "iceandfire:bestiary"
+			id: "1A5D8658AA71ECAA"
+			rewards: [
+				{
+					count: 10
+					id: "2065DF0C8BB23AC8"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "20EB737C8AE6C5F8"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "22306D4C70C38566"
+				item: "iceandfire:bestiary"
+				type: "item"
+			}]
+			title: "The Bestiary"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1A5D8658AA71ECAA"]
+			description: ["Dragons eat meal made of bones and meat. Craft a bag."]
+			icon: "iceandfire:dragon_meal"
+			id: "09C646CD2C9475C2"
+			rewards: [
+				{
+					count: 10
+					id: "503A4CD484DEC04C"
+					item: "minecraft:iron_ingot"
+					type: "item"
+				}
+				{
+					id: "17575F0F107157CE"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "3C9FB2FC7029C75E"
+				item: "iceandfire:dragon_meal"
+				type: "item"
+			}]
+			title: "Dragon Meal"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["09C646CD2C9475C2"]
+			description: ["Dragon skeletons sleep in the open. Mine dragon bones from their remains."]
+			icon: "iceandfire:dragonbone"
+			id: "0132F9AC00D98587"
+			rewards: [
+				{
+					count: 16
+					id: "1DFAC1FE361A5D11"
+					item: "minecraft:lapis_lazuli"
+					type: "item"
+				}
+				{
+					id: "6EDC72EEC9DA9A23"
+					type: "xp"
+					xp: 140
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 4L
+				id: "256F448458CB78D7"
+				item: "iceandfire:dragonbone"
+				type: "item"
+			}]
+			title: "Dragon Remains"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0132F9AC00D98587"]
+			description: ["A sword and a bow from dragon bone. Heavy and strong."]
+			icon: {
+				Count: 1
+				id: "iceandfire:dragonbone_sword"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "3AFA17E118845D2F"
+			rewards: [
+				{
+					id: "2EB2CDF7C8022E8E"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "569E7E83AF6E34EE"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "4CE9D8C0473D1161"
+					item: {
+						Count: 1
+						id: "iceandfire:dragonbone_sword"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "3DDE141F282946DF"
+					item: {
+						Count: 1
+						id: "iceandfire:dragonbone_bow"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "Bone Weapon"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["3AFA17E118845D2F"]
+			description: ["A cockatrice turns living things to stone. Face one only with a mirror."]
+			icon: "iceandfire:cockatrice_eye"
+			id: "2D0C3C645A6346F0"
+			rewards: [
+				{
+					count: 8
+					id: "79A85595EEF8398D"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "1C9B4CCE7CF68417"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					entity: "iceandfire:cockatrice"
+					id: "168EFFEEB8A1D8D2"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "40A337816ABA5032"
+					item: "iceandfire:cockatrice_eye"
+					type: "item"
+				}
+			]
+			title: "Cockatrice"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2D0C3C645A6346F0"]
+			description: ["A hippogryph is a proud mount. Tame one and ride."]
+			icon: "minecraft:book"
+			id: "416EDBD4764B6272"
+			rewards: [
+				{
+					id: "6C8C39C2020E8A91"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "578B3E0AB299C526"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				entity: "iceandfire:hippogryph"
+				id: "4DADF7A7D8486CFE"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Hippogryph"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["416EDBD4764B6272"]
+			description: ["Giant ants build great hives in deserts and jungles. Take the resin."]
+			icon: "iceandfire:myrmex_desert_resin"
+			id: "70287C9047B41484"
+			rewards: [
+				{
+					id: "7C13B45E6E984D92"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "25A423077773FB07"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					count: 4L
+					id: "57C7F583FFDF8389"
+					item: "iceandfire:myrmex_desert_resin"
+					type: "item"
+				}
+				{
+					entity: "iceandfire:myrmex_queen"
+					id: "32762960A8C183BC"
+					type: "kill"
+					value: 1L
+				}
+			]
+			title: "Myrmex Hives"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["70287C9047B41484"]
+			description: ["A one-eyed giant lives in the hills. Take its eye and skull."]
+			icon: {
+				Count: 1
+				id: "iceandfire:cyclops_eye"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "6B5201194F2C731D"
+			rewards: [
+				{
+					count: 8
+					id: "426A98827B53063C"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "1E141CD28467AE02"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "1A8C0F33029971A3"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [
+				{
+					entity: "iceandfire:cyclops"
+					id: "71F60BDB129DC31F"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					id: "5C793A4C2C986A5B"
+					item: {
+						Count: 1
+						id: "iceandfire:cyclops_eye"
+						tag: {
+							Damage: 0
+						}
+					}
+					type: "item"
+				}
+			]
+			title: "The Cyclops"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6B5201194F2C731D"]
+			description: ["A hydra's heads regrow if you do not seal them. Burn each one."]
+			icon: "minecraft:book"
+			id: "22D95924F77BA2E0"
+			rewards: [
+				{
+					count: 2
+					id: "7E9532A9EA59F22C"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "27581083419F159B"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				entity: "iceandfire:hydra"
+				id: "33F9680F3C8A5A9B"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Hydra"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["22D95924F77BA2E0"]
+			description: ["Sea serpents terrorize the ocean. Take on one from a good ship."]
+			icon: "minecraft:book"
+			id: "1003E5C1F28631A1"
+			rewards: [
+				{
+					count: 2
+					id: "458B97E6516B39EF"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "75A427344A10B2E5"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				entity: "iceandfire:sea_serpent"
+				id: "7A343214DE019161"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Sea Serpent"
+			x: 18.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1003E5C1F28631A1"]
+			description: ["A dragon egg holds a future companion. Take or buy one."]
+			icon: "iceandfire:dragonegg_red"
+			id: "4C267988ADF6CF07"
+			rewards: [
+				{
+					count: 8
+					id: "39AD608196C282EA"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "120FB2D0BC0E0704"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "03F4E7CD70528B78"
+					type: "xp"
+					xp: 300
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "63AF280E2323D052"
+				item: "iceandfire:dragonegg_red"
+				type: "item"
+			}]
+			title: "Dragon Egg"
+			x: 20.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["4C267988ADF6CF07"]
+			description: ["A fire dragon in its prime is the mightiest foe in the overworld. Bring everything you have."]
+			icon: "minecraft:book"
+			id: "0C6656517733FA63"
+			rewards: [
+				{
+					count: 16
+					id: "634ADB3B971F06EE"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "60EBDEF3B72A9727"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "6DBDE870709BAC54"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				entity: "iceandfire:fire_dragon"
+				id: "1CBE0A1D2CC3D8A2"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Fire Dragon"
+			x: 22.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0C6656517733FA63"]
+			description: ["An ice dragon rules the glacier. Take its scales and make armor."]
+			icon: "iceandfire:dragonscales_blue"
+			id: "2AAAC751746F5A65"
+			rewards: [
+				{
+					count: 16
+					id: "01F20F23BF853665"
+					item: "minecraft:experience_bottle"
+					type: "item"
+				}
+				{
+					id: "448C9DC45823A724"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "2A309F165DE4ED6F"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [
+				{
+					entity: "iceandfire:ice_dragon"
+					id: "5D1D953C68979371"
+					type: "kill"
+					value: 1L
+				}
+				{
+					consume_items: false
+					count: 4L
+					id: "78FBB9C0CA14C641"
+					item: "iceandfire:dragonscales_blue"
+					type: "item"
+				}
+			]
+			title: "The Ice Dragon"
+			x: 24.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2AAAC751746F5A65"]
+			description: ["A lightning dragon spits storms. Go to the highlands with a lightning rod and a plan."]
+			icon: "minecraft:book"
+			id: "574012C3719F1978"
+			rewards: [
+				{
+					count: 3
+					id: "63B1010B9F80F648"
+					item: "minecraft:diamond"
+					type: "item"
+				}
+				{
+					id: "1A4308F3CA32B97B"
+					type: "xp"
+					xp: 400
+				}
+			]
+			tasks: [{
+				entity: "iceandfire:lightning_dragon"
+				id: "56816F2719AD7145"
+				type: "kill"
+				value: 1L
+			}]
+			title: "The Lightning Dragon"
+			x: 26.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["574012C3719F1978"]
+			description: ["Dragonsteel is forged at the dragon forge from dragon blood and steel. The finest metal in the mod."]
+			icon: "iceandfire:dragonsteel_fire_ingot"
+			id: "47216A60ECF2BB59"
+			rewards: [
+				{
+					id: "7AC620E33E9AC530"
+					item: "minecraft:netherite_scrap"
+					type: "item"
+				}
+				{
+					count: 2
+					id: "52CD72E3B049CA91"
+					item: "minecraft:golden_apple"
+					type: "item"
+				}
+				{
+					id: "4ECC75F2C46E8AA3"
+					type: "xp"
+					xp: 550
+				}
+			]
+			tasks: [
+				{
+					consume_items: false
+					id: "0D2C5E95E3D593D0"
+					item: "iceandfire:dragonsteel_fire_ingot"
+					type: "item"
+				}
+				{
+					consume_items: false
+					id: "1503C0C550BB2FE6"
+					item: "iceandfire:dragonsteel_ice_ingot"
+					type: "item"
+				}
+			]
+			title: "Dragonsteel"
+			x: 28.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Dragons, myrmex hives and the legends of the old world."]
+	title: "Ice and Fire"
+}

@@ -1,0 +1,18 @@
+{
+	"name": "The Machine",
+	"icon": "minecraft:paper",
+	"category": "patchouli:notes",
+	"sortnum": 17,
+	"read_by_default": false,
+	"pages": [
+		{
+			"type": "patchouli:text",
+			"text": "That's all four.$(br2)They won't hold together on their own. They need something to bind them, a heart that's never gone cold, and there's only one of those I know of. It's in the dragon."
+		},
+		{
+			"type": "patchouli:text",
+			"text": "Put the eyes in the frame and go through. Then bring every piece together and make it whole.$(br2)$(o)The last thing you need is still beating inside the Ender Dragon, in the End.$()"
+		}
+	],
+	"advancement": "kubejs:fairytale/p16"
+}

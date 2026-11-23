@@ -1,0 +1,316 @@
+{
+	default_hide_dependency_lines: false
+	default_quest_shape: ""
+	filename: "39_the_hexed_cauldron"
+	group: "0367FDC07E543102"
+	icon: "hexerei:mixing_cauldron"
+	id: "31348954A27D8A54"
+	order_index: 7
+	quest_links: [ ]
+	quests: [
+		{
+			description: ["Sage is the first herb most witches grow."]
+			icon: "hexerei:sage_seed"
+			id: "0E3758143A47C106"
+			rewards: [
+				{
+					count: 16
+					id: "265865355492CCAC"
+					item: "minecraft:bone_meal"
+					type: "item"
+				}
+				{
+					id: "20E63C71580ADDEA"
+					type: "xp"
+					xp: 40
+				}
+			]
+			tasks: [{
+				consume_items: false
+				count: 4L
+				id: "304020DD4A6A16F0"
+				item: "hexerei:sage_seed"
+				type: "item"
+			}]
+			title: "Sage Seeds"
+			x: 0.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0E3758143A47C106"]
+			description: ["Find a mandrake plant out in the world and harvest its root."]
+			icon: "hexerei:mandrake_root"
+			id: "1BBE1B609C37D74B"
+			rewards: [
+				{
+					count: 4
+					id: "48FD0CAD87C8C9A5"
+					item: "minecraft:flower_pot"
+					type: "item"
+				}
+				{
+					id: "4EC6FD4D7B1CEFBF"
+					type: "xp"
+					xp: 60
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "3AED338E25589040"
+				item: "hexerei:mandrake_root"
+				type: "item"
+			}]
+			title: "Mandrake Root"
+			x: 2.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["1BBE1B609C37D74B"]
+			description: ["Most of Hexerei is made in this cauldron. Check JEI for every recipe."]
+			icon: "hexerei:mixing_cauldron"
+			id: "0189A21E547A48B6"
+			rewards: [
+				{
+					id: "39FE69EB8E1280FE"
+					item: "minecraft:cauldron"
+					type: "item"
+				}
+				{
+					id: "540523963CA9341F"
+					type: "xp"
+					xp: 100
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "77304A111AB2E73B"
+				item: "hexerei:mixing_cauldron"
+				type: "item"
+			}]
+			title: "The Mixing Cauldron"
+			x: 4.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["0189A21E547A48B6"]
+			description: ["Keeps a big stack of one herb."]
+			icon: "hexerei:herb_jar"
+			id: "2F07D3EC5A4410F7"
+			rewards: [
+				{
+					count: 8
+					id: "39F3B47FDCA0D699"
+					item: "minecraft:glass"
+					type: "item"
+				}
+				{
+					id: "1D50D7F7C1E57E8A"
+					type: "xp"
+					xp: 60
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "078ACC48AD9CD9B1"
+				item: "hexerei:herb_jar"
+				type: "item"
+			}]
+			title: "Herb Jar"
+			x: 6.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2F07D3EC5A4410F7"]
+			description: ["Dips wicks into wax to make candles."]
+			icon: "hexerei:candle_dipper"
+			id: "5785CBC9B1CD61DF"
+			rewards: [
+				{
+					count: 6
+					id: "4913E8364F53091C"
+					item: "minecraft:honeycomb"
+					type: "item"
+				}
+				{
+					id: "401E5952FA4684D1"
+					type: "xp"
+					xp: 60
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "0FE8EEB847DE910E"
+				item: "hexerei:candle_dipper"
+				type: "item"
+			}]
+			title: "The Dipper"
+			x: 8.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["5785CBC9B1CD61DF"]
+			description: ["Selenite grows from budding selenite. Mine a shard."]
+			icon: "hexerei:selenite_shard"
+			id: "42A43A24CCA9A5A5"
+			rewards: [
+				{
+					count: 8
+					id: "288DC2DD51D6FAB3"
+					item: "minecraft:amethyst_shard"
+					type: "item"
+				}
+				{
+					id: "503D1F4B619C5F66"
+					type: "xp"
+					xp: 80
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "347A9F03FC366481"
+				item: "hexerei:selenite_shard"
+				type: "item"
+			}]
+			title: "Selenite"
+			x: 10.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["42A43A24CCA9A5A5"]
+			description: ["A witch's own guide to the mod."]
+			icon: "hexerei:book_of_shadows"
+			id: "6951E0260CD93960"
+			rewards: [
+				{
+					count: 16
+					id: "317523FF415845AC"
+					item: "minecraft:paper"
+					type: "item"
+				}
+				{
+					id: "328718F9DECDAB5B"
+					type: "xp"
+					xp: 80
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "509A8BB4AD7ABC14"
+				item: "hexerei:book_of_shadows"
+				type: "item"
+			}]
+			title: "Book of Shadows"
+			x: 12.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["6951E0260CD93960"]
+			description: ["Every broom needs a brush."]
+			icon: {
+				Count: 1
+				id: "hexerei:broom_brush"
+				tag: {
+					Damage: 0
+				}
+			}
+			id: "2BA4F310C4F8C41F"
+			rewards: [
+				{
+					count: 16
+					id: "2D61F719E9451DF7"
+					item: "minecraft:wheat"
+					type: "item"
+				}
+				{
+					id: "0D3CAE10738F7BC9"
+					type: "xp"
+					xp: 80
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "1A2E06A2BBD4E0A4"
+				item: {
+					Count: 1
+					id: "hexerei:broom_brush"
+					tag: {
+						Damage: 0
+					}
+				}
+				type: "item"
+			}]
+			title: "Broom Brush"
+			x: 14.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["2BA4F310C4F8C41F"]
+			description: ["Your own flying broom. Upgrades add storage and better handling."]
+			icon: "hexerei:willow_broom"
+			id: "55C601AEFE731C17"
+			rewards: [
+				{
+					count: 4
+					id: "6BB5FB9722710F6B"
+					item: "minecraft:phantom_membrane"
+					type: "item"
+				}
+				{
+					id: "1343566FA399D6BC"
+					type: "xp"
+					xp: 200
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "0178F47FF0C2F478"
+				item: "hexerei:willow_broom"
+				type: "item"
+			}]
+			title: "Willow Broom"
+			x: 16.0d
+			y: 0.0d
+			shape: "circle"
+		}
+		{
+			dependencies: ["55C601AEFE731C17"]
+			description: ["A crystal ball for the coven."]
+			icon: "hexerei:crystal_ball"
+			id: "6E69FE51AA306B8E"
+			rewards: [
+				{
+					count: 2
+					id: "27A3B84360699006"
+					item: "minecraft:ender_eye"
+					type: "item"
+				}
+				{
+					id: "11600D9608C8A2EC"
+					type: "xp"
+					xp: 150
+				}
+			]
+			tasks: [{
+				consume_items: false
+				id: "47BFFA5A7D9AA3AA"
+				item: "hexerei:crystal_ball"
+				type: "item"
+			}]
+			title: "Crystal Ball"
+			x: 18.0d
+			y: 0.0d
+			shape: "diamond"
+			size: 1.5d
+		}
+	]
+	subtitle: ["Hexerei witchcraft: herbs, cauldrons and flying brooms."]
+	title: "The Hexed Cauldron"
+}
