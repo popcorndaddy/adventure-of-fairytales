@@ -710,7 +710,7 @@ SKULL = ["...#####...",
          "...#.#.#..."]
 SKULL_M = np.array([[c == "#" for c in row] for row in SKULL], dtype=np.float32)
 VIOLET = np.array([0.72, 0.28, 1.0])
-BLACK_TINT = (0.1, 0.085, 0.13)
+BLACK_TINT = (0.27, 0.27, 0.31)                       # v9: dark gunmetal grey (was near-black)
 
 
 def voronoi_cracks(t, w, h, cell):
@@ -724,7 +724,7 @@ def voronoi_cracks(t, w, h, cell):
         d2 = np.where(d < d1, d1, np.minimum(d2, d)); d1 = np.minimum(d1, d)
     edge = d2 - d1
     line = np.clip(1 - edge / 0.9, 0, 1)
-    t[..., :3] = t[..., :3] * (1 - 0.6 * line[..., None]) + np.array([0.36, 0.31, 0.44]) * 0.55 * line[..., None]
+    t[..., :3] = t[..., :3] * (1 - 0.6 * line[..., None]) + np.array([0.07, 0.07, 0.09]) * 0.6 * line[..., None]   # dark etched lines on steel
 
 
 def black_plate(w, h, face):
@@ -732,10 +732,10 @@ def black_plate(w, h, face):
     recolour(t, BLACK_TINT, 0.45, 1.9)
     if face in ("north", "south", "east", "west"):                       # glossy: a soft sheen across the upper part
         yy = np.arange(h)[:, None]
-        t[..., :3] += (0.06 * np.exp(-((yy / max(h, 1) - 0.25) ** 2) / 0.02))[..., None] * np.array([0.8, 0.75, 1.0])
+        t[..., :3] += (0.13 * np.exp(-((yy / max(h, 1) - 0.25) ** 2) / 0.02))[..., None] * np.array([0.9, 0.92, 1.0])   # silver sheen
     voronoi_cracks(t, w, h, 2.6 * TPX)
-    grain(t, 0.008)
-    wear(t, 0.08, 0.5)
+    grain(t, 0.01)
+    wear(t, 0.2, 0.55)                                                   # bright silver on the worn edges
     return t
 
 
