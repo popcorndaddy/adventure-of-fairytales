@@ -190,7 +190,7 @@ LOOP = {"Gatekeeper_Idle", "Gatekeeper_Walking", "Gatekeeper_Heavy_Walk", "Gatek
 HOLD = {"Gatekeeper_Death", "Gatekeeper_Block", "Gatekeeper_Awakening", "Gatekeeper_Entrance"}
 anims = {}
 for name, (f0, f1, loop) in clips.items():
-    bones, length = sample_clip(name, f0, f1, 1 if name in ("Gatekeeper_Overhead_Attack", "Gatekeeper_Horizontal_Sweep", "Gatekeeper_Multi_Arm_Attack") else 2)
+    bones, length = sample_clip(name, f0, f1, 1 if name in ("Gatekeeper_Overhead_Attack", "Gatekeeper_Horizontal_Sweep", "Gatekeeper_Multi_Arm_Attack", "Gatekeeper_Gravity_Well") else 2)
     a = {"animation_length": round(length, 4), "bones": bones}
     if name in LOOP:
         a["loop"] = True

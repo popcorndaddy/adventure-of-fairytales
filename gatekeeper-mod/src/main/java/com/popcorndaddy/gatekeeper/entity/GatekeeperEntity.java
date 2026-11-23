@@ -70,7 +70,7 @@ public class GatekeeperEntity extends Monster implements GeoEntity {
 
     private enum Action {
         NONE("", 0), OVERHEAD("overhead", 48), SWEEP("sweep", 44), MULTI("multi", 73),
-        BLOCK("block", 29), STAGGER("stagger", 32), RAGE("rage", 67);
+        BLOCK("block", 29), STAGGER("stagger", 32), RAGE("rage", 67), GRAVITY_WELL("gravity_well", 100);
         final String anim; final int length;
         Action(String anim, int length) { this.anim = anim; this.length = length; }
     }
@@ -79,7 +79,11 @@ public class GatekeeperEntity extends Monster implements GeoEntity {
     private final ServerBossEvent bossEvent = new ServerBossEvent(Component.translatable("entity.aof_gatekeeper.gatekeeper"),
             BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.NOTCHED_10);
     private Action action = Action.NONE;
-    private int actionTicks, attackCooldown = 40, staggerCooldown, blockCooldown;
+    private int actionTicks, attackCooldown = 40, staggerCooldown, blockCooldown, gravityCooldown = 160;
+
+    /** Gravity well timings (ticks): the sword is planted and the pull starts, then the burst. */
+    public static final int GW_OPEN = 16, GW_BURST = 76;
+    public static final double GW_RADIUS = 16.0, GW_BURST_RADIUS = 7.5;
     private boolean rageDone;
     @Nullable private BlockPos guardedPortal;
 
@@ -244,6 +248,7 @@ public class GatekeeperEntity extends Monster implements GeoEntity {
         this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
         if (this.staggerCooldown > 0) this.staggerCooldown--;
         if (this.blockCooldown > 0) this.blockCooldown--;
+        if (this.gravityCooldown > 0 && this.action == Action.NONE) this.gravityCooldown--;
 
         switch (this.phase()) {
             case PHASE_DORMANT -> this.tickDormant();
@@ -320,6 +325,12 @@ public class GatekeeperEntity extends Monster implements GeoEntity {
         } else {
             this.getNavigation().stop();
         }
+        if (this.attackCooldown <= 0 && this.gravityCooldown <= 0 && dist > 6.5 && dist <= GW_RADIUS - 2 && this.hasLineOfSight(target)) {
+            this.faceTarget(target, 360f);                 // out of sword reach: drag them in
+            this.startAction(Action.GRAVITY_WELL);
+            this.gravityCooldown = this.enraged() ? 260 : 380;
+            return;
+        }
         if (this.attackCooldown <= 0 && dist <= 7.0 && this.hasLineOfSight(target)) {
             float r = this.random.nextFloat();
             Action a = dist > 5.5 ? (r < 0.6f ? Action.SWEEP : Action.OVERHEAD)
@@ -383,6 +394,7 @@ public class GatekeeperEntity extends Monster implements GeoEntity {
                 }
                 if (t > 19 && t % 4 == 0) this.burst(ParticleTypes.DRAGON_BREATH, this.position().add(0, 3, 0), 20, 2.0);
             }
+            case GRAVITY_WELL -> this.tickGravityWell(t, target, dmg);
             default -> { }
         }
         if (t >= this.action.length) {
@@ -394,6 +406,86 @@ public class GatekeeperEntity extends Monster implements GeoEntity {
             };
             this.action = Action.NONE;
         }
+    }
+
+    // ---------------------------------------------------------------- gravity well
+    /**
+     * He plants the sword (tick 16) and opens a well: for 3 seconds everything within 16 blocks is dragged toward him
+     * on an inward spiral (stronger the closer it gets), crushed a little at the core; on tick 76 it bursts and flings
+     * everything near him outward. A heavy hit (stagger) during the channel breaks it.
+     */
+    private void tickGravityWell(int t, @Nullable LivingEntity target, float dmg) {
+        if (t < GW_OPEN && target != null && target.isAlive()) this.faceTarget(target, 8f);
+        if (t == 6) this.playSound(GatekeeperMod.SND_WHOOSH.get(), 2.0f, 0.6f);
+        if (t == GW_OPEN) {
+            Vec3 tip = this.localPoint(0.2, 0, 1.4);
+            this.playSound(GatekeeperMod.SND_IMPACT.get(), 2.5f, 0.6f);
+            this.playSound(GatekeeperMod.SND_PORTAL.get(), 3.0f, 0.7f);
+            this.burst(ParticleTypes.REVERSE_PORTAL, tip, 40, 0.6);
+            this.burst(ParticleTypes.CAMPFIRE_COSY_SMOKE, tip, 8, 0.6);
+        }
+        if (t >= GW_OPEN && t < GW_BURST) {
+            float ramp = Math.min(1f, (t - GW_OPEN) / 10f) * (t >= GW_BURST - 10 ? 1.35f : 1f);
+            Vec3 c = this.position();
+            for (LivingEntity e : this.nearby(c, GW_RADIUS)) {
+                Vec3 d = new Vec3(c.x - e.getX(), 0, c.z - e.getZ());
+                double dist = d.length();
+                if (dist > GW_RADIUS || dist < 1e-3) continue;
+                Vec3 in = d.scale(1 / dist);
+                Vec3 swirl = new Vec3(-in.z, 0, in.x);                                   // counter-clockwise around him
+                double s = (0.045 + 0.075 * (1 - dist / GW_RADIUS)) * ramp;
+                Vec3 pull = dist < 2.4 ? swirl.scale(s * 0.5) : in.scale(s).add(swirl.scale(s * 0.45));
+                Vec3 v = e.getDeltaMovement().add(pull);
+                e.setDeltaMovement(v.x, Math.min(v.y, 0.25), v.z);
+                e.hurtMarked = true;                                                       // players: send the new velocity
+                e.fallDistance = 0;
+                if (dist < 3.5 && t % 20 == 0) e.hurt(this.damageSources().indirectMagic(this, this), 2.0f);
+            }
+            if (t % 2 == 0) this.gravityWellParticles(t);
+            if ((t - GW_OPEN) % 20 == 0) this.playSound(GatekeeperMod.SND_PULSE.get(), 2.5f, 0.6f + 0.15f * (t - GW_OPEN) / 20f);
+        }
+        if (t == GW_BURST) {
+            for (LivingEntity e : this.nearby(this.position(), GW_BURST_RADIUS)) {
+                Vec3 d = new Vec3(e.getX() - this.getX(), 0, e.getZ() - this.getZ());
+                Vec3 out = d.lengthSqr() < 1e-4 ? Vec3.directionFromRotation(0, this.yBodyRot) : d.normalize();
+                e.hurt(this.damageSources().mobAttack(this), dmg * 0.9f);
+                e.setDeltaMovement(out.x * 2.2, 0.65, out.z * 2.2);
+                e.hurtMarked = true;
+            }
+            this.shockwave(GW_BURST_RADIUS + 1.5);
+            this.burst(ParticleTypes.EXPLOSION_EMITTER, this.position().add(0, 2.5, 0), 1, 0);
+            this.burst(ParticleTypes.REVERSE_PORTAL, this.position().add(0, 3, 0), 120, 2.5);
+            this.burst(ParticleTypes.DRAGON_BREATH, this.position().add(0, 1, 0), 60, 3.0);
+            this.playSound(GatekeeperMod.SND_IMPACT.get(), 4.0f, 0.5f);
+            this.playSound(GatekeeperMod.SND_SHRIEK.get(), 3.5f, 0.9f);
+        }
+    }
+
+    /** Three spiral arms of particles winding into him, turning faster as the well tightens, plus rising motes at the core. */
+    private void gravityWellParticles(int t) {
+        if (!(this.level() instanceof ServerLevel sl)) return;
+        double spin = 0.06 * t + 0.0012 * t * t;
+        for (int arm = 0; arm < 3; arm++) {
+            for (int i = 0; i < 9; i++) {
+                double u = i / 8.0;
+                double r = 1.5 + (GW_RADIUS - 3) * Math.pow(1 - u, 1.25);
+                double a = spin + arm * (Math.PI * 2 / 3) + u * Math.PI * 2 * 1.4;
+                double x = this.getX() + Math.cos(a) * r, z = this.getZ() + Math.sin(a) * r;
+                sl.sendParticles(i % 3 == 0 ? ParticleTypes.REVERSE_PORTAL : ParticleTypes.PORTAL, x, this.getY() + 0.15, z, 1, 0.05, 0.02, 0.05, 0);
+            }
+        }
+        sl.sendParticles(ParticleTypes.REVERSE_PORTAL, this.getX(), this.getY() + 3.5, this.getZ(), 6, 1.6, 1.2, 1.6, 0.02);
+        if (t % 6 == 0) sl.sendParticles(ParticleTypes.DRAGON_BREATH, this.getX(), this.getY() + 0.4, this.getZ(), 10, 2.5, 0.1, 2.5, 0.01);
+    }
+
+    /** True while the gravity well is channelling or bursting (for tests and other systems). */
+    public boolean usingGravityWell() { return this.action == Action.GRAVITY_WELL; }
+
+    /** Start the gravity well now (if he is fighting and not mid-action). Used by tests and commands. */
+    public boolean forceGravityWell() {
+        if (this.phase() != PHASE_FIGHT || this.action != Action.NONE || this.isDeadOrDying()) return false;
+        this.startAction(Action.GRAVITY_WELL);
+        return true;
     }
 
     // ---------------------------------------------------------------- combat helpers
@@ -527,6 +619,7 @@ public class GatekeeperEntity extends Monster implements GeoEntity {
                 .triggerableAnim("block", RawAnimation.begin().thenPlay("animation.gatekeeper.block"))
                 .triggerableAnim("stagger", RawAnimation.begin().thenPlay("animation.gatekeeper.stagger"))
                 .triggerableAnim("rage", RawAnimation.begin().thenPlay("animation.gatekeeper.rage"))
+                .triggerableAnim("gravity_well", RawAnimation.begin().thenPlay("animation.gatekeeper.gravity_well"))
                 .triggerableAnim("death", RawAnimation.begin().thenPlayAndHold("animation.gatekeeper.death")));
     }
 

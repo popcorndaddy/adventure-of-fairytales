@@ -3,8 +3,8 @@
 #   powershell -ExecutionPolicy Bypass -File tools\export-pack.ps1 -Version 1.1.0
 param(
     [string]$Instance = "C:\Users\richa\curseforge\minecraft\Instances\Adventures of Fairytale",
-    [string]$Version = "1.1.0",
-    [string]$ModJar = "$PSScriptRoot\..\gatekeeper-mod\build\libs\aof_gatekeeper-1.0.0.jar",
+    [string]$Version = "1.2.0",
+    [string]$ModJar = "$PSScriptRoot\..\gatekeeper-mod\build\libs\aof_gatekeeper-1.1.0.jar",
     [string]$Out = "$PSScriptRoot\..\Adventures-of-Fairytale-$Version.zip"
 )
 $ErrorActionPreference = "Stop"
@@ -45,6 +45,6 @@ foreach ($item in @("config", "fancymenu_data", "kubejs", "patchouli_books", "re
         Add-File $src "overrides/$item"; $count++
     }
 }
-Add-File ([System.IO.Path]::GetFullPath($ModJar)) "overrides/mods/aof_gatekeeper-1.0.0.jar"; $count++
+Add-File ([System.IO.Path]::GetFullPath($ModJar)) "overrides/mods/$([System.IO.Path]::GetFileName($ModJar))"; $count++
 $zip.Dispose()
 "EXPORTED $Out  ($count override files, $($manifest.files.Count) CurseForge mods, $([math]::Round((Get-Item $Out).Length / 1MB, 1)) MB)"

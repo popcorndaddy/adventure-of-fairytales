@@ -67,6 +67,34 @@ public class GatekeeperTests {
         h.succeedWhen(() -> h.assertTrue(z.getHealth() < 400 || !z.isAlive(), "target not damaged yet"));
     }
 
+    /** Gravity well: a target 10 blocks away is dragged in during the 3-second channel, then thrown back out by the burst. */
+    @GameTest(template = "arena", timeoutTicks = 400)
+    public static void gravityWellPullsThenBursts(GameTestHelper h) {
+        GatekeeperEntity g = spawn(h, 12, 6);
+        net.minecraft.world.entity.decoration.ArmorStand stand = h.spawn(EntityType.ARMOR_STAND, 12, 2, 16);
+        double[] d = new double[3];
+        h.runAfterDelay(2, g::startAwakening);
+        h.runAfterDelay(200, () -> {
+            h.assertTrue(g.phase() == GatekeeperEntity.PHASE_FIGHT, "should be fighting before the well");
+            d[0] = g.distanceTo(stand);
+            h.assertTrue(g.forceGravityWell(), "gravity well should start");
+            h.assertTrue(g.usingGravityWell(), "should be channelling");
+        });
+        h.runAfterDelay(200 + GatekeeperEntity.GW_BURST - 2, () -> {
+            d[1] = g.distanceTo(stand);
+            h.assertTrue(g.usingGravityWell(), "still channelling just before the burst");
+            h.assertTrue(d[1] < d[0] - 4.0, "target should be pulled in: " + d[0] + " -> " + d[1]);
+        });
+        h.runAfterDelay(200 + GatekeeperEntity.GW_BURST + 14, () -> {
+            d[2] = g.distanceTo(stand);
+            h.assertTrue(d[2] > d[1] + 2.0, "burst should throw the target out: " + d[1] + " -> " + d[2]);
+        });
+        h.runAfterDelay(200 + 104, () -> {
+            h.assertFalse(g.usingGravityWell(), "the well should end after 100 ticks");
+            h.succeed();
+        });
+    }
+
     /** At half health he enrages (rage animation, then enraged state). */
     @GameTest(template = "arena", timeoutTicks = 400)
     public static void enragesAtHalfHealth(GameTestHelper h) {
