@@ -842,10 +842,10 @@ def helm_paint(o, mat, w, h, face):
     if mat == "accent":
         recolour(t, (0.62, 0.42, 0.88), 0.5, 1.5)
     else:
-        recolour(t, (0.2, 0.11, 0.29), 0.5, 2.0)
+        recolour(t, BLACK_TINT, 0.45, 1.9)                                # the same dark grey steel as the armour
         if face in ("north", "south", "east", "west", "up"):
             yy = np.arange(h)[:, None]
-            t[..., :3] += (0.05 * np.exp(-((yy / max(h, 1) - 0.2) ** 2) / 0.02))[..., None] * np.array([0.8, 0.7, 1.0])
+            t[..., :3] += (0.13 * np.exp(-((yy / max(h, 1) - 0.2) ** 2) / 0.02))[..., None] * np.array([0.9, 0.92, 1.0])   # silver sheen
     if o.name == "Grille":                                                # rebreather grille: vertical slots
         xx = np.arange(w)
         slot = ((xx % int(0.6 * TPX)) < int(0.3 * TPX))
@@ -856,7 +856,7 @@ def helm_paint(o, mat, w, h, face):
     scratches(t, max(3, (w * h) // (110 * SC * SC)), 0.32, (3, 18))
     if face in ("north", "east", "west", "up"):
         gouges(t, w, h, 1 if min(w, h) < 6 * TPX else 2)
-    scorch(t, w, h, 1.4 * TPX, 0.75)
+    scorch(t, w, h, 0.9 * TPX, 0.55)                                     # burnt ends, narrower so the steel shows
     grain(t, 0.012)
     return np.clip(t, 0, 1), g
 
