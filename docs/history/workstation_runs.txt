@@ -1,2 +1,3 @@
 2026-11-22 18:01 | richa | 10/20 present | missing required: pip: openpyxl (the usage spreadsheet), Godot 4.4 console exe (Desktop/GoDot or EVERWOOD_GODOT), Godot 4.4 export templates (windows x86_64 + web release), Builds folder ../Everwood - Builds, VS Code, VS Code ext: anthropic.claude-code | optional absent: VS Code ext: geequlim.godot-tools, Rootstock kit repo clone (../../../rootstock-os), GIMP 2.10 (palettes, .xcf; per-machine, gitignored), Aseprite (Steam; sprite sheets, .aseprite sources)
 2026-11-22 18:02 | richa | 10/11 present | missing required: none | optional absent: Rootstock kit repo clone (../../../rootstock-os)
+2026-11-22 19:48 | richa | 10/11 present | missing required: none | optional absent: Rootstock kit repo clone (../../../rootstock-os)

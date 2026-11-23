@@ -123,7 +123,7 @@ CHECKS = [
      lambda: first_existing([os.path.join(PF, "Blender Foundation", "Blender*")])),
     ("CurseForge instance: Adventures of Fairytale", False,
      lambda: first_existing([os.path.join(HOME, "curseforge", "minecraft", "Instances", "Adventures of Fairytale")])),
-    ("Dedicated server folder E:\AdventuresOfFairytale-Server", False,
+    ("Dedicated server folder (E: AdventuresOfFairytale-Server)", False,
      lambda: first_existing([r"E:\AdventuresOfFairytale-Server"])),
     (".claude/settings.json (the hooks)", True,
      lambda: first_existing([os.path.join(ROOT, ".claude", "settings.json")])),
