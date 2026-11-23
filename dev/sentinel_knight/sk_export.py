@@ -65,8 +65,9 @@ for b in rig.data.bones:
     bones_out[b.name] = e
 
 # ------------------------------------------------------------------ cubes + atlas allocation
-TPX = 4                                     # texels per model pixel
-W, H = 2048, 1024
+TPX = 8                                     # texels per model pixel (v4: doubled for a high-res look)
+SC = TPX // 4                               # scale for pixel-sized details authored at 4 texels/px
+W, H = 4096, 2048
 blocks = sorted([o for o in bpy.data.objects if "sk_mat" in o], key=lambda o: (o["sk_bone"], o.name))
 # face order of the unit-cube mesh built in sk_build: 0 front(-Y) 1 back(+Y) 2 +X 3 -X 4 top 5 bottom
 # file faces: north = -z_file = front, south = back, east = file -x side, west = file +x side
@@ -212,7 +213,7 @@ def paint(mat, w, h, face):
         cracks(t, max(1, (w * h) // 1500), (0.05, 0.05, 0.06))
     elif mat == "grip":
         yy, xx = np.mgrid[0:h, 0:w]
-        band = ((xx + yy) // 3) % 2 == 0
+        band = ((xx + yy) // (3 * SC)) % 2 == 0
         t[..., :3] = np.where(band[..., None], np.array([0.10, 0.065, 0.05]), np.array([0.06, 0.04, 0.03]))
     elif mat == "void":
         t[..., :3] = (0.008, 0.006, 0.012)
@@ -250,65 +251,179 @@ def load_tile(name):
 
 GK = {k: load_tile(k) for k in ("AncientDarkIron_Albedo", "DarkSteel_Albedo", "WeatheredBronze_Albedo", "RuneStone_Albedo",
                                 "RuneStone_Emission", "TatteredCloth_Albedo", "TatteredCloth_Emission", "PurpleEnergy_Albedo")}
-MAG = 2                                     # one Gatekeeper texel = 2x2 atlas texels (half a model pixel)
+MAG = 2 * SC                                # one Gatekeeper texel = half a model pixel (same scale as v3)
 
 
 def sample(tile, w, h, mag=MAG, ox=None, oy=None):
+    """Bilinear, wrapping sample of a 64x64 Gatekeeper tile: smooth instead of blown-up blocks."""
     th, tw = tile.shape[:2]
     ox = rnd.integers(0, tw) if ox is None else ox; oy = rnd.integers(0, th) if oy is None else oy
-    ys = ((np.arange(h) // mag) + oy) % th; xs = ((np.arange(w) // mag) + ox) % tw
-    return tile[ys][:, xs].copy(), ox, oy
+    fy = (np.arange(h) + 0.5) / mag - 0.5 + oy; fx = (np.arange(w) + 0.5) / mag - 0.5 + ox
+    y0 = np.floor(fy).astype(int); x0 = np.floor(fx).astype(int)
+    ty = (fy - y0)[:, None, None]; tx = (fx - x0)[None, :, None]
+    Y0, Y1 = y0 % th, (y0 + 1) % th; X0, X1 = x0 % tw, (x0 + 1) % tw
+    a = tile[Y0][:, X0]; b = tile[Y0][:, X1]; c = tile[Y1][:, X0]; d = tile[Y1][:, X1]
+    out = (a * (1 - tx) + b * tx) * (1 - ty) + (c * (1 - tx) + d * tx) * ty
+    return out.astype(np.float32), ox, oy
+
+
+def mottle(h, w, cell, amp):
+    """Soft low-frequency variation (hammered, uneven metal)."""
+    ch, cw = h // cell + 3, w // cell + 3
+    tile = (rnd.random((ch, cw, 1)) - 0.5) * 2 * amp
+    m, _, _ = sample(np.repeat(tile, 4, -1), w, h, mag=cell, ox=0, oy=0)
+    return m[..., 0]
+
+
+def grain(t, amp):
+    t[..., :3] += (noise(t.shape[0], t.shape[1], amp))[..., None]
+
+
+def wear(t, hi, lo, width=None):
+    """Bevelled, worn edges: bright rim fading inward on top/left, shadowed bottom/right, chipped specks."""
+    h, w = t.shape[:2]
+    k = width or 2 * SC
+    k = max(1, min(k, h // 3, w // 3))
+    for i in range(k):
+        f = 1 - i / k
+        t[i, :, :3] += hi * f; t[:, i, :3] += hi * 0.6 * f
+        t[h - 1 - i, :, :3] *= 1 - (1 - lo) * f; t[:, w - 1 - i, :3] *= 1 - (1 - lo) * f
+    chips = rnd.random((h, w)) < 0.012
+    edge = np.zeros((h, w), bool); edge[:k + 1] = True; edge[:, :k + 1] = True; edge[-k - 1:] = True; edge[:, -k - 1:] = True
+    t[chips & edge, :3] += hi * 0.7
+
+
+def scratches(t, n, hi, length=(6, 22)):
+    """Thin bright scratches with a dark lip, the kind a long war leaves on plate."""
+    h, w = t.shape[:2]
+    if h < 6 or w < 6:
+        return
+    for _ in range(n):
+        L = rnd.integers(length[0] * SC, length[1] * SC)
+        ang = rnd.uniform(0, math.pi); dx, dy = math.cos(ang), math.sin(ang)
+        x, y = rnd.uniform(0, w), rnd.uniform(0, h)
+        for s in range(L):
+            xi, yi = int(x + dx * s), int(y + dy * s)
+            if 0 <= xi < w and 0 <= yi < h:
+                t[yi, xi, :3] += hi * (1 - abs(s / L - 0.5))
+                if yi + 1 < h:
+                    t[yi + 1, xi, :3] *= 0.8
+
+
+def dents(t, n, depth=0.35):
+    h, w = t.shape[:2]
+    yy, xx = np.mgrid[0:h, 0:w]
+    for _ in range(n):
+        r = rnd.uniform(1.5, 4.0) * SC; cx, cy = rnd.uniform(0, w), rnd.uniform(0, h)
+        d = np.sqrt((xx - cx) ** 2 + (yy - cy) ** 2) / r
+        k = np.clip(1 - d, 0, 1)
+        lit = np.clip(((xx - cx) + (yy - cy)) / r, -1, 1)                   # light from the top left
+        t[..., :3] *= (1 - depth * k * (0.5 + 0.5 * lit))[..., None]
+
+
+def rivet(t, cx, cy, r, col=(0.30, 0.30, 0.34)):
+    h, w = t.shape[:2]
+    yy, xx = np.mgrid[0:h, 0:w]
+    d = np.sqrt((xx - cx) ** 2 + (yy - cy) ** 2) / r
+    dome = d < 1
+    shade = np.clip(1.15 - 0.9 * np.sqrt(((xx - cx + r * 0.35) ** 2 + (yy - cy + r * 0.35) ** 2)) / r, 0.25, 1.2)
+    t[dome, :3] = (np.array(col)[None, :] * shade[dome][:, None])
+    ring = (d >= 1) & (d < 1.35)
+    t[ring, :3] *= 0.45                                                      # shadow ring
+
+
+def soft_line_mask(dist, width):
+    return np.clip(1 - np.abs(dist) / width, 0, 1)
 
 
 def gk_paint(mat, w, h, face):
     g = np.zeros((h, w, 4), dtype=np.float32)
+    yy, xx = np.mgrid[0:h, 0:w]
     if mat in ("plate", "rune", "emblem"):
         t, ox, oy = sample(GK["AncientDarkIron_Albedo"], w, h)
         t[..., :3] = t[..., :3] * np.array([0.62, 0.6, 0.7]) + np.array([0.004, 0.0, 0.012])    # blackened, faintly violet
         t[..., 3] = 1
-        bevel(t, 0.10, 0.5)
+        t[..., :3] *= (1 + mottle(h, w, 6 * SC, 0.18))[..., None]
+        grain(t, 0.012)
+        dents(t, max(0, (w * h) // (900 * SC * SC)))
+        scratches(t, max(1, (w * h) // (500 * SC * SC)), 0.07)
+        wear(t, 0.11, 0.45)
         if mat == "rune" and face in ("north", "south", "east", "west"):
             em, _, _ = sample(GK["RuneStone_Emission"], w, h, ox=ox, oy=oy)
-            glyph = em[..., :3].max(-1) > 0.15
-            t[glyph, :3] = (0.20, 0.10, 0.30)                                  # carved Gatekeeper glyphs
-            g[glyph, :3] = (0.20, 0.06, 0.32); g[glyph, 3] = 1                 # a dim ember in the cuts
+            v = np.clip((em[..., :3].max(-1) - 0.10) / 0.12, 0, 1)                  # smooth-edged glyph strokes
+            t[..., :3] = t[..., :3] * (1 - v[..., None]) + np.array([0.20, 0.10, 0.30]) * v[..., None]
+            under = np.roll(v, 1, axis=0) * (1 - v)
+            t[..., :3] *= (1 - 0.5 * under)[..., None]                                 # cut-in shadow under each stroke
+            g[..., :3] = v[..., None] * np.array([0.22, 0.07, 0.36]); g[..., 3] = (v > 0.02)
         if mat == "emblem" and face in ("north",):
-            yy, xx = np.mgrid[0:h, 0:w]
-            edge = (xx == 1) | (xx == w - 2) | (yy == 1) | (yy == h - 2)
-            chevron = np.abs(np.abs(xx - (w - 1) / 2) - yy * (w / 2) / max(h, 1) * 0.9) < 0.6
-            lines = (edge | chevron) & (rnd.random((h, w)) < 0.9)
-            t[lines, :3] = (0.42, 0.16, 0.66)
-            g[lines, :3] = (0.5, 0.18, 0.8); g[lines, 3] = 1                    # glowing purple tracery: outline + chevron
+            edge_d = np.minimum.reduce([xx - 1.5 * SC, (w - 1 - 1.5 * SC) - xx, yy - 1.5 * SC, (h - 1 - 1.5 * SC) - yy])
+            chev_d = np.abs(xx - (w - 1) / 2) - yy * (w / 2) / max(h, 1) * 0.9
+            v = np.maximum(soft_line_mask(edge_d, 0.9 * SC), soft_line_mask(chev_d, 0.9 * SC))
+            halo = np.maximum(soft_line_mask(edge_d, 2.6 * SC), soft_line_mask(chev_d, 2.6 * SC))
+            t[..., :3] = t[..., :3] * (1 - v[..., None]) + np.array([0.48, 0.2, 0.74]) * v[..., None]
+            g[..., :3] = np.clip(v[..., None] * np.array([0.55, 0.2, 0.88]) + halo[..., None] * np.array([0.10, 0.03, 0.18]), 0, 1)
+            g[..., 3] = (halo > 0.02)                                                  # glowing purple tracery with a soft halo
     elif mat == "trim":
         t, _, _ = sample(GK["DarkSteel_Albedo"], w, h)
         t[..., :3] *= 0.85; t[..., 3] = 1
-        bevel(t, 0.16, 0.45)
-        if w >= 10 and h >= 6:
-            for (x, y) in ((2, 2), (w - 3, 2), (2, h - 3), (w - 3, h - 3)):
-                t[y, x, :3] = (0.42, 0.42, 0.46); t[min(y + 1, h - 1), x, :3] = (0.05, 0.05, 0.06)
+        t[..., :3] += (np.sin(xx * 0.9 / SC + yy * 0.15) * 0.008)[..., None]          # brushed
+        grain(t, 0.01)
+        scratches(t, max(1, (w * h) // (700 * SC * SC)), 0.06, (4, 12))
+        wear(t, 0.16, 0.42)
+        if w >= 10 * SC and h >= 6 * SC:
+            r = 1.1 * SC
+            for (x, y) in ((2.5 * SC, 2.5 * SC), (w - 2.5 * SC, 2.5 * SC), (2.5 * SC, h - 2.5 * SC), (w - 2.5 * SC, h - 2.5 * SC)):
+                rivet(t, x, y, r, (0.44, 0.44, 0.48))
     elif mat == "bronze":
         t, _, _ = sample(GK["WeatheredBronze_Albedo"], w, h); t[..., 3] = 1
-        bevel(t, 0.12, 0.5)
+        t[..., :3] *= (1 + mottle(h, w, 4 * SC, 0.2))[..., None]
+        patina = mottle(h, w, 5 * SC, 1.0) > 0.45
+        t[patina, :3] = t[patina, :3] * 0.6 + np.array([0.10, 0.16, 0.13]) * 0.4    # verdigris in the hollows
+        grain(t, 0.015)
+        wear(t, 0.16, 0.5)
     elif mat == "cloth":
         t, ox, oy = sample(GK["TatteredCloth_Albedo"], w, h)
         lum = t[..., :3].mean(-1, keepdims=True)
         t[..., :3] = np.array([0.20, 0.06, 0.32]) * (0.55 + 3.5 * lum)          # dyed deep purple
+        weave = 0.92 + 0.08 * ((xx // SC + yy // SC) % 2)                         # fine twill
+        t[..., :3] *= weave[..., None]
+        t[..., :3] *= (1 + mottle(h, w, 5 * SC, 0.22))[..., None]               # folds and stains
+        streak = mottle(w, 1, 3 * SC, 1.0)[:, 0] if w > 0 else 0
+        t[..., :3] *= (1 - 0.18 * np.clip(streak, 0, 1))[None, :, None]         # threadbare vertical runs
         sp, _, _ = sample(GK["TatteredCloth_Emission"], w, h, ox=ox, oy=oy)
-        speck = sp[..., :3].max(-1) > 0.2
-        t[speck, :3] = (0.55, 0.25, 0.8)
+        v = np.clip((sp[..., :3].max(-1) - 0.3) / 0.2, 0, 1) * (rnd.random((h, w)) < 0.5)    # sparse, small glints of thread
+        t[..., :3] = t[..., :3] * (1 - 0.6 * v[..., None]) + np.array([0.45, 0.2, 0.66]) * 0.6 * v[..., None]
+        grain(t, 0.01)
         t[..., 3] = 1
-        t[-1, :, :3] *= 0.6
+        hem = 2 * SC
+        t[-hem:, :, :3] *= 0.6
+        fray = (rnd.random(w) < 0.35)
+        t[-hem - SC:-hem, fray, :3] *= 0.7
     elif mat == "blade":
         t, _, _ = sample(GK["DarkSteel_Albedo"], w, h); t[..., 3] = 1
         t[..., :3] *= 1.15
+        brush = noise(1, w, 0.03)                                                   # brushed along the length
+        t[..., :3] += brush[..., None]
+        grain(t, 0.008)
         if face in ("up", "down") and w >= 6:
-            t[:, :2, :3] = (0.62, 0.62, 0.68); t[:, -2:, :3] = (0.62, 0.62, 0.68)     # honed edges
+            e = 2 * SC
+            ramp = np.clip(1 - np.minimum(xx, w - 1 - xx) / (e * 1.6), 0, 1)
+            t[..., :3] = t[..., :3] * (1 - ramp[..., None]) + np.array([0.66, 0.66, 0.72]) * ramp[..., None]   # honed bevels
+            nick = (rnd.random(h) < 0.03)
+            t[nick, :e // 2 + 1, :3] *= 0.5; t[nick, -(e // 2 + 1):, :3] *= 0.5
+        scratches(t, max(1, (w * h) // (900 * SC * SC)), 0.05, (3, 8))
     elif mat == "energy":
         t, _, _ = sample(GK["PurpleEnergy_Albedo"], w, h); t[..., 3] = 1
+        cx = np.abs(xx - (w - 1) / 2) / max(w / 2, 1); cy = np.abs(yy - (h - 1) / 2) / max(h / 2, 1)
+        core = np.clip(1 - np.minimum(cx, 1) * 0.8, 0, 1)[..., None] if w <= h else np.clip(1 - np.minimum(cy, 1) * 0.8, 0, 1)[..., None]
+        t[..., :3] = np.clip(t[..., :3] * (0.75 + 0.6 * core) + core * np.array([0.12, 0.05, 0.18]), 0, 1)   # hot core
         g[..., :3] = np.clip(t[..., :3] * 1.1, 0, 1); g[..., 3] = 1
     elif mat == "eye":
-        t = np.zeros((h, w, 4), dtype=np.float32); t[..., :3] = (0.8, 0.45, 1.0); t[..., 3] = 1
-        g[..., :3] = (0.95, 0.6, 1.0); g[..., 3] = 1
+        t = np.zeros((h, w, 4), dtype=np.float32)
+        cx = np.abs(xx - (w - 1) / 2) / max(w / 2, 1); cy = np.abs(yy - (h - 1) / 2) / max(h / 2, 1)
+        k = np.clip(1 - np.maximum(cx, cy) * 0.6, 0, 1)[..., None]
+        t[..., :3] = np.array([0.62, 0.30, 0.9]) + k * np.array([0.35, 0.3, 0.1]); t[..., 3] = 1
+        g[..., :3] = np.clip(np.array([0.75, 0.4, 1.0]) + k * 0.25, 0, 1); g[..., 3] = 1
     else:
         return paint(mat, w, h, face)
     return np.clip(t, 0, 1), g

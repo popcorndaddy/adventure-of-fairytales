@@ -51,3 +51,11 @@ The animation timings are ticks. If you change a hit frame, change the matching 
 - dash lunges 9–16;
 - summon on 30;
 - awaken flares on 80.
+
+## Textures (v4, high resolution)
+- Atlas is 4096x2048 at 8 texels per model pixel (`TPX`/`SC` in sk_export.py); the geo stays in 512x256 texture units.
+- Gatekeeper tiles (64x64) are sampled bilinearly, then fine detail is painted at full resolution:
+  mottling, grain, dents, scratches, worn edges, round rivets, soft-edged rune glyphs and glowing tracery.
+- Caution: sentinel_knight_anim.blend keeps the geometry from when it was first baked (the older cape).
+  Export the geo from sentinel_knight.blend (`sk_cycle.ps1 -NoBuild`), and only the animations with `-Anims`,
+  or re-bake after rebuilding.
