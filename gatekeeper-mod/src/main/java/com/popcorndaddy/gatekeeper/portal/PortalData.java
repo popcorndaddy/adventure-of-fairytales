@@ -66,4 +66,9 @@ public class PortalData extends SavedData {
         portals.put(portal, true);
         setDirty();
     }
+
+    /** Forget every portal within `radius` of `pos` (tests start from a clean slate; the test world is reused between runs). */
+    public void forgetNear(BlockPos pos, int radius) {
+        if (portals.keySet().removeIf(p -> p.distManhattan(pos) <= radius)) setDirty();
+    }
 }

@@ -595,11 +595,18 @@ public class GatekeeperEntity extends Monster implements GeoEntity {
         if (tag.contains("GkPortal")) this.guardedPortal = NbtUtils.readBlockPos(tag.getCompound("GkPortal"));
     }
 
+    /**
+     * He is always "The Ancient Gatekeeper". Some pack mods (e.g. Villager Names) give random names to mobs as they
+     * spawn, which would rename his boss bar and death messages, so custom names are ignored.
+     */
     @Override
     public void setCustomName(@Nullable Component name) {
-        super.setCustomName(name);
-        this.bossEvent.setName(this.getDisplayName());
+        super.setCustomName(null);
+        this.bossEvent.setName(Component.translatable("entity.aof_gatekeeper.gatekeeper"));
     }
+
+    @Override @Nullable public Component getCustomName() { return null; }
+    @Override public boolean hasCustomName() { return false; }
 
     // ---------------------------------------------------------------- GeckoLib
     @Override

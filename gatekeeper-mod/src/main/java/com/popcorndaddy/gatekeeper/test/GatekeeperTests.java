@@ -95,6 +95,17 @@ public class GatekeeperTests {
         });
     }
 
+    /** Mods that hand out random mob names (Villager Names) must not rename him. */
+    @GameTest(template = "arena", timeoutTicks = 40)
+    public static void keepsHisName(GameTestHelper h) {
+        GatekeeperEntity g = spawn(h, 12, 12);
+        g.setCustomName(net.minecraft.network.chat.Component.literal("Joanna"));
+        h.assertFalse(g.hasCustomName(), "custom name should be ignored");
+        h.assertTrue(g.getDisplayName().getString().equals(net.minecraft.network.chat.Component.translatable("entity.aof_gatekeeper.gatekeeper").getString()),
+                "display name should stay the Gatekeeper's, was " + g.getDisplayName().getString());
+        h.succeed();
+    }
+
     /** At half health he enrages (rage animation, then enraged state). */
     @GameTest(template = "arena", timeoutTicks = 400)
     public static void enragesAtHalfHealth(GameTestHelper h) {
@@ -123,6 +134,7 @@ public class GatekeeperTests {
     @GameTest(template = "arena", timeoutTicks = 100)
     public static void portalSeal(GameTestHelper h) {
         BlockPos c = new BlockPos(12, 2, 12);
+        PortalData.get(h.getLevel()).forgetNear(h.absolutePos(c), 32);     // the test world persists between runs
         for (int i = -1; i <= 1; i++) {
             h.setBlock(c.offset(i, 0, -2), Blocks.END_PORTAL_FRAME);
             h.setBlock(c.offset(i, 0, 2), Blocks.END_PORTAL_FRAME);

@@ -1,10 +1,10 @@
-# Exports the Adventures of Fairytale CurseForge instance as an importable CurseForge pack zip,
+﻿# Exports the Adventures of Fairytale CurseForge instance as an importable CurseForge pack zip,
 # mirroring the folders of previous exports and bundling the Gatekeeper mod jar in overrides/mods.
 #   powershell -ExecutionPolicy Bypass -File tools\export-pack.ps1 -Version 1.1.0
 param(
     [string]$Instance = "C:\Users\richa\curseforge\minecraft\Instances\Adventures of Fairytale",
-    [string]$Version = "1.2.0",
-    [string]$ModJar = "$PSScriptRoot\..\gatekeeper-mod\build\libs\aof_gatekeeper-1.1.0.jar",
+    [string]$Version = "1.2.1",
+    [string]$ModJar = "$PSScriptRoot\..\gatekeeper-mod\build\libs\aof_gatekeeper-1.1.1.jar",
     [string]$Out = "$PSScriptRoot\..\Adventures-of-Fairytale-$Version.zip"
 )
 $ErrorActionPreference = "Stop"

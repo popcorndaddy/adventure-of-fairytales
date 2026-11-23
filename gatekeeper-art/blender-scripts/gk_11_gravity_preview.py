@@ -17,6 +17,14 @@ rig = bpy.data.objects["Gatekeeper_Rig"]
 N = 150
 BURST, OPEN = 114, 24
 col, lights, portal = AR.build(length=N + 1)
+# thin the arena haze so the pull reads clearly
+try:
+    bpy.data.materials["Arena_GroundFog"].node_tree.nodes["Principled Volume"].inputs["Density"].default_value = 0.03
+except KeyError:
+    pass
+for n in scene.world.node_tree.nodes:
+    if n.type == "VOLUME_SCATTER":
+        n.inputs["Density"].default_value = 0.002
 rig.animation_data.action = bpy.data.actions["Gatekeeper_Gravity_Well"]
 rig.location = (0, 0, 0)
 try:
@@ -164,6 +172,75 @@ for o in fx.objects:
         for fc in fcs:
             for kp in fc.keyframe_points:
                 kp.interpolation = "LINEAR"
+
+# ---------------------------------------------------------------- a player caught in the well
+# A blocky, player-sized figure (1.8 m) stands out in front of him. When the well opens it tries to run away, but is
+# dragged backwards along the spiral, feet scraping, then lifted off the ground; the burst flings it out, tumbling.
+def mat(name, rgb):
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    m.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (*rgb, 1); return m
+
+
+def box_obj(name, size, offset, m, parent):
+    bpy.ops.mesh.primitive_cube_add(size=1)
+    o = bpy.context.object; o.name = name
+    bpy.context.collection.objects.unlink(o); fx.objects.link(o)
+    o.scale = size; bpy.ops.object.select_all(action="DESELECT"); o.select_set(True)
+    bpy.context.view_layer.objects.active = o; bpy.ops.object.transform_apply(scale=True)
+    for v in o.data.vertices:
+        v.co += Vector(offset)
+    o.data.materials.append(m); o.parent = parent
+    return o
+
+
+skin, shirt, pants, hair = mat("PL_Skin", (0.78, 0.55, 0.42)), mat("PL_Shirt", (0.05, 0.62, 0.66)), mat("PL_Pants", (0.17, 0.2, 0.55)), mat("PL_Hair", (0.25, 0.16, 0.1))
+pl = link(bpy.data.objects.new("GW_Player", None))
+torso = box_obj("PL_Body", (0.5, 0.26, 0.75), (0, 0, 1.125), shirt, pl)
+headb = box_obj("PL_Head", (0.5, 0.5, 0.5), (0, 0, 1.75), skin, pl)
+box_obj("PL_Hair", (0.52, 0.52, 0.14), (0, 0, 1.97), hair, pl)
+limbs = {}
+for nm, m, x, z in (("arm_L", shirt, 0.375, 1.5), ("arm_R", shirt, -0.375, 1.5), ("leg_L", pants, 0.125, 0.75), ("leg_R", pants, -0.125, 0.75)):
+    piv = link(bpy.data.objects.new(f"PL_{nm}_pivot", None)); piv.parent = pl; piv.location = (x, 0, z)
+    box_obj(f"PL_{nm}", (0.25, 0.25, 0.75), (0, 0, -0.375), m, piv)
+    limbs[nm] = piv
+
+A0, R0 = math.radians(-96), 10.5                         # start: in front of him, a little to his right
+fling = {}
+for f in range(0, N + 1):
+    if f < OPEN:
+        r, a, z, lean, run = R0, A0, 0.0, 0.0, 0.15 * math.sin(f * 0.25)
+    elif f < BURST:
+        u = (f - OPEN) / (BURST - 6 - OPEN); u = min(u, 1.0)
+        r = 2.7 + (R0 - 2.7) * (1 - u ** 1.6)
+        a = A0 + math.radians(75) * u ** 1.4              # counter-clockwise with the swirl
+        z = 0.0 if u < 0.55 else 0.9 * ((u - 0.55) / 0.45) ** 1.5 + 0.12 * math.sin(f * 0.5) * (u > 0.55)
+        lean, run = -0.35 - 0.25 * u, 1.0
+    else:
+        if not fling:
+            fling.update(r=r, a=a, z=z)
+        t = f - BURST
+        r = fling["r"] + 0.75 * t - 0.012 * t * t if t < 30 else fling["r"] + 0.75 * 30 - 0.012 * 900
+        z = max(0.0, fling["z"] + 0.42 * t - 0.022 * t * t)
+        a = fling["a"]; lean, run = 0.0, 0.0
+    radial = Vector((math.cos(a), math.sin(a), 0))
+    pl.location = (radial.x * r, radial.y * r, z)
+    face = math.atan2(radial.y, radial.x) - math.pi / 2          # faces away from him (trying to run)
+    if f < BURST:
+        pl.rotation_euler = (lean, 0, face)
+    else:
+        t = f - BURST
+        spin = min(t, 22) * 0.38
+        pl.rotation_euler = (-spin if z > 0 else -math.pi / 2, 0.25 * min(t, 22) * 0.2, face)
+    pl.keyframe_insert("location", frame=f); pl.keyframe_insert("rotation_euler", frame=f)
+    sw = math.sin(f * (0.55 if f >= OPEN else 0.2))
+    flail = 1.0 if OPEN <= f < BURST else (0.6 if f >= BURST else 0.15)
+    for nm, piv in limbs.items():
+        sgn = 1 if nm.endswith("L") else -1
+        if nm.startswith("arm"):
+            piv.rotation_euler = (sgn * 0.9 * sw * flail + (1.2 if OPEN <= f < BURST else 0), 0, sgn * 0.5 * flail)
+        else:
+            piv.rotation_euler = (-sgn * 0.8 * sw * run, 0, 0)
+        piv.keyframe_insert("rotation_euler", frame=f)
 
 # ---------------------------------------------------------------- camera: slow push-in orbit from his front-left
 cam = link(bpy.data.objects.new("GW_Cam", bpy.data.cameras.new("GW_Cam"))); scene.camera = cam
