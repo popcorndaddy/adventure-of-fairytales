@@ -56,6 +56,14 @@ for S, s in SIDE.items():
 # the sword: bone head = right-hand grip point; at rest the blade points straight forward (-Y)
 GRIP = (-14, -1.0, 32.0)
 BONES.append(("sword", "hand_R", GRIP, (GRIP[0], GRIP[1] - 6, GRIP[2])))
+# secondary motion: a three-panel cape (three segments each) and four tassets that swing with the legs
+BONES.append(("cape_root", "chest", (0, 5.6, 63.5), (0, 5.6, 61.5)))
+for s, x in (("L", 8.6), ("M", 0.0), ("R", -8.6)):
+    BONES += [(f"cape_{s}1", "cape_root", (x, 6.4, 62.5), (x, 6.4, 43.5)),
+              (f"cape_{s}2", f"cape_{s}1", (x, 6.4, 43.5), (x, 6.4, 24.5)),
+              (f"cape_{s}3", f"cape_{s}2", (x, 6.4, 24.5), (x, 6.4, 5.5))]
+for n, h in (("F", (0, -5.4, 40.5)), ("B", (0, 5.8, 40.5)), ("L", (9.0, 0.0, 40.5)), ("R", (-9.0, 0.0, 40.5))):
+    BONES.append((f"tasset_{n}", "pelvis", h, (h[0], h[1], h[2] - 10)))
 
 arm = bpy.data.armatures.new("Sentinel_Armature")
 rig = bpy.data.objects.new("Sentinel_Rig", arm)
@@ -100,7 +108,8 @@ def block(bone, c, size, mat, rot=(0, 0, 0), coll="Sentinel_Armor", name=None):
 MAT_COLOR = {"obsidian": (0.05, 0.045, 0.06, 1), "gunmetal": (0.16, 0.16, 0.18, 1), "iron": (0.1, 0.095, 0.11, 1),
              "void": (0.0, 0.0, 0.0, 1), "cavity": (0.15, 0.03, 0.22, 1), "heart": (0.8, 0.2, 0.9, 1),
              "heart_glow": (0.5, 0.1, 0.7, 1), "eye": (0.6, 0.3, 1.0, 1), "blade": (0.13, 0.13, 0.15, 1),
-             "grip": (0.12, 0.08, 0.06, 1), "rune": (0.06, 0.05, 0.08, 1)}
+             "grip": (0.12, 0.08, 0.06, 1), "rune": (0.06, 0.05, 0.08, 1), "cloth": (0.16, 0.05, 0.24, 1),
+             "emblem": (0.1, 0.05, 0.16, 1), "energy": (0.7, 0.3, 1.0, 1), "bronze": (0.35, 0.25, 0.12, 1)}
 
 
 def sym(bone, c, size, mat, rot=(0, 0, 0), coll="Sentinel_Armor"):

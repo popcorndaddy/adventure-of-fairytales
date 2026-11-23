@@ -28,6 +28,7 @@ class Rig:
         self.grip0 = Vector(sc["sk_grip"]) * PX
         self.grip_l_s = sc["sk_grip_l_s"] * PX
         self.sword_len = sc["sk_sword_len"] * PX
+        self.sec = {}                     # secondary-motion state (cape / tasset springs), reset per action
 
     def upd(self):
         bpy.context.view_layer.update()
@@ -311,6 +312,87 @@ def pose(r, P):
             r.pb["sword"].matrix = want; r.upd()
     hs, gs = P["heart"]
     r.scale("heart", hs); r.scale("heart_glow", gs / max(hs, 1e-3))
+    secondary(r, P)
+
+
+# ---------------------------------------------------------------- secondary motion: cape + tassets
+LEG_BONES = [f"{b}_{S}" for S in ("R", "L") for b in ("thigh", "shin", "foot", "toe")]
+
+
+def _leg_points(r):
+    pts = []
+    for b in LEG_BONES:
+        for p in (r.pb[b].head, r.pb[b].tail, (r.pb[b].head + r.pb[b].tail) / 2):
+            pts.append(p / PX)
+    return pts
+
+
+def _spring(st, key, target, k=0.22, c=0.62):
+    """Under-damped spring per frame: the value overshoots a little and settles (follow-through)."""
+    x, v = st.get(key, (target, 0.0))
+    v = v * c + (target - x) * k
+    x = x + v
+    st[key] = (x, v)
+    return x
+
+
+def secondary(r, P):
+    st = r.sec
+    pel = r.head("pelvis") / PX
+    prev = st.get("pelvis", pel)
+    vel = pel - prev                                             # px per frame of the body itself
+    st["pelvis"] = pel
+    move = P.get("move", 0.0)                                    # forward speed of the entity (walk / dash), px per frame
+    fwd = (-vel.y) + move
+    chest_R = r.rot("chest") @ r.base["chest"].inverted()
+    chest_fwd = chest_R @ Vector((0, -1, 0))
+    yaw = math.degrees(math.atan2(chest_fwd.x, -chest_fwd.y))
+    yaw_lag = _spring(st, "yaw", yaw, 0.12, 0.7)
+    flutter = P.get("cape_flutter", 0.0)
+    legs = _leg_points(r)
+    # ---- cape: three panels, three segments. Angles are measured in HIS turning frame (behind his back, not behind
+    # the world), trailing his turns a little; springs give follow-through; never inside his legs.
+    for s, side in (("L", 1), ("M", 0), ("R", -1)):
+        prev_angle = 0.0
+        for k in (1, 2, 3):
+            b = f"cape_{s}{k}"
+            yaw_k = yaw + (yaw_lag - yaw) * (0.35 + 0.2 * k)          # lower segments trail the turn more
+            Rk = Matrix.Rotation(math.radians(yaw_k), 3, "Z"); Rki = Rk.transposed()
+            A = Rki @ (r.head(b) / PX)
+            L = r.len[b] / PX
+            base = 7.0 + 3.0 * (k - 1)
+            target = base + min(48.0, 9.0 * max(0.0, fwd) * (0.8 + 0.25 * k)) - 3.0 * vel.z * k
+            target += 0.18 * abs(yaw - yaw_lag) * k                     # flares out behind a fast turn
+            target += flutter * math.sin(P.get("t", 0) * (1.3 + 0.4 * k) + side) * k
+            th = _spring(st, b, max(prev_angle - 4.0, target), 0.20 - 0.03 * k, 0.66)
+            # clearance from the legs (in his frame): the segment's end must stay behind every leg point at its height
+            need = -1e9
+            for q0 in legs:
+                q = Rki @ q0
+                if A.z - L - 6 <= q.z <= A.z + 2 and abs(q.x - A.x) < 10.0:
+                    need = max(need, q.y + 5.0)
+            if need > -1e9:
+                ratio = (need - A.y) / L
+                if ratio > -1.0:
+                    th_min = math.degrees(math.asin(max(-1.0, min(1.0, ratio))))
+                    if th < th_min:
+                        th = th_min; st[b] = (th, 0.0)
+            sway = side * (1.5 + 0.8 * k)
+            d = Vector((math.sin(math.radians(sway)), math.sin(math.radians(th)), -math.cos(math.radians(th))))
+            r.aim(b, Rk @ d)
+            prev_angle = th
+    # ---- tassets follow the thigh that moves into them
+    down = Vector((0, 0, -1))
+    th_dirs = {S: (r.tail(f"thigh_{S}") - r.head(f"thigh_{S}")).normalized() for S in ("R", "L")}
+    front = min(th_dirs.values(), key=lambda d: d.y)
+    back = max(th_dirs.values(), key=lambda d: d.y)
+    pel_R = r.rot("pelvis") @ r.base["pelvis"].inverted()
+    pdown = pel_R @ down
+    r.aim("tasset_F", (pdown * 0.3 + front * 0.7).normalized() + Vector((0, -0.12, 0)))
+    r.aim("tasset_B", (pdown * 0.35 + back * 0.65).normalized() + Vector((0, 0.1, 0)))
+    for S in ("R", "L"):
+        out = Vector((1 if S == "L" else -1, 0, 0)) * 0.12
+        r.aim(f"tasset_{S}", (pdown * 0.3 + th_dirs[S] * 0.7).normalized() + out)
 
 
 # ---------------------------------------------------------------- baking
@@ -322,6 +404,17 @@ def bake(r, name, n, fn, loop="false"):
     act = bpy.data.actions.new(name); act.use_fake_user = True
     r.ob.animation_data_create(); r.ob.animation_data.action = act
     prev = {}
+    # warm the secondary-motion springs: a full pre-roll for loops (seamless), a settle on frame 0 otherwise
+    r.sec = {}
+    if loop == "true":
+        for f in range(0, n + 1):
+            fn(r, f)
+    else:
+        for _ in range(40):
+            fn(r, 0)
+        for key in list(r.sec):
+            if isinstance(r.sec[key], tuple):
+                r.sec[key] = (r.sec[key][0], 0.0)
     for f in range(0, n + 1):
         fn(r, f)
         for p in r.pb:

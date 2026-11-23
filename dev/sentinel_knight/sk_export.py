@@ -236,8 +236,86 @@ def paint(mat, w, h, face):
     return t, g
 
 
+# ------------------------------------------------------------------ Gatekeeper material set (v3 look)
+TEXDIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "textures")
+
+
+def load_tile(name):
+    im = bpy.data.images.load(os.path.join(TEXDIR, f"GK_{name}.png"))
+    a = np.empty(im.size[0] * im.size[1] * 4, dtype=np.float32); im.pixels.foreach_get(a)
+    a = a.reshape(im.size[1], im.size[0], 4)[::-1].copy()
+    bpy.data.images.remove(im)
+    return a
+
+
+GK = {k: load_tile(k) for k in ("AncientDarkIron_Albedo", "DarkSteel_Albedo", "WeatheredBronze_Albedo", "RuneStone_Albedo",
+                                "RuneStone_Emission", "TatteredCloth_Albedo", "TatteredCloth_Emission", "PurpleEnergy_Albedo")}
+MAG = 2                                     # one Gatekeeper texel = 2x2 atlas texels (half a model pixel)
+
+
+def sample(tile, w, h, mag=MAG, ox=None, oy=None):
+    th, tw = tile.shape[:2]
+    ox = rnd.integers(0, tw) if ox is None else ox; oy = rnd.integers(0, th) if oy is None else oy
+    ys = ((np.arange(h) // mag) + oy) % th; xs = ((np.arange(w) // mag) + ox) % tw
+    return tile[ys][:, xs].copy(), ox, oy
+
+
+def gk_paint(mat, w, h, face):
+    g = np.zeros((h, w, 4), dtype=np.float32)
+    if mat in ("plate", "rune", "emblem"):
+        t, ox, oy = sample(GK["AncientDarkIron_Albedo"], w, h)
+        t[..., :3] = t[..., :3] * np.array([0.62, 0.6, 0.7]) + np.array([0.004, 0.0, 0.012])    # blackened, faintly violet
+        t[..., 3] = 1
+        bevel(t, 0.10, 0.5)
+        if mat == "rune" and face in ("north", "south", "east", "west"):
+            em, _, _ = sample(GK["RuneStone_Emission"], w, h, ox=ox, oy=oy)
+            glyph = em[..., :3].max(-1) > 0.15
+            t[glyph, :3] = (0.20, 0.10, 0.30)                                  # carved Gatekeeper glyphs
+            g[glyph, :3] = (0.20, 0.06, 0.32); g[glyph, 3] = 1                 # a dim ember in the cuts
+        if mat == "emblem" and face in ("north",):
+            yy, xx = np.mgrid[0:h, 0:w]
+            edge = (xx == 1) | (xx == w - 2) | (yy == 1) | (yy == h - 2)
+            chevron = np.abs(np.abs(xx - (w - 1) / 2) - yy * (w / 2) / max(h, 1) * 0.9) < 0.6
+            lines = (edge | chevron) & (rnd.random((h, w)) < 0.9)
+            t[lines, :3] = (0.42, 0.16, 0.66)
+            g[lines, :3] = (0.5, 0.18, 0.8); g[lines, 3] = 1                    # glowing purple tracery: outline + chevron
+    elif mat == "trim":
+        t, _, _ = sample(GK["DarkSteel_Albedo"], w, h)
+        t[..., :3] *= 0.85; t[..., 3] = 1
+        bevel(t, 0.16, 0.45)
+        if w >= 10 and h >= 6:
+            for (x, y) in ((2, 2), (w - 3, 2), (2, h - 3), (w - 3, h - 3)):
+                t[y, x, :3] = (0.42, 0.42, 0.46); t[min(y + 1, h - 1), x, :3] = (0.05, 0.05, 0.06)
+    elif mat == "bronze":
+        t, _, _ = sample(GK["WeatheredBronze_Albedo"], w, h); t[..., 3] = 1
+        bevel(t, 0.12, 0.5)
+    elif mat == "cloth":
+        t, ox, oy = sample(GK["TatteredCloth_Albedo"], w, h)
+        lum = t[..., :3].mean(-1, keepdims=True)
+        t[..., :3] = np.array([0.20, 0.06, 0.32]) * (0.55 + 3.5 * lum)          # dyed deep purple
+        sp, _, _ = sample(GK["TatteredCloth_Emission"], w, h, ox=ox, oy=oy)
+        speck = sp[..., :3].max(-1) > 0.2
+        t[speck, :3] = (0.55, 0.25, 0.8)
+        t[..., 3] = 1
+        t[-1, :, :3] *= 0.6
+    elif mat == "blade":
+        t, _, _ = sample(GK["DarkSteel_Albedo"], w, h); t[..., 3] = 1
+        t[..., :3] *= 1.15
+        if face in ("up", "down") and w >= 6:
+            t[:, :2, :3] = (0.62, 0.62, 0.68); t[:, -2:, :3] = (0.62, 0.62, 0.68)     # honed edges
+    elif mat == "energy":
+        t, _, _ = sample(GK["PurpleEnergy_Albedo"], w, h); t[..., 3] = 1
+        g[..., :3] = np.clip(t[..., :3] * 1.1, 0, 1); g[..., 3] = 1
+    elif mat == "eye":
+        t = np.zeros((h, w, 4), dtype=np.float32); t[..., :3] = (0.8, 0.45, 1.0); t[..., 3] = 1
+        g[..., :3] = (0.95, 0.6, 1.0); g[..., 3] = 1
+    else:
+        return paint(mat, w, h, face)
+    return np.clip(t, 0, 1), g
+
+
 for (o, face, x, y, w, h, mat) in regions:
-    t, g = paint(mat, w, h, face)
+    t, g = gk_paint(mat, w, h, face)
     alb[y:y + h, x:x + w] = t
     glw[y:y + h, x:x + w] = g
 

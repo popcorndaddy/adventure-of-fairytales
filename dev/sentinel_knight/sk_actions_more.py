@@ -67,14 +67,15 @@ def walk():
             arm_L=dict(hand=(14.6 - 0.4 * hx, -2.0 - 6.5 * armL, 34.5), point=(0.1, -0.15 - 0.3 * armL, -1.0), palm=(-1.0, 0.1, 0.0),
                        elbow=(0.5, 0.6, -0.2)),
             curl_R=1.0, curl_L=0.45 + 0.1 * math.sin(ph * 2), spread_L=0.15, thumb_L=0.5,
-            heart=(hs, gs)))
+            heart=(hs, gs), move=VW))
     return NW, fn, "true"
 
 
 # ====================================================================== SWEEP (50 ticks, blade crosses his front on tick 24)
 @action
 def sweep():
-    N = 50
+    N = 60
+    WARP = [(0, 0, "l"), (14, 14, "l"), (22, 18, "l"), (28, 24, "l"), (40, 34, "l"), (60, 50)]
     G = [(0, (-3.0, -13.0, 41.0)), (8, (-11.0, -2.0, 52.0)), (14, (-12.0, 4.0, 57.0)), (18, (-12.5, 4.5, 58.0), "i"),
          (21, (-9.0, -10.0, 48.0), "l"), (24, (2.0, -15.0, 44.0), "l"), (27, (12.0, -7.0, 43.0), "o"), (32, (15.0, 3.0, 45.0)),
          (38, (12.0, -2.0, 44.0)), (50, (-3.0, -13.0, 41.0))]
@@ -89,18 +90,19 @@ def sweep():
     PIV = [(0, -28), (22, -28), (28, -2, "o"), (40, -10), (50, -28)]
 
     def fn(r, f):
+        fo = track(WARP, f)                                    # retimed: new tick -> authored pose frame
         P = combat_base(0)
-        coil = smooth((f - 12) / 4) * (1 - smooth((f - 19) / 1.5))
+        coil = smooth((fo - 12) / 4) * (1 - smooth((fo - 19) / 1.5))
         tremble = 0.8 * math.sin(f * 2.6) * coil
-        P.update(body=(track(BX, f), track(BY, f), track(BZ, f)), hips=(9.0 + 3 * bump(f, 25, 3), 0.0, track(HY, f)),
-                 chest=(3.0 + 4 * bump(f, 25, 3), 0.0, track(CY, f) + tremble), spine=(2.0, 0.0, 0.5 * track(CY, f)),
-                 head=(-track(HY, f) - track(CY, f) * 0.6 + 12 - 6 * bump(f, 26, 5), 4.0, 0.0))
-        P["foot_R"] = ((-8.0, 5.0), 0.0, track(PIV, f), track(HEEL, f))
-        g = track(G, f)
-        P["sword"] = dict(grip=g, dir=sword_dir(track(AZ, f), track(EL, f)), flat=(0.0, 0.0, 1.0), two=True,
+        P.update(body=(track(BX, fo), track(BY, fo), track(BZ, fo)), hips=(9.0 + 3 * bump(fo, 25, 3), 0.0, track(HY, fo)),
+                 chest=(3.0 + 4 * bump(fo, 25, 3), 0.0, track(CY, fo) + tremble), spine=(2.0, 0.0, 0.5 * track(CY, fo)),
+                 head=(-track(HY, fo) - track(CY, fo) * 0.6 + 12 - 6 * bump(fo, 26, 5), 4.0, 0.0))
+        P["foot_R"] = ((-8.0, 5.0), 0.0, track(PIV, fo), track(HEEL, fo))
+        g = track(G, fo)
+        P["sword"] = dict(grip=g, dir=sword_dir(K._spring(r.sec, "saz", track(AZ, fo), 0.42, 0.52), K._spring(r.sec, "sel", track(EL, fo), 0.42, 0.52)), flat=(0.0, 0.0, 1.0), two=True,
                           elbow_R=(-0.6, 0.6, -0.5), elbow_L=(0.6, 0.6, -0.5))
-        P["curl_R"] = P["curl_L"] = 1.0 + 0.12 * bump(f, 23, 4)
-        amp = 1.0 + 0.9 * smooth((f - 8) / 10) * (1 - smooth((f - 28) / 12))
+        P["curl_R"] = P["curl_L"] = 1.0 + 0.12 * bump(fo, 23, 4)
+        amp = 1.0 + 0.9 * smooth((fo - 8) / 10) * (1 - smooth((fo - 28) / 12))
         P["heart"] = heartbeat(f / 20.0, 110 + 40 * coil, amp)
         K.pose(r, merged(**P))
     return N, fn, "false"
@@ -109,31 +111,33 @@ def sweep():
 # ====================================================================== PUSH (40 ticks, palm strike on tick 20)
 @action
 def push():
-    N = 40
+    N = 36
+    WARP = [(0, 0, "l"), (10, 12, "l"), (14, 17, "l"), (16, 20, "l"), (36, 40)]
 
     def fn(r, f):
+        fo = track(WARP, f)                                    # retimed: new tick -> authored pose frame
         P = combat_base(0)
-        coil = smooth(f / 12) * (1 - smooth((f - 17) / 3))
-        hit = smooth((f - 17) / 3) * (1 - smooth((f - 28) / 12))
-        back = 1 - smooth((f - 30) / 10)
+        coil = smooth(fo / 12) * (1 - smooth((fo - 17) / 3))
+        hit = smooth((fo - 17) / 3) * (1 - smooth((fo - 28) / 12))
+        back = 1 - smooth((fo - 30) / 10)
         P.update(body=(-0.8 * coil, 1.0 + 2.5 * coil - 4.0 * hit, -4.0 - 1.2 * coil - 1.5 * hit),
                  hips=(9.0 - 6 * coil + 9 * hit, 0.0, -14.0 - 14 * coil + 18 * hit),
                  chest=(3.0 - 5 * coil + 5 * hit, 0.0, 6.0 - 16 * coil + 14 * hit),
                  head=(10 + 8 * coil - 6 * hit, 6.0 - 4 * hit, 3 * coil), shrug_L=4 * coil)
-        P["foot_L"] = ((7.0, -7.0 - 7.0 * smooth((f - 15) / 5) * back), 3.0 * bump(f, 17.5, 1.6), 12, 0)
+        P["foot_L"] = ((7.0, -7.0 - 7.0 * smooth((fo - 15) / 5) * back), 3.0 * bump(fo, 17.5, 1.6), 12, 0)
         P["foot_R"] = ((-8.0, 5.0), 0.0, -28, 26 * hit)
         # sword drops to his right side, one-handed, while the claw does the work
-        sw = smooth(f / 6) * (1 - smooth((f - 32) / 8))
+        sw = smooth(fo / 6) * (1 - smooth((fo - 32) / 8))
         base_g = (-3.0, -13.0, 41.0)
         P["sword"] = dict(grip=lerpP(base_g, (-13.0, -2.0, 38.0), sw), dir=sword_dir(lerpP(6, -30, sw), lerpP(28, -30, sw)),
-                          flat=(1.0, 0.0, 0.2), two=True, two_w=1 - smooth(f / 4) + smooth((f - 34) / 6))
+                          flat=(1.0, 0.0, 0.2), two=True, two_w=1 - smooth(fo / 4) + smooth((fo - 34) / 6))
         if 2 <= f <= 37:
             cocked = dict(hand=(9.0, -1.0, 52.0), point=(0.0, -0.5, 0.85), palm=(0.0, -1.0, 0.1), elbow=(0.8, 0.6, -0.5))
             thrust = dict(hand=(3.0, -27.0, 50.0), point=(0.0, -0.05, 1.0), palm=(0.0, -1.0, 0.0), elbow=(0.6, 0.2, -0.8))
             rest = dict(hand=(10.0, -9.0, 40.0), point=(0.1, -0.5, -0.8), palm=(-0.6, -0.2, 0.0), elbow=(0.6, 0.6, -0.4))
-            a = lerpP(rest, cocked, smooth((f - 2) / 10))
-            a = lerpP(a, thrust, smooth((f - 16) / 4))
-            a = lerpP(a, rest, smooth((f - 26) / 11))
+            a = lerpP(rest, cocked, smooth((fo - 2) / 10))
+            a = lerpP(a, thrust, smooth((fo - 16) / 4))
+            a = lerpP(a, rest, smooth((fo - 26) / 11))
             P["arm_L"] = a
             P["curl_L"] = 0.9 * coil + (-0.15) * hit + 0.6 * (1 - coil - hit) * (f > 26)
             P["spread_L"] = 1.0 * hit; P["thumb_L"] = 0.2
@@ -145,34 +149,36 @@ def push():
 # ====================================================================== STOMP (40 ticks, foot lands on tick 19)
 @action
 def stomp():
-    N = 40
+    N = 44
+    WARP = [(0, 0, "l"), (12, 11, "l"), (17, 15, "l"), (22, 19, "l"), (44, 40)]
     LIFT = [(0, 0), (3, 0), (11, 15.0, "o"), (15, 16.0, "i"), (19, 0, "i"), (40, 0)]
     FY = [(0, 5.0), (11, -1.0), (15, -1.5, "i"), (19, 2.0, "i"), (32, 2.0), (40, 5.0)]
     BZ = [(0, -4.0), (4, -5.0), (12, -1.0), (15, -0.6, "i"), (19, -9.0, "o"), (23, -8.0), (32, -5.0), (40, -4.0)]
     LEAN = [(0, 9), (12, 2), (15, 1, "i"), (19, 22, "o"), (24, 18), (40, 9)]
 
     def fn(r, f):
+        fo = track(WARP, f)                                    # retimed: new tick -> authored pose frame
         P = combat_base(0)
-        apex = smooth((f - 10) / 3) * (1 - smooth((f - 16) / 1))
+        apex = smooth((fo - 10) / 3) * (1 - smooth((fo - 16) / 1))
         trem = 1.2 * math.sin(f * 2.7) * apex + 2.0 * math.sin((f - 19) * 2.3) * math.exp(-max(0, f - 19) / 3.0) * (f >= 19)
-        P.update(body=(2.6 * smooth(f / 10) * (1 - smooth((f - 19) / 5)), 1.0, track(BZ, f)),
-                 hips=(track(LEAN, f), 5 * smooth(f / 10) * (1 - smooth((f - 19) / 4)), -14.0 + 6 * smooth(f / 10) * (1 - smooth((f - 24) / 12))),
-                 chest=(3 + 0.5 * track(LEAN, f) - 6 * apex, 0.0, 6.0 + trem),
-                 head=(10.0, 4.0 + 8 * bump(f, 20, 3), 0.0))
-        P["foot_R"] = ((-7.5, track(FY, f)), track(LIFT, f), -20, -8 * apex)
+        P.update(body=(2.6 * smooth(fo / 10) * (1 - smooth((fo - 19) / 5)), 1.0, track(BZ, fo)),
+                 hips=(track(LEAN, fo), 5 * smooth(fo / 10) * (1 - smooth((fo - 19) / 4)), -14.0 + 6 * smooth(fo / 10) * (1 - smooth((fo - 24) / 12))),
+                 chest=(3 + 0.5 * track(LEAN, fo) - 6 * apex, 0.0, 6.0 + trem),
+                 head=(10.0, 4.0 + 8 * bump(fo, 20, 3), 0.0))
+        P["foot_R"] = ((-7.5, track(FY, fo)), track(LIFT, fo), -20, -8 * apex)
         P["knee_R"] = (-0.3, -1.0, 0.0)
-        raise_ = smooth((f - 2) / 9) * (1 - smooth((f - 17) / 2))
-        P["sword"] = dict(grip=lerpP((-3.0, -13.0, 41.0), (-17.0, -6.0, 58.0), raise_), dir=sword_dir(lerpP(6, -60, raise_), lerpP(28, 55, raise_) - 70 * smooth((f - 17) / 2) * (1 - smooth((f - 30) / 10))),
-                          flat=(0.3, 0.0, 1.0), two=True, two_w=1 - smooth((f - 2) / 4) + smooth((f - 30) / 8))
+        raise_ = smooth((fo - 2) / 9) * (1 - smooth((fo - 14.0) / 5.0))
+        P["sword"] = dict(grip=lerpP((-3.0, -13.0, 41.0), (-17.0, -6.0, 58.0), raise_), dir=sword_dir(lerpP(6, -60, raise_), lerpP(28, 55, raise_) - 70 * smooth((fo - 14.0) / 5.0) * (1 - smooth((fo - 30) / 10))),
+                          flat=(0.3, 0.0, 1.0), two=True, two_w=1 - smooth((fo - 2) / 4) + smooth((fo - 30) / 8))
         if 3 <= f <= 37:
             out = dict(hand=(32.0, -3.0, 58.0), point=(0.9, 0.0, 0.4), palm=(0.0, -0.2, -1.0), elbow=(0.6, 0.6, -0.4))
             slam = dict(hand=(17.0, -10.0, 30.0), point=(0.2, -0.4, -0.9), palm=(-0.5, -0.3, 0.0), elbow=(0.6, 0.6, -0.3))
-            a = lerpP(LEFT_HANG, out, smooth((f - 3) / 8))
-            a = lerpP(a, slam, smooth((f - 16) / 3))
-            a = lerpP(a, dict(hand=(8.0, -12.0, 40.0), point=(-0.3, -0.6, -0.6), palm=(-0.6, 0.3, 0.0), elbow=(0.6, 0.5, -0.4)), smooth((f - 26) / 11))
+            a = lerpP(LEFT_HANG, out, smooth((fo - 3) / 8))
+            a = lerpP(a, slam, smooth((fo - 16) / 3))
+            a = lerpP(a, dict(hand=(8.0, -12.0, 40.0), point=(-0.3, -0.6, -0.6), palm=(-0.6, 0.3, 0.0), elbow=(0.6, 0.5, -0.4)), smooth((fo - 26) / 11))
             P["arm_L"] = a
-            P["curl_L"] = 0.3 + 0.6 * smooth((f - 16) / 3); P["spread_L"] = 0.8 * raise_
-        P["heart"] = heartbeat(f / 20.0, 120, 1.0 + 1.2 * apex + 0.8 * bump(f, 20, 2))
+            P["curl_L"] = 0.3 + 0.6 * smooth((fo - 16) / 3); P["spread_L"] = 0.8 * raise_
+        P["heart"] = heartbeat(f / 20.0, 120, 1.0 + 1.2 * apex + 0.8 * bump(fo, 20, 2))
         K.pose(r, merged(**P))
     return N, fn, "false"
 
@@ -180,28 +186,31 @@ def stomp():
 # ====================================================================== DASH (32 ticks: crouch 0-7, explode 8-16, brake, recover)
 @action
 def dash():
-    N = 32
+    N = 34
+    WARP = [(0, 0, "l"), (10, 7, "l"), (11, 8, "l"), (18, 16, "l"), (34, 32)]
     BZ = [(0, -4.0), (6, -9.0), (8, -9.4, "i"), (10, -3.0, "o"), (16, -4.0), (19, -8.0), (26, -5.0), (32, -4.0)]
     BY = [(0, 1.0), (6, 3.0), (8, 3.4, "i"), (11, -7.0, "o"), (16, -8.0), (20, -3.0), (32, 1.0)]
     LEAN = [(0, 9), (6, 20), (8, 22, "i"), (11, 32, "o"), (16, 28), (19, 2), (24, 4), (32, 9)]
 
     def fn(r, f):
+        fo = track(WARP, f)                                    # retimed: new tick -> authored pose frame
         P = combat_base(0)
-        P.update(body=(0.0, track(BY, f), track(BZ, f)), hips=(track(LEAN, f), 0.0, track([(0, -14), (7, -22), (11, -4, "o"), (20, -8), (32, -14)], f)),
-                 chest=(3.0, 0.0, track([(0, 6), (7, -6), (11, 4, "o"), (32, 6)], f)),
-                 head=(track([(0, 22), (7, 26), (11, 6, "o"), (32, 22)], f), track([(0, 4), (8, -6), (11, -10, "o"), (19, 2), (32, 4)], f), 0.0))
-        P["foot_R"] = ((-8.0, track([(0, 5.0), (8, 5.0), (11, 9.0, "o"), (14, -2.0), (17, -9.0, "i"), (32, 5.0)], f)),
-                       track([(0, 0), (10, 0), (12, 6.0), (15, 4.0), (17, 0, "i"), (24, 0), (27, 3.0), (30, 0)], f), -28,
-                       track([(0, 0), (6, 14), (9, 52, "o"), (12, 8), (15, 0), (32, 0)], f))
-        P["foot_L"] = ((7.0, track([(0, -7.0), (9, -7.0), (12, -3.0), (15, -16.0, "i"), (24, -16.0), (29, -7.0), (32, -7.0)], f)),
-                       track([(0, 0), (9, 0), (11, 5.0), (13, 7.0), (15, 0, "i"), (24, 0), (26.5, 3.5), (29, 0), (32, 0)], f), 12,
-                       track([(0, 0), (8, 0), (10, 20), (12, 0), (32, 0)], f))
+        P.update(body=(0.0, track(BY, fo), track(BZ, fo)), hips=(track(LEAN, fo), 0.0, track([(0, -14), (7, -22), (11, -4, "o"), (20, -8), (32, -14)], fo)),
+                 chest=(3.0, 0.0, track([(0, 6), (7, -6), (11, 4, "o"), (32, 6)], fo)),
+                 head=(track([(0, 22), (7, 26), (11, 6, "o"), (32, 22)], fo), track([(0, 4), (8, -6), (11, -10, "o"), (19, 2), (32, 4)], fo), 0.0))
+        P["foot_R"] = ((-8.0, track([(0, 5.0), (8, 5.0), (11, 9.0, "o"), (14, -2.0), (17, -9.0, "i"), (32, 5.0)], fo)),
+                       track([(0, 0), (8, 0), (9.5, 2.5), (12, 6.0), (15, 4.0), (17, 0, "i"), (24, 0), (27, 3.0), (30, 0)], fo), -28,
+                       track([(0, 0), (6, 14), (9, 52, "o"), (12, 8), (15, 0), (32, 0)], fo))
+        P["foot_L"] = ((7.0, track([(0, -7.0), (9, -7.0), (12, -3.0), (15, -16.0, "i"), (24, -16.0), (29, -7.0), (32, -7.0)], fo)),
+                       track([(0, 0), (9, 0), (11, 5.0), (13, 7.0), (15, 0, "i"), (24, 0), (26.5, 3.5), (29, 0), (32, 0)], fo), 12,
+                       track([(0, 0), (8, 0), (10, 20), (12, 0), (32, 0)], fo))
         # the blade is drawn in close along his body, then driven forward like a lance through the lunge
-        P["sword"] = dict(grip=track([(0, (-3.0, -13.0, 41.0)), (7, (-9.0, 2.0, 40.0)), (11, (-4.0, -16.0, 42.0), "o"), (17, (-4.0, -15.0, 41.0)), (32, (-3.0, -13.0, 41.0))], f),
-                          dir=sword_dir(track([(0, 6), (7, -8), (11, 4, "o"), (32, 6)], f), track([(0, 28), (7, 8), (11, 2, "o"), (17, 6), (32, 28)], f)),
+        P["sword"] = dict(grip=track([(0, (-3.0, -13.0, 41.0)), (7, (-9.0, 2.0, 40.0)), (11, (-4.0, -16.0, 42.0), "o"), (17, (-4.0, -15.0, 41.0)), (32, (-3.0, -13.0, 41.0))], fo),
+                          dir=sword_dir(K._spring(r.sec, "saz", track([(0, 6), (7, -8), (11, 4, "o"), (32, 6)], fo), 0.42, 0.52), K._spring(r.sec, "sel", track([(0, 28), (7, 8), (11, 2, "o"), (17, 6), (32, 28)], fo), 0.42, 0.52)),
                           flat=(1.0, 0.0, 0.2), two=True, elbow_R=(-0.7, 0.6, -0.4), elbow_L=(0.7, 0.5, -0.5))
-        P["shrug_R"] = P["shrug_L"] = 3 * bump(f, 7, 2.5)
-        P["heart"] = heartbeat(f / 20.0, 140, 1.4 + 0.8 * bump(f, 9, 2.5))
+        P["shrug_R"] = P["shrug_L"] = 3 * bump(fo, 7, 2.5)
+        P["move"] = 14.0 * smooth((f - 10) / 2) * (1 - smooth((f - 18) / 3))   # the entity is shoved forward on ticks 11-18
+        P["heart"] = heartbeat(f / 20.0, 140, 1.4 + 0.8 * bump(fo, 9, 2.5))
         K.pose(r, merged(**P))
     return N, fn, "false"
 
@@ -222,6 +231,10 @@ def summon_pose(f, k, br=0.0, loopf=None):
     planted = dict(grip=SG, dir=tuple((Vector(SUMMON_TIP) - Vector(SG)).normalized()), flat=(1.0, 0.0, 0.0), two=False)
     P["sword"] = lerpP(P["sword"], planted, k) if k < 1 else planted
     P["sword"]["two"] = k < 0.35
+    if 0.0 < k < 1.0:
+        for S in ("foot_R", "foot_L"):
+            xy, lift, yw, pt = P[S]
+            P[S] = (xy, lift + 2.6 * math.sin(math.pi * min(1.0, k * (1.25 if S == "foot_R" else 1.0))), yw, pt)
     P["sword"]["two_w"] = 1 - smooth(k / 0.35)
     return P
 
@@ -359,6 +372,10 @@ def death():
             P[k] = lerpP(P[k], v, buckle)
         for k, v in COLLAPSE.items():
             P[k] = lerpP(P[k], v, fall)
+        for S, ph in (("foot_R", 0.0), ("foot_L", 0.25)):
+            xy, lift, yw, pt = P[S]
+            u = max(0.0, min(1.0, buckle * 1.3 - ph))
+            P[S] = (xy, lift + 3.0 * math.sin(math.pi * u), yw, pt)
         # the sword: held through the recoil, slips from the fingers at 18, falls and lands flat at 30
         held = dict(grip=(-11.0, -8.0, 44.0), dir=sword_dir(-30, -20), flat=(1.0, 0.0, 0.3), two=False)
         P["sword"] = lerpP(P["sword"], held, smooth((f - 2) / 8)) if f < 18 else held
@@ -404,3 +421,18 @@ def dormant():
         hs, gs = heartbeat(f / 20.0, 30, 0.25)                      # 30 bpm over 2 s = one beat: seamless
         r.scale("heart", hs); r.scale("heart_glow", (0.35 * gs) / max(hs, 1e-3))
     return N, fn, "true"
+
+
+# ====================================================================== timing markers (ticks) -> withered_sentinel_events.js
+# One source of truth for the entity script: lengths, telegraphs (the readable wind-up a player can react to),
+# impacts/damage windows, sounds, particle bursts, shockwaves and heart surges.
+EVENTS = {
+    "sweep": dict(length=60, telegraph=14, swing=24, impact=28, trail=[23, 32], recover=40, heart=[10, 14, 18, 22], sound_whoosh=24, shockwave=28),
+    "push": dict(length=36, telegraph=8, gather=[2, 14], impact=16, recover=24, heart=[8, 12], shockwave=16),
+    "stomp": dict(length=44, telegraph=10, apex=[12, 19], impact=22, recover=30, heart=[12, 16, 20], shockwave=22, quake=22),
+    "dash": dict(length=34, telegraph=0, roar=10, lunge=[11, 18], brake=19, blink=[10, 19], heart=[8, 11]),
+    "summon_start": dict(length=40, drive=20, summon=30, runes_from=22, heart=[24, 30, 36]),
+    "summon_end": dict(length=30, compress=9, release=13, heart=[12]),
+    "awaken": dict(length=100, stir=20, rise=40, draw=52, flare=80, done=100, runes=[20, 78]),
+    "death": dict(length=100, sword_drop=30, violent=[34, 74], flare=77, extinguish=[79, 87], remove=108),
+}

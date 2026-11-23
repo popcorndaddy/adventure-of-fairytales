@@ -4,7 +4,7 @@ import bpy, sys, os, math
 from mathutils import Vector
 
 args = sys.argv[sys.argv.index("--") + 1:]
-OUT = os.path.abspath(args[0]); STILLS = "--stills" in args
+OUT = os.path.abspath(args[0]); STILLS = "--stills" in args; SLOW = "--slow" in args
 scene = bpy.context.scene
 for o in bpy.data.objects:
     if o.type == "MESH" and o.parent is None and not any(m.type == "ARMATURE" for m in o.modifiers):
@@ -14,6 +14,8 @@ PX = 1 / 16
 ORDER = [("awaken", 1, "AWAKEN"), ("idle", 1, "IDLE"), ("idle_combat", 1, "COMBAT STANCE"), ("walk", 2, "WALK"),
          ("sweep", 1, "SWEEP"), ("push", 1, "PUSH"), ("stomp", 1, "STOMP"), ("dash", 1, "DASH"),
          ("summon_start", 1, "SUMMON"), ("summon_loop", 1, "SUMMON - channelling"), ("summon_end", 1, "SUMMON - release"), ("death", 1, "DEATH")]
+if SLOW:   # slow-motion review of the attacks: each clip twice at half speed
+    ORDER = [("sweep", 1, "SWEEP (half speed)"), ("push", 1, "PUSH (half speed)"), ("stomp", 1, "STOMP (half speed)"), ("dash", 1, "DASH (half speed)")]
 WALK_V = 2 * 21.6 / 48 * PX                      # metres per frame (walk ground speed)
 GAP = 6
 
@@ -104,7 +106,7 @@ for i, (t, f0) in enumerate(labels):
     for fr, hide in ((0, True), (f0, False), (f1, True)):
         t.hide_render = hide; t.keyframe_insert("hide_render", frame=max(0, fr))
 
-scene.render.fps = 20
+scene.render.fps = 10 if SLOW else 20
 scene.frame_start, scene.frame_end = 0, END
 scene.render.resolution_x, scene.render.resolution_y = 1280, 720
 try:
