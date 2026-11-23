@@ -47,6 +47,24 @@ def file_rot(R_int):
     return [round(-math.degrees(ax), 3), round(-math.degrees(ay), 3), round(math.degrees(az), 3)]
 
 
+def file_rot_cont(R_int, prev):
+    """Like file_rot, but of the equivalent Euler triples (x, y, z) / (x+180, 180-y, z+180), each +-360, it returns
+    the one closest to the previous tick. GeckoLib blends Euler numbers between ticks, so a flip between two
+    equivalent triples (e.g. 179 -> -179) would spin the bone for a frame even though both ticks are correct."""
+    ax, ay, az = euler_zyx(R_int)
+    if prev is None:
+        e = (ax, ay, az)
+    else:
+        best = None
+        for c in ((ax, ay, az), (ax + math.pi, math.pi - ay, az + math.pi)):
+            w = [v + 2 * math.pi * round((p_ - v) / (2 * math.pi)) for v, p_ in zip(c, prev)]
+            d = sum((v - p_) ** 2 for v, p_ in zip(w, prev))
+            if best is None or d < best[0]:
+                best = (d, w)
+        e = tuple(best[1])
+    return [round(-math.degrees(e[0]), 3), round(-math.degrees(e[1]), 3), round(math.degrees(e[2]), 3)], e
+
+
 # ------------------------------------------------------------------ rest pose
 saved_action = rig.animation_data.action if rig.animation_data else None
 if rig.animation_data:
@@ -472,6 +490,7 @@ if DO_ANIMS:
         rig.animation_data_create(); rig.animation_data.action = act
         f0, f1 = int(act.frame_range[0]), int(act.frame_range[1])
         tracks = {b: {"rotation": {}, "position": {}, "scale": {}} for b in order_b}
+        prev_e = {b: None for b in order_b}
         for f in range(f0, f1 + 1):
             scene.frame_set(f)
             Wd = world_delta()
@@ -486,7 +505,7 @@ if DO_ANIMS:
                 p = heads[name]
                 pos = (Q @ p) - p
                 ri = M3 @ D @ M3i
-                tracks[name]["rotation"][t] = file_rot(ri)
+                tracks[name]["rotation"][t], prev_e[name] = file_rot_cont(ri, prev_e[name])
                 pi = M3 @ pos
                 tracks[name]["position"][t] = [R6(-pi.x), R6(pi.y), R6(pi.z)]
                 tracks[name]["scale"][t] = [R6(scl.x), R6(scl.z), R6(scl.y)]

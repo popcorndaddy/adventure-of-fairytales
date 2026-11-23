@@ -12,6 +12,7 @@ by_bone = {}
 for o in blocks:
     by_bone.setdefault(o["sk_bone"], []).append(o)
 PX = K.PX
+BODY = [("pelvis", "chest", 7.5), ("chest", "chest", 8.5), ("thigh_R", "thigh_R", 3.5), ("thigh_L", "thigh_L", 3.5), ("shin_R", "shin_R", 3.0), ("shin_L", "shin_L", 3.0), ("head", "head", 4.5)]
 
 
 def low(bones):
@@ -29,6 +30,7 @@ for name in names:
     n = int(act.frame_range[1])
     gap_l, gap_r, feet, sword_low = [], [], {"R": [], "L": []}, []
     tips, slide = [], {}
+    elbow, clip = {}, []
     for f in range(0, n + 1):
         bpy.context.scene.frame_set(f)
         sw = r.pb["sword"]
@@ -44,9 +46,21 @@ for name in names:
         gap_r.append(((palm_r - (grip + d * tr)).length / PX))
         for S in ("R", "L"):
             feet[S].append(low([f"foot_{S}", f"toe_{S}"]))
-            fc = r.pb[f"foot_{S}"].head / PX
+            fc = r.pb[f"toe_{S}"].head / PX                      # the ball of the foot: it must not slide
             slide.setdefault(S, []).append((fc.x, fc.y, feet[S][-1]))
         sword_low.append(low(["sword"]))
+        for S in ("R", "L"):
+            u = (r.pb[f"upperarm_{S}"].tail - r.pb[f"upperarm_{S}"].head).normalized(); fa = (r.pb[f"forearm_{S}"].tail - r.pb[f"forearm_{S}"].head).normalized()
+            elbow.setdefault(S, []).append(180 - math.degrees(u.angle(fa)))
+        # blade vs body: points along the blade (guard -> tip) inside the torso / thigh capsules
+        dn = (sw.tail - sw.head).normalized()
+        for k in range(4, 22):
+            q = (sw.head + dn * (r.sword_len * k / 22)) / PX
+            for (b0, b1, rad) in BODY:
+                a0 = r.pb[b0].head / PX; a1 = r.pb[b1].tail / PX
+                ab = a1 - a0; t = max(0.0, min(1.0, (q - a0).dot(ab) / ab.length_squared))
+                if (q - (a0 + ab * t)).length < rad:
+                    clip.append((f, b0)); break
         tips.append(((sw.head + (sw.tail - sw.head).normalized() * r.sword_len) / PX, d.copy()))
     # sword continuity: per-frame tip travel and blade turn (no teleporting between poses)
     jumps = [(tips[i + 1][0] - tips[i][0]).length for i in range(len(tips) - 1)]
@@ -64,4 +78,9 @@ for name in names:
     print(f"  right fist to handle: {min(gap_r):.2f}..{max(gap_r):.2f} px")
     print(f"  lowest foot R {min(feet['R']):.2f} L {min(feet['L']):.2f}   highest-lowest R {max(feet['R']):.2f} L {max(feet['L']):.2f}")
     print(f"  sword lowest {min(sword_low):.2f} px")
+    print(f"  elbow straightness R {min(elbow['R']):.0f}..{max(elbow['R']):.0f} deg, L {min(elbow['L']):.0f}..{max(elbow['L']):.0f} deg (180 = straight)")
+    cf = sorted(set(f for f, _ in clip))
+    print(f"  blade inside body: {len(cf)} frames {cf[:12]} {sorted(set(b for _, b in clip))}")
+    if name == "dash":
+        print("  dash elbows by tick R:", [round(x) for x in elbow['R']], "L:", [round(x) for x in elbow['L']])
 print("CHECK_OK")

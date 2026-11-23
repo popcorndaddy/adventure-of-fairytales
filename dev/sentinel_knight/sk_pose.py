@@ -238,6 +238,42 @@ def hold_sword(r, grip_px, d, n, two=True, two_w=1.0, elbow_R=(-0.7, 0.6, -0.3),
         r.set_world_rot("hand_L", cur.to_quaternion().slerp(want.to_quaternion(), two_w).to_matrix())
 
 
+def free_target(r, S, a):
+    """World wrist position, hand rotation and elbow pole for a free hand described by dict a."""
+    p = Vector(a["point"]).normalized(); n = Vector(a["palm"]); n = (n - p * n.dot(p)).normalized()
+    rest_palm = Vector((1, 0, 0)) if S == "R" else Vector((-1, 0, 0))
+    B0 = Matrix((Vector((0, 0, -1)), rest_palm, Vector((0, 0, -1)).cross(rest_palm))).transposed()
+    B = Matrix((p, n, p.cross(n))).transposed()
+    return Vector(a["hand"]) * PX, B @ B0.inverted() @ r.base[f"hand_{S}"], Vector(a["elbow"])
+
+
+def sword_targets(r, sw):
+    """Where each fist must be (and how it is turned) to hold the sword described by sw."""
+    d = Vector(sw["dir"]).normalized()
+    Rs = sword_frame(d, sw["flat"]) @ S_REST.inverted()
+    G = Vector(sw["grip"]) * PX
+    v0 = r.grip0 - r.head0["hand_R"]
+    R_t = (G - Rs @ v0, Rs @ r.base["hand_R"], Vector(sw.get("elbow_R", (-0.7, 0.6, -0.3))))
+    GL = G + d * r.grip_l_s
+    L_t = (GL - Rs @ v0, Rs @ r.base["hand_L"], Vector(sw.get("elbow_L", (0.6, 0.6, -0.4))))
+    return R_t, L_t
+
+
+def place_hand(r, S, pos, R3, pole):
+    r.ik(f"upperarm_{S}", f"forearm_{S}", pos, pole)
+    r.set_world_rot(f"hand_{S}", R3)
+
+
+def blend_target(a, b, w):
+    """Blend two (pos, rot, pole) hand targets: w = 0 -> a, 1 -> b."""
+    if w <= 0:
+        return a
+    if w >= 1:
+        return b
+    q = a[1].to_quaternion().slerp(b[1].to_quaternion(), w)
+    return a[0].lerp(b[0], w), q.to_matrix(), a[2].lerp(b[2], w)
+
+
 def free_arm(r, S, hand_px, point, palm, elbow):
     """Free arm: wrist at hand_px, fingers pointing along `point`, palm facing `palm`."""
     r.ik(f"upperarm_{S}", f"forearm_{S}", Vector(hand_px) * PX, Vector(elbow))
@@ -270,6 +306,32 @@ def head_look(r, yaw, pitch, tilt):
     r.set_world_rot("head", R @ r.base["head"])
 
 
+HEAD_LOOK_PITCH = 9.0          # he looks slightly down: at a player standing in front of a 4.5-block knight
+NECK_SOFT, NECK_MAX = 45.0, 65.0
+
+
+def calm_head(r, P):
+    """The head stays on the target (the entity always faces it) with only a few degrees of drift, follows the body
+    through a soft spring, and never twists more than ~65 deg from the chest. head_mode: 'calm' (default),
+    'pitch' (keeps the authored nod/tilt, calms the turning: kneeling, collapse), 'free' (as authored)."""
+    hy, hp, ht = P["head"]
+    mode = P.get("head_mode", "calm")
+    if mode == "free":
+        return hy, hp, ht
+    hy = 0.12 * hy
+    if mode == "calm":
+        hp = HEAD_LOOK_PITCH + 0.25 * (hp - HEAD_LOOK_PITCH); ht = 0.25 * ht
+    hy = _spring(r.sec, "head_y", hy, 0.3, 0.45)
+    hp = _spring(r.sec, "head_p", hp, 0.3, 0.45)
+    ht = _spring(r.sec, "head_t", ht, 0.3, 0.45)
+    cy = P["hips"][2] + P["spine"][2] + P["chest"][2]           # where the chest points (world yaw)
+    rel = hy - cy
+    a = abs(rel)
+    if a > NECK_SOFT:                                            # soft limit: the neck gives way to the shoulders
+        rel = math.copysign(NECK_SOFT + (NECK_MAX - NECK_SOFT) * math.tanh((a - NECK_SOFT) / (NECK_MAX - NECK_SOFT)), rel)
+    return cy + rel, hp, ht
+
+
 def pose(r, P):
     r.rest_pose()
     bx, by, bz = P["body"]
@@ -286,18 +348,39 @@ def pose(r, P):
             r.rotate(f"clavicle_{S}", Matrix.Rotation(math.radians(sh * -sg), 3, r.rot("chest") @ r.base["chest"].inverted() @ Vector((0, 1, 0))))
     for S in ("R", "L"):
         xy, lift, yaw_f, pit = P[f"foot_{S}"]
+        y0 = P.get(f"pivot_{S}")
+        if y0 is not None and yaw_f != y0:                       # turn about the ball of the foot, not the ankle
+            b0 = (r.head0[f"toe_{S}"] - r.head0[f"foot_{S}"]) / PX; b0.z = 0
+            d = Matrix.Rotation(math.radians(y0), 3, "Z") @ b0 - Matrix.Rotation(math.radians(yaw_f), 3, "Z") @ b0
+            xy = (xy[0] + d.x, xy[1] + d.y)
         place_leg(r, S, xy, lift, yaw_f, pit, P[f"knee_{S}"])
-    head_look(r, *P["head"])
+    head_look(r, *calm_head(r, P))
     sw = P["sword"]
-    if P["arm_R"]:
-        a = P["arm_R"]; free_arm(r, "R", a["hand"], a["point"], a["palm"], a["elbow"])
-    elif sw:
-        hold_sword(r, sw["grip"], sw["dir"], sw["flat"], sw.get("two", False) and not P["arm_L"], sw.get("two_w", 1.0),
-                   sw.get("elbow_R", (-0.7, 0.6, -0.3)), sw.get("elbow_L", (0.6, 0.6, -0.4)))
+    # Each hand is a blend of "on the sword" and "free" (arm_R_w / arm_L_w, 0..1), so a hand never jumps between
+    # the two in one tick. Without a weight, a given free arm wins outright (the old behaviour).
+    wR = P.get("arm_R_w", 1.0) if P["arm_R"] else 0.0
+    wL = P.get("arm_L_w", 1.0) if P["arm_L"] else 0.0
+    tR = tL = None
+    if sw:
+        tR, tL = sword_targets(r, sw)
+    if P["arm_R"] or tR:
+        fR = free_target(r, "R", P["arm_R"]) if P["arm_R"] else None
+        place_hand(r, "R", *(blend_target(tR, fR, wR) if (tR and fR) else (fR or tR)))
+    on_L = (sw.get("two_w", 1.0) if (sw and sw.get("two", False)) else 0.0) * (1.0 - wL)
     if P["arm_L"]:
-        a = P["arm_L"]; free_arm(r, "L", a["hand"], a["point"], a["palm"], a["elbow"])
-    fingers(r, "R", P["curl_R"], P.get("spread_R", 0.0), P.get("thumb_R", 0.5))
-    fingers(r, "L", P["curl_L"], P["spread_L"], P["thumb_L"], P.get("wobble_L", (0, 0, 0)))
+        fL = free_target(r, "L", P["arm_L"])
+        place_hand(r, "L", *(blend_target(fL, tL, on_L) if tL else fL))
+    elif tL and on_L > 0:
+        cur = (r.head("hand_L"), r.rot("hand_L"), tL[2])
+        place_hand(r, "L", *blend_target(cur, tL, on_L))
+    cl, sp, th = P["curl_L"], P["spread_L"], P["thumb_L"]
+    if P["arm_L"] and on_L > 0:                                  # fingers close round the handle as the hand arrives
+        cl = cl + (1.0 - cl) * on_L; sp = sp * (1 - on_L); th = th + (0.9 - th) * on_L
+    cr = P["curl_R"]
+    if P["arm_R"] and sw and wR < 1:
+        cr = cr + (1.0 - cr) * (1 - wR)
+    fingers(r, "R", cr, P.get("spread_R", 0.0), P.get("thumb_R", 0.5))
+    fingers(r, "L", cl, sp, th, P.get("wobble_L", (0, 0, 0)))
     sw_w = P.get("sword_world")
     if sw_w:                                       # sword released: placed in the world (e.g. dropped in death)
         g, d, n, w = sw_w
@@ -345,11 +428,16 @@ def secondary(r, P):
     move = P.get("move", 0.0)                                    # forward speed of the entity (walk / dash), px per frame
     fwd = (-vel.y) + move
     chest_R = r.rot("chest") @ r.base["chest"].inverted()
-    chest_fwd = chest_R @ Vector((0, -1, 0))
-    yaw = math.degrees(math.atan2(chest_fwd.x, -chest_fwd.y))
+    chest_right = chest_R @ Vector((1, 0, 0))                   # stays level when he bends forward (the forward axis does not)
+    yaw = math.degrees(math.atan2(chest_right.y, chest_right.x))
     yaw_lag = _spring(st, "yaw", yaw, 0.12, 0.7)
     flutter = P.get("cape_flutter", 0.0)
     legs = _leg_points(r)
+    lie = P.get("cape_on_legs", 0.0)
+    if lie > 0:                                                  # down the back: from the shoulders to the hips, just off the armour
+        spine_down = (r.head("pelvis") - r.tail("chest")).normalized()
+        back_out = chest_R @ Vector((0, 1, 0))
+        along_back = (spine_down + back_out * 0.25).normalized()
     # ---- cape: three panels, three segments. Angles are measured in HIS turning frame (behind his back, not behind
     # the world), trailing his turns a little; springs give follow-through; never inside his legs.
     for s, side in (("L", 1), ("M", 0), ("R", -1)):
@@ -367,7 +455,8 @@ def secondary(r, P):
             th = _spring(st, b, max(prev_angle - 4.0, target), 0.20 - 0.03 * k, 0.66)
             # clearance from the legs (in his frame): the segment's end must stay behind every leg point at its height
             need = -1e9
-            for q0 in legs:
+            free = P.get("cape_on_legs", 0.0) > 0.5                # collapsed: the cape lies down his back, then falls free
+            for q0 in ([] if free else legs):
                 q = Rki @ q0
                 if A.z - L - 6 <= q.z <= A.z + 2 and abs(q.x - A.x) < 10.0:
                     need = max(need, q.y + 5.0)
@@ -377,9 +466,18 @@ def secondary(r, P):
                     th_min = math.degrees(math.asin(max(-1.0, min(1.0, ratio))))
                     if th < th_min:
                         th = th_min; st[b] = (th, 0.0)
+            if A.z - L * math.cos(math.radians(th)) < 0.6 and A.z - 0.6 < L:    # never through the floor: it pools
+                th = max(th, math.degrees(math.acos(max(-1.0, min(1.0, (A.z - 0.6) / L))))); st[b] = (th, 0.0)
+            last = st.get(b + "_out")
+            if last is not None and abs(th - last) > 20.0:             # pushed by a fast leg: give way over a few ticks
+                th = last + math.copysign(20.0, th - last); st[b] = (th, 0.0)
+            st[b + "_out"] = th
             sway = side * (1.5 + 0.8 * k)
             d = Vector((math.sin(math.radians(sway)), math.sin(math.radians(th)), -math.cos(math.radians(th))))
-            r.aim(b, Rk @ d)
+            wd = Rk @ d
+            if lie > 0 and k == 1:
+                wd = wd.lerp(along_back, lie).normalized()
+            r.aim(b, wd)
             prev_angle = th
     # ---- tassets follow the thigh that moves into them
     down = Vector((0, 0, -1))

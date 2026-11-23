@@ -59,3 +59,15 @@ The animation timings are ticks. If you change a hit frame, change the matching 
 - Caution: sentinel_knight_anim.blend keeps the geometry from when it was first baked (the older cape).
   Export the geo from sentinel_knight.blend (`sk_cycle.ps1 -NoBuild`), and only the animations with `-Anims`,
   or re-bake after rebuilding.
+
+## Animation QC (v5 polish pass)
+- `sk_snap.py` - true per-tick rotation change of every bone (quaternion angle); flags snaps above a threshold.
+- `sk_check.py` - grip contact, planted-foot slide (measured at the ball of the foot), floor, blade travel,
+  elbow straightness and blade-through-body clipping, per action.
+- Export writes rotation keys that are continuous tick to tick (`file_rot_cont`): GeckoLib blends Euler numbers
+  between ticks, so equivalent-but-different triples (179 -> -179) would spin a bone for a frame.
+- Hands blend between "on the sword" and "free" (`arm_L_w` / `arm_R_w` with the sword's `two_w`), and free-hand
+  orientations blend as rotations, so no hand switches or flips in one tick.
+- Head: `calm_head` keeps the look on the target (the entity faces it) with a few degrees of drift, a soft spring
+  and a ~65 degree neck limit; `head_mode` "pitch" keeps authored nods for kneeling/collapse.
+- `sk_sheets.ps1` exports animations only (the anim .blend's geometry is stale) and renders 3-view sheets.
