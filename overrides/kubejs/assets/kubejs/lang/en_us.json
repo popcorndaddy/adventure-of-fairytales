@@ -1,4 +1,6 @@
 {
   "subtitles.kubejs.title_dawn_of_adventure": "An adventure begins",
-  "subtitles.kubejs.letter_secret_found": "A torn page returns"
+  "subtitles.kubejs.letter_secret_found": "A torn page returns",
+  "entity.kubejs.gate_knight": "The Gate Knight",
+  "item.kubejs.gate_knight_spawn_egg": "Gate Knight Spawn Egg"
 }
