@@ -18,11 +18,33 @@ def spike(bone, base, h, w=1.5, rot=(0, 0, 0), mat="plate", tip="trim"):
     block(bone, tuple(Vector(base) + up * (h + 0.1)), (w * 0.62, w * 0.62, w * 0.62), tip, (rot[0], rot[1], rot[2] + 45))
 
 
+def oct_disc(bone, c, d, t, mat, rot=(0, 0, 0), coll="Sentinel_Armor", name=None):
+    """A round(ish) disc: a square and the same square turned 45 deg about its own normal (an octagon)."""
+    R = Euler(tuple(math.radians(a) for a in rot), "XYZ").to_matrix()
+    R45 = R @ Euler((0, 0, math.radians(45)), "XYZ").to_matrix()
+    e45 = tuple(math.degrees(a) for a in R45.to_euler("XYZ"))
+    block(bone, c, (d, d, t), mat, rot, coll, name)
+    block(bone, c, (d * 0.83, d * 0.83, t * 0.98), mat, e45, coll, (name + "_45") if name else None)
+
+
+def dome(bone, base, axis_rot, layers, mat="plate", rim="trim", name=None):
+    """A stepped dome: stacked octagonal layers along the local normal, shrinking towards the top, with a rim."""
+    R = Euler(tuple(math.radians(a) for a in axis_rot), "XYZ").to_matrix()
+    n = R @ Vector((0, 0, 1))
+    if rim:
+        d0, t0 = layers[0]
+        oct_disc(bone, tuple(Vector(base) - n * 0.2), d0 * 1.08, 0.7, rim, axis_rot)
+    h = 0.0
+    for i, (d, t) in enumerate(layers):
+        oct_disc(bone, tuple(Vector(base) + n * (h + t / 2)), d, t, mat, axis_rot, name=(f"{name}_{i}" if name else None))
+        h += t * 0.92
+
+
 # ---------------- pelvis core, belt with a bronze buckle
 block("pelvis", (0, 0.5, 40.2), (13.6, 9.2, 6.2), "plate")
 block("pelvis", (0, 0.5, 43.4), (15.4, 10.4, 1.9), "trim")
-block("pelvis", (0, -5.4, 43.4), (3.4, 0.8, 2.6), "bronze")
-block("pelvis", (0, -5.8, 43.4), (1.4, 0.6, 1.4), "energy", (0, 45, 0))
+oct_disc("pelvis", (0, -5.5, 43.4), 4.0, 0.9, "bronze", (90, 0, 0), name="Buckle")                 # round medallion buckle
+block("pelvis", (0, -6.1, 43.4), (1.2, 0.5, 1.2), "energy", (0, 45, 0))
 # ---------------- tassets (own bones: they swing clear of the legs)
 for i, (z, w, m) in enumerate(((37.4, 9.6, "plate"), (32.8, 8.6, "rune"), (28.2, 7.4, "plate"))):
     block("tasset_F", (0, -5.6 - 0.4 * i, z), (w, 1.4, 5.4), m, (6, 0, 0))
@@ -65,23 +87,26 @@ block("heart", (1.2, -1.4, 60.2), (2.0, 2.6, 1.8), "heart", coll="Sentinel_Heart
 block("heart", (0, -1.4, 55.0), (2.0, 2.2, 1.4), "heart", coll="Sentinel_Heart", name="Heart_Apex")
 block("heart", (0.4, -0.8, 61.6), (1.2, 1.2, 1.6), "heart", coll="Sentinel_Heart", name="Heart_Aorta")
 block("heart_glow", (0, -2.0, 58.0), (5.6, 4.0, 7.2), "heart_glow", coll="Sentinel_Heart", name="Heart_GlowShell")
-# ---------------- great-helm: pointed visor, burning eye slit, tall crest spike
+# ---------------- war helm (v8): a rounded power-armour helm, battle-scarred. Domed crown, heavy brow over angled
+# glowing lenses, a jutting rebreather with a grille and angled cheek vents, a mohawk crest, a light purple stripe.
 block("neck", (0, 0, 65.4), (8.6, 8.6, 3.0), "plate")
 block("neck", (0, 0.5, 66.8), (5, 5, 3.6), "void", coll="Sentinel_Body")
-block("head", (0, 3.6, 73.4), (9.6, 2.0, 11.0), "plate")
+oct_disc("head", (0, 0.4, 72.6), 10.4, 9.4, "plate", name="Helm_Shell")                         # round skull of the helm
+dome("head", (0, 0.4, 77.2), (0, 0, 0), [(9.8, 1.6), (8.4, 1.4), (6.2, 1.2)], rim=None, name="Helm_Dome")
+block("head", (0, 0.4, 77.4), (1.4, 10.8, 3.4), "accent", name="Helm_Stripe")                  # light purple stripe
+block("head", (0, -4.9, 74.2), (9.6, 1.6, 4.6), "plate", name="Helm_Face")                      # faceplate
+block("head", (0, -5.5, 76.6), (10.2, 1.8, 1.6), "accent", (-22, 0, 0), name="Helm_Brow")        # heavy brow
 for sx in (-1, 1):
-    block("head", (sx * 4.6, -0.2, 73.4), (1.6, 8.8, 11.0), "plate")
-    block("head", (sx * 2.25, -4.7, 71.0), (4.8, 1.6, 6.0), "plate", (0, 0, sx * 16))           # V visor halves (slit above)
-    block("head", (sx * 2.3, -5.0, 74.9), (3.0, 0.6, 1.0), "eye", (0, 0, sx * 12), coll="Sentinel_Body",
-          name=f"Eye_{'L' if sx > 0 else 'R'}")
-    block("head", (sx * 5.5, -1.4, 72.4), (1.0, 5.4, 6.4), "trim", (0, sx * 10, 0))             # cheek flares
-    spike("head", (sx * 4.2, -1.6, 78.6), 3.6, 1.1, (0, sx * 28, 0))                            # small temple prongs
-block("head", (0, -4.9, 76.6), (9.8, 1.6, 1.8), "plate", (-12, 0, 0))                           # brow ridge
-block("head", (0, -0.2, 78.8), (9.4, 8.6, 1.6), "plate")
-block("head", (0, 0.6, 80.0), (1.2, 9.2, 2.2), "trim")                                          # crest fin
-spike("head", (0, -1.0, 79.4), 6.4, 2.8, (-10, 0, 0))                                           # the crest spike
-block("head", (0, -2.6, 80.6), (2.2, 4.0, 2.4), "plate", (-30, 0, 0))                          # its swept base
-block("head", (0, -4.9, 67.9), (2.6, 1.6, 2.6), "plate", (0, 45, 0))                            # chin point
+    block("head", (sx * 2.4, -5.8, 74.6), (3.2, 0.6, 1.8), "eye", (-6, 0, sx * -18), coll="Sentinel_Body",
+          name=f"Eye_{'L' if sx > 0 else 'R'}")                                                      # angled lenses
+    block("head", (sx * 2.4, -5.65, 74.6), (3.8, 0.4, 2.4), "accent", (-6, 0, sx * -18), name=f"Lens_Rim_{sx}")
+    block("head", (sx * 3.7, -5.6, 69.8), (2.2, 2.6, 3.2), "accent", (0, 0, sx * 28), name=f"Cheek_Vent_{sx}")
+    block("head", (sx * 5.4, -1.2, 71.0), (1.2, 6.4, 5.8), "plate", (0, sx * 8, 0), name=f"Helm_Cheek_{sx}")
+block("head", (0, -6.6, 69.6), (4.4, 3.0, 3.8), "plate", name="Rebreather")                    # the snout
+block("head", (0, -8.2, 69.4), (3.4, 0.8, 3.0), "iron", name="Grille")                          # its grille
+block("head", (0, -1.0, 67.4), (7.6, 7.2, 1.4), "plate", name="Helm_Chin")
+for k, (y, h) in enumerate(((-3.2, 2.6), (0.0, 3.4), (3.2, 2.8))):                            # mohawk crest
+    block("head", (0, y, 81.6 + h / 2 - 1.0), (1.4, 3.4, h), "accent", name=f"Crest_{k}")
 block("head", (0, -0.4, 72.8), (7.6, 7.6, 8.6), "void", coll="Sentinel_Body")
 # ---------------- shoulders, arms, hands, legs (right authored, mirrored)
 for S, s in SIDE.items():
@@ -90,20 +115,14 @@ for S, s in SIDE.items():
     R2 = lambda r: (r[0], r[1] * sg, r[2] * sg)
     U, F, Hn = f"upperarm_{S}", f"forearm_{S}", f"hand_{S}"
     block(f"clavicle_{S}", (X(-9.0), 0, 62.4), (4.2, 6.4, 2.8), "trim")
-    # angular pauldron: four stepped plates with pointed corners, a trim rim, one swept-back spike
-    block(U, (X(-15.6), 0, 63.6), (12.6, 12.8, 4.6), "plate", R2((0, -16, 0)))
-    block(U, (X(-15.6), 0, 61.3), (13.0, 13.2, 0.7), "trim", R2((0, -16, 0)))
-    block(U, (X(-18.2), 0, 59.6), (8.8, 12.4, 3.4), "rune", R2((0, -30, 0)))
-    block(U, (X(-20.0), 0, 56.6), (6.6, 11.8, 3.2), "plate", R2((0, -42, 0)))
-    block(U, (X(-21.0), 0, 53.8), (4.6, 10.8, 3.0), "plate", R2((0, -54, 0)))
-    for y in (-5.8, 5.8):
-        tooth(U, (X(-16.4), y, 63.6), 2.2, rot=R2((0, -16, 45)))
-        tooth(U, (X(-20.4), y * 0.95, 56.6), 1.8, rot=R2((0, -42, 45)))
-    spike(U, (X(-16.2), 2.6, 65.6), 6.4, 1.8, R2((-28, -22, 0)))
+    # domed pauldron (v8): a big rounded shell tipped out over the shoulder, a gold rim, a glowing vent band below
+    dome(U, (X(-16.0), 0, 60.6), R2((0, -18, 0)), [(14.0, 2.4), (12.6, 1.8), (10.6, 1.6), (7.8, 1.4), (4.6, 1.0)], name=f"Pauldron_{S}")
+    block(U, (X(-19.4), 0, 58.2), (5.6, 12.0, 2.6), "rune", R2((0, -40, 0)))
+    block(U, (X(-20.6), 0, 55.8), (4.2, 10.8, 2.4), "plate", R2((0, -55, 0)))
     block(U, (X(-14.0), 0, 53.0), (6.6, 6.6, 10.0), "plate")                       # rerebrace
     block(U, (X(-17.5), 0, 53.0), (1.0, 3.2, 9.0), "trim")
-    block(U, (X(-14.0), 1.8, 47.4), (5.4, 4.2, 4.6), "plate")                      # couter + fan
-    block(U, (X(-16.6), 1.6, 47.4), (1.0, 4.6, 4.6), "trim", (45, 0, 0))
+    block(U, (X(-14.0), 1.8, 47.4), (5.4, 4.2, 4.6), "plate")                      # couter
+    dome(U, (X(-16.6), 1.4, 47.4), R2((0, -90, 0)), [(4.6, 0.9), (3.2, 0.8)], name=f"Couter_{S}")   # round elbow cop
     block(F, (X(-14.0), 0, 41.8), (6.8, 6.8, 9.0), "plate")                        # vambrace
     block(F, (X(-14.0), 0, 37.3), (7.8, 7.8, 2.2), "trim")
     for i, z in enumerate((44.6, 42.0, 39.4)):                                       # bladed fins sweeping back
@@ -124,9 +143,7 @@ for S, s in SIDE.items():
     block(T, (X(-6.2), 0, 30.6), (8.2, 8.4, 13.2), "plate")
     for i, (z, w, m) in enumerate(((35.0, 8.8, "plate"), (31.0, 8.4, "rune"), (27.0, 8.0, "plate"))):
         block(T, (X(-6.2), -4.6 - 0.2 * i, z), (w, 1.4, 4.8), m, (14 - 2 * i, 0, 0))
-    block(Sh, (X(-6.2), -4.2, 21.6), (6.6, 2.6, 5.4), "trim")
-    block(Sh, (X(-6.2), -6.0, 22.4), (2.2, 2.4, 2.2), "plate", (35, 45, 0))
-    block(Sh, (X(-9.6), -1.4, 21.6), (1.2, 4.6, 4.6), "plate", (45, 0, 0))
+    dome(Sh, (X(-6.2), -3.8, 21.8), (90, 0, 0), [(7.6, 1.2), (6.4, 1.0), (5.0, 1.2)], name=f"Knee_{S}")  # round knee cop
     block(Sh, (X(-6.2), 0, 14.0), (7.2, 7.6, 13.0), "plate")
     for i, z in enumerate((18.0, 14.0, 10.0)):
         block(Sh, (X(-6.2), -4.1 - 0.2 * i, z), (7.4 - 0.4 * i, 1.2, 4.0), "rune" if i == 1 else "plate", (10, 0, 0))

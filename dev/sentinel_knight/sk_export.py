@@ -124,16 +124,18 @@ class Shelf:
 
 shelf = Shelf()
 regions = []                        # (obj, face, x, y, w, h, mat)
-order = sorted(range(len(cubes)), key=lambda i: -max(cubes[i][2].y, cubes[i][2].x, cubes[i][2].z))
-for i in order:
-    o, cube, size = cubes[i]
+faces_all = []
+for o, cube, size in cubes:
     sx, sy, sz = size
     dims = {"north": (sx, sy), "south": (sx, sy), "east": (sz, sy), "west": (sz, sy), "up": (sx, sz), "down": (sx, sz)}
     for face, (fw, fh) in dims.items():
         w, h = max(2, round(fw * TPX)), max(2, round(fh * TPX))
-        x, y = shelf.alloc(w, h)
-        cube["uv"][face] = {"uv": [x / TPX, y / TPX], "uv_size": [w / TPX, h / TPX]}
-        regions.append((o, face, x, y, w, h, o["sk_mat"]))
+        faces_all.append((o, cube, face, w, h))
+# shelf packing: all faces sorted by height (tallest first), so each shelf is filled with faces of similar height
+for o, cube, face, w, h in sorted(faces_all, key=lambda q: (-q[4], -q[3])):
+    x, y = shelf.alloc(w, h)
+    cube["uv"][face] = {"uv": [x / TPX, y / TPX], "uv_size": [w / TPX, h / TPX]}
+    regions.append((o, face, x, y, w, h, o["sk_mat"]))
 used_h = shelf.y + shelf.h
 print("ATLAS rows used", used_h, "of", H, flush=True)
 
@@ -804,17 +806,74 @@ SCARF = max(_sc, key=lambda o_: o_.matrix_world.to_scale().x * o_.matrix_world.t
 RIM_BONES = ("upperarm_L", "upperarm_R", "chest", "shin_L", "shin_R", "tasset_F", "tasset_L", "tasset_R", "tasset_B")
 
 
+def scorch(t, w, h, reach, strength=0.7, bottom=1.6):
+    """Burnt ends: soot creeping in from the edges (heaviest along the bottom), charred brown at the very rim."""
+    yy, xx = np.mgrid[0:h, 0:w]
+    d = np.minimum.reduce([xx, w - 1 - xx, yy * 1.0, (h - 1 - yy) / bottom]).astype(np.float32)
+    soot = np.exp(-d / reach) * (0.55 + 0.45 * mottle(h, w, max(2, int(reach)), 1.0).clip(-1, 1) * 0.5 + 0.45)
+    soot = np.clip(soot, 0, 1)
+    t[..., :3] *= (1 - strength * soot)[..., None]
+    rim = np.exp(-d / (reach * 0.25))
+    t[..., :3] = t[..., :3] * (1 - 0.35 * rim[..., None]) + np.array([0.16, 0.07, 0.03]) * 0.35 * rim[..., None]
+
+
+def gouges(t, w, h, n_sets=1):
+    """Deep parallel gouges from a blade or claw: a dark cut with a bright, scraped lip."""
+    if min(w, h) < 3 * TPX:
+        return
+    for _ in range(n_sets):
+        ang = rnd.uniform(0.5, 1.1) * (1 if rnd.random() < 0.5 else -1)
+        dx, dy = math.cos(ang), math.sin(ang)
+        x0, y0 = rnd.uniform(0.15 * w, 0.5 * w), rnd.uniform(0.2 * h, 0.6 * h)
+        L = int(min(w, h) * rnd.uniform(0.55, 0.9))
+        for k in range(3):
+            ox, oy = -dy * k * 0.55 * TPX, dx * k * 0.55 * TPX
+            for s_ in range(L):
+                x, y = int(x0 + ox + dx * s_), int(y0 + oy + dy * s_)
+                if 1 <= x < w - 1 and 1 <= y < h - 1:
+                    t[y, x, :3] *= 0.25
+                    t[y - 1, x, :3] = np.minimum(t[y - 1, x, :3] + 0.22, 1.0)
+
+
+def helm_paint(o, mat, w, h, face):
+    """The war helm: dark purple-black, light purple accents, dented, scratched, gouged and scorched by old fights."""
+    g = np.zeros((h, w, 4), dtype=np.float32)
+    t, _, _ = sample(GK["AncientDarkIron_Albedo"], w, h); t[..., 3] = 1
+    if mat == "accent":
+        recolour(t, (0.62, 0.42, 0.88), 0.5, 1.5)
+    else:
+        recolour(t, (0.2, 0.11, 0.29), 0.5, 2.0)
+        if face in ("north", "south", "east", "west", "up"):
+            yy = np.arange(h)[:, None]
+            t[..., :3] += (0.05 * np.exp(-((yy / max(h, 1) - 0.2) ** 2) / 0.02))[..., None] * np.array([0.8, 0.7, 1.0])
+    if o.name == "Grille":                                                # rebreather grille: vertical slots
+        xx = np.arange(w)
+        slot = ((xx % int(0.6 * TPX)) < int(0.3 * TPX))
+        t[:, slot, :3] = np.array([0.02, 0.01, 0.03])
+        t[:, ~slot, :3] = np.array([0.45, 0.3, 0.6]) * 0.7
+        return np.clip(t, 0, 1), g
+    dents(t, max(1, (w * h) // (500 * SC * SC)), 0.45)
+    scratches(t, max(3, (w * h) // (110 * SC * SC)), 0.32, (3, 18))
+    if face in ("north", "east", "west", "up"):
+        gouges(t, w, h, 1 if min(w, h) < 6 * TPX else 2)
+    scorch(t, w, h, 1.4 * TPX, 0.75)
+    grain(t, 0.012)
+    return np.clip(t, 0, 1), g
+
+
 def marine_paint(o, mat, w, h, face):
     bone = o["sk_bone"]
     g = np.zeros((h, w, 4), dtype=np.float32)
     side = face in ("north", "south", "east", "west")
     big = min(w, h) >= 4 * TPX
     zc = o.matrix_world.translation.z * 16
-    if bone == "head" and zc > 77 and mat in ("plate", "trim"):            # the crest: a stiff purple plume
-        t = purple_cloth(w, h, face, "x")
+    if o.name.startswith("Crest"):                                         # the crest: a stiff light purple plume
+        t = purple_cloth(w, h, face, "x"); t[..., :3] = t[..., :3] * 1.9 + np.array([0.12, 0.08, 0.16])
         xx = np.arange(w)
         t[..., :3] *= (0.75 + 0.35 * np.abs(np.sin(xx * 1.3)))[None, :, None]
         return np.clip(t, 0, 1), g
+    if bone == "head" and mat in ("plate", "trim", "accent", "iron"):
+        return helm_paint(o, mat, w, h, face)
     if mat in ("plate", "emblem"):
         t = black_plate(w, h, face)
         if bone == "tasset_F" and o.name in BIG and face == "north":         # the front tabard: purple cloth, gold skull
@@ -827,7 +886,7 @@ def marine_paint(o, mat, w, h, face):
             vents(t, g, w, h, 3)
         if bone.startswith(("forearm", "shin")) and side and big and o.name not in KNEES:
             vents(t, g, w, h, 1, horizontal=False)
-        if o.name in KNEES and face == "north":                            # kneepad: gold ring and skull
+        if o.name.startswith("Knee_") and o.name.endswith("_2") and face == "up":   # knee dome: gold ring and skull
             yy, xx = np.mgrid[0:h, 0:w]
             r = np.sqrt((xx - w / 2) ** 2 + (yy - h / 2) ** 2); R0 = min(w, h) * 0.38
             ring = np.abs(r - R0) < 0.45 * TPX
@@ -846,7 +905,7 @@ def marine_paint(o, mat, w, h, face):
         return np.clip(t, 0, 1), g
     if mat == "bronze":                                                  # belt buckle and fittings: gold, skull on the buckle
         t = gold_metal(w, h, 2.0)
-        if bone == "pelvis" and face == "north" and min(w, h) >= 2 * TPX:
+        if o.name == "Buckle" and face == "up" and min(w, h) >= 2 * TPX:
             stamp(t, g, SKULL_M, w / 2, h / 2, min(w, h) * 0.8, np.array([0.35, 0.25, 0.08]))
         return np.clip(t, 0, 1), g
     if mat == "cloth":
