@@ -105,8 +105,13 @@ for sx in (-1, 1):
 block("head", (0, -6.6, 69.6), (4.4, 3.0, 3.8), "plate", name="Rebreather")                    # the snout
 block("head", (0, -8.2, 69.4), (3.4, 0.8, 3.0), "iron", name="Grille")                          # its grille
 block("head", (0, -1.0, 67.4), (7.6, 7.2, 1.4), "plate", name="Helm_Chin")
-for k, (y, h) in enumerate(((-3.2, 2.6), (0.0, 3.4), (3.2, 2.8))):                            # mohawk crest
-    block("head", (0, y, 81.6 + h / 2 - 1.0), (1.4, 3.4, h), "accent", name=f"Crest_{k}")
+for k, (y, h) in enumerate(((1.2, 3.0), (4.0, 2.4))):                                           # plume behind the spire
+    block("head", (0, y, 81.4 + h / 2 - 1.0), (1.4, 3.2, h), "accent", name=f"Crest_{k}")
+spike("head", (0, -1.8, 80.6), 7.6, 2.2, (-6, 0, 0), mat="plate", tip="accent")                  # the tall spire (dark knight)
+for sx in (-1, 1):
+    spike("head", (sx * 3.8, -2.4, 79.6), 3.0, 1.0, (8, sx * 32, 0), mat="plate", tip="accent")  # crown prongs
+block("head", (0, -6.1, 73.6), (1.2, 0.8, 3.4), "plate", name="Helm_Nasal")                        # nasal bar between the eyes
+block("head", (0, -6.1, 71.9), (1.1, 0.8, 1.1), "plate", (0, 45, 0), name="Helm_Nasal_Tip")
 block("head", (0, -0.4, 72.8), (7.6, 7.6, 8.6), "void", coll="Sentinel_Body")
 # ---------------- shoulders, arms, hands, legs (right authored, mirrored)
 for S, s in SIDE.items():
@@ -117,8 +122,13 @@ for S, s in SIDE.items():
     block(f"clavicle_{S}", (X(-9.0), 0, 62.4), (4.2, 6.4, 2.8), "trim")
     # domed pauldron (v8): a big rounded shell tipped out over the shoulder, a gold rim, a glowing vent band below
     dome(U, (X(-16.0), 0, 60.6), R2((0, -18, 0)), [(14.0, 2.4), (12.6, 1.8), (10.6, 1.6), (7.8, 1.4), (4.6, 1.0)], name=f"Pauldron_{S}")
-    block(U, (X(-19.4), 0, 58.2), (5.6, 12.0, 2.6), "rune", R2((0, -40, 0)))
+    block(U, (X(-19.4), 0, 58.2), (5.6, 12.0, 2.6), "rune", R2((0, -40, 0)))                      # layered lames (dark knight)
     block(U, (X(-20.6), 0, 55.8), (4.2, 10.8, 2.4), "plate", R2((0, -55, 0)))
+    block(U, (X(-21.2), 0, 53.6), (3.2, 9.6, 2.2), "plate", R2((0, -66, 0)))
+    for y in (-6.0, 6.0):
+        tooth(U, (X(-21.0), y * 0.85, 55.6), 1.4, rot=R2((0, -55, 45)))
+    for y in (-3.8, 3.8):
+        spike(U, (X(-18.2), y, 62.4), 3.4, 1.2, R2((-y * 4, -40, 0)), mat="plate", tip="trim")    # swept spikes on the rim
     block(U, (X(-14.0), 0, 53.0), (6.6, 6.6, 10.0), "plate")                       # rerebrace
     block(U, (X(-17.5), 0, 53.0), (1.0, 3.2, 9.0), "trim")
     block(U, (X(-14.0), 1.8, 47.4), (5.4, 4.2, 4.6), "plate")                      # couter

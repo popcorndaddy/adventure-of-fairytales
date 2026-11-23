@@ -915,6 +915,24 @@ def marine_paint(o, mat, w, h, face):
         if bone == "cape_M2" and face == "south":                           # the banner on his back: a gold skull
             stamp(t, g, SKULL_M, w / 2, h * 0.45, min(w * 0.6, h * 0.4), GOLD * 0.95)
         return np.clip(t, 0, 1), g
+    if mat == "blade":                                                   # dark steel burning purple at the edges
+        t, _, _ = sample(GK["DarkSteel_Albedo"], w, h); t[..., 3] = 1
+        recolour(t, (0.22, 0.2, 0.28), 0.5, 1.6)
+        yy, xx = np.mgrid[0:h, 0:w]
+        e = np.minimum(xx, w - 1 - xx).astype(np.float32) / max(1.0, 0.9 * TPX)
+        edge = np.clip(1.25 - e, 0, 1)                                    # glowing honed edges
+        flame = np.clip(np.sin(yy * 0.21 + np.sin(yy * 0.05) * 3 + xx * 0.4) * 0.5 + 0.5, 0, 1) ** 4 * 0.45
+        k = np.clip(edge + flame * (face in ("up", "down")), 0, 1)
+        t[..., :3] = t[..., :3] * (1 - 0.6 * k[..., None]) + VIOLET * 0.75 * k[..., None]
+        g[..., :3] = k[..., None] * VIOLET * 0.85; g[..., 3] = (k > 0.03).astype(np.float32)
+        return np.clip(t, 0, 1), g
+    if mat == "energy" and bone == "sword":                              # white-hot core of the blade
+        t = np.zeros((h, w, 4), np.float32); t[..., 3] = 1
+        xx = np.arange(w)[None, :]
+        c = np.clip(1 - np.abs(xx - (w - 1) / 2) / max(w / 2, 1), 0, 1)
+        t[..., :3] = (np.array([0.62, 0.36, 0.95]) + c[..., None] * np.array([0.38, 0.5, 0.05])).clip(0, 1)
+        g[..., :3] = t[..., :3]; g[..., 3] = 1
+        return np.clip(t, 0, 1), g
     if mat == "eye":
         t = np.zeros((h, w, 4), np.float32); t[..., :3] = (0.42, 0.1, 0.72); t[..., 3] = 1
         g[..., :3] = (0.5, 0.12, 0.92); g[..., 3] = 1

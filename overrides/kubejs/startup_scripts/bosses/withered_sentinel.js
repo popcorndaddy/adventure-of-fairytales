@@ -395,6 +395,12 @@ global.wsTick = e => {
   if (e.tickCount % (target ? 12 : 30) == 0) { fxHeart(e, target ? 1.0 : 0.5); fxGoldPulse(e, target ? 1.0 : 0.55) }
   wsFootsteps(e, d, act)
   if (Math.random() < 0.022) fxArmorBreath(e, 1.0)                    // about once every 2-3 seconds
+  // a dark, quiet haze about him: faint purple motes drifting up from the armour, a thin mist low at his feet
+  if (e.tickCount % 6 == 0 && Math.random() < 0.45) {
+    let q = wsLocal(e, (Math.random() - 0.5) * 30, 8 + Math.random() * 56, (Math.random() - 0.5) * 12)
+    wsAt(e, q, 'particle minecraft:dust 0.5 0.14 0.85 0.55 ~ ~ ~ 0.05 0.12 0.05 0.004 1 force')
+  }
+  if (e.tickCount % 14 == 0) wsAt(e, wsLocal(e, 0, 1, 0), 'particle minecraft:dust 0.2 0.04 0.34 1.7 ~ ~ ~ 1.3 0.04 1.3 0.002 3 force')
 
   if (act != '') {
     d.putInt('ws_t', t + 1)
