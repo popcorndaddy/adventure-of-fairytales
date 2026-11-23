@@ -66,7 +66,7 @@ block("chest", (0, 4.6, 58.4), (21.0, 3.0, 13.0), "plate")
 block("chest", (0, 2.8, 58.0), (14.0, 0.6, 10.5), "cavity", coll="Sentinel_Body")
 block("chest", (0, -0.6, 53.4), (12.0, 7.0, 1.0), "cavity", coll="Sentinel_Body")
 for sx in (-1, 1):
-    block("chest", (sx * 10.2, 0.2, 58.2), (2.8, 10.0, 12.4), "plate", (0, sx * 7, 0))            # flanks
+    block("chest", (sx * 10.0, 0.2, 58.4), (2.8, 10.0, 12.4), "plate", (0, sx * 15, 0))           # flanks, sloping in to the waist
     block("chest", (sx * 5.6, -4.7, 59.4), (7.6, 2.4, 9.6), "emblem", (-4, 0, sx * -6))          # breastplate halves
     block("chest", (sx * 6.2, -5.3, 63.0), (8.0, 1.8, 2.8), "plate", (-18, 0, sx * -8))          # upper bevel
     block("chest", (sx * 2.15, -5.7, 58.6), (0.9, 1.2, 10.0), "trim")                            # slit edges

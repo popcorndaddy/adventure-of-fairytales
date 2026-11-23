@@ -126,7 +126,18 @@ exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "sk_armor.py"
 # ---------------------------------------------------------------- v7: bulkier armour (+35% width) around the same skeleton
 # Every block is widened about its own bone's axis, so it stays centred on the joint the animations move:
 # torso pieces get wider and deeper, limbs get more girth, boots get wider (not taller), the cape spans the wider back.
-WIDEN = 1.35
+WIDEN = 1.15                                                      # v10: less bulk (was 1.35)
+# the torso follows a curved V profile by height (px): broad upper chest, narrow waist, a little flare at the hips
+TORSO_PROFILE = [(30, 1.04), (38, 1.03), (42, 0.94), (46, 0.78), (50, 0.88), (55, 1.06), (60, 1.22), (66, 1.26), (80, 1.26)]
+
+
+def torso_k(z_px):
+    for (z0, k0), (z1, k1) in zip(TORSO_PROFILE, TORSO_PROFILE[1:]):
+        if z_px <= z1:
+            w = max(0.0, min(1.0, (z_px - z0) / (z1 - z0)))
+            w = w * w * (3 - 2 * w)                                   # smooth, so the outline curves
+            return k0 + (k1 - k0) * w
+    return TORSO_PROFILE[-1][1]
 TORSO = ("pelvis", "spine", "chest", "neck", "cape_root", "clavicle_L", "clavicle_R", "tasset_F", "tasset_B", "tasset_L", "tasset_R", "heart", "heart_glow")
 LIMB = ("upperarm_L", "upperarm_R", "forearm_L", "forearm_R", "thigh_L", "thigh_R", "shin_L", "shin_R", "hand_L", "hand_R")
 
@@ -140,13 +151,15 @@ def _widen():
         k = WIDEN
         if b in TORSO or b == "head":
             if b == "head":
-                k = 1.12                                          # the helm grows a little: the body grows a lot
-            if b in ("clavicle_L", "clavicle_R", "tasset_L", "tasset_R"):
-                h = rig.data.bones["pelvis"].head_local.copy()     # side pieces move out with the wider torso
-            W = Matrix.Diagonal((k, k, 1.0))
+                W = Matrix.Diagonal((1.06, 1.06, 1.0))            # the helm stays close to its own size
+            else:
+                kz = torso_k(o.matrix_world.translation.z * 16)   # width by height: the V and the waist curve
+                if b in ("clavicle_L", "clavicle_R", "tasset_L", "tasset_R"):
+                    h = rig.data.bones["pelvis"].head_local.copy()  # side pieces follow the torso outline
+                W = Matrix.Diagonal((kz, 1 + (kz - 1) * 0.55, 1.0))  # depth follows the width, more gently
         elif b in LIMB:
             if b.startswith("hand"):
-                k = 1.2
+                k = 1.1
             I = Matrix.Identity(3); aa = Matrix(((a.x * a.x, a.x * a.y, a.x * a.z), (a.y * a.x, a.y * a.y, a.y * a.z), (a.z * a.x, a.z * a.y, a.z * a.z)))
             W = I + (I - aa) * (k - 1)                              # more girth, same length
         elif b.startswith(("foot_", "toe_")):
