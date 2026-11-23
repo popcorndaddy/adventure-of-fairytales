@@ -14,6 +14,9 @@ PX = 1 / 16
 ORDER = [("awaken", 1, "AWAKEN"), ("idle", 1, "IDLE"), ("idle_combat", 1, "COMBAT STANCE"), ("walk", 2, "WALK"),
          ("sweep", 1, "SWEEP"), ("push", 1, "PUSH"), ("stomp", 1, "STOMP"), ("dash", 1, "DASH"),
          ("summon_start", 1, "SUMMON"), ("summon_loop", 1, "SUMMON - channelling"), ("summon_end", 1, "SUMMON - release"), ("death", 1, "DEATH")]
+if "--only" in args:   # e.g. --only sweep,dash : those clips, at full speed then half speed
+    pick = args[args.index("--only") + 1].split(",")
+    ORDER = [(n, 1, n.upper()) for n in pick] + [(n, 1, n.upper() + " (half speed)") for n in pick]
 if SLOW:   # slow-motion review of the attacks: each clip twice at half speed
     ORDER = [("sweep", 1, "SWEEP (half speed)"), ("push", 1, "PUSH (half speed)"), ("stomp", 1, "STOMP (half speed)"), ("dash", 1, "DASH (half speed)")]
 WALK_V = 2 * 21.6 / 48 * PX                      # metres per frame (walk ground speed)
@@ -34,12 +37,16 @@ for name, rep, label in ORDER:
         except Exception:
             pass
         s.extrapolation = "HOLD_FORWARD"
+        half = label is not None and "(half speed)" in label and "--only" in args
+        if half:
+            s.scale = 2.0                                  # this clip plays at half speed
         rig.location = (0, y, 0); rig.keyframe_insert("location", frame=f)
         if name == "walk":
             y -= WALK_V * n
             rig.location = (0, y, 0); rig.keyframe_insert("location", frame=f + n)
-        segs.append((name, f, n, label if k == 0 else None))
-        f += n
+        nn = n * 2 if half else n
+        segs.append((name, f, nn, label if k == 0 else None))
+        f += nn
     rig.location = (0, y, 0); rig.keyframe_insert("location", frame=f)
     f += GAP
 END = f

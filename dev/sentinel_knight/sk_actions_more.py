@@ -71,38 +71,38 @@ def walk():
     return NW, fn, "true"
 
 
-# ====================================================================== SWEEP (50 ticks, blade crosses his front on tick 24)
+# ====================================================================== SWEEP (70 ticks: deep coil 0-20, a long 340-degree arc 20-36, held follow-through, recover)
 @action
 def sweep():
-    N = 60
-    WARP = [(0, 0, "l"), (14, 14, "l"), (22, 18, "l"), (28, 24, "l"), (40, 34, "l"), (60, 50)]
-    G = [(0, (-3.0, -13.0, 41.0)), (8, (-11.0, -2.0, 52.0)), (14, (-12.0, 4.0, 57.0)), (18, (-12.5, 4.5, 58.0), "i"),
-         (21, (-9.0, -10.0, 48.0), "l"), (24, (2.0, -15.0, 44.0), "l"), (27, (12.0, -7.0, 43.0), "o"), (32, (15.0, 3.0, 45.0)),
-         (38, (12.0, -2.0, 44.0)), (50, (-3.0, -13.0, 41.0))]
-    AZ = [(0, 6), (8, -95), (14, -150), (18, -158, "i"), (21, -70, "l"), (24, 8, "l"), (27, 70, "o"), (32, 118), (38, 100), (50, 6)]
-    EL = [(0, 28), (8, 28), (14, 22), (18, 20, "i"), (21, 4, "l"), (24, -4, "l"), (27, -12, "o"), (32, -24), (38, -10), (50, 28)]
-    HY = [(0, -14), (10, -34), (18, -40, "i"), (21, -12, "l"), (24, 18, "l"), (28, 34, "o"), (34, 36), (50, -14)]
-    CY = [(0, 6), (10, -24), (18, -32, "i"), (21, 0, "l"), (24, 24, "l"), (28, 34, "o"), (34, 30), (50, 6)]
-    BX = [(0, 0), (14, -2.2), (18, -2.4), (24, 1.8, "o"), (32, 2.2), (50, 0)]
-    BY = [(0, 1.0), (14, 3.0), (18, 3.2), (24, -2.0, "o"), (32, -1.5), (50, 1.0)]
-    BZ = [(0, -4.0), (14, -6.0), (18, -6.4), (22, -5.0), (25, -7.2, "o"), (32, -6.0), (50, -4.0)]
-    HEEL = [(0, 0), (22, 0), (27, 30, "o"), (34, 26), (44, 0), (50, 0)]
-    PIV = [(0, -28), (22, -28), (28, -2, "o"), (40, -10), (50, -28)]
+    N = 70
+    # grip path (world px): coiled over the right shoulder -> across the front -> wrapped round past the left shoulder
+    G = [(0, (-3.0, -13.0, 41.0)), (8, (-11.0, -1.0, 53.0)), (16, (-12.5, 5.0, 58.0)), (20, (-12.5, 5.5, 58.5), "i"),
+         (23, (-10.0, -9.0, 49.0), "l"), (26, (0.0, -17.0, 44.0), "l"), (29, (9.0, -12.0, 44.0), "l"), (32, (10.0, -3.0, 47.0)),
+         (36, (6.0, 2.0, 51.0), "o"), (46, (6.5, 1.0, 50.0)), (54, (6.0, -7.0, 46.0)), (70, (-3.0, -13.0, 41.0))]
+    AZ = [(0, 6), (8, -95), (16, -158), (20, -168, "i"), (23, -95, "l"), (26, -5, "l"), (29, 75, "l"), (32, 130),
+          (36, 165, "o"), (46, 160), (54, 100), (70, 6)]
+    EL = [(0, 28), (8, 28), (16, 22), (20, 20, "i"), (23, 4, "l"), (26, -6, "l"), (29, -12, "l"), (32, -4),
+          (36, 20, "o"), (46, 22), (54, 12), (70, 28)]
+    HY = [(0, -14), (10, -38), (20, -46, "i"), (23, -14, "l"), (26, 18, "l"), (30, 36, "o"), (36, 44), (46, 42), (70, -14)]
+    CY = [(0, 6), (10, -28), (20, -38, "i"), (23, 0, "l"), (26, 26, "l"), (30, 38, "o"), (36, 44), (46, 40), (70, 6)]
+    BX = [(0, 0), (16, -2.4), (20, -2.6), (27, 2.0, "o"), (36, 2.6), (46, 2.4), (70, 0)]
+    BY = [(0, 1.0), (16, 3.0), (20, 3.2), (27, -2.2, "o"), (36, -2.0), (70, 1.0)]
+    BZ = [(0, -4.0), (16, -6.0), (20, -6.4), (24, -5.0), (28, -7.4, "o"), (36, -6.6), (46, -6.2), (70, -4.0)]
+    HEEL = [(0, 0), (24, 0), (30, 32, "o"), (44, 30), (54, 0), (70, 0)]
+    PIV = [(0, -28), (24, -28), (31, 0, "o"), (46, -4), (58, -28), (70, -28)]
 
     def fn(r, f):
-        fo = track(WARP, f)                                    # retimed: new tick -> authored pose frame
         P = combat_base(0)
-        coil = smooth((fo - 12) / 4) * (1 - smooth((fo - 19) / 1.5))
+        coil = smooth((f - 13) / 4) * (1 - smooth((f - 20.5) / 1.5))
         tremble = 0.8 * math.sin(f * 2.6) * coil
-        P.update(body=(track(BX, fo), track(BY, fo), track(BZ, fo)), hips=(9.0 + 3 * bump(fo, 25, 3), 0.0, track(HY, fo)),
-                 chest=(3.0 + 4 * bump(fo, 25, 3), 0.0, track(CY, fo) + tremble), spine=(2.0, 0.0, 0.5 * track(CY, fo)),
-                 head=(-track(HY, fo) - track(CY, fo) * 0.6 + 12 - 6 * bump(fo, 26, 5), 4.0, 0.0))
-        P["foot_R"] = ((-8.0, 5.0), 0.0, track(PIV, fo), track(HEEL, fo))
-        g = track(G, fo)
-        P["sword"] = dict(grip=g, dir=sword_dir(K._spring(r.sec, "saz", track(AZ, fo), 0.42, 0.52), K._spring(r.sec, "sel", track(EL, fo), 0.42, 0.52)), flat=(0.0, 0.0, 1.0), two=True,
-                          elbow_R=(-0.6, 0.6, -0.5), elbow_L=(0.6, 0.6, -0.5))
-        P["curl_R"] = P["curl_L"] = 1.0 + 0.12 * bump(fo, 23, 4)
-        amp = 1.0 + 0.9 * smooth((fo - 8) / 10) * (1 - smooth((fo - 28) / 12))
+        P.update(body=(track(BX, f), track(BY, f), track(BZ, f)), hips=(9.0 + 3 * bump(f, 27, 3), 0.0, track(HY, f)),
+                 chest=(3.0 + 4 * bump(f, 27, 3), 0.0, track(CY, f) + tremble), spine=(2.0, 0.0, 0.4 * track(CY, f)),
+                 head=(-track(HY, f) - track(CY, f) * 0.7 + 12 - 6 * bump(f, 28, 5), 4.0, 0.0))
+        P["foot_R"] = ((-8.0, 5.0), 0.0, track(PIV, f), track(HEEL, f))
+        P["sword"] = dict(grip=track(G, f), dir=sword_dir(K._spring(r.sec, "saz", track(AZ, f), 0.42, 0.52), K._spring(r.sec, "sel", track(EL, f), 0.42, 0.52)),
+                          flat=(0.0, 0.0, 1.0), two=True, elbow_R=(-0.6, 0.6, -0.5), elbow_L=(0.6, 0.6, -0.5))
+        P["curl_R"] = P["curl_L"] = 1.0 + 0.12 * bump(f, 26, 5)
+        amp = 1.0 + 0.9 * smooth((f - 8) / 12) * (1 - smooth((f - 34) / 14))
         P["heart"] = heartbeat(f / 20.0, 110 + 40 * coil, amp)
         K.pose(r, merged(**P))
     return N, fn, "false"
@@ -195,19 +195,21 @@ def dash():
     def fn(r, f):
         fo = track(WARP, f)                                    # retimed: new tick -> authored pose frame
         P = combat_base(0)
-        P.update(body=(0.0, track(BY, fo), track(BZ, fo)), hips=(track(LEAN, fo), 0.0, track([(0, -14), (7, -22), (11, -4, "o"), (20, -8), (32, -14)], fo)),
-                 chest=(3.0, 0.0, track([(0, 6), (7, -6), (11, 4, "o"), (32, 6)], fo)),
-                 head=(track([(0, 22), (7, 26), (11, 6, "o"), (32, 22)], fo), track([(0, 4), (8, -6), (11, -10, "o"), (19, 2), (32, 4)], fo), 0.0))
+        P.update(body=(0.0, track(BY, fo), track(BZ, fo)), hips=(track(LEAN, fo), 0.0, track([(0, -14), (7, -24), (8.5, -4), (10, 18, "o"), (11, 20), (19, 14), (26, -6), (32, -14)], fo)),
+                 chest=(3.0, 0.0, track([(0, 6), (7, -8), (11, 10, "o"), (19, 8), (32, 6)], fo)),
+                 head=(track([(0, 22), (7, 26), (11, 2, "o"), (19, 4), (32, 22)], fo), track([(0, 4), (8, -6), (11, -10, "o"), (19, 2), (32, 4)], fo), 0.0))
         P["foot_R"] = ((-8.0, track([(0, 5.0), (8, 5.0), (11, 9.0, "o"), (14, -2.0), (17, -9.0, "i"), (32, 5.0)], fo)),
                        track([(0, 0), (8, 0), (9.5, 2.5), (12, 6.0), (15, 4.0), (17, 0, "i"), (24, 0), (27, 3.0), (30, 0)], fo), -28,
                        track([(0, 0), (6, 14), (9, 52, "o"), (12, 8), (15, 0), (32, 0)], fo))
         P["foot_L"] = ((7.0, track([(0, -7.0), (9, -7.0), (12, -3.0), (15, -16.0, "i"), (24, -16.0), (29, -7.0), (32, -7.0)], fo)),
                        track([(0, 0), (9, 0), (11, 5.0), (13, 7.0), (15, 0, "i"), (24, 0), (26.5, 3.5), (29, 0), (32, 0)], fo), 12,
                        track([(0, 0), (8, 0), (10, 20), (12, 0), (32, 0)], fo))
-        # the blade is drawn in close along his body, then driven forward like a lance through the lunge
-        P["sword"] = dict(grip=track([(0, (-3.0, -13.0, 41.0)), (7, (-9.0, 2.0, 40.0)), (11, (-4.0, -16.0, 42.0), "o"), (17, (-4.0, -15.0, 41.0)), (32, (-3.0, -13.0, 41.0))], fo),
-                          dir=sword_dir(K._spring(r.sec, "saz", track([(0, 6), (7, -8), (11, 4, "o"), (32, 6)], fo), 0.42, 0.52), K._spring(r.sec, "sel", track([(0, 28), (7, 8), (11, 2, "o"), (17, 6), (32, 28)], fo), 0.42, 0.52)),
-                          flat=(1.0, 0.0, 0.2), two=True, elbow_R=(-0.7, 0.6, -0.4), elbow_L=(0.7, 0.5, -0.5))
+        # the blade is drawn back to his right hip, then both arms drive it straight out ahead like a lance and HOLD it there
+        P["sword"] = dict(grip=track([(0, (-3.0, -13.0, 41.0)), (7, (-6.5, 0.0, 42.5)), (8, (-6.5, -3.0, 43.0)), (9.5, (-6.0, -12.0, 45.0)), (11, (-5.0, -31.0, 49.0), "o"),
+                                      (16, (-5.0, -32.0, 49.0)), (19, (-5.0, -27.0, 47.0)), (24, (-4.0, -20.0, 44.0)), (32, (-3.0, -13.0, 41.0))], fo),
+                          dir=sword_dir(K._spring(r.sec, "saz", track([(0, 6), (7, -6), (11, 0, "o"), (19, 0), (32, 6)], fo), 0.42, 0.52),
+                                        K._spring(r.sec, "sel", track([(0, 28), (7, 6), (11, 0, "o"), (16, 1), (19, -5), (24, 8), (32, 28)], fo), 0.42, 0.52)),
+                          flat=(1.0, 0.0, 0.2), two=True, elbow_R=(-0.7, 0.2, -0.7), elbow_L=(0.7, 0.2, -0.7))
         P["shrug_R"] = P["shrug_L"] = 3 * bump(fo, 7, 2.5)
         P["move"] = 14.0 * smooth((f - 10) / 2) * (1 - smooth((f - 18) / 3))   # the entity is shoved forward on ticks 11-18
         P["heart"] = heartbeat(f / 20.0, 140, 1.4 + 0.8 * bump(fo, 9, 2.5))
@@ -427,10 +429,10 @@ def dormant():
 # One source of truth for the entity script: lengths, telegraphs (the readable wind-up a player can react to),
 # impacts/damage windows, sounds, particle bursts, shockwaves and heart surges.
 EVENTS = {
-    "sweep": dict(length=60, telegraph=14, swing=24, impact=28, trail=[23, 32], recover=40, heart=[10, 14, 18, 22], sound_whoosh=24, shockwave=28),
+    "sweep": dict(length=70, telegraph=16, swing=26, impact=27, trail=[21, 36], trail_az=[-168, 165], recover=46, heart=[10, 14, 18, 20], sound_whoosh=23, shockwave=27),
     "push": dict(length=36, telegraph=8, gather=[2, 14], impact=16, recover=24, heart=[8, 12], shockwave=16),
     "stomp": dict(length=44, telegraph=10, apex=[12, 19], impact=22, recover=30, heart=[12, 16, 20], shockwave=22, quake=22),
-    "dash": dict(length=34, telegraph=0, roar=10, lunge=[11, 18], brake=19, blink=[10, 19], heart=[8, 11]),
+    "dash": dict(length=34, telegraph=0, roar=10, thrust=12, lunge=[11, 18], brake=19, blink=[10, 19], heart=[8, 11]),
     "summon_start": dict(length=40, drive=20, summon=30, runes_from=22, heart=[24, 30, 36]),
     "summon_end": dict(length=30, compress=9, release=13, heart=[12]),
     "awaken": dict(length=100, stir=20, rise=40, draw=52, flare=80, done=100, runes=[20, 78]),

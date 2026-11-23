@@ -2,23 +2,27 @@
 // telegraph = the readable wind-up, impact = damage tick, [a, b] = windows. Do not edit by hand: change the animation.
 //   {
 //     "sweep": {
-//       "length": 60,
-//       "telegraph": 14,
-//       "swing": 24,
-//       "impact": 28,
+//       "length": 70,
+//       "telegraph": 16,
+//       "swing": 26,
+//       "impact": 27,
 //       "trail": [
-//         23,
-//         32
+//         21,
+//         36
 //       ],
-//       "recover": 40,
+//       "trail_az": [
+//         -168,
+//         165
+//       ],
+//       "recover": 46,
 //       "heart": [
 //         10,
 //         14,
 //         18,
-//         22
+//         20
 //       ],
-//       "sound_whoosh": 24,
-//       "shockwave": 28
+//       "sound_whoosh": 23,
+//       "shockwave": 27
 //     },
 //     "push": {
 //       "length": 36,
@@ -56,6 +60,7 @@
 //       "length": 34,
 //       "telegraph": 0,
 //       "roar": 10,
+//       "thrust": 12,
 //       "lunge": [
 //         11,
 //         18
@@ -116,4 +121,4 @@
 //       "remove": 108
 //     }
 //   }
-global.WS_EVENTS_JSON = "{\"sweep\": {\"length\": 60, \"telegraph\": 14, \"swing\": 24, \"impact\": 28, \"trail\": [23, 32], \"recover\": 40, \"heart\": [10, 14, 18, 22], \"sound_whoosh\": 24, \"shockwave\": 28}, \"push\": {\"length\": 36, \"telegraph\": 8, \"gather\": [2, 14], \"impact\": 16, \"recover\": 24, \"heart\": [8, 12], \"shockwave\": 16}, \"stomp\": {\"length\": 44, \"telegraph\": 10, \"apex\": [12, 19], \"impact\": 22, \"recover\": 30, \"heart\": [12, 16, 20], \"shockwave\": 22, \"quake\": 22}, \"dash\": {\"length\": 34, \"telegraph\": 0, \"roar\": 10, \"lunge\": [11, 18], \"brake\": 19, \"blink\": [10, 19], \"heart\": [8, 11]}, \"summon_start\": {\"length\": 40, \"drive\": 20, \"summon\": 30, \"runes_from\": 22, \"heart\": [24, 30, 36]}, \"summon_end\": {\"length\": 30, \"compress\": 9, \"release\": 13, \"heart\": [12]}, \"awaken\": {\"length\": 100, \"stir\": 20, \"rise\": 40, \"draw\": 52, \"flare\": 80, \"done\": 100, \"runes\": [20, 78]}, \"death\": {\"length\": 100, \"sword_drop\": 30, \"violent\": [34, 74], \"flare\": 77, \"extinguish\": [79, 87], \"remove\": 108}}"
+global.WS_EVENTS_JSON = "{\"sweep\": {\"length\": 70, \"telegraph\": 16, \"swing\": 26, \"impact\": 27, \"trail\": [21, 36], \"trail_az\": [-168, 165], \"recover\": 46, \"heart\": [10, 14, 18, 20], \"sound_whoosh\": 23, \"shockwave\": 27}, \"push\": {\"length\": 36, \"telegraph\": 8, \"gather\": [2, 14], \"impact\": 16, \"recover\": 24, \"heart\": [8, 12], \"shockwave\": 16}, \"stomp\": {\"length\": 44, \"telegraph\": 10, \"apex\": [12, 19], \"impact\": 22, \"recover\": 30, \"heart\": [12, 16, 20], \"shockwave\": 22, \"quake\": 22}, \"dash\": {\"length\": 34, \"telegraph\": 0, \"roar\": 10, \"thrust\": 12, \"lunge\": [11, 18], \"brake\": 19, \"blink\": [10, 19], \"heart\": [8, 11]}, \"summon_start\": {\"length\": 40, \"drive\": 20, \"summon\": 30, \"runes_from\": 22, \"heart\": [24, 30, 36]}, \"summon_end\": {\"length\": 30, \"compress\": 9, \"release\": 13, \"heart\": [12]}, \"awaken\": {\"length\": 100, \"stir\": 20, \"rise\": 40, \"draw\": 52, \"flare\": 80, \"done\": 100, \"runes\": [20, 78]}, \"death\": {\"length\": 100, \"sword_drop\": 30, \"violent\": [34, 74], \"flare\": 77, \"extinguish\": [79, 87], \"remove\": 108}}"
