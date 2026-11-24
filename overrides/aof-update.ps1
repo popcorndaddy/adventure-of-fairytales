@@ -36,56 +36,82 @@ if ($Schedule) {
   Say "Automatic updates on: the pack updates every time you sign in to Windows (task '$TaskName')."
 }
 
-# ---- download the branch
+# git's id for a file's content ("blob <size>\0" + bytes, SHA-1): matches the ids in GitHub's file list
+function BlobSha([string]$path) {
+  $bytes = [IO.File]::ReadAllBytes($path)
+  $hdr = [Text.Encoding]::ASCII.GetBytes("blob $($bytes.Length)`0")
+  $h = [Security.Cryptography.SHA1]::Create()
+  [void]$h.TransformBlock($hdr, 0, $hdr.Length, $null, 0); [void]$h.TransformFinalBlock($bytes, 0, $bytes.Length)
+  -join ($h.Hash | % { $_.ToString('x2') })
+}
+function FileSha1([string]$path) { (Get-FileHash $path -Algorithm SHA1).Hash }
+
+# ---- find the pack files: GitHub's file list for the branch (only changed files get downloaded), or a local zip
 $tmp = Join-Path $env:TEMP ("aof-update-" + [guid]::NewGuid().ToString('N').Substring(0, 8)); New-Item -ItemType Directory $tmp | Out-Null
 try {
   [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-  $branches = if ($Branch) { @($Branch) } else { @('main', 'unpack-pack') }
-  $root = $null; $sha = ''
-  foreach ($b in $branches) {
-    $zip = Join-Path $tmp "$b.zip"
-    if ($ZipPath) { Copy-Item $ZipPath $zip }
-    else {
-      # a tiny API call first: skip the download when nothing was pushed since the last update
-      try { $sha = (Invoke-RestMethod -UseBasicParsing "https://api.github.com/repos/$Repo/commits/$b" -Headers @{ 'User-Agent' = 'aof-update' }).sha } catch { $sha = '' }
-      if ($sha -and -not $Force -and -not $DryRun -and (Test-Path $ShaFile) -and ((Get-Content $ShaFile -Raw).Trim() -eq "$b $sha")) {
+  $hdrs = @{ 'User-Agent' = 'aof-update' }
+  $entries = @(); $manifest = $null; $sha = ''
+  if ($ZipPath) {
+    $dir = Join-Path $tmp 'zip'; Expand-Archive $ZipPath $dir -Force
+    $r = Get-ChildItem $dir -Directory | ? { Test-Path (Join-Path $_.FullName 'overrides') } | Select-Object -First 1
+    if (-not $r) { Say "That zip has no overrides folder. Nothing changed."; exit 1 }
+    $ov = Join-Path $r.FullName 'overrides'; $manifest = Join-Path $r.FullName 'manifest.json'
+    if (-not $Branch) { $Branch = 'zip' }
+    Get-ChildItem $ov -Recurse -File | % { $entries += [pscustomobject]@{ Rel = $_.FullName.Substring($ov.Length + 1); Sha = (BlobSha $_.FullName); Src = $_.FullName; Url = $null } }
+  } else {
+    $branches = if ($Branch) { @($Branch) } else { @('main', 'unpack-pack') }
+    foreach ($b in $branches) {
+      try { $c = Invoke-RestMethod -UseBasicParsing "https://api.github.com/repos/$Repo/commits/$b" -Headers $hdrs } catch { continue }
+      $tree = Invoke-RestMethod -UseBasicParsing "https://api.github.com/repos/$Repo/git/trees/$($c.sha)?recursive=1" -Headers $hdrs
+      $files = @($tree.tree | ? { $_.type -eq 'blob' -and $_.path.StartsWith('overrides/') })
+      if (-not $files.Count) { continue }                                    # this branch doesn't hold the unpacked pack
+      if ($tree.truncated) { Say "GitHub's file list for '$b' was cut short; some files may be missed this time." }
+      $sha = $c.sha; $Branch = $b
+      if (-not $Force -and -not $DryRun -and (Test-Path $ShaFile) -and ((Get-Content $ShaFile -Raw).Trim() -eq "$b $sha")) {
         Say "Adventures of Fairytale is up to date ($b @ $($sha.Substring(0, 7)))."; exit 0
       }
-      try { Invoke-WebRequest -UseBasicParsing "https://codeload.github.com/$Repo/zip/refs/heads/$b" -OutFile $zip } catch { continue }
+      foreach ($f in $files) {
+        $url = "https://raw.githubusercontent.com/$Repo/$sha/" + (($f.path -split '/' | % { [Uri]::EscapeDataString($_) }) -join '/')
+        $entries += [pscustomobject]@{ Rel = $f.path.Substring(10).Replace('/', '\'); Sha = $f.sha; Src = $null; Url = $url }
+      }
+      $manifest = Join-Path $tmp 'manifest.json'
+      try { Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/$Repo/$sha/manifest.json" -OutFile $manifest } catch { $manifest = $null }
+      break
     }
-    $dir = Join-Path $tmp $b; Expand-Archive $zip $dir -Force
-    $r = Get-ChildItem $dir -Directory | Select-Object -First 1
-    if ($r -and (Test-Path (Join-Path $r.FullName 'overrides'))) { $root = $r.FullName; $Branch = $b; break }
+    if (-not $entries.Count) { Say "Couldn't find the pack files on GitHub ($Repo, branches: $($branches -join ', ')). Nothing changed."; exit 1 }
   }
-  if (-not $root) { Say "Couldn't find the pack files on GitHub ($Repo, branches: $($branches -join ', ')). Nothing changed."; exit 1 }
-  $ov = Join-Path $root 'overrides'
 
   # ---- copy changed files
   $old = @{}; if (Test-Path $Stamp) { Get-Content $Stamp | % { $p = $_.Split("`t"); if ($p.Count -eq 2) { $old[$p[0]] = $p[1] } } }
-  $new = @{}; $added = 0; $changed = 0; $removed = 0
-  Get-ChildItem $ov -Recurse -File | % {
-    $rel = $_.FullName.Substring($ov.Length + 1)
-    if ($Keep -contains $rel) { return }
-    $h = (Get-FileHash $_.FullName -Algorithm SHA1).Hash; $new[$rel] = $h
+  $new = @{}; $added = 0; $changed = 0; $removed = 0; $failed = 0
+  foreach ($e in $entries) {
+    $rel = $e.Rel
+    if ($Keep -contains $rel) { continue }
+    $new[$rel] = $e.Sha
     $dst = Join-Path $Instance $rel
     if (Test-Path $dst) {
-      if ((Get-FileHash $dst -Algorithm SHA1).Hash -eq $h) { return }
-      $changed++; Say "  updated  $rel"
-    } else { $added++; Say "  added    $rel" }
-    if (-not $DryRun) { New-Item -ItemType Directory -Force (Split-Path $dst) | Out-Null; Copy-Item $_.FullName $dst -Force }
+      if ((BlobSha $dst) -eq $e.Sha) { continue }
+      $what = 'updated '
+    } else { $what = 'added   ' }
+    if ($DryRun) { if ($what -eq 'added   ') { $added++ } else { $changed++ }; Say "  $what $rel"; continue }
+    $part = Join-Path $tmp ([guid]::NewGuid().ToString('N'))
+    try {
+      if ($e.Url) { Invoke-WebRequest -UseBasicParsing $e.Url -OutFile $part } else { Copy-Item $e.Src $part }
+      if ((BlobSha $part) -ne $e.Sha) { throw "the download didn't match GitHub's copy" }
+      New-Item -ItemType Directory -Force (Split-Path $dst) | Out-Null; Move-Item $part $dst -Force
+      if ($what -eq 'added   ') { $added++ } else { $changed++ }; Say "  $what $rel"
+    } catch { $failed++; $new.Remove($rel); Say "  FAILED   $rel ($($_.Exception.Message))" }
   }
   # our own mods (overrides/mods): an older version left in mods/ would load twice and crash the game, so move it aside
-  $packMods = Join-Path $ov 'mods'
-  if (Test-Path $packMods) {
-    $aside = Join-Path $Instance 'mods-replaced'
-    Get-ChildItem $packMods -Filter *.jar | % {
-      $keep = $_.Name
-      if ($keep -match '^(.+?)-\d[^-]*\.jar$') {
-        $id = $Matches[1]
-        Get-ChildItem (Join-Path $Instance 'mods') -Filter "$id-*.jar" | ? { $_.Name -ne $keep -and $_.Name -match ('^' + [regex]::Escape($id) + '-\d[^-]*\.jar$') } | % {
-          $removed++; Say "  replaced mods\$($_.Name) (moved to mods-replaced)"
-          if (-not $DryRun) { New-Item -ItemType Directory -Force $aside | Out-Null; Move-Item $_.FullName (Join-Path $aside $_.Name) -Force }
-        }
+  $aside = Join-Path $Instance 'mods-replaced'
+  foreach ($e in ($entries | ? { $_.Rel -match '^mods\\[^\\]+\.jar$' })) {
+    $keep = Split-Path $e.Rel -Leaf
+    if ($keep -match '^(.+?)-\d[^-]*\.jar$') {
+      $id = $Matches[1]
+      Get-ChildItem (Join-Path $Instance 'mods') -Filter "$id-*.jar" | ? { $_.Name -ne $keep -and $_.Name -match ('^' + [regex]::Escape($id) + '-\d[^-]*\.jar$') } | % {
+        $removed++; Say "  replaced mods\$($_.Name) (moved to mods-replaced)"
+        if (-not $DryRun) { New-Item -ItemType Directory -Force $aside | Out-Null; Move-Item $_.FullName (Join-Path $aside $_.Name) -Force }
       }
     }
   }
@@ -93,22 +119,28 @@ try {
   foreach ($rel in $old.Keys) {
     if ($new.ContainsKey($rel)) { continue }
     $dst = Join-Path $Instance $rel
-    if ((Test-Path $dst) -and (Get-FileHash $dst -Algorithm SHA1).Hash -eq $old[$rel]) {
+    if ((Test-Path $dst) -and ((BlobSha $dst) -eq $old[$rel] -or (FileSha1 $dst) -eq $old[$rel])) {
       $removed++; Say "  removed  $rel"; if (-not $DryRun) { Remove-Item $dst -Force }
     }
   }
-  if (-not $DryRun) { $new.GetEnumerator() | % { "$($_.Key)`t$($_.Value)" } | Set-Content $Stamp; if ($sha) { "$Branch $sha" | Set-Content $ShaFile } }
+  if (-not $DryRun) {
+    # keep entries for files that failed this time so they are retried and never treated as removed
+    foreach ($k in $old.Keys) { if (-not $new.ContainsKey($k) -and ($entries | ? { $_.Rel -eq $k })) { $new[$k] = $old[$k] } }
+    $new.GetEnumerator() | % { "$($_.Key)`t$($_.Value)" } | Set-Content $Stamp
+    if ($sha -and -not $failed) { "$Branch $sha" | Set-Content $ShaFile }
+  }
 
   # ---- mods the pack lists that this instance doesn't have
   $missing = @()
   $mi = Join-Path $Instance 'minecraftinstance.json'
-  if (Test-Path $mi) {
+  if ((Test-Path $mi) -and $manifest -and (Test-Path $manifest)) {
     $have = @{}; (Get-Content $mi -Raw | ConvertFrom-Json).installedAddons | % { $have[[string]$_.addonID] = $true }
-    $man = Get-Content (Join-Path $root 'manifest.json') -Raw | ConvertFrom-Json
+    $man = Get-Content $manifest -Raw | ConvertFrom-Json
     foreach ($f in $man.files) { if (-not $have[[string]$f.projectID]) { $missing += $f.projectID } }
   }
   $verb = if ($DryRun) { 'would change' } else { 'changed' }
   Say "Adventures of Fairytale ($Branch): $added added, $changed updated, $removed removed - $verb."
+  if ($failed) { Say "$failed file(s) couldn't be downloaded; run the updater again to retry them." }
   if ($missing.Count) {
     Say "The pack also needs $($missing.Count) mod(s) this instance doesn't have (CurseForge project IDs: $($missing -join ', '))."
     Say "  Install them in the CurseForge app (search the mod, or re-import the pack zip). Then run this again."
