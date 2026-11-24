@@ -1,4 +1,6 @@
 {
   "subtitles.kubejs.title_dawn_of_adventure": "An adventure begins",
-  "subtitles.kubejs.letter_secret_found": "A torn page returns"
+  "subtitles.kubejs.letter_secret_found": "A torn page returns",
+  "entity.kubejs.withered_sentinel": "The Withered Sentinel",
+  "item.kubejs.withered_sentinel_spawn_egg": "Withered Sentinel Spawn Egg"
 }
