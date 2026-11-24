@@ -18,6 +18,7 @@
 param([string]$Instance = $PSScriptRoot, [string]$Branch = "", [string]$Repo = "popcorndaddy/adventure-of-fairytales",
       [switch]$Schedule, [switch]$Unschedule, [switch]$DryRun, [switch]$Quiet, [switch]$Force, [string]$ZipPath = "")
 $ErrorActionPreference = 'Stop'
+$ProgressPreference = 'SilentlyContinue'                                              # the progress bar makes Invoke-WebRequest crawl in Windows PowerShell
 $TaskName = 'Adventures of Fairytale pack updater'
 $Keep = @('options.txt', 'optionsof.txt', 'optionsshaders.txt', 'servers.dat')        # never overwritten
 $Stamp = Join-Path $Instance '.aof-update-files.txt'                                   # files this updater installed
