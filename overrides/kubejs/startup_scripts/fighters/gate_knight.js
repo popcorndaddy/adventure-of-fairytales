@@ -56,7 +56,7 @@ StartupEvents.registry('entity_type', event => {
     .eggItem(egg => egg.backgroundColor(0x141018).highlightColor(0xA040FF))
 })
 
-EntityJSEvents.editAttributes(event => {
+EntityJSEvents.attributes(event => {   // (EntityJS's name for the attribute-modification event)
   event.modify('kubejs:gate_knight', attr => {
     attr.add('minecraft:generic.max_health', 600)
     attr.add('minecraft:generic.movement_speed', 0.27)      // a little quicker than a walking player
