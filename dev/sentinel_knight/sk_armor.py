@@ -45,7 +45,7 @@ block("pelvis", (0, 0.5, 40.2), (13.6, 9.2, 6.2), "plate")
 block("pelvis", (0, 0.5, 43.4), (15.4, 10.4, 1.9), "trim")
 block("pelvis", (0, -5.7, 43.4), (4.2, 1.6, 3.8), "tooth", name="Skull_Buckle")                  # a skull for a buckle
 # ---------------- tassets (own bones: they swing clear of the legs)
-block("tasset_F", (0, -5.8, 38.0), (9.8, 1.6, 4.4), "plate", (6, 0, 0))                          # plate under the belt
+block("tasset_F", (0, -5.8, 39.0), (8.0, 1.4, 2.6), "trim", (6, 0, 0))                           # band under the belt
 block("tasset_F", (0, -6.6, 28.2), (7.6, 0.7, 17.0), "cloth", (4, 0, 0), name="Tabard")           # the purple tabard
 for j, (dx, h_) in enumerate(((-2.6, 1.6), (0.0, 2.6), (2.6, 1.2))):                               # its torn hem
     block("tasset_F", (dx, -7.1, 19.2 - h_ / 2), (2.4, 0.6, h_), "cloth", (4, 0, (-8, 4, 10)[j]), name=f"Tabard_Hem_{j}")
@@ -53,8 +53,8 @@ for i, (z, w) in enumerate(((37.2, 12.4), (32.0, 10.6))):
     block("tasset_B", (0, 6.0 + 0.5 * i, z), (w, 1.4, 5.6), "plate", (-8, 0, 0))
 for S, sx in (("L", 1), ("R", -1)):
     for i, z in enumerate((37.6, 33.8, 30.0)):
-        block(f"tasset_{S}", (sx * (9.6 + 0.35 * i), 0.0, z), (1.4, 8.6 - 0.6 * i, 4.6), "plate" if i != 1 else "rune", (0, sx * -10, 0))
-        tooth(f"tasset_{S}", (sx * (9.9 + 0.35 * i), -3.6 + 0.3 * i, z - 2.2), 1.1)
+        if i == 0:                                                     # one short hip plate per side
+            block(f"tasset_{S}", (sx * 9.4, 0.0, z), (1.4, 7.6, 4.0), "plate", (0, sx * -10, 0))
 # ---------------- spine: layered faulds
 for z, w, d in ((45.6, 11.6, 8.2), (48.1, 12.8, 8.8), (50.6, 14.2, 9.6)):
     block("spine", (0, 0.2, z), (w, d, 2.4), "plate")
@@ -77,14 +77,17 @@ block("chest", (0, 0.0, 52.6), (17.0, 10.0, 1.6), "trim")
 # purple scarf wrapped at the neck, a fold hanging over the chest
 block("chest", (0, 0.2, 65.4), (12.6, 11.2, 3.4), "plate", name="Gorget")                          # gorget under the helm
 block("chest", (0, 0.2, 66.9), (13.2, 11.8, 0.8), "trim", name="Gorget_Rim")
-# a heavy chain slung from the left shoulder across the chest (alternating links)
-CH0, CH1 = Vector((9.4, -6.4, 63.0)), Vector((-8.6, -6.0, 50.6))
-for k in range(12):
-    p_ = CH0.lerp(CH1, (k + 0.5) / 12)
-    d_ = (CH1 - CH0).normalized()
-    a_ = math.degrees(math.atan2(-d_.z, d_.x))
-    sz = (1.9, 0.6, 1.1) if k % 2 == 0 else (1.9, 1.1, 0.6)
-    block("chest", tuple(p_), sz, "iron", (0, a_, 0), name=f"Chain_{k}")
+# heavy chains hanging in a U from each shoulder down to the belt
+for sx in (-1, 1):
+    pts = [Vector((sx * 10.8, -6.6, 61.0)), Vector((sx * 9.6, -7.4, 54.0)), Vector((sx * 7.4, -7.2, 48.0)), Vector((sx * 5.0, -6.9, 45.2))]
+    k = 0
+    for a_, b_ in zip(pts, pts[1:]):
+        n = max(2, int((b_ - a_).length / 1.7))
+        for t_ in range(n):
+            p_ = a_.lerp(b_, (t_ + 0.5) / n); d_ = (b_ - a_).normalized()
+            sz = (1.8, 0.6, 1.1) if k % 2 == 0 else (1.8, 1.1, 0.6)
+            block("chest", tuple(p_), sz, "iron", (0, math.degrees(math.atan2(-d_.z, d_.x)), 0), name=f"Chain_{sx}_{k}")
+            k += 1
 # ---------------- heart (own bones) + additive glow shell, behind the slit
 block("heart", (0, -1.4, 57.6), (4.2, 3.2, 4.4), "heart", coll="Sentinel_Heart", name="Heart_Ventricles")
 block("heart", (-1.2, -1.4, 60.2), (2.0, 2.6, 1.8), "heart", coll="Sentinel_Heart", name="Heart_Atrium_R")
@@ -92,104 +95,100 @@ block("heart", (1.2, -1.4, 60.2), (2.0, 2.6, 1.8), "heart", coll="Sentinel_Heart
 block("heart", (0, -1.4, 55.0), (2.0, 2.2, 1.4), "heart", coll="Sentinel_Heart", name="Heart_Apex")
 block("heart", (0.4, -0.8, 61.6), (1.2, 1.2, 1.6), "heart", coll="Sentinel_Heart", name="Heart_Aorta")
 block("heart_glow", (0, -2.0, 58.0), (5.6, 4.0, 7.2), "heart_glow", coll="Sentinel_Heart", name="Heart_GlowShell")
-# ---------------- executioner's great-helm (v13, from the user's sheet): a square enclosed helm, a tall central crest,
-# a crown of bronze spikes round the top, a deep visor with burning purple eyes, a barred grille over the mouth
+# ---------------- executioner's great-helm (v14, built to the user's front/back pictures): a big square helm on a high
+# collar, a tall stepped crest, a wide crown of bronze-tipped spikes, angled burning eyes, a barred grille
 block("neck", (0, 0, 65.4), (8.6, 8.6, 3.0), "plate")
 block("neck", (0, 0.5, 66.8), (5, 5, 3.6), "void", coll="Sentinel_Body")
-block("head", (0, 0.6, 73.2), (10.6, 10.2, 11.2), "plate", name="Helm_Shell")
-block("head", (0, 0.6, 79.3), (11.6, 11.2, 1.4), "trim", name="Helm_CrownRim")                    # bronze crown band
-block("head", (0, 0.6, 80.4), (9.4, 9.0, 1.2), "plate", name="Helm_Top")
-block("head", (0, -0.4, 84.6), (2.4, 3.2, 8.4), "plate", name="Helm_Crest")                       # the tall crest
-block("head", (0, -0.4, 89.2), (3.0, 3.8, 1.0), "trim", name="Helm_CrestCap")
-for (x, y, tilt) in ((-5.0, -4.6, (-14, -14, 0)), (5.0, -4.6, (-14, 14, 0)), (-5.2, 0.6, (0, -18, 0)), (5.2, 0.6, (0, 18, 0)),
-                     (-5.0, 5.6, (14, -14, 0)), (5.0, 5.6, (14, 14, 0)), (-2.4, -5.0, (-16, -4, 0)), (2.4, -5.0, (-16, 4, 0))):
-    spike("head", (x, y, 79.8), 3.8, 1.3, tilt, mat="trim", tip="trim")                          # crown of spikes
-block("head", (0, -5.3, 76.8), (11.2, 1.8, 2.4), "plate", (-8, 0, 0), name="Helm_Brow")          # heavy brow over the visor
-block("head", (0, -5.0, 73.9), (8.6, 0.8, 2.6), "void", coll="Sentinel_Body", name="Helm_VisorDark")
+block("head", (0, 0.4, 73.8), (13.2, 12.4, 12.4), "plate", name="Helm_Shell")
+block("head", (0, 0.4, 80.6), (14.2, 13.4, 1.4), "trim", name="Helm_CrownRim")
+block("head", (0, 0.4, 81.8), (11.6, 11.0, 1.4), "plate", name="Helm_Top")
+block("head", (0, 0.0, 83.6), (7.0, 7.6, 2.4), "plate", name="Helm_CrestBase")                    # stepped crest
+block("head", (0, -0.2, 87.6), (3.4, 4.0, 6.0), "plate", name="Helm_Crest")
+block("head", (0, -0.2, 91.4), (2.6, 3.2, 2.0), "plate", name="Helm_CrestTop")
 for sx in (-1, 1):
-    block("head", (sx * 2.3, -5.25, 73.9), (3.0, 0.6, 1.3), "eye", (0, 0, sx * -10), coll="Sentinel_Body",
+    block("head", (sx * 2.6, -0.2, 85.6), (1.8, 3.4, 3.6), "plate", name=f"Helm_CrestStep_{sx}")
+for (x, y, tilt, hgt) in ((-6.4, -5.8, (-16, -16, 0), 4.6), (6.4, -5.8, (-16, 16, 0), 4.6), (-6.8, 0.4, (0, -22, 0), 4.0), (6.8, 0.4, (0, 22, 0), 4.0),
+                          (-6.4, 6.6, (16, -16, 0), 3.6), (6.4, 6.6, (16, 16, 0), 3.6), (-3.2, -6.4, (-18, -6, 0), 3.8), (3.2, -6.4, (-18, 6, 0), 3.8)):
+    spike("head", (x, y, 81.2), hgt, 1.5, tilt, mat="plate", tip="trim")                         # crown of spikes
+block("head", (0, -6.4, 77.6), (13.8, 1.8, 2.4), "plate", name="Helm_Brow")
+block("head", (0, -6.0, 74.4), (11.0, 0.8, 3.0), "void", coll="Sentinel_Body", name="Helm_VisorDark")
+for sx in (-1, 1):
+    block("head", (sx * 2.9, -6.3, 74.5), (3.8, 0.6, 1.6), "eye", (0, 0, sx * -12), coll="Sentinel_Body",
           name=f"Eye_{'L' if sx > 0 else 'R'}")
-    block("head", (sx * 5.5, -0.4, 72.4), (1.4, 9.6, 9.4), "plate", name=f"Helm_Cheek_{sx}")
-block("head", (0, -5.2, 69.8), (10.2, 1.4, 5.0), "plate", name="Helm_Face")                      # lower faceplate
-for k in range(5):
-    block("head", (-3.2 + 1.6 * k, -6.05, 69.7), (0.9, 0.8, 4.0), "iron", name=f"Helm_Grille_{k}")  # barred grille
-block("head", (0, -0.6, 67.6), (8.4, 8.4, 1.4), "plate", name="Helm_Chin")
-block("head", (0, -0.4, 72.8), (7.6, 7.6, 8.6), "void", coll="Sentinel_Body")
-# ---------------- shoulders, arms, hands, legs (right authored, mirrored)
+    block("head", (sx * 6.7, -0.2, 73.4), (1.6, 11.6, 10.6), "plate", name=f"Helm_Cheek_{sx}")
+block("head", (0, -6.4, 70.0), (12.8, 1.4, 5.4), "plate", name="Helm_Face")
+block("head", (0, -7.1, 72.0), (1.6, 0.8, 5.0), "plate", name="Helm_Nose")                           # central rib of the face
+for k in (-2, -1, 1, 2):
+    block("head", (k * 1.6, -7.2, 69.4), (0.8, 0.8, 4.2), "iron", name=f"Helm_Grille_{k}")
+block("head", (0, -0.6, 67.4), (10.6, 10.4, 1.4), "plate", name="Helm_Chin")
+block("head", (0, -0.4, 73.4), (9.6, 9.6, 9.6), "void", coll="Sentinel_Body")
+# ---------------- shoulders, arms, hands, legs (v14, to the user's pictures; right authored, mirrored)
+def band(bone, c, size, rot=(0, 0, 0), name=None):
+    """A bronze band: slightly larger than the plate it wraps."""
+    return block(bone, c, size, "trim", rot, name=name)
+
+
 for S, s in SIDE.items():
     X = lambda v: v if S == "R" else -v
     sg = 1 if S == "R" else -1
     R2 = lambda r: (r[0], r[1] * sg, r[2] * sg)
     U, F, Hn = f"upperarm_{S}", f"forearm_{S}", f"hand_{S}"
     block(f"clavicle_{S}", (X(-9.0), 0, 62.4), (4.2, 6.4, 2.8), "trim")
-    # executioner pauldron (v13): square stepped plates tipped out over the shoulder, a bronze rim, spikes, rune faces
-    Rp = Euler(tuple(math.radians(a) for a in R2((0, -14, 0))), "XYZ").to_matrix(); n_ = Rp @ Vector((0, 0, 1))
-    base_ = Vector((X(-16.0), 0, 60.4))
-    block(U, tuple(base_ - n_ * 0.3), (18.4, 17.8, 1.0), "trim", R2((0, -14, 0)), name=f"Pauldron_{S}_Rim")
-    hh = 0.0
-    for k, (d, t) in enumerate(((17.2, 3.0), (14.6, 2.6), (11.4, 2.2), (7.8, 1.8))):
-        block(U, tuple(base_ + n_ * (hh + t / 2)), (d, d * 0.97, t), "rune" if k == 0 else "plate", R2((0, -14, 0)), name=f"Pauldron_{S}_{k}")
-        hh += t * 0.95
-    for (dx_, y_) in ((-1.5, -3.6), (-1.5, 3.6), (2.6, 0.0)):
-        spike(U, tuple(base_ + n_ * 5.6 + Vector((X(dx_), y_ * 1.15, 0))), 5.0, 1.6, R2((-y_ * 3, -14 - dx_ * 4, 0)), mat="plate", tip="trim")
+    # pauldron: a tall box covering the shoulder and upper arm (as high as the helm), bronze bands top and bottom,
+    # a stepped cap with spikes; two skulls on the left one
+    rot_p = R2((0, -8, 0))
+    cx_ = X(-16.6)
+    block(U, (cx_ + X(-0.8), 0.0, 59.4), (13.2, 15.4, 10.4), "rune", rot_p, name=f"Pauldron_{S}_Main")      # outer wall
+    band(U, (cx_ + X(-0.8), 0.0, 54.4), (14.0, 16.2, 1.3), rot_p, name=f"Pauldron_{S}_Rim0")
+    block(U, (cx_ + X(1.4), 0.0, 65.2), (12.6, 14.6, 3.6), "plate", rot_p, name=f"Pauldron_{S}_Step1")      # stepped up and in
+    band(U, (cx_ + X(1.4), 0.0, 63.6), (13.4, 15.4, 1.1), rot_p, name=f"Pauldron_{S}_Rim1")
+    block(U, (cx_ + X(2.8), 0.0, 68.4), (9.6, 12.0, 3.0), "plate", rot_p, name=f"Pauldron_{S}_Cap")
+    block(U, (cx_ + X(3.8), 0.0, 70.8), (6.4, 9.0, 2.0), "plate", rot_p, name=f"Pauldron_{S}_Top")
+    block(U, (cx_ + X(-0.6), 0.0, 53.4), (12.4, 14.0, 2.4), "plate", R2((0, -12, 0)), name=f"Pauldron_{S}_Lame")
+    for (dx_, y_, h_) in ((-2.8, -4.0, 5.2), (-2.8, 4.0, 4.4), (2.4, 0.0, 3.8)):
+        spike(U, (cx_ + X(dx_ * 0.9 + 1.6), y_, 70.6), h_, 1.8, R2((-y_ * 3, -8 - dx_ * 3, 0)), mat="plate", tip="trim")
     if S == "L":
-        block(U, tuple(base_ + n_ * 3.0 + Vector((X(-2.0), -6.4, 0.6))), (3.6, 3.0, 3.4), "tooth", name="Skull_Pauldron")
-    block(U, (X(-19.4), 0, 58.2), (5.6, 12.0, 2.6), "rune", R2((0, -40, 0)))                      # layered lames (dark knight)
-    block(U, (X(-20.6), 0, 55.8), (4.2, 10.8, 2.4), "plate", R2((0, -55, 0)))
-    block(U, (X(-21.2), 0, 53.6), (3.2, 9.6, 2.2), "plate", R2((0, -66, 0)))
-    for y in (-6.0, 6.0):
-        tooth(U, (X(-21.0), y * 0.85, 55.6), 1.4, rot=R2((0, -55, 45)))
-    for y in (-3.8, 3.8):
-        spike(U, (X(-18.2), y, 62.4), 3.4, 1.2, R2((-y * 4, -40, 0)), mat="plate", tip="trim")    # swept spikes on the rim
-    block(U, (X(-14.0), 0, 53.0), (6.6, 6.6, 10.0), "rune")                        # rerebrace
-    block(U, (X(-17.5), 0, 53.0), (1.0, 3.2, 9.0), "trim")
-    block(U, (X(-14.0), 1.8, 47.4), (5.4, 4.2, 4.6), "plate")                      # couter
-    dome(U, (X(-16.6), 1.4, 47.4), R2((0, -90, 0)), [(4.6, 0.9), (3.2, 0.8)], name=f"Couter_{S}")   # round elbow cop
-    block(F, (X(-14.0), 0, 41.8), (7.4, 7.4, 9.0), "rune")                         # vambrace
-    block(F, (X(-14.0), 0, 37.3), (7.8, 7.8, 2.2), "trim")
-    for i, z in enumerate((44.6, 42.0, 39.4)):                                       # bladed fins sweeping back
-        block(F, (X(-17.9), 1.2 + 0.6 * i, z), (0.8, 5.0 - 0.8 * i, 1.6), "trim", R2((0, -20, 0)))
-        tooth(F, (X(-18.2), 3.8 + 0.4 * i, z + 0.4), 1.1, rot=(45, 0, 0))
-    block(Hn, (X(-14.0), 0, 32.4), (4.8, 6.2, 5.2), "plate")                       # gauntlet
-    block(Hn, (X(-14.0), 0, 29.8), (5.0, 6.4, 1.2), "trim")
-    for y in (-1.8, 0.0, 1.8):
-        tooth(Hn, (X(-16.6), y, 30.6), 0.9, rot=(0, 0, 45))
+        for k, dz_ in enumerate((0.0, 0.2)):
+            block(U, (cx_ + X(-1.0 + 4.0 * k), -7.8, 67.2 + dz_), (3.4, 2.8, 3.2), "tooth", name=f"Skull_Pauldron_{k}")
+    # thick banded arms
+    block(U, (X(-14.0), 0, 52.6), (10.0, 10.0, 9.0), "rune", name=f"Rerebrace_{S}")
+    band(U, (X(-14.0), 0, 48.4), (10.6, 10.6, 1.1))
+    block(U, (X(-14.0), 0.8, 46.6), (9.4, 8.8, 3.6), "plate", name=f"Couter_{S}")                # elbow
+    band(F, (X(-14.0), 0, 45.2), (11.0, 11.0, 1.2))
+    block(F, (X(-14.0), 0, 40.8), (10.4, 10.4, 8.4), "rune", name=f"Vambrace_{S}")
+    band(F, (X(-14.0), 0, 36.6), (11.0, 11.0, 1.3))
+    block(Hn, (X(-14.0), 0, 32.4), (8.6, 9.2, 6.4), "plate", name=f"Gauntlet_{S}")              # big gauntlet
+    band(Hn, (X(-14.0), 0, 29.4), (9.0, 9.6, 1.3), name=f"Gauntlet_{S}_Knuckles")
     for fi, fy in (("index", -1.7), ("middle", 0.0), ("ring", 1.7)):
-        block(f"{fi}1_{S}", (X(-14.2), fy, 28.65), (1.6, 1.6, 2.7), "plate")
-        block(f"{fi}2_{S}", (X(-14.2), fy, 26.05), (1.45, 1.45, 2.5), "trim")
-        block(f"{fi}2_{S}", (X(-14.2), fy - 0.25, 24.6), (0.9, 0.9, 1.1), "plate", (20, 0, 0))
-    block(f"thumb1_{S}", (X(-12.45), -2.9, 31.8), (1.7, 1.7, 2.6), "plate", (24, 0, 0))
-    block(f"thumb2_{S}", (X(-12.2), -3.7, 29.6), (1.45, 1.45, 2.2), "trim", (24, 0, 0))
-    # legs: cuisse with three scale rows, spiked poleyn with a fan, layered greave, pointed sabaton
+        block(f"{fi}1_{S}", (X(-14.2), fy, 28.65), (1.8, 1.8, 2.7), "plate")
+        block(f"{fi}2_{S}", (X(-14.2), fy, 26.05), (1.6, 1.6, 2.5), "plate")
+    block(f"thumb1_{S}", (X(-12.45), -2.9, 31.8), (1.9, 1.9, 2.6), "plate", (24, 0, 0))
+    block(f"thumb2_{S}", (X(-12.2), -3.7, 29.6), (1.6, 1.6, 2.2), "plate", (24, 0, 0))
+    # legs: thick banded thighs and shins, layered knees, big blocky boots with bronze caps
     T, Sh, Ft, To = f"thigh_{S}", f"shin_{S}", f"foot_{S}", f"toe_{S}"
-    block(T, (X(-6.2), 0, 30.6), (8.6, 8.8, 13.2), "rune")
-    for i, (z, w, m) in enumerate(((35.0, 8.8, "plate"), (31.0, 8.4, "rune"), (27.0, 8.0, "plate"))):
-        block(T, (X(-6.2), -4.6 - 0.2 * i, z), (w, 1.4, 4.8), m, (14 - 2 * i, 0, 0))
-    block(Sh, (X(-6.2), -4.4, 21.8), (8.0, 1.8, 6.8), "plate", name=f"Knee_{S}_0")              # square layered knee plates
-    block(Sh, (X(-6.2), -5.5, 21.8), (6.2, 1.0, 5.0), "rune", name=f"Knee_{S}_1")
-    block(Sh, (X(-6.2), -5.2, 25.0), (8.4, 1.4, 0.9), "trim", name=f"Knee_{S}_Rim")
-    block(Sh, (X(-6.2), 0, 14.0), (7.8, 8.0, 13.0), "rune")
-    for i, z in enumerate((18.0, 14.0, 10.0)):
-        block(Sh, (X(-6.2), -4.1 - 0.2 * i, z), (7.4 - 0.4 * i, 1.2, 4.0), "rune" if i == 1 else "plate", (10, 0, 0))
-        tooth(Sh, (X(-6.2), -4.3 - 0.2 * i, z - 2.1), 1.0, rot=(90, 45, 0))
-    block(Sh, (X(-9.9), 0, 15.0), (0.8, 5.0, 9.0), "trim", R2((0, -8, 0)))
-    block(Sh, (X(-6.2), 3.9, 15.0), (6.2, 1.4, 10.0), "plate")
-    block(Ft, (X(-6.2), 0, 6.5), (7.8, 8.0, 3.0), "trim")
-    block(Ft, (X(-6.2), -1.0, 2.6), (8.0, 9.6, 5.2), "plate")
-    block(Ft, (X(-6.2), -3.2, 5.6), (7.0, 4.0, 1.2), "plate", (15, 0, 0))
-    block(Ft, (X(-6.2), 5.3, 3.0), (1.6, 2.6, 1.6), "plate", (-30, 0, 0))
-    block(To, (X(-6.2), -8.2, 1.9), (7.0, 5.2, 3.8), "plate")
-    block(To, (X(-6.2), -11.0, 1.4), (3.4, 3.4, 2.4), "trim", (0, 0, 45))
+    band(T, (X(-6.2), 0, 37.0), (11.6, 11.6, 1.2))
+    block(T, (X(-6.2), 0, 30.4), (11.0, 11.0, 12.6), "rune", name=f"Cuisse_{S}")
+    band(T, (X(-6.2), 0, 24.4), (11.6, 11.6, 1.2))
+    block(Sh, (X(-6.2), -5.3, 21.4), (10.6, 2.0, 7.0), "plate", name=f"Knee_{S}_0")
+    block(Sh, (X(-6.2), -6.4, 21.4), (8.0, 1.0, 5.0), "rune", name=f"Knee_{S}_1")
+    band(Sh, (X(-6.2), 0, 18.6), (11.2, 11.2, 1.2))
+    block(Sh, (X(-6.2), 0, 13.6), (10.6, 10.6, 9.4), "rune", name=f"Greave_{S}")
+    band(Sh, (X(-6.2), 0, 8.4), (11.2, 11.2, 1.2))
+    block(Ft, (X(-6.2), -0.6, 3.6), (11.4, 13.4, 6.8), "plate", name=f"Boot_{S}")
+    band(Ft, (X(-6.2), -0.6, 7.3), (12.0, 14.0, 1.0))
+    block(To, (X(-6.2), -9.4, 2.2), (10.4, 5.6, 4.4), "plate", name=f"BootToe_{S}")
+    band(To, (X(-6.2), -12.0, 1.6), (10.8, 1.2, 3.0), name=f"BootToeCap_{S}")
+    band(Ft, (X(-6.2), 5.8, 1.4), (11.2, 1.2, 2.8), name=f"BootHeel_{S}")
 # ---------------- the cape: three panels, three segments each, tattered hem; bronze clasps at the shoulders
 block("cape_root", (0, 5.9, 63.6), (21.0, 1.6, 2.2), "cloth")
 for sx in (-1, 1):
     block("cape_root", (sx * 9.6, 5.4, 63.4), (2.2, 1.0, 2.2), "bronze", (0, 45, 0))
 for s, x in (("L", 8.6), ("M", 0.0), ("R", -8.6)):
-    w = 9.6 if s == "M" else 10.0                                           # panels overlap: one cloak, no gaps
+    w = 15.0 if s == "M" else 10.6                                          # v14: the middle panel carries the banner
     lean = 0
     bottom = 6.8 + (2.2 if s != "M" else 0)
     for k, (z0, z1) in enumerate(((62.6, 43.4), (43.6, 24.4), (24.6, bottom))):
-        block(f"cape_{s}{k + 1}", (x, 6.6 + (0.0 if s == "M" else 0.35), (z0 + z1) / 2), (w, 0.9, z0 - z1), "cloth", (0, 0, lean))
+        block(f"cape_{s}{k + 1}", (x, 6.6 + (0.35 if s == "M" else 0.0), (z0 + z1) / 2), (w, 0.9, z0 - z1), "cloth", (0, 0, lean))
     for j in range(3):                                                         # tattered hem
         hx = x - w / 2 + w * (j + 0.5) / 3
         hz = bottom - (1.2 if j % 2 == 0 else 0.4)

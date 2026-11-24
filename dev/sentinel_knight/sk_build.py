@@ -128,7 +128,7 @@ exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "sk_armor.py"
 # torso pieces get wider and deeper, limbs get more girth, boots get wider (not taller), the cape spans the wider back.
 WIDEN = 1.15                                                      # v10: less bulk (was 1.35)
 # the torso follows a curved V profile by height (px): broad upper chest, narrow waist, a little flare at the hips
-TORSO_PROFILE = [(30, 1.04), (38, 1.03), (42, 0.94), (46, 0.78), (50, 0.88), (55, 1.06), (60, 1.22), (66, 1.26), (80, 1.26)]
+TORSO_PROFILE = [(30, 1.0), (38, 1.0), (42, 0.92), (46, 0.8), (50, 0.84), (55, 0.9), (60, 0.95), (66, 0.98), (80, 0.98)]   # v14: narrow enough that the arms stand clear
 
 
 def torso_k(z_px):
@@ -151,7 +151,7 @@ def _widen():
         k = WIDEN
         if b in TORSO or b == "head":
             if b == "head":
-                W = Matrix.Diagonal((1.06, 1.06, 1.0))            # the helm stays close to its own size
+                W = Matrix.Diagonal((1.2, 1.12, 1.0))             # v14: a big helm, as in the pictures
             else:
                 kz = torso_k(o.matrix_world.translation.z * 16)   # width by height: the V and the waist curve
                 if b in ("clavicle_L", "clavicle_R", "tasset_L", "tasset_R"):

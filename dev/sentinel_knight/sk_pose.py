@@ -472,7 +472,7 @@ def secondary(r, P):
             if last is not None and abs(th - last) > 20.0:             # pushed by a fast leg: give way over a few ticks
                 th = last + math.copysign(20.0, th - last); st[b] = (th, 0.0)
             st[b + "_out"] = th
-            sway = side * (1.5 + 0.8 * k)
+            sway = side * (3.0 + 3.2 * k)                                  # v14: the cloak flares out towards the hem
             d = Vector((math.sin(math.radians(sway)), math.sin(math.radians(th)), -math.cos(math.radians(th))))
             wd = Rk @ d
             if lie > 0 and k == 1:

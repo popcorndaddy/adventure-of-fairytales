@@ -962,7 +962,7 @@ def marine_paint(o, mat, w, h, face):
 
 # ------------------------------------------------------------------ v13 executioner (the user's sheet): charcoal stone-block
 # plate tinted purple, antique bronze edges, glowing purple runes, a ribcage sigil, bone skulls, a burning jagged blade
-CHAR = (0.17, 0.13, 0.21)
+CHAR = (0.2, 0.14, 0.27)                                                  # v14: more purple in the stone
 BRONZE = (0.66, 0.46, 0.2)
 GLYPHS = [np.array([[c == "#" for c in row] for row in r_], dtype=np.float32) for r_ in RUNES]
 
@@ -977,6 +977,9 @@ def block_plate(w, h, face, tint=CHAR):
     u = (xx + ox) % cell; v = yy % cell
     var = mottle(h, w, cell, 0.18)
     t[..., :3] *= (1 + var)[..., None]
+    cid = ((xx + ox) // cell) * 7919 + (yy // cell) * 104729              # some stone blocks run purple, like the pictures
+    pur = ((cid * 2654435761) % 997 / 997.0) < 0.28
+    t[pur, :3] = t[pur, :3] * 0.55 + np.array([0.3, 0.12, 0.46]) * 0.45
     t[(u < 1) | (v < 1), :3] *= 0.45                                      # dark seams
     hi = ((u == 1) | (v == 1)) & (u > 0) & (v > 0)
     t[hi, :3] = np.minimum(t[hi, :3] * 1.45 + 0.03, 1)                    # lit bevel on each block
@@ -1005,20 +1008,20 @@ def ribcage(t, g, w, h, mirror):
     yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
     sx = (w - 1 - xx) if mirror else xx                                    # distance from the spine edge
     m = np.zeros((h, w), np.float32)
-    m = np.maximum(m, (sx < 0.9 * TPX).astype(np.float32))                 # the spine
-    for k in range(4):
-        y0 = h * (0.18 + 0.2 * k)
-        curve = y0 + (sx / max(w, 1)) ** 1.6 * h * 0.16
-        m = np.maximum(m, ((np.abs(yy - curve) < 0.45 * TPX) & (sx < w * (0.85 - 0.08 * k))).astype(np.float32))
+    m = np.maximum(m, (sx < 0.7 * TPX).astype(np.float32))                 # the spine
+    for k in range(4):                                                  # short ribs off a glowing spine
+        y0 = h * (0.2 + 0.18 * k)
+        curve = y0 + (sx / max(w, 1)) ** 1.4 * h * 0.1
+        m = np.maximum(m, ((np.abs(yy - curve) < 0.32 * TPX) & (sx < w * (0.5 - 0.06 * k))).astype(np.float32))
     halo = np.clip(m * 1.0, 0, 1)
-    t[..., :3] = t[..., :3] * (1 - m[..., None]) + np.array([0.55, 0.16, 0.9]) * m[..., None]
-    g[..., :3] = np.maximum(g[..., :3], m[..., None] * np.array([0.5, 0.12, 0.85])); g[..., 3] = np.maximum(g[..., 3], (halo > 0.02).astype(np.float32))
+    t[..., :3] = t[..., :3] * (1 - m[..., None]) + np.array([0.5, 0.12, 0.88]) * m[..., None]
+    g[..., :3] = np.maximum(g[..., :3], m[..., None] * np.array([0.42, 0.08, 0.78])); g[..., 3] = np.maximum(g[..., 3], (halo > 0.02).astype(np.float32))
 
 
 def banner_emblem(t, g, w, h):
     """Back of the cape: a sword inside a ring of spikes."""
     yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
-    cx, cy = w / 2, h * 0.45; R = min(w, h) * 0.4
+    cx, cy = w / 2, h * 0.38; R = min(w, h) * 0.36
     r = np.sqrt((xx - cx) ** 2 + (yy - cy) ** 2); ang = np.arctan2(yy - cy, xx - cx)
     ring = np.abs(r - R) < 0.5 * TPX
     spikes = (np.abs(r - R - 0.9 * TPX) < 0.9 * TPX) & (np.cos(ang * 10) > 0.7)
@@ -1040,7 +1043,7 @@ def exec_paint(o, mat, w, h, face):
         if side and big:
             bronze_edge(t, w, h, int(0.45 * TPX))
         if mat == "rune" and (side or face == "up") and min(w, h) >= 3 * TPX:
-            glyph(t, g, w, h, sum(map(ord, name + face)) % 7, min(w * 0.38, h * 0.42), col=np.array([0.55, 0.16, 0.9]))
+            glyph(t, g, w, h, sum(map(ord, name + face)) % 7, min(w * 0.24, h * 0.3), col=np.array([0.55, 0.16, 0.9]))
         if mat == "emblem" and face == "north":
             ribcage(t, g, w, h, mirror=o.matrix_world.translation.x < 0)
         return np.clip(t, 0, 1), g
@@ -1049,6 +1052,10 @@ def exec_paint(o, mat, w, h, face):
         recolour(t, BRONZE, 0.35, 1.7)
         t[..., :3] *= (1 + mottle(h, w, 3 * SC, 0.2))[..., None]
         grain(t, 0.015); wear(t, 0.16, 0.45)
+        if side and min(w, h) >= int(0.9 * TPX):                         # dark rivets along the bands
+            step = int(1.8 * TPX); cy_ = (h - 1) / 2
+            for cx_ in range(step // 2, w, step):
+                rivet(t, cx_, cy_, 0.26 * TPX, (0.12, 0.1, 0.1))
         return np.clip(t, 0, 1), g
     if mat == "iron":                                                    # grille bars, chain links: dark iron
         t, _, _ = sample(GK["DarkSteel_Albedo"], w, h); t[..., 3] = 1
@@ -1065,14 +1072,22 @@ def exec_paint(o, mat, w, h, face):
     if mat == "cloth":
         t, _, _ = sample(GK["TatteredCloth_Albedo"], w, h)
         lum = t[..., :3].mean(-1, keepdims=True)
-        t[..., :3] = np.array([0.2, 0.06, 0.3]) * (0.4 + 2.2 * lum); t[..., 3] = 1
+        t[..., :3] = np.array([0.3, 0.09, 0.45]) * (0.45 + 2.3 * lum); t[..., 3] = 1                # v14: brighter purple cloth
         yy, xx = np.mgrid[0:h, 0:w]
         t[..., :3] *= (1 - 0.35 * (yy / max(h, 1)) ** 2)[..., None]
         if (bone.endswith("3") or name.startswith("Tabard_Hem")) and side:
             cut = (h - 1 - yy) < (1.1 * TPX * (0.5 + 0.5 * np.abs(np.sin(xx * 0.41) * np.cos(xx * 0.17))) + rnd.random(w)[None, :] * 0.8 * TPX)
             t[cut, 3] = 0.0
-        if bone == "cape_M2" and face == "south":
+        if bone == "cape_M1" and face == "south":
             banner_emblem(t, g, w, h)
+        if bone == "cape_M2" and face == "south":                         # the emblem's blade runs on down the cloak
+            yy2, xx2 = np.mgrid[0:h, 0:w]
+            m = ((np.abs(xx2 - w / 2) < 0.6 * TPX * (1 - yy2 / (h * 0.75)).clip(0.15, 1)) & (yy2 < h * 0.75)).astype(np.float32)
+            col = np.array([0.5, 0.18, 0.8])
+            t[..., :3] = t[..., :3] * (1 - m[..., None]) + col * m[..., None]
+            g[..., :3] = np.maximum(g[..., :3], m[..., None] * col * 0.55); g[..., 3] = np.maximum(g[..., 3], (m > 0).astype(np.float32))
+        if bone in ("cape_L1", "cape_R1", "cape_L2", "cape_R2") and face == "south":
+            glyph(t, g, w, h, sum(map(ord, bone)) % 7, min(w * 0.3, h * 0.22), col=np.array([0.5, 0.18, 0.8]), glow=0.45)
         if name == "Tabard" and face == "north":
             glyph(t, g, w, h, 3, min(w * 0.6, h * 0.3), col=np.array([0.62, 0.25, 0.95]), glow=0.7)
         return np.clip(t, 0, 1), g
