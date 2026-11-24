@@ -2,3 +2,7 @@ preview/
 out_assets/
 *.blend1
 __pycache__/
+meshy/user_glb/model.glb
+meshy/user_glb/ortho_*.png
+meshy/user_glb/grid_*.png
+backup_shark_jaw/*.blend

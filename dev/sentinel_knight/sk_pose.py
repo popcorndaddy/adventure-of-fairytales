@@ -190,8 +190,12 @@ def merged(**kw):
     P = dict(DEFAULT); P.update(kw); return P
 
 
+LEG_SPREAD = 4.0                     # v15: hips are 4 px wider than the stances were authored for; feet follow
+
+
 def place_leg(r, S, xy, lift, yaw, pitch, pole):
     """Ankle over (x, y) px at sole height + lift; foot yawed; heel raised by pitch around the ball of the foot."""
+    xy = (xy[0] + (-LEG_SPREAD if S == "R" else LEG_SPREAD), xy[1])
     sole_to_ankle = 6.0
     a = Vector((xy[0], xy[1], sole_to_ankle + lift)) * PX
     Rz = Matrix.Rotation(math.radians(yaw), 3, "Z")

@@ -128,7 +128,10 @@ faces_all = []
 for o, cube, size in cubes:
     sx, sy, sz = size
     dims = {"north": (sx, sy), "south": (sx, sy), "east": (sz, sy), "west": (sz, sy), "up": (sx, sz), "down": (sx, sz)}
+    hidden = set(o.get("sk_hide", []))
     for face, (fw, fh) in dims.items():
+        if face in hidden:
+            continue                                               # buried against a neighbouring box: not drawn
         w, h = max(2, round(fw * TPX)), max(2, round(fh * TPX))
         faces_all.append((o, cube, face, w, h))
 # shelf packing: all faces sorted by height (tallest first), so each shelf is filled with faces of similar height
@@ -1112,7 +1115,100 @@ def exec_paint(o, mat, w, h, face):
     return gk_paint(mat, w, h, face)
 
 
+# ------------------------------------------------------------------ v15: boxes built from the user's model are painted by
+# projecting that model's own texture: each texel's point on the box goes back to the model and takes its colour
+GLB_WORK = os.path.join(os.path.dirname(os.path.abspath(__file__)), "meshy", "user_glb", "work.blend")
+GLB = None
+if any(r[6] == "glb" for r in regions):
+    from mathutils.bvhtree import BVHTree
+    with bpy.data.libraries.load(GLB_WORK) as (src, dst):
+        dst.meshes = list(src.meshes); dst.images = list(src.images)
+    gme = [m for m in bpy.data.meshes if len(m.vertices) > 100000][0]
+    gimg = [i for i in bpy.data.images if i.size[0] >= 1024][0]
+    gw, gh = gimg.size
+    gpix = np.empty(gw * gh * 4, np.float32); gimg.pixels.foreach_get(gpix); gpix = gpix.reshape(gh, gw, 4)
+    gme.calc_loop_triangles()
+    K_RAW, Z_OFF = 92.0 / 1.905, 0.953
+    gverts = [Vector((v.co.x * K_RAW, v.co.y * K_RAW, v.co.z * K_RAW + Z_OFF * K_RAW)) for v in gme.vertices]
+    gtris = [tuple(t.vertices) for t in gme.loop_triangles]
+    uvl = gme.uv_layers.active.data
+    guv = [tuple(tuple(uvl[l].uv) for l in t.loops) for t in gme.loop_triangles]
+    GLB = BVHTree.FromPolygons(gverts, gtris)
+    print("GLB texture source", len(gtris), "triangles", gw, "x", gh, flush=True)
+
+
+def glb_paint(o, face, w, h):
+    """Project the user's model texture onto one box face (sampled every 2 texels)."""
+    t = np.zeros((h, w, 4), np.float32); t[..., 3] = 1
+    g = np.zeros((h, w, 4), np.float32)
+    M = o.matrix_world; loc, _, scl = M.decompose()
+    c = loc * 16; sz = Vector((scl.x, scl.y, scl.z)) * 16
+    lo_b, hi_b = c - sz / 2, c + sz / 2
+    to_i = lambda v: Vector((-v.x, v.z, v.y))                               # Blender px -> internal
+    to_b = lambda v: Vector((-v.x, v.z, v.y))                               # internal -> Blender px (self-inverse)
+    a_, b_ = to_i(lo_b), to_i(hi_b)
+    f = Vector((min(a_.x, b_.x), min(a_.y, b_.y), min(a_.z, b_.z))); tt = Vector((max(a_.x, b_.x), max(a_.y, b_.y), max(a_.z, b_.z)))
+    Q = {"north": lambda f, t: [(t[0], t[1], f[2]), (f[0], t[1], f[2]), (f[0], f[1], f[2]), (t[0], f[1], f[2])],
+         "south": lambda f, t: [(f[0], t[1], t[2]), (t[0], t[1], t[2]), (t[0], f[1], t[2]), (f[0], f[1], t[2])],
+         "east": lambda f, t: [(t[0], t[1], t[2]), (t[0], t[1], f[2]), (t[0], f[1], f[2]), (t[0], f[1], t[2])],
+         "west": lambda f, t: [(f[0], t[1], f[2]), (f[0], t[1], t[2]), (f[0], f[1], t[2]), (f[0], f[1], f[2])],
+         "up": lambda f, t: [(f[0], t[1], f[2]), (t[0], t[1], f[2]), (t[0], t[1], t[2]), (f[0], t[1], t[2])],
+         "down": lambda f, t: [(f[0], f[1], t[2]), (t[0], f[1], t[2]), (t[0], f[1], f[2]), (f[0], f[1], f[2])]}
+    tl, tr, br, bl = [Vector(p) for p in Q[face](f, tt)]
+    if face in ("up", "down"):
+        P0, PA, PB = br, bl, tr                                          # the rect is turned 180 deg on up/down
+    else:
+        P0, PA, PB = tl, tr, bl
+    Ainv = Matrix([o["sk_Ainv"][0:3], o["sk_Ainv"][3:6], o["sk_Ainv"][6:9]]); tv = Vector(o["sk_t"]); sh = Vector((o["sk_shift"], 0, 0))
+    NRM = {"north": (0, -1, 0), "south": (0, 1, 0), "east": (-1, 0, 0), "west": (1, 0, 0), "up": (0, 0, 1), "down": (0, 0, -1)}
+    nrm = Vector(NRM[face]); dir_in = (Ainv @ (-nrm)).normalized(); S_ = 1.0 / max(1e-6, (Ainv @ Vector((1, 0, 0))).length)
+    step = 2
+    for j in range(0, h, step):
+        for i in range(0, w, step):
+            a = (i + step / 2) / w; bb = (j + step / 2) / h
+            pi = P0 + (PA - P0) * a + (PB - P0) * bb
+            pb_ = to_b(pi)
+            praw = Ainv @ (pb_ - tv - sh)
+            # the model surface straight behind this face (ray inward from just outside); nearest point as a fallback
+            start = Ainv @ (pb_ + nrm * 1.2 - tv - sh)
+            hit = GLB.ray_cast(start, dir_in, 3.2 / S_)
+            if hit[0] is None:
+                hit = GLB.find_nearest(praw)
+                if hit[0] is None:
+                    continue
+            k = hit[2]; A, B, Cc = (gverts[v] for v in gtris[k])
+            w3 = barycentric_weights(hit[0], A, B, Cc)
+            uv = [sum(w3[q] * guv[k][q][d] for q in range(3)) for d in range(2)]
+            px = min(gw - 1, max(0, int(uv[0] % 1.0 * gw))); py = min(gh - 1, max(0, int(uv[1] % 1.0 * gh)))
+            col = gpix[py, px, :3]
+            t[j:j + step, i:i + step, :3] = col
+            r, gg, bcol = col
+            if bcol > 0.55 and bcol > gg * 2.0 and r > gg * 1.3:              # bright purple: runes, ribcage, eyes, blade
+                k_ = min(0.7, (bcol - 0.5) * 2.0)
+                g[j:j + step, i:i + step, :3] = col * k_; g[j:j + step, i:i + step, 3] = 1
+    return t, g
+
+
+def barycentric_weights(p, a, b, c):
+    v0, v1, v2 = b - a, c - a, p - a
+    d00, d01, d11, d20, d21 = v0.dot(v0), v0.dot(v1), v1.dot(v1), v2.dot(v0), v2.dot(v1)
+    den = d00 * d11 - d01 * d01
+    if abs(den) < 1e-12:
+        return (1.0, 0.0, 0.0)
+    v = (d11 * d20 - d01 * d21) / den; w_ = (d00 * d21 - d01 * d20) / den
+    return (1 - v - w_, v, w_)
+
+
+n_glb = 0
 for (o, face, x, y, w, h, mat) in regions:
+    if mat == "glb":
+        t, g = glb_paint(o, face, w, h)
+        n_glb += 1
+        if n_glb % 2000 == 0:
+            print("  painted", n_glb, "faces", flush=True)
+        alb[y:y + h, x:x + w] = t
+        glw[y:y + h, x:x + w] = g
+        continue
     t, g = exec_paint(o, mat, w, h, face)
     alb[y:y + h, x:x + w] = t
     glw[y:y + h, x:x + w] = g

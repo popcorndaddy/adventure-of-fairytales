@@ -26,6 +26,7 @@ for name in ("Sentinel_Armature", "Sentinel_Body", "Sentinel_Armor", "Sentinel_W
 
 # ============================================================== skeleton (heads/tails in px)
 SIDE = {"R": -1, "L": 1}
+ARM_X, LEG_X = 16.0, 10.0            # v15: shoulders and hips set wider to carry the user's model (was 14 / 6)
 BONES = [  # name, parent, head, tail
     ("root", None, (0, 0, 0), (0, -4, 0)),
     ("pelvis", "root", (0, 0, 38), (0, 0, 44)),
@@ -39,22 +40,22 @@ BONES = [  # name, parent, head, tail
 for S, s in SIDE.items():
     x = s
     BONES += [
-        (f"clavicle_{S}", "chest", (3 * x, 0, 62), (11 * x, 0, 62)),
-        (f"upperarm_{S}", f"clavicle_{S}", (14 * x, 0, 61), (14 * x, 0, 47)),
-        (f"forearm_{S}", f"upperarm_{S}", (14 * x, 0, 47), (14 * x, 0, 35)),
-        (f"hand_{S}", f"forearm_{S}", (14 * x, 0, 35), (14 * x, 0, 30)),
-        (f"thigh_{S}", "pelvis", (6 * x, 0, 38), (6 * x, 0, 22)),
-        (f"shin_{S}", f"thigh_{S}", (6 * x, 0, 22), (6 * x, 0, 6)),
-        (f"foot_{S}", f"shin_{S}", (6 * x, 0, 6), (6 * x, -5.5, 2)),
-        (f"toe_{S}", f"foot_{S}", (6 * x, -5.5, 2), (6 * x, -10, 1.5)),
+        (f"clavicle_{S}", "chest", (3 * x, 0, 62), ((ARM_X - 3) * x, 0, 62)),
+        (f"upperarm_{S}", f"clavicle_{S}", (ARM_X * x, 0, 61), (ARM_X * x, 0, 47)),
+        (f"forearm_{S}", f"upperarm_{S}", (ARM_X * x, 0, 47), (ARM_X * x, 0, 35)),
+        (f"hand_{S}", f"forearm_{S}", (ARM_X * x, 0, 35), (ARM_X * x, 0, 30)),
+        (f"thigh_{S}", "pelvis", (LEG_X * x, 0, 38), (LEG_X * x, 0, 22)),
+        (f"shin_{S}", f"thigh_{S}", (LEG_X * x, 0, 22), (LEG_X * x, 0, 6)),
+        (f"foot_{S}", f"shin_{S}", (LEG_X * x, 0, 6), (LEG_X * x, -5.5, 2)),
+        (f"toe_{S}", f"foot_{S}", (LEG_X * x, -5.5, 2), (LEG_X * x, -10, 1.5)),
     ]
     for fi, fy in (("index", -1.7), ("middle", 0.0), ("ring", 1.7)):
-        BONES += [(f"{fi}1_{S}", f"hand_{S}", (14.2 * x, fy, 30), (14.2 * x, fy, 27.3)),
-                  (f"{fi}2_{S}", f"{fi}1_{S}", (14.2 * x, fy, 27.3), (14.2 * x, fy, 24.8))]
-    BONES += [(f"thumb1_{S}", f"hand_{S}", (12.6 * x, -2.4, 33), (12.3 * x, -3.4, 30.6)),
-              (f"thumb2_{S}", f"thumb1_{S}", (12.3 * x, -3.4, 30.6), (12.1 * x, -4.0, 28.6))]
+        BONES += [(f"{fi}1_{S}", f"hand_{S}", ((ARM_X + 0.2) * x, fy, 30), ((ARM_X + 0.2) * x, fy, 27.3)),
+                  (f"{fi}2_{S}", f"{fi}1_{S}", ((ARM_X + 0.2) * x, fy, 27.3), ((ARM_X + 0.2) * x, fy, 24.8))]
+    BONES += [(f"thumb1_{S}", f"hand_{S}", ((ARM_X - 1.4) * x, -2.4, 33), ((ARM_X - 1.7) * x, -3.4, 30.6)),
+              (f"thumb2_{S}", f"thumb1_{S}", ((ARM_X - 1.7) * x, -3.4, 30.6), ((ARM_X - 1.9) * x, -4.0, 28.6))]
 # the sword: bone head = right-hand grip point; at rest the blade points straight forward (-Y)
-GRIP = (-14, -1.0, 32.0)
+GRIP = (-ARM_X, -1.0, 32.0)
 BONES.append(("sword", "hand_R", GRIP, (GRIP[0], GRIP[1] - 6, GRIP[2])))
 # secondary motion: a three-panel cape (three segments each) and four tassets that swing with the legs
 BONES.append(("cape_root", "chest", (0, 5.6, 63.5), (0, 5.6, 61.5)))
@@ -246,6 +247,9 @@ t = bpy.data.texts.new("Sentinel_Export_README")
 t.write("Export with sk_export.py: model blocks = Sentinel_Body/Armor/Weapon/Heart (rigid bone parented).\n"
         "Sentinel_Collision holds helpers only: COL_* = gameplay/collision references, HIT_* = attack shapes.\n"
         "Sentinel_Effects holds FX_* anchors used for particle/hit spawn points.\n")
+# v15: the user's own model replaces the hand-built armour when its working copy is present
+if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "meshy", "user_glb", "work.blend")):
+    exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "sk_glb.py")).read())
 scene["sk_grip_l_s"] = GRIP_L_S; scene["sk_sword_len"] = SWORD_LEN; scene["sk_grip"] = GRIP
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 n = sum(1 for o in bpy.data.objects if "sk_mat" in o)

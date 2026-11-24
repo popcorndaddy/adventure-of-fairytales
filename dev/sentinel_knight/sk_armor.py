@@ -46,9 +46,10 @@ block("pelvis", (0, 0.5, 43.4), (15.4, 10.4, 1.9), "trim")
 block("pelvis", (0, -5.7, 43.4), (4.2, 1.6, 3.8), "tooth", name="Skull_Buckle")                  # a skull for a buckle
 # ---------------- tassets (own bones: they swing clear of the legs)
 block("tasset_F", (0, -5.8, 39.0), (8.0, 1.4, 2.6), "trim", (6, 0, 0))                           # band under the belt
-block("tasset_F", (0, -6.6, 28.2), (7.6, 0.7, 17.0), "cloth", (4, 0, 0), name="Tabard")           # the purple tabard
-for j, (dx, h_) in enumerate(((-2.6, 1.6), (0.0, 2.6), (2.6, 1.2))):                               # its torn hem
-    block("tasset_F", (dx, -7.1, 19.2 - h_ / 2), (2.4, 0.6, h_), "cloth", (4, 0, (-8, 4, 10)[j]), name=f"Tabard_Hem_{j}")
+block("tasset_F", (0, -6.6, 30.0), (5.0, 0.7, 14.0), "cloth", (4, 0, 0), name="Tabard")           # the purple tabard (narrow)
+for j, (dx, h_) in enumerate(((-1.7, 2.2), (-0.6, 3.6), (0.6, 4.4), (1.7, 2.6))):                    # pointed, ragged end
+    block("tasset_F", (dx, -7.0, 23.0 - h_ / 2), (1.15, 0.6, h_), "cloth", (4, 0, 0), name=f"Tabard_Hem_{j}")
+block("tasset_F", (0, -7.0, 35.8), (5.6, 0.8, 1.0), "trim", name="Tabard_Bar")
 for i, (z, w) in enumerate(((37.2, 12.4), (32.0, 10.6))):
     block("tasset_B", (0, 6.0 + 0.5 * i, z), (w, 1.4, 5.6), "plate", (-8, 0, 0))
 for S, sx in (("L", 1), ("R", -1)):
@@ -144,6 +145,9 @@ for S, s in SIDE.items():
     band(U, (cx_ + X(1.4), 0.0, 63.6), (13.4, 15.4, 1.1), rot_p, name=f"Pauldron_{S}_Rim1")
     block(U, (cx_ + X(2.8), 0.0, 68.4), (9.6, 12.0, 3.0), "plate", rot_p, name=f"Pauldron_{S}_Cap")
     block(U, (cx_ + X(3.8), 0.0, 70.8), (6.4, 9.0, 2.0), "plate", rot_p, name=f"Pauldron_{S}_Top")
+    for (dx_, dy_, dz_, sz_) in ((-6.6, -4.2, 61.0, (2.4, 5.6, 6.0)), (-6.6, 4.2, 61.0, (2.4, 5.6, 6.0)), (-5.8, 0.0, 66.4, (2.6, 7.0, 3.0)),
+                                 (-1.6, -7.6, 60.2, (6.4, 1.6, 6.4)), (-1.6, 7.6, 60.2, (6.4, 1.6, 6.4)), (1.4, -6.8, 65.6, (5.0, 1.4, 3.0))):
+        block(U, (cx_ + X(dx_), dy_, dz_), sz_, "plate", rot_p, name=f"Pauldron_{S}_Chunk")          # rough stacked edges
     block(U, (cx_ + X(-0.6), 0.0, 53.4), (12.4, 14.0, 2.4), "plate", R2((0, -12, 0)), name=f"Pauldron_{S}_Lame")
     for (dx_, y_, h_) in ((-2.8, -4.0, 5.2), (-2.8, 4.0, 4.4), (2.4, 0.0, 3.8)):
         spike(U, (cx_ + X(dx_ * 0.9 + 1.6), y_, 70.6), h_, 1.8, R2((-y_ * 3, -8 - dx_ * 3, 0)), mat="plate", tip="trim")
@@ -187,12 +191,17 @@ for s, x in (("L", 8.6), ("M", 0.0), ("R", -8.6)):
     w = 15.0 if s == "M" else 10.6                                          # v14: the middle panel carries the banner
     lean = 0
     bottom = 6.8 + (2.2 if s != "M" else 0)
+    side = 0 if s == "M" else (1 if s == "L" else -1)
     for k, (z0, z1) in enumerate(((62.6, 43.4), (43.6, 24.4), (24.6, bottom))):
-        block(f"cape_{s}{k + 1}", (x, 6.6 + (0.35 if s == "M" else 0.0), (z0 + z1) / 2), (w, 0.9, z0 - z1), "cloth", (0, 0, lean))
-    for j in range(3):                                                         # tattered hem
-        hx = x - w / 2 + w * (j + 0.5) / 3
-        hz = bottom - (1.2 if j % 2 == 0 else 0.4)
-        block(f"cape_{s}3", (hx, 6.6, hz), (w / 3 - 0.4, 0.8, 1.6 if j % 2 == 0 else 0.8), "cloth", (0, 0, 10 if j == 1 else -8))
+        flare = (1.0, 1.18, 1.4)[k] if s != "M" else (1.0, 1.06, 1.12)[k]          # v15: the cloak flares out
+        xo = x + side * (0.0, 2.2, 5.4)[k]
+        block(f"cape_{s}{k + 1}", (xo, 6.6 + (0.35 if s == "M" else 0.0), (z0 + z1) / 2), (w * flare, 0.9, z0 - z1), "cloth",
+              (0, 0, -side * (0, 5, 9)[k]))
+    wb = w * ((1.4 if s != "M" else 1.12)); xb = x + side * 5.4
+    for j in range(6):                                                         # long ragged strips at the hem
+        hx = xb - wb / 2 + wb * (j + 0.5) / 6
+        L = (4.2, 2.0, 5.6, 1.4, 3.6, 2.6)[(j + (0 if s == "M" else 2)) % 6]
+        block(f"cape_{s}3", (hx, 6.6, bottom - L / 2 + 0.3), (wb / 6 - 0.2, 0.8, L), "cloth", (0, 0, -side * 9), name=f"CapeRag_{s}_{j}")
 
 # ---------------- the longsword (bone 'sword'; at rest the blade points straight forward, flat facing up)
 gx, gy, gz = GRIP

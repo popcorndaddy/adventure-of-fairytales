@@ -14,6 +14,9 @@ ONLY = set(args[0].split(",")) if args and args[0] else None
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sentinel_knight_anim.blend")
 if os.path.exists(OUT):
     bpy.ops.wm.open_mainfile(filepath=OUT)          # keep previously baked actions
+# the boxes don't move during baking (only the skeleton does): drop them so each pose step stays fast
+for _o in [o for o in bpy.data.objects if o.get("sk_mat") == "glb"]:
+    bpy.data.objects.remove(_o, do_unlink=True)
 r = K.Rig()
 SL = 56.0                                          # sword length (grip -> tip), px
 
