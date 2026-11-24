@@ -1,0 +1,11 @@
+{
+  "gatekeeper.ambient":        {"subtitle": "subtitles.aof_gatekeeper.ambient",  "sounds": [{"name": "aof_gatekeeper:ambient", "attenuation_distance": 32}]},
+  "gatekeeper.pulse":          {"subtitle": "subtitles.aof_gatekeeper.pulse",    "sounds": [{"name": "aof_gatekeeper:pulse", "attenuation_distance": 32}]},
+  "gatekeeper.shriek":         {"subtitle": "subtitles.aof_gatekeeper.shriek",   "sounds": [{"name": "aof_gatekeeper:shriek", "attenuation_distance": 64}]},
+  "gatekeeper.step":           {"subtitle": "subtitles.aof_gatekeeper.step",     "sounds": [{"name": "aof_gatekeeper:step", "attenuation_distance": 32}]},
+  "gatekeeper.impact":         {"subtitle": "subtitles.aof_gatekeeper.impact",   "sounds": [{"name": "aof_gatekeeper:impact", "attenuation_distance": 48}]},
+  "gatekeeper.whoosh":         {"subtitle": "subtitles.aof_gatekeeper.whoosh",   "sounds": [{"name": "aof_gatekeeper:whoosh", "attenuation_distance": 24}]},
+  "gatekeeper.drag":           {"subtitle": "subtitles.aof_gatekeeper.drag",     "sounds": [{"name": "aof_gatekeeper:drag", "attenuation_distance": 32}]},
+  "gatekeeper.eyes_open":      {"subtitle": "subtitles.aof_gatekeeper.eyes",     "sounds": [{"name": "aof_gatekeeper:eyes_open", "attenuation_distance": 48}]},
+  "gatekeeper.portal_flicker": {"subtitle": "subtitles.aof_gatekeeper.portal",   "sounds": [{"name": "aof_gatekeeper:portal_flicker", "attenuation_distance": 48}]}
+}

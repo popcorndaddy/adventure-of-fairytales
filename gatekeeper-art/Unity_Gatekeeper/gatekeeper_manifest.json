@@ -1,0 +1,315 @@
+{
+  "clips": {
+    "Gatekeeper_Idle": {
+      "first": 0,
+      "last": 160,
+      "loop": true,
+      "root_motion": false,
+      "events": {
+        "sword_scrape": [
+          104,
+          122
+        ]
+      }
+    },
+    "Gatekeeper_Awakening": {
+      "first": 0,
+      "last": 180,
+      "loop": false,
+      "root_motion": false,
+      "events": {
+        "arm_unfold": [
+          44,
+          62
+        ],
+        "head_turn": [
+          100
+        ],
+        "sword_drag_sparks": [
+          110,
+          150
+        ],
+        "eyes_open": [
+          160
+        ],
+        "fire_ignite": [
+          44,
+          62
+        ]
+      }
+    },
+    "Gatekeeper_Entrance": {
+      "first": 0,
+      "last": 100,
+      "loop": false,
+      "root_motion": true,
+      "events": {
+        "heavy_step": [
+          40,
+          74
+        ],
+        "roar": [
+          64
+        ]
+      }
+    },
+    "Gatekeeper_Walking": {
+      "first": 0,
+      "last": 56,
+      "loop": true,
+      "root_motion": true,
+      "events": {
+        "footstep": [
+          0,
+          28
+        ]
+      }
+    },
+    "Gatekeeper_Heavy_Walk": {
+      "first": 0,
+      "last": 72,
+      "loop": true,
+      "root_motion": true,
+      "events": {
+        "heavy_footstep": [
+          0,
+          36
+        ]
+      }
+    },
+    "Gatekeeper_Sword_Drag": {
+      "first": 0,
+      "last": 80,
+      "loop": true,
+      "root_motion": true,
+      "events": {
+        "footstep": [
+          0,
+          40
+        ],
+        "sword_drag_sparks": [
+          0,
+          80
+        ]
+      }
+    },
+    "Gatekeeper_Overhead_Attack": {
+      "first": 0,
+      "last": 72,
+      "loop": false,
+      "root_motion": false,
+      "events": {
+        "windup": [
+          10
+        ],
+        "impact": [
+          34
+        ],
+        "ground_crack": [
+          34
+        ],
+        "camera_shake": [
+          34
+        ]
+      }
+    },
+    "Gatekeeper_Horizontal_Sweep": {
+      "first": 0,
+      "last": 66,
+      "loop": false,
+      "root_motion": false,
+      "events": {
+        "windup": [
+          10
+        ],
+        "swing": [
+          20
+        ],
+        "shockwave": [
+          24
+        ],
+        "impact": [
+          24
+        ]
+      }
+    },
+    "Gatekeeper_Multi_Arm_Attack": {
+      "first": 0,
+      "last": 110,
+      "loop": false,
+      "root_motion": false,
+      "events": {
+        "claw_R": [
+          12
+        ],
+        "claw_L": [
+          24
+        ],
+        "punch": [
+          30
+        ],
+        "sword_sweep": [
+          58
+        ],
+        "claws_both": [
+          62
+        ]
+      }
+    },
+    "Gatekeeper_Block": {
+      "first": 0,
+      "last": 44,
+      "loop": false,
+      "root_motion": false,
+      "events": {
+        "block_impact": [
+          16
+        ]
+      }
+    },
+    "Gatekeeper_Stagger": {
+      "first": 0,
+      "last": 48,
+      "loop": false,
+      "root_motion": false,
+      "events": {
+        "hit": [
+          2
+        ],
+        "stumble_step": [
+          14
+        ]
+      }
+    },
+    "Gatekeeper_Rage": {
+      "first": 0,
+      "last": 100,
+      "loop": false,
+      "root_motion": false,
+      "events": {
+        "roar": [
+          28
+        ],
+        "camera_shake": [
+          30,
+          60
+        ]
+      }
+    },
+    "Gatekeeper_Death": {
+      "first": 0,
+      "last": 130,
+      "loop": false,
+      "root_motion": false,
+      "events": {
+        "hit": [
+          2
+        ],
+        "knees_hit_ground": [
+          30
+        ],
+        "body_hits_ground": [
+          98
+        ],
+        "eyes_fade": [
+          98,
+          120
+        ]
+      }
+    }
+  },
+  "materials": {
+    "GK_AncientDarkIron": {
+      "albedo": "GK_AncientDarkIron_Albedo.png",
+      "emission": "GK_AncientDarkIron_Emission.png",
+      "emission_strength": 0.0,
+      "metallic": 0.75,
+      "smoothness": 0.44999998807907104
+    },
+    "GK_ChainIron": {
+      "albedo": "GK_ChainIron_Albedo.png",
+      "emission": "GK_ChainIron_Emission.png",
+      "emission_strength": 0.0,
+      "metallic": 0.800000011920929,
+      "smoothness": 0.5
+    },
+    "GK_CorruptedStone": {
+      "albedo": "GK_CorruptedStone_Albedo.png",
+      "emission": "GK_CorruptedStone_Emission.png",
+      "emission_strength": 0.0,
+      "metallic": 0.0,
+      "smoothness": 0.07999998331069946
+    },
+    "GK_CyanRunes": {
+      "albedo": "GK_CyanRunes_Albedo.png",
+      "emission": "GK_CyanRunes_Emission.png",
+      "emission_strength": 3.5,
+      "metallic": 0.0,
+      "smoothness": 0.5999999940395355
+    },
+    "GK_DarkSteel": {
+      "albedo": "GK_DarkSteel_Albedo.png",
+      "emission": "GK_DarkSteel_Emission.png",
+      "emission_strength": 0.0,
+      "metallic": 0.8500000238418579,
+      "smoothness": 0.6200000047683716
+    },
+    "GK_EyeGlow": {
+      "albedo": "GK_EyeGlow_Albedo.png",
+      "emission": "GK_EyeGlow_Emission.png",
+      "emission_strength": 16.0,
+      "metallic": 0.0,
+      "smoothness": 0.699999988079071
+    },
+    "GK_FireEnergy": {
+      "albedo": "GK_FireEnergy_Albedo.png",
+      "emission": "GK_FireEnergy_Emission.png",
+      "emission_strength": 6.0,
+      "metallic": 0.0,
+      "smoothness": 0.5999999940395355
+    },
+    "GK_MagentaFragments": {
+      "albedo": "GK_MagentaFragments_Albedo.png",
+      "emission": "GK_MagentaFragments_Emission.png",
+      "emission_strength": 5.0,
+      "metallic": 0.0,
+      "smoothness": 0.5999999940395355
+    },
+    "GK_PurpleEnergy": {
+      "albedo": "GK_PurpleEnergy_Albedo.png",
+      "emission": "GK_PurpleEnergy_Emission.png",
+      "emission_strength": 4.0,
+      "metallic": 0.0,
+      "smoothness": 0.5999999940395355
+    },
+    "GK_RuneStone": {
+      "albedo": "GK_RuneStone_Albedo.png",
+      "emission": "GK_RuneStone_Emission.png",
+      "emission_strength": 1.6,
+      "metallic": 0.0,
+      "smoothness": 0.10000002384185791
+    },
+    "GK_TatteredCloth": {
+      "albedo": "GK_TatteredCloth_Albedo.png",
+      "emission": "GK_TatteredCloth_Emission.png",
+      "emission_strength": 1.0,
+      "metallic": 0.0,
+      "smoothness": 0.050000011920928955
+    },
+    "GK_WeatheredBronze": {
+      "albedo": "GK_WeatheredBronze_Albedo.png",
+      "emission": "GK_WeatheredBronze_Emission.png",
+      "emission_strength": 0.0,
+      "metallic": 0.800000011920929,
+      "smoothness": 0.5
+    }
+  },
+  "sockets": [
+    "socket_hand_L",
+    "socket_extra_L",
+    "socket_hand_R",
+    "weapon",
+    "socket_extra_R"
+  ],
+  "fps": 30
+}
