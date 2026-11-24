@@ -1162,7 +1162,7 @@ def glb_paint(o, face, w, h):
     Ainv = Matrix([o["sk_Ainv"][0:3], o["sk_Ainv"][3:6], o["sk_Ainv"][6:9]]); tv = Vector(o["sk_t"]); sh = Vector((o["sk_shift"], 0, 0))
     NRM = {"north": (0, -1, 0), "south": (0, 1, 0), "east": (-1, 0, 0), "west": (1, 0, 0), "up": (0, 0, 1), "down": (0, 0, -1)}
     nrm = Vector(NRM[face]); dir_in = (Ainv @ (-nrm)).normalized(); S_ = 1.0 / max(1e-6, (Ainv @ Vector((1, 0, 0))).length)
-    step = 2
+    step = 1                                                             # every texel (was every 2nd)
     for j in range(0, h, step):
         for i in range(0, w, step):
             a = (i + step / 2) / w; bb = (j + step / 2) / h
@@ -1179,13 +1179,20 @@ def glb_paint(o, face, w, h):
             k = hit[2]; A, B, Cc = (gverts[v] for v in gtris[k])
             w3 = barycentric_weights(hit[0], A, B, Cc)
             uv = [sum(w3[q] * guv[k][q][d] for q in range(3)) for d in range(2)]
-            px = min(gw - 1, max(0, int(uv[0] % 1.0 * gw))); py = min(gh - 1, max(0, int(uv[1] % 1.0 * gh)))
-            col = gpix[py, px, :3]
+            fx = (uv[0] % 1.0) * gw - 0.5; fy = (uv[1] % 1.0) * gh - 0.5        # bilinear: blend the 4 nearest texels
+            x0 = int(math.floor(fx)); y0 = int(math.floor(fy)); ax = fx - x0; ay = fy - y0
+            x0c, x1c = min(gw - 1, max(0, x0)), min(gw - 1, max(0, x0 + 1)); y0c, y1c = min(gh - 1, max(0, y0)), min(gh - 1, max(0, y0 + 1))
+            col = ((gpix[y0c, x0c, :3] * (1 - ax) + gpix[y0c, x1c, :3] * ax) * (1 - ay) + (gpix[y1c, x0c, :3] * (1 - ax) + gpix[y1c, x1c, :3] * ax) * ay)
             t[j:j + step, i:i + step, :3] = col
             r, gg, bcol = col
             if bcol > 0.55 and bcol > gg * 2.0 and r > gg * 1.3:              # bright purple: runes, ribcage, eyes, blade
                 k_ = min(0.7, (bcol - 0.5) * 2.0)
                 g[j:j + step, i:i + step, :3] = col * k_; g[j:j + step, i:i + step, 3] = 1
+    # soften single-texel noise: a light 3x3 blur of the colour, keeping the face edges crisp
+    if w >= 4 and h >= 4:
+        c3 = t[..., :3]; pad = np.pad(c3, ((1, 1), (1, 1), (0, 0)), mode="edge")
+        blur = sum(pad[dy:dy + h, dx:dx + w] for dy in range(3) for dx in range(3)) / 9.0
+        t[..., :3] = c3 * 0.45 + blur * 0.55
     return t, g
 
 

@@ -10,7 +10,7 @@ K_RAW = 92.0 / 1.905                 # GLB units -> raw px (feet at 0, crest at 
 Z_OFF = 0.953
 S = 0.87                             # raw px -> skeleton px (joints line up: knee, elbow, wrist, belt, neck)
 ARM_SHIFT, LEG_SHIFT = 1.4, 2.2      # the model's arms/legs stand a little wider than the skeleton: pull them in
-VOX = 1.0                            # box grid, px
+VOX = 0.75                           # box grid, px (v16: finer, smoother surfaces)
 
 
 def _glb_raw():
