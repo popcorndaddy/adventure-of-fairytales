@@ -12,7 +12,10 @@ StartupEvents.registry('entity_type', event => {
     .animationResource(e => 'kubejs:animations/entity/gate_knight.animation.json')
     // the purple trim, runes and visor burn in the dark; brighter once he has roared
     .newGlowingGeoLayer(layer => layer.textureResource(e => {
-      try { if (!e.getItemBySlot(GK_SLOT_CHEST).isEmpty()) return 'kubejs:textures/entity/gate_knight_glowmask_enraged.png' } catch (err) {}
+      try {
+        let get = typeof e.getItemBySlot === 'function' ? 'getItemBySlot' : 'm_6844_'
+        if (!e[get](GK_SLOT_CHEST).isEmpty()) return 'kubejs:textures/entity/gate_knight_glowmask_enraged.png'
+      } catch (err) {}
       return 'kubejs:textures/entity/gate_knight_glowmask.png'
     }))
     .mobCategory('monster')
