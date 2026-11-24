@@ -141,7 +141,14 @@ try {
   if ((Test-Path $mi) -and $manifest -and (Test-Path $manifest)) {
     $have = @{}; (Get-Content $mi -Raw | ConvertFrom-Json).installedAddons | % { $have[[string]$_.addonID] = $true }
     $man = Get-Content $manifest -Raw | ConvertFrom-Json
-    foreach ($f in $man.files) { if (-not $have[[string]$f.projectID]) { $missing += $f.projectID } }
+    # CurseForge mods the pack ships itself in overrides/mods (open licence), so a locked CurseForge profile still gets them
+    $bundled = @{ '967617' = 'entityjs-forge-*.jar' }
+    foreach ($f in $man.files) {
+      $id = [string]$f.projectID
+      if ($have[$id]) { continue }
+      if ($bundled.ContainsKey($id) -and (Get-ChildItem (Join-Path $Instance 'mods') -Filter $bundled[$id] -ErrorAction SilentlyContinue)) { continue }
+      $missing += $f.projectID
+    }
   }
   $verb = if ($DryRun) { 'would change' } else { 'changed' }
   Say "Adventures of Fairytale ($Branch): $added added, $changed updated, $removed removed - $verb."
