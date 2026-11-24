@@ -853,6 +853,9 @@ def helm_paint(o, mat, w, h, face):
         t[:, ~slot, :3] = np.array([0.45, 0.3, 0.6]) * 0.7
         return np.clip(t, 0, 1), g
     dents(t, max(1, (w * h) // (500 * SC * SC)), 0.45)
+    if mat == "plate" and min(w, h) >= 3 * TPX:                           # studded: small rivets scattered over the plate
+        for _ in range(max(1, (w * h) // int((3.2 * TPX) ** 2))):
+            rivet(t, rnd.uniform(0.6 * TPX, w - 0.6 * TPX), rnd.uniform(0.6 * TPX, h - 0.6 * TPX), 0.32 * TPX, (0.55, 0.55, 0.6))
     scratches(t, max(3, (w * h) // (110 * SC * SC)), 0.32, (3, 18))
     if face in ("north", "east", "west", "up"):
         gouges(t, w, h, 1 if min(w, h) < 6 * TPX else 2)
@@ -871,6 +874,21 @@ def marine_paint(o, mat, w, h, face):
         t = purple_cloth(w, h, face, "x"); t[..., :3] = t[..., :3] * 1.9 + np.array([0.12, 0.08, 0.16])
         xx = np.arange(w)
         t[..., :3] *= (0.75 + 0.35 * np.abs(np.sin(xx * 1.3)))[None, :, None]
+        return np.clip(t, 0, 1), g
+    if mat == "tooth":                                                   # shark teeth: old ivory, darker at the root
+        t, _, _ = sample(GK["WeatheredBronze_Albedo"], w, h); t[..., 3] = 1
+        recolour(t, (0.86, 0.8, 0.66), 0.55, 1.2)
+        yy, xx = np.mgrid[0:h, 0:w]
+        c = np.sqrt((xx - (w - 1) / 2) ** 2 + (yy - (h - 1) / 2) ** 2) / max(w, h)
+        t[..., :3] *= (1.05 - 0.45 * c)[..., None]
+        grain(t, 0.02); scratches(t, 1, -0.15, (2, 5))
+        return np.clip(t, 0, 1), g
+    if o.name.startswith("Maw_"):                                        # the jaw: helm steel with a thin gold inner lip
+        t, g = helm_paint(o, "plate", w, h, face)
+        if face == "north":
+            lip = np.zeros((h, w), bool); lip[: max(1, int(h * 0.3))] = True
+            gm = gold_metal(w, h, 2.2)
+            t[lip, :3] = gm[lip, :3]
         return np.clip(t, 0, 1), g
     if bone == "head" and mat in ("plate", "trim", "accent", "iron"):
         return helm_paint(o, mat, w, h, face)
