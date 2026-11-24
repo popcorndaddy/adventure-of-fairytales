@@ -960,8 +960,145 @@ def marine_paint(o, mat, w, h, face):
     return gk_paint(mat, w, h, face)
 
 
+# ------------------------------------------------------------------ v13 executioner (the user's sheet): charcoal stone-block
+# plate tinted purple, antique bronze edges, glowing purple runes, a ribcage sigil, bone skulls, a burning jagged blade
+CHAR = (0.17, 0.13, 0.21)
+BRONZE = (0.66, 0.46, 0.2)
+GLYPHS = [np.array([[c == "#" for c in row] for row in r_], dtype=np.float32) for r_ in RUNES]
+
+
+def block_plate(w, h, face, tint=CHAR):
+    """Charcoal plate made of small bevelled stone blocks (the voxel look of the sheet), worn and damaged."""
+    t, _, _ = sample(GK["AncientDarkIron_Albedo"], w, h); t[..., 3] = 1
+    recolour(t, tint, 0.5, 1.7)
+    cell = int(2.2 * TPX)
+    yy, xx = np.mgrid[0:h, 0:w]
+    ox = (yy // cell % 2) * (cell // 2)                                   # staggered like masonry
+    u = (xx + ox) % cell; v = yy % cell
+    var = mottle(h, w, cell, 0.18)
+    t[..., :3] *= (1 + var)[..., None]
+    t[(u < 1) | (v < 1), :3] *= 0.45                                      # dark seams
+    hi = ((u == 1) | (v == 1)) & (u > 0) & (v > 0)
+    t[hi, :3] = np.minimum(t[hi, :3] * 1.45 + 0.03, 1)                    # lit bevel on each block
+    dents(t, max(1, (w * h) // (600 * SC * SC)), 0.35)
+    scratches(t, max(1, (w * h) // (260 * SC * SC)), 0.12, (3, 10))
+    grain(t, 0.012)
+    return t
+
+
+def bronze_edge(t, w, h, width):
+    yy, xx = np.mgrid[0:h, 0:w]
+    d = np.minimum.reduce([xx, w - 1 - xx, yy, h - 1 - yy])
+    m = d < width
+    gm, _, _ = sample(GK["WeatheredBronze_Albedo"], w, h); recolour(gm, BRONZE, 0.35, 1.6)
+    t[m, :3] = gm[m, :3] * (1.15 - 0.3 * d[m, None] / max(width, 1))
+    t[(d >= width) & (d < width + 1), :3] *= 0.4
+
+
+def glyph(t, g, w, h, idx, height, col=VIOLET, glow=0.5):
+    m = stamp(t, g, GLYPHS[idx % len(GLYPHS)], w / 2, h / 2, height, col * 0.85, glow=col * glow, outline=False)
+    return m
+
+
+def ribcage(t, g, w, h, mirror):
+    """The chest sigil: half a ribcage per breastplate half, ribs curving from the spine (inner edge) outward."""
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    sx = (w - 1 - xx) if mirror else xx                                    # distance from the spine edge
+    m = np.zeros((h, w), np.float32)
+    m = np.maximum(m, (sx < 0.9 * TPX).astype(np.float32))                 # the spine
+    for k in range(4):
+        y0 = h * (0.18 + 0.2 * k)
+        curve = y0 + (sx / max(w, 1)) ** 1.6 * h * 0.16
+        m = np.maximum(m, ((np.abs(yy - curve) < 0.45 * TPX) & (sx < w * (0.85 - 0.08 * k))).astype(np.float32))
+    halo = np.clip(m * 1.0, 0, 1)
+    t[..., :3] = t[..., :3] * (1 - m[..., None]) + np.array([0.55, 0.16, 0.9]) * m[..., None]
+    g[..., :3] = np.maximum(g[..., :3], m[..., None] * np.array([0.5, 0.12, 0.85])); g[..., 3] = np.maximum(g[..., 3], (halo > 0.02).astype(np.float32))
+
+
+def banner_emblem(t, g, w, h):
+    """Back of the cape: a sword inside a ring of spikes."""
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    cx, cy = w / 2, h * 0.45; R = min(w, h) * 0.4
+    r = np.sqrt((xx - cx) ** 2 + (yy - cy) ** 2); ang = np.arctan2(yy - cy, xx - cx)
+    ring = np.abs(r - R) < 0.5 * TPX
+    spikes = (np.abs(r - R - 0.9 * TPX) < 0.9 * TPX) & (np.cos(ang * 10) > 0.7)
+    blade = (np.abs(xx - cx) < 0.55 * TPX * (1 - (yy - cy + R * 1.4) / (R * 3.0)).clip(0.2, 1)) & (yy > cy - R * 1.4) & (yy < cy + R * 1.7)
+    guard = (np.abs(yy - (cy - R * 0.75)) < 0.4 * TPX) & (np.abs(xx - cx) < R * 0.55)
+    m = (ring | spikes | blade | guard).astype(np.float32)
+    col = np.array([0.5, 0.18, 0.8])
+    t[..., :3] = t[..., :3] * (1 - m[..., None]) + col * m[..., None]
+    g[..., :3] = np.maximum(g[..., :3], m[..., None] * col * 0.55); g[..., 3] = np.maximum(g[..., 3], (m > 0).astype(np.float32))
+
+
+def exec_paint(o, mat, w, h, face):
+    bone = o["sk_bone"]; name = o.name
+    g = np.zeros((h, w, 4), dtype=np.float32)
+    side = face in ("north", "south", "east", "west")
+    big = min(w, h) >= 4 * TPX
+    if mat in ("plate", "rune", "emblem"):
+        t = block_plate(w, h, face)
+        if side and big:
+            bronze_edge(t, w, h, int(0.45 * TPX))
+        if mat == "rune" and (side or face == "up") and min(w, h) >= 3 * TPX:
+            glyph(t, g, w, h, sum(map(ord, name + face)) % 7, min(w * 0.38, h * 0.42), col=np.array([0.55, 0.16, 0.9]))
+        if mat == "emblem" and face == "north":
+            ribcage(t, g, w, h, mirror=o.matrix_world.translation.x < 0)
+        return np.clip(t, 0, 1), g
+    if mat in ("trim", "bronze"):
+        t, _, _ = sample(GK["WeatheredBronze_Albedo"], w, h); t[..., 3] = 1
+        recolour(t, BRONZE, 0.35, 1.7)
+        t[..., :3] *= (1 + mottle(h, w, 3 * SC, 0.2))[..., None]
+        grain(t, 0.015); wear(t, 0.16, 0.45)
+        return np.clip(t, 0, 1), g
+    if mat == "iron":                                                    # grille bars, chain links: dark iron
+        t, _, _ = sample(GK["DarkSteel_Albedo"], w, h); t[..., 3] = 1
+        recolour(t, (0.2, 0.19, 0.22), 0.45, 1.6); wear(t, 0.14, 0.5)
+        return np.clip(t, 0, 1), g
+    if mat == "tooth":                                                   # skulls: carved old bone
+        t, _, _ = sample(GK["WeatheredBronze_Albedo"], w, h); t[..., 3] = 1
+        recolour(t, (0.78, 0.72, 0.6), 0.5, 1.2); grain(t, 0.02)
+        if name.startswith("Skull") and face == "north":
+            sk = np.array([[c == "#" for c in row] for row in SKULL], dtype=np.float32)
+            m = stamp(np.zeros_like(t), np.zeros_like(g), sk, w / 2, h / 2, min(w, h) * 0.95, np.ones(3))
+            t[..., :3] *= (1 - 0.82 * (1 - m))[..., None] * 0 + (0.18 + 0.82 * m)[..., None]   # sockets and teeth gaps dark
+        return np.clip(t, 0, 1), g
+    if mat == "cloth":
+        t, _, _ = sample(GK["TatteredCloth_Albedo"], w, h)
+        lum = t[..., :3].mean(-1, keepdims=True)
+        t[..., :3] = np.array([0.2, 0.06, 0.3]) * (0.4 + 2.2 * lum); t[..., 3] = 1
+        yy, xx = np.mgrid[0:h, 0:w]
+        t[..., :3] *= (1 - 0.35 * (yy / max(h, 1)) ** 2)[..., None]
+        if (bone.endswith("3") or name.startswith("Tabard_Hem")) and side:
+            cut = (h - 1 - yy) < (1.1 * TPX * (0.5 + 0.5 * np.abs(np.sin(xx * 0.41) * np.cos(xx * 0.17))) + rnd.random(w)[None, :] * 0.8 * TPX)
+            t[cut, 3] = 0.0
+        if bone == "cape_M2" and face == "south":
+            banner_emblem(t, g, w, h)
+        if name == "Tabard" and face == "north":
+            glyph(t, g, w, h, 3, min(w * 0.6, h * 0.3), col=np.array([0.62, 0.25, 0.95]), glow=0.7)
+        return np.clip(t, 0, 1), g
+    if mat == "blade":                                                   # dark broad blade, runes burning along it
+        t, _, _ = sample(GK["DarkSteel_Albedo"], w, h); t[..., 3] = 1
+        recolour(t, (0.16, 0.13, 0.2), 0.5, 1.6); scratches(t, 2, 0.1, (3, 8))
+        if face in ("up", "down") and h >= 6 * TPX:
+            for k in range(int(h // (5 * TPX))):
+                stamp(t, g, GLYPHS[k % len(GLYPHS)], w * 0.5, (k + 0.5) * 5 * TPX, min(2.6 * TPX, w * 0.35), np.array([0.55, 0.16, 0.9]), glow=np.array([0.45, 0.1, 0.8]), outline=False)
+        return np.clip(t, 0, 1), g
+    if mat == "energy":                                                  # crystal shards and gems: burning purple
+        t = np.zeros((h, w, 4), np.float32); t[..., 3] = 1
+        yy, xx = np.mgrid[0:h, 0:w]
+        c = np.clip(1 - np.maximum(np.abs(xx - (w - 1) / 2) / max(w / 2, 1), np.abs(yy - (h - 1) / 2) / max(h / 2, 1)), 0, 1)
+        t[..., :3] = np.clip(np.array([0.42, 0.1, 0.76]) + c[..., None] * np.array([0.32, 0.26, 0.2]), 0, 1)
+        g[..., :3] = t[..., :3] * 0.75; g[..., 3] = 1
+        return t, g
+    if mat == "eye":
+        t = np.zeros((h, w, 4), np.float32); t[..., :3] = (0.7, 0.3, 1.0); t[..., 3] = 1
+        g[..., :3] = (0.85, 0.4, 1.0); g[..., 3] = 1
+        return t, g
+    return gk_paint(mat, w, h, face)
+
+
 for (o, face, x, y, w, h, mat) in regions:
-    t, g = marine_paint(o, mat, w, h, face)
+    t, g = exec_paint(o, mat, w, h, face)
     alb[y:y + h, x:x + w] = t
     glw[y:y + h, x:x + w] = g
 
