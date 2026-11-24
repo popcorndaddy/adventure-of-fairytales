@@ -33,6 +33,22 @@ public class GatekeeperTests {
         return h.spawn(GatekeeperMod.GATEKEEPER.get(), x, 2, z);
     }
 
+    /** A survival test player standing at (x, z) in the arena (he only ever fights players). */
+    private static net.minecraft.world.entity.player.Player player(GameTestHelper h, int x, int z, float hp) {
+        ServerLevel level = h.getLevel();
+        net.minecraft.world.entity.player.Player p = new net.minecraft.world.entity.player.Player(level, BlockPos.ZERO, 0f,
+                new com.mojang.authlib.GameProfile(java.util.UUID.randomUUID(), "test-player")) {
+            @Override public boolean isSpectator() { return false; }
+            @Override public boolean isCreative() { return false; }
+        };
+        Vec3 at = h.absoluteVec(new Vec3(x + 0.5, 2, z + 0.5));
+        p.moveTo(at.x, at.y, at.z, 0, 0);
+        p.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH).setBaseValue(hp);
+        p.setHealth(hp);
+        level.addFreshEntity(p);
+        return p;
+    }
+
     /** Dormant guardians ignore damage; once awakened he goes through the awakening + entrance and starts fighting. */
     @GameTest(template = "arena", timeoutTicks = 400)
     public static void awakensAndFights(GameTestHelper h) {
@@ -54,24 +70,42 @@ public class GatekeeperTests {
         });
     }
 
-    /** In the fight he walks to a target and his attacks deal damage. */
+    /** In the fight he walks to a player and his attacks deal damage. */
     @GameTest(template = "arena", timeoutTicks = 500)
     public static void attacksHit(GameTestHelper h) {
         GatekeeperEntity g = spawn(h, 12, 8);
-        Zombie z = h.spawn(EntityType.ZOMBIE, 12, 2, 17);
+        net.minecraft.world.entity.player.Player p = player(h, 12, 17, 400);
+        h.runAfterDelay(2, () -> { g.startAwakening(); });
+        h.runAfterDelay(200, () -> g.setTarget(p));
+        h.succeedWhen(() -> h.assertTrue(p.getHealth() < 400 || !p.isAlive(), "player not damaged yet"));
+    }
+
+    /** He fights players only: a zombie beside the fight is never hit, and a zombie that strikes him is not targeted. */
+    @GameTest(template = "arena", timeoutTicks = 500)
+    public static void ignoresOtherMobs(GameTestHelper h) {
+        GatekeeperEntity g = spawn(h, 12, 8);
+        Zombie z = h.spawn(EntityType.ZOMBIE, 13, 2, 11);
         z.setNoAi(true);
         z.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH).setBaseValue(400);
         z.setHealth(400);
-        h.runAfterDelay(2, () -> { g.startAwakening(); });
-        h.runAfterDelay(200, () -> g.setTarget(z));
-        h.succeedWhen(() -> h.assertTrue(z.getHealth() < 400 || !z.isAlive(), "target not damaged yet"));
+        h.runAfterDelay(2, g::startAwakening);
+        h.runAfterDelay(200, () -> {
+            g.hurt(g.damageSources().mobAttack(z), 1.0f);
+            h.assertFalse(g.canAttack(z), "a zombie must never be a valid target");
+            h.assertTrue(g.forceGravityWell(), "gravity well should start");
+        });
+        h.runAfterDelay(200 + GatekeeperEntity.GW_BURST + 20, () -> {
+            h.assertTrue(z.getHealth() >= 400, "the zombie was hurt: " + z.getHealth());
+            h.assertTrue(g.getTarget() != z, "he turned on the zombie");
+            h.succeed();
+        });
     }
 
     /** Gravity well: a target 10 blocks away is dragged in during the 3-second channel, then thrown back out by the burst. */
     @GameTest(template = "arena", timeoutTicks = 400)
     public static void gravityWellPullsThenBursts(GameTestHelper h) {
         GatekeeperEntity g = spawn(h, 12, 6);
-        net.minecraft.world.entity.decoration.ArmorStand stand = h.spawn(EntityType.ARMOR_STAND, 12, 2, 16);
+        net.minecraft.world.entity.player.Player stand = player(h, 12, 16, 400);
         double[] d = new double[3];
         h.runAfterDelay(2, g::startAwakening);
         h.runAfterDelay(200, () -> {

@@ -3,7 +3,7 @@
 A Forge 1.20.1 adventure modpack (Forge 47.4.28, 336 CurseForge mods), now with **The Ancient Gatekeeper**: a custom boss who guards the End portal.
 
 ## Play it (CurseForge app)
-1. Download **`Adventures-of-Fairytale-1.2.1.zip`** from this repo (don't unzip it).
+1. Download **`Adventures-of-Fairytale-1.2.2.zip`** from this repo (don't unzip it).
 2. In the CurseForge app, go to **Minecraft ▸ Create Custom Profile ▸ Import** (the small "import" link) and pick the zip.
 3. CurseForge downloads the 336 mods automatically. The Gatekeeper mod is already bundled inside the zip.
 4. Give it at least 10–12 GB of RAM (**Profile Options ▸ Java Settings**), then press **Play**.
@@ -24,7 +24,7 @@ Your friend does the same import. To play together, use World Host (included) or
 ## Repo layout
 | Folder | What's inside |
 |---|---|
-| `Adventures-of-Fairytale-1.2.1.zip` | the importable pack (current: gravity well; the Gatekeeper keeps his name even with Villager Names). `1.1.0` is an older release. |
+| `Adventures-of-Fairytale-1.2.2.zip` | the importable pack (current: the Gatekeeper sleeps in every End portal room before you arrive, fights players only, never breaks blocks). `1.1.0` is an older release. |
 | `gatekeeper-mod/` | the Forge + GeckoLib mod source. Build with `gradlew build`; run the automated in-game tests with `gradlew runGameTestServer` (7 tests). |
 | `gatekeeper-art/` | Blender model, rig and 14 animations (`gatekeeper_stage3.blend`), the cinematic, combat reel and gravity-well preview (`Gatekeeper_Gravity_Well.mp4`), renders, and the Blender Python pipeline (`blender-scripts/`) that builds, animates, checks and converts him to GeckoLib |
 | `gatekeeper-art/Unity_Gatekeeper/` | the same boss exported for Unity (FBX with clips, textures, audio, import scripts) |

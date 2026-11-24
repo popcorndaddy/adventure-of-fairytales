@@ -504,8 +504,9 @@ public class GatekeeperEntity extends Monster implements GeoEntity {
     }
 
     private List<LivingEntity> nearby(Vec3 c, double r) {
+        // he fights players only: his blows, shockwaves and gravity well never touch other creatures
         return this.level().getEntitiesOfClass(LivingEntity.class, new AABB(c, c).inflate(r, 4, r),
-                e -> e != this && e.isAlive() && !(e instanceof GatekeeperEntity) && e.distanceToSqr(c) <= r * r + 16);
+                e -> e instanceof Player p && !p.isCreative() && !p.isSpectator() && e.isAlive() && e.distanceToSqr(c) <= r * r + 16);
     }
 
     private void pointHit(Vec3 c, double r, float dmg, float knock) {
@@ -651,6 +652,12 @@ public class GatekeeperEntity extends Monster implements GeoEntity {
     @Override
     public boolean checkSpawnRules(net.minecraft.world.level.LevelAccessor level, net.minecraft.world.entity.MobSpawnType reason) {
         return true;
+    }
+
+    /** Only players are ever his target (other mobs that strike him are ignored). */
+    @Override
+    public boolean canAttack(LivingEntity target) {
+        return target instanceof Player p && !p.isCreative() && !p.isSpectator() && super.canAttack(target);
     }
 
     @Override

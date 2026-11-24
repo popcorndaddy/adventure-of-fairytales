@@ -22,15 +22,17 @@ import java.util.Set;
 
 /**
  * The Gatekeeper guards every End portal (vanilla stronghold frames and End Remastered's ancient portal frames).
- * When a player first comes near one, a dormant Gatekeeper appears in front of it. Until he is defeated the portal
- * is sealed: no eye can be placed in its frames.
+ * Before a player first reaches one, a dormant Gatekeeper is already asleep in front of it (placed quietly while they
+ * are still on their way in). He wakes when he sees them. Until he is defeated the portal is sealed: no eye can be
+ * placed in its frames. He only ever fights players and never breaks blocks.
  */
 @Mod.EventBusSubscriber(modid = GatekeeperMod.MODID)
 public class PortalGuard {
     private static final Set<ResourceLocation> FRAMES = Set.of(
             new ResourceLocation("minecraft", "end_portal_frame"),
             new ResourceLocation("endrem", "ancient_portal_frame"));
-    private static final int SCAN_XZ = 14, SCAN_Y = 7, PORTAL_RADIUS = 16;
+    // a player still in the corridors (up to ~24 blocks away) is enough: he is already asleep in the room when they walk in
+    private static final int SCAN_XZ = 24, SCAN_Y = 10, PORTAL_RADIUS = 16;
 
     static boolean isFrame(BlockState state) {
         ResourceLocation id = ForgeRegistries.BLOCKS.getKey(state.getBlock());
@@ -83,9 +85,7 @@ public class PortalGuard {
         Vec3 dir = flat.lengthSqr() > 0.01 ? flat.normalize() : new Vec3(0, 0, 1);
         Vec3 spot = Vec3.atCenterOf(portal).add(dir.scale(5.0));
         BlockPos pos = groundBelow(level, BlockPos.containing(spot));
-        GatekeeperEntity.spawnGuardian(level, pos, player.position(), portal);
-        level.playSound(null, portal, GatekeeperMod.SND_PORTAL.get(), net.minecraft.sounds.SoundSource.HOSTILE, 3.0f, 0.8f);
-        player.displayClientMessage(Component.translatable("message.aof_gatekeeper.guardian_appears"), true);
+        GatekeeperEntity.spawnGuardian(level, pos, player.position(), portal);       // quietly: he has always been here
     }
 
     private static BlockPos groundBelow(ServerLevel level, BlockPos start) {
