@@ -60,17 +60,17 @@ def walk():
     def fn(r, f):
         u = (f % (NW // 2)) / (NW // 2)
         ph = 2 * math.pi * (f + 5) / NW
-        hz = track([(0, 0, "c"), (0.15, -1.6, "c"), (0.45, 0.7, "c"), (0.7, 0.3, "c"), (1.0, 0, "c")], u)
-        hx = -1.7 * math.sin(ph)
-        yaw = -6.0 * math.sin(ph)
+        hz = track([(0, 0, "c"), (0.15, -2.8, "c"), (0.45, 1.2, "c"), (0.7, 0.5, "c"), (1.0, 0, "c")], u)    # v16: heavier
+        hx = -2.6 * math.sin(ph)
+        yaw = -9.0 * math.sin(ph)
         fR, fL = foot_walk("R", f), foot_walk("L", f)
         armR = fR[0][1] / 14.0; armL = fL[0][1] / 14.0                         # arms counter-swing the legs
         impact = bump(u, 0.12, 0.07)
         G = (-13.0 + 0.5 * hx, -3.0 - 3.0 * armR, 37.5 + 0.7 * hz)
         hs, gs = heartbeat(f / 20.0, 50, 0.9)
         K.pose(r, merged(
-            body=(hx, 0.0, -1.0 + hz), hips=(6.0 + 1.2 * impact, 2.2 * math.sin(ph), yaw),
-            spine=(2.0, -0.8 * math.sin(ph), -0.5 * yaw), chest=(2.0 + 1.5 * impact, -0.6 * math.sin(ph), -1.1 * yaw),
+            body=(hx, 0.0, -1.4 + hz), hips=(7.0 + 2.6 * impact, 3.4 * math.sin(ph), yaw),
+            spine=(3.0, -1.4 * math.sin(ph), -0.5 * yaw), chest=(3.0 + 3.4 * impact, -1.0 * math.sin(ph), -1.1 * yaw),
             head=(0.0, 6.0 + 2.0 * bump(u, 0.2, 0.1), 0.0), shrug_R=1.5 * impact, shrug_L=1.5 * impact,
             foot_R=fR, foot_L=fL,
             sword=dict(grip=G, dir=sword_dir(-24 + 5 * armR, -34 + 4 * armR), flat=(1.0, 0.0, 0.3), two=False,
@@ -236,7 +236,7 @@ def dash():
 
 # ====================================================================== SUMMON (start 40 ticks, loop 60 seamless, end 30)
 SUMMON_TIP = (-12.0, -22.0, -6.0)          # sword driven into the stone in front of him (6 px deep)
-SG = (-8.0, -14.0, 47.0)                   # right fist on the grip of the planted sword
+SG = grip_for((-8.0, -14.0, 47.0), SUMMON_TIP)   # right fist on the grip of the planted sword (point in the stone)
 HAND_UP = dict(hand=(18.0, -16.0, 70.0), point=(0.1, -0.35, 1.0), palm=(0.0, -1.0, 0.35), elbow=(0.9, 0.3, -0.4))
 
 
@@ -331,7 +331,7 @@ def summon_end():
 KNEEL = dict(body=(0.0, 1.0, -15.0), hips=(14.0, 0.0, -4.0), spine=(10.0, 0.0, 0.0), chest=(14.0, 0.0, 0.0), head=(0.0, 42.0, 0.0),
              foot_R=((-7.0, 13.0), 0.0, -8, 62.0), foot_L=((7.5, -9.0), 0.0, 6, 0.0), knee_R=(-0.2, -1.0, -0.3), knee_L=(0.2, -1.0, 0.2))
 KNEEL_TIP = (-2.0, -22.0, -1.5)
-KNEEL_G = (-2.0, -15.0, 42.0)
+KNEEL_G = grip_for((-2.0, -15.0, 42.0), KNEEL_TIP)
 
 
 @action

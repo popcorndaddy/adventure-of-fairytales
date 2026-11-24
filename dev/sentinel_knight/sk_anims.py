@@ -29,6 +29,12 @@ def planted_sword(grip, tip, flat):
 ACTIONS = {}
 
 
+def grip_for(G, TIP):
+    """Grip that puts the sword's point exactly at TIP along the same line (whatever the blade's length)."""
+    d = (Vector(TIP) - Vector(G)).normalized()
+    return tuple(Vector(TIP) - d * (r.sword_len / K.PX))
+
+
 def action(fn):
     ACTIONS[fn.__name__] = fn
     return fn
@@ -48,14 +54,14 @@ def idle():
         sway = wave(f, N, (1.0, 1, 0.0), (0.25, 3, 0.4))                         # weight settles side to side
         roll = bump(f, 62, 10)                                                    # rolls the blade in his hands
         squeeze = 0.06 * wave(f, N, (1, 2, 0.6)) + 0.08 * roll                   # the grip tightens and eases
-        G = (-1.5 + 0.6 * sway, -10.0 - 0.3 * br, 51.0 + 0.6 * br)
+        G = grip_for((-1.5 + 1.0 * sway, -10.0 - 0.5 * br, 51.0 + 1.2 * br), TIP)
         d = (Vector(TIP) - Vector(G)).normalized()
         flat = Vector((math.cos(math.radians(6 * roll)), math.sin(math.radians(6 * roll)), 0.0))
         hs, gs = heartbeat(f / 20.0, 36, 0.8)
         K.pose(r, merged(
-            body=(0.9 * sway, 0.4, -1.2 + 0.35 * br), hips=(5.0, -1.4 * sway, 1.2 * sway),
-            spine=(1.5 - 0.6 * br, 0.4 * sway, 0.0), chest=(2.5 - 1.6 * br, 0.3 * sway, 0.0),
-            head=(0.0, 9.0, 0.0), shrug_R=0.8 + 1.4 * br, shrug_L=0.8 + 1.4 * br,
+            body=(1.8 * sway, 0.4, -1.6 + 0.9 * br), hips=(6.0, -2.6 * sway, 2.4 * sway),
+            spine=(2.0 - 1.4 * br, 0.8 * sway, 0.0), chest=(3.0 - 3.4 * br, 0.6 * sway, 0.0),
+            head=(5.0 * wave(f, N, (1.0, 1, 2.0)), 9.0 - 2.0 * br, 0.0), shrug_R=1.0 + 3.0 * br, shrug_L=1.0 + 3.0 * br,
             foot_R=((-8.5, 1.0), 0, -12, 0), foot_L=((8.5, -1.0), 0, 12, 0),
             sword=dict(grip=G, dir=tuple(d), flat=tuple(flat), two=True,
                        elbow_R=(-0.85, 0.25, -0.45), elbow_L=(0.85, 0.25, -0.45)),
@@ -79,10 +85,10 @@ def combat_base(f=0, N=60, intensity=1.0):
     bx, by, bz = COMBAT["body"]
     hp, hr, hy = COMBAT["hips"]
     g = COMBAT["grip"]
-    d = dir_az_el(COMBAT["az"] + 3.5 * weave_a, COMBAT["el"] + 3.0 * weave_e)
+    d = dir_az_el(COMBAT["az"] + 7.0 * weave_a, COMBAT["el"] + 6.0 * weave_e)          # v16: a wider, slower weave
     return dict(
-        body=(bx + 0.7 * rock, by, bz - 0.6 * br), hips=(hp + 0.8 * br, -1.0 * rock, hy + 2.0 * rock),
-        spine=(COMBAT["spine"][0] - 0.5 * br, 0, COMBAT["spine"][2]), chest=(COMBAT["chest"][0] - 1.6 * br, 0, COMBAT["chest"][2] + 1.0 * rock),
+        body=(bx + 1.5 * rock, by, bz - 1.2 * br), hips=(hp + 1.6 * br, -2.0 * rock, hy + 3.6 * rock),
+        spine=(COMBAT["spine"][0] - 1.2 * br, 0, COMBAT["spine"][2]), chest=(COMBAT["chest"][0] - 3.2 * br, 0, COMBAT["chest"][2] + 2.2 * rock),
         head=(-hy - COMBAT["spine"][2] - COMBAT["chest"][2] + 22 - 2.0 * rock, 4.0 + 0.8 * br, 0.0),
         shrug_R=1.5 * br, shrug_L=1.5 * br,
         foot_R=COMBAT["foot_R"], foot_L=COMBAT["foot_L"],

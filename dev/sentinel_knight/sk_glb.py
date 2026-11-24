@@ -10,6 +10,7 @@ K_RAW = 92.0 / 1.905                 # GLB units -> raw px (feet at 0, crest at 
 Z_OFF = 0.953
 S = 0.87                             # raw px -> skeleton px (joints line up: knee, elbow, wrist, belt, neck)
 ARM_SHIFT, LEG_SHIFT = 1.4, 2.2      # the model's arms/legs stand a little wider than the skeleton: pull them in
+SWORD_SCALE = 1.45                   # the greatsword is drawn larger than the model's (reach for the attacks)
 VOX = 0.75                           # box grid, px (v16: finer, smoother surfaces)
 
 
@@ -38,9 +39,11 @@ G_RAW = c0 + d_up * (t_bl.max() + 5.0)                      # grip: a fist's wid
 rel = C - c0; along = rel @ d_up; dist = np.linalg.norm(rel - np.outer(along, d_up), axis=1)
 zc = C[:, 2]
 sword = (dist < np.where((zc > 34) & (zc < 47), 8.0, 9.0)) & (zc < 47) & ((x < -22) | (y < -14)) & (along < t_bl.max() + 9)
+# the blade's outer crystal teeth: everything out past his right boot, in front, below the fist
+sword |= (zc < 47) & (y < 2.0) & (((x < -23.5) & (zc > 7)) | (x < -25.2))
 
 # ---- the cape: everything well behind the body, plus the rags flaring out at the sides
-cape = (~sword) & (((y > 9.5) & (z < 74)) | ((y > 6.0) & (z < 45) & (np.abs(x) > 3)) | ((np.abs(x) > 23.5) & (z < 36)))
+cape = (~sword) & (((y > 9.5) & (z < 74)) | ((y > 6.0) & (z < 45) & (np.abs(x) > 3)) | ((np.abs(x) > 23.5) & (z < 36) & (y > 2.0)))
 
 assign = np.full(len(C), "", dtype=object)
 zs = z * S
@@ -50,6 +53,9 @@ for i in np.nonzero(cape)[0]:
     sd = "L" if x[i] * S > 5.5 else ("R" if x[i] * S < -5.5 else "M")
     seg = "root" if zs[i] > 61 else ("1" if zs[i] > 43.5 else ("2" if zs[i] > 24.5 else "3"))
     assign[i] = "cape_root" if seg == "root" else f"cape_{sd}{seg}"
+# the model's cape rags that flare far out beyond the cape panels would hang loose next to his feet: leave them out
+far_rags = (~sword) & (np.abs(x) > 25.5) & (z < 36) & (y > 2.0)
+assign[far_rags] = "-"
 rest = np.nonzero(assign == "")[0]
 for i in rest:
     xi, yi, zi = x[i], y[i], z[i]; Sd = "L" if xi > 0 else "R"; zz = zi * S
@@ -82,7 +88,7 @@ def bone_map(b):
         Bm = Matrix((fwd, nf, fwd.cross(nf))).transposed()
         Br = Matrix((Vector((0, -1, 0)), Vector((0, 0, 1)), Vector((0, -1, 0)).cross(Vector((0, 0, 1))))).transposed()
         R = Br @ Bm.inverted()
-        A = R * S
+        A = R * (S * SWORD_SCALE)
         t = Vector(GRIP) - A @ Vector(tuple(G_RAW))
         return A, t
     A = Matrix.Identity(3) * S
@@ -105,7 +111,7 @@ for o in [o for o in bpy.data.objects if "sk_mat" in o]:
 rng = np.random.default_rng(3)
 N_BOX = 0
 FACE_OF = {(0, -1): "east", (0, 1): "west", (1, -1): "north", (1, 1): "south", (2, -1): "down", (2, 1): "up"}
-for b in sorted(set(assign)):
+for b in sorted(set(assign) - {"-"}):
     idx = np.nonzero(assign == b)[0]
     A, t = bone_map(b)
     An = np.array(A); tn = np.array(t)
@@ -142,6 +148,22 @@ for b in sorted(set(assign)):
                 for dz in (0, 1, 2):
                     cnt += pad[dx:dx + dims[0], dy:dy + dims[1], dz:dz + dims[2]]
         solid = (solid & (cnt >= 8)) | (~solid & (cnt >= 19))
+    # drop stray fragments: connected pieces smaller than 12 voxels
+    lab = np.zeros(dims, np.int32); cur = 0; sizes = {}
+    for start in zip(*np.nonzero(solid)):
+        if lab[start]:
+            continue
+        cur += 1; stack = [start]; lab[start] = cur; n_ = 0
+        while stack:
+            c_ = stack.pop(); n_ += 1
+            for d_ in ((1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1)):
+                q_ = (c_[0] + d_[0], c_[1] + d_[1], c_[2] + d_[2])
+                if 0 <= q_[0] < dims[0] and 0 <= q_[1] < dims[1] and 0 <= q_[2] < dims[2] and solid[q_] and not lab[q_]:
+                    lab[q_] = cur; stack.append(q_)
+        sizes[cur] = n_
+    small = [k_ for k_, v_ in sizes.items() if v_ < 12]
+    if small:
+        solid &= ~np.isin(lab, small)
     # greedy merge into boxes
     todo = solid.copy()
     Ainv = np.array(A.inverted()).ravel().tolist()
@@ -178,6 +200,6 @@ for b in sorted(set(assign)):
     print("GLB bone", b, "tris", len(idx), "boxes so far", N_BOX, flush=True)
 
 # the sword's length from the grip, for the animation checks; the off hand a fist below the grip
-SWORD_LEN = float(S * np.linalg.norm(G_RAW - TIP))
+SWORD_LEN = float(S * SWORD_SCALE * np.linalg.norm(G_RAW - TIP))
 GRIP_L_S = -5.0
 print("GLB_OK boxes", N_BOX, "sword len", round(SWORD_LEN, 1), flush=True)
