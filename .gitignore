@@ -1,0 +1,16 @@
+# Gradle / Forge build output
+gatekeeper-mod/.gradle/
+gatekeeper-mod/build/
+gatekeeper-mod/run/
+gatekeeper-mod/run-data/
+gatekeeper-mod/runs/
+gatekeeper-mod/logs/
+gatekeeper-mod/*_log.txt
+gatekeeper-mod/out/
+gatekeeper-mod/.idea/
+gatekeeper-mod/*.iml
+
+# Blender autosaves / backups and render scratch
+*.blend1
+gatekeeper-art/blender-scripts/__pycache__/
+gatekeeper-art/*_log.txt

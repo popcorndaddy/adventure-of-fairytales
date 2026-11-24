@@ -73,6 +73,21 @@ try {
     } else { $added++; Say "  added    $rel" }
     if (-not $DryRun) { New-Item -ItemType Directory -Force (Split-Path $dst) | Out-Null; Copy-Item $_.FullName $dst -Force }
   }
+  # our own mods (overrides/mods): an older version left in mods/ would load twice and crash the game, so move it aside
+  $packMods = Join-Path $ov 'mods'
+  if (Test-Path $packMods) {
+    $aside = Join-Path $Instance 'mods-replaced'
+    Get-ChildItem $packMods -Filter *.jar | % {
+      $keep = $_.Name
+      if ($keep -match '^(.+?)-\d[^-]*\.jar$') {
+        $id = $Matches[1]
+        Get-ChildItem (Join-Path $Instance 'mods') -Filter "$id-*.jar" | ? { $_.Name -ne $keep -and $_.Name -match ('^' + [regex]::Escape($id) + '-\d[^-]*\.jar$') } | % {
+          $removed++; Say "  replaced mods\$($_.Name) (moved to mods-replaced)"
+          if (-not $DryRun) { New-Item -ItemType Directory -Force $aside | Out-Null; Move-Item $_.FullName (Join-Path $aside $_.Name) -Force }
+        }
+      }
+    }
+  }
   # files the updater put here earlier that the pack no longer has - removed only if you haven't edited them since
   foreach ($rel in $old.Keys) {
     if ($new.ContainsKey($rel)) { continue }

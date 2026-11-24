@@ -1,0 +1,82 @@
+{
+ "Gatekeeper_Idle": {
+  "lowest_px": -1.19,
+  "arm_clipping": {}
+ },
+ "Gatekeeper_Awakening": {
+  "lowest_px": -1.51,
+  "arm_clipping": {}
+ },
+ "Gatekeeper_Entrance": {
+  "lowest_px": -0.98,
+  "arm_clipping": {}
+ },
+ "Gatekeeper_Walking": {
+  "lowest_px": -0.61,
+  "arm_clipping": {}
+ },
+ "Gatekeeper_Heavy_Walk": {
+  "lowest_px": -0.65,
+  "arm_clipping": {}
+ },
+ "Gatekeeper_Sword_Drag": {
+  "lowest_px": -0.74,
+  "arm_clipping": {}
+ },
+ "Gatekeeper_Overhead_Attack": {
+  "lowest_px": -0.82,
+  "arm_clipping": {}
+ },
+ "Gatekeeper_Horizontal_Sweep": {
+  "lowest_px": -0.67,
+  "arm_clipping": {
+   "arm_R": [
+    [
+     32,
+     13
+    ],
+    [
+     36,
+     13
+    ]
+   ]
+  }
+ },
+ "Gatekeeper_Multi_Arm_Attack": {
+  "lowest_px": -0.95,
+  "arm_clipping": {
+   "arm_L": [
+    [
+     48,
+     5
+    ]
+   ],
+   "arm_R": [
+    [
+     68,
+     3
+    ],
+    [
+     72,
+     4
+    ]
+   ]
+  }
+ },
+ "Gatekeeper_Block": {
+  "lowest_px": -0.78,
+  "arm_clipping": {}
+ },
+ "Gatekeeper_Stagger": {
+  "lowest_px": -0.85,
+  "arm_clipping": {}
+ },
+ "Gatekeeper_Rage": {
+  "lowest_px": -0.82,
+  "arm_clipping": {}
+ },
+ "Gatekeeper_Death": {
+  "lowest_px": -1.92,
+  "arm_clipping": {}
+ }
+}
