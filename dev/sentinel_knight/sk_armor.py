@@ -87,13 +87,12 @@ block("heart", (1.2, -1.4, 60.2), (2.0, 2.6, 1.8), "heart", coll="Sentinel_Heart
 block("heart", (0, -1.4, 55.0), (2.0, 2.2, 1.4), "heart", coll="Sentinel_Heart", name="Heart_Apex")
 block("heart", (0.4, -0.8, 61.6), (1.2, 1.2, 1.6), "heart", coll="Sentinel_Heart", name="Heart_Aorta")
 block("heart_glow", (0, -2.0, 58.0), (5.6, 4.0, 7.2), "heart_glow", coll="Sentinel_Heart", name="Heart_GlowShell")
-# ---------------- war helm (v8): a rounded power-armour helm, battle-scarred. Domed crown, heavy brow over angled
-# glowing lenses, a jutting rebreather with a grille and angled cheek vents, a mohawk crest, a light purple stripe.
+# ---------------- war helm: a rounded power-armour helm, battle-scarred. Domed crown, heavy brow over angled glowing
+# lenses, a jutting rebreather with a grille and angled cheek vents, small crown prongs. It sits inside the shark jaw.
 block("neck", (0, 0, 65.4), (8.6, 8.6, 3.0), "plate")
 block("neck", (0, 0.5, 66.8), (5, 5, 3.6), "void", coll="Sentinel_Body")
 oct_disc("head", (0, 0.4, 72.6), 10.4, 9.4, "plate", name="Helm_Shell")                         # round skull of the helm
 dome("head", (0, 0.4, 77.2), (0, 0, 0), [(9.8, 1.6), (8.4, 1.4), (6.2, 1.2)], rim=None, name="Helm_Dome")
-block("head", (0, 0.4, 77.4), (1.4, 10.8, 3.4), "accent", name="Helm_Stripe")                  # light purple stripe
 block("head", (0, -4.9, 74.2), (9.6, 1.6, 4.6), "plate", name="Helm_Face")                      # faceplate
 block("head", (0, -5.5, 76.6), (10.2, 1.8, 1.6), "accent", (-22, 0, 0), name="Helm_Brow")        # heavy brow
 for sx in (-1, 1):
@@ -102,74 +101,52 @@ for sx in (-1, 1):
     block("head", (sx * 2.4, -5.65, 74.6), (3.8, 0.4, 2.4), "accent", (-6, 0, sx * -18), name=f"Lens_Rim_{sx}")
     block("head", (sx * 3.7, -5.6, 69.8), (2.2, 2.6, 3.2), "accent", (0, 0, sx * 28), name=f"Cheek_Vent_{sx}")
     block("head", (sx * 5.4, -1.2, 71.0), (1.2, 6.4, 5.8), "plate", (0, sx * 8, 0), name=f"Helm_Cheek_{sx}")
-block("head", (0, -6.6, 69.6), (4.4, 3.0, 3.8), "plate", name="Rebreather")                    # the snout
+    spike("head", (sx * 3.8, -2.4, 79.6), 3.0, 1.0, (8, sx * 32, 0), mat="plate", tip="accent")    # crown prongs
+block("head", (0, -6.6, 69.6), (4.4, 3.0, 3.8), "plate", name="Rebreather")                    # rebreather
 block("head", (0, -8.2, 69.4), (3.4, 0.8, 3.0), "iron", name="Grille")                          # its grille
 block("head", (0, -1.0, 67.4), (7.6, 7.2, 1.4), "plate", name="Helm_Chin")
-# dorsal fin (v11, shark helm): a tall blade swept back over the crown, light purple along its leading edge
-for k, (dy, L, z, t) in enumerate(((0.0, 9.4, 81.2, 1.8), (1.0, 8.0, 83.0, 1.6), (2.1, 6.4, 84.8, 1.4), (3.3, 4.6, 86.6, 1.2), (4.5, 2.6, 88.2, 1.0))):
-    block("head", (0, -0.6 + dy, z), (t, L, 1.9), "plate", name=f"Fin_{k}")
-    block("head", (0, -0.6 + dy - L / 2 - 0.2, z), (t * 0.7, 0.8, 1.9), "accent", name=f"Fin_Edge_{k}")
-# shark maw: the helm's face opening is a jaw - a pointed arch hugging the face, steel with a thin gold lip,
-# a serrated row of ivory teeth all round it pointing in at the eyes and the grille
-MAW_CX, MAW_CZ, MAW_RX, MAW_UP, MAW_DN, MAW_Y = 0.0, 71.8, 6.3, 8.6, 4.4, -6.1
-N_MAW = 20
-# the snout: a ridge rising from the arch's point, back over the crown into the dorsal fin
-block("head", (0, -5.6, 80.4), (2.6, 2.4, 3.4), "plate", (-30, 0, 0), name="Snout_0")
-block("head", (0, -3.6, 82.0), (2.2, 4.2, 2.2), "plate", (-18, 0, 0), name="Snout_1")
-block("head", (0, -6.6, 79.0), (1.6, 1.2, 1.6), "accent", (-30, 45, 0), name="Snout_Tip")
-
-
-def _maw_pt(t):
-    sn = math.sin(t)
-    if sn >= 0:                                                    # upper half narrows to a point: an arch
-        return MAW_CX + MAW_RX * math.cos(t) * (1 - 0.62 * sn ** 1.6), MAW_CZ + MAW_UP * sn   # a pointed (gothic) arch
-    return MAW_CX + MAW_RX * math.cos(t), MAW_CZ + MAW_DN * sn
-
-
-for i in range(N_MAW):
-    t0, t1 = 2 * math.pi * i / N_MAW, 2 * math.pi * (i + 1) / N_MAW
-    (x0, z0), (x1, z1) = _maw_pt(t0), _maw_pt(t1)
-    mx, mz = (x0 + x1) / 2, (z0 + z1) / 2
-    dx, dz = x1 - x0, z1 - z0; L = math.hypot(dx, dz)
-    block("head", (mx, MAW_Y, mz), (L * 1.12, 1.6, 1.4), "plate", (0, math.degrees(math.atan2(-dz, dx)), 0), name=f"Maw_{i}")
-    for j, (fr, sz) in enumerate(((0.25, 1.15), (0.75, 0.8))):
-        px, pz = x0 + dx * fr, z0 + dz * fr
-        nx, nz = MAW_CX - px, MAW_CZ - pz; nl = math.hypot(nx, nz); nx, nz = nx / nl, nz / nl
-        a_ = math.degrees(math.atan2(nz, nx))
-        block("head", (px + nx * 1.05, MAW_Y - 0.2, pz + nz * 1.05), (sz, 1.2, sz), "tooth", (0, 45 - a_, 0), name=f"Tooth_{i}_{j}")
-block("head", (0, -4.9, 74.2), (9.6, 1.6, 4.6), "plate", name="Helm_Face")                      # faceplate
-block("head", (0, -5.5, 76.6), (10.2, 1.8, 1.6), "accent", (-22, 0, 0), name="Helm_Brow")        # heavy brow
-for sx in (-1, 1):
-    block("head", (sx * 2.4, -5.8, 74.6), (3.2, 0.6, 1.8), "eye", (-6, 0, sx * -18), coll="Sentinel_Body",
-          name=f"Eye_{'L' if sx > 0 else 'R'}")                                                      # angled lenses
-    block("head", (sx * 2.4, -5.65, 74.6), (3.8, 0.4, 2.4), "accent", (-6, 0, sx * -18), name=f"Lens_Rim_{sx}")
-    block("head", (sx * 3.7, -5.6, 69.8), (2.2, 2.6, 3.2), "accent", (0, 0, sx * 28), name=f"Cheek_Vent_{sx}")
-    block("head", (sx * 5.4, -1.2, 71.0), (1.2, 6.4, 5.8), "plate", (0, sx * 8, 0), name=f"Helm_Cheek_{sx}")
-block("head", (0, -6.6, 69.6), (4.4, 3.0, 3.8), "plate", name="Rebreather")                    # the snout
-block("head", (0, -8.2, 69.4), (3.4, 0.8, 3.0), "iron", name="Grille")                          # its grille
-block("head", (0, -1.0, 67.4), (7.6, 7.2, 1.4), "plate", name="Helm_Chin")
-# dorsal fin (v11, shark helm): a tall blade swept back over the crown, light purple along its leading edge
-for k, (dy, L, z, t) in enumerate(((0.0, 9.4, 81.2, 1.8), (1.0, 8.0, 83.0, 1.6), (2.1, 6.4, 84.8, 1.4), (3.3, 4.6, 86.6, 1.2), (4.5, 2.6, 88.2, 1.0))):
-    block("head", (0, -0.6 + dy, z), (t, L, 1.9), "plate", name=f"Fin_{k}")
-    block("head", (0, -0.6 + dy - L / 2 - 0.2, z), (t * 0.7, 0.8, 1.9), "accent", name=f"Fin_Edge_{k}")
-# shark maw: a gold-rimmed jaw ring framing the face, ivory teeth all round it pointing in at the eyes and grille
-MAW_C, MAW_RX, MAW_RZ, MAW_Y = (0.0, 72.6), 6.9, 7.2, -7.0
-N_MAW = 16
-for i in range(N_MAW):
-    th = 2 * math.pi * (i + 0.5) / N_MAW
-    cx, cz = MAW_C[0] + MAW_RX * math.cos(th), MAW_C[1] + MAW_RZ * math.sin(th)
-    seg = 2 * math.pi * math.hypot(MAW_RX, MAW_RZ) / math.sqrt(2) / N_MAW * 1.15
-    block("head", (cx, MAW_Y, cz), (seg, 2.4, 1.5), "trim", (0, -(math.degrees(th) + 90), 0), name=f"Maw_{i}")
-    for j, (fr, sz) in enumerate(((0.0, 1.5), (0.5, 1.1))):                                      # two teeth per segment
-        a_ = th + (fr - 0.25) * 2 * math.pi / N_MAW
-        r_in = 1.45
-        tx = MAW_C[0] + (MAW_RX - r_in) * math.cos(a_); tz = MAW_C[1] + (MAW_RZ - r_in) * math.sin(a_)
-        block("head", (tx, MAW_Y - 0.3, tz), (sz, 1.4, sz), "tooth", (0, -135 - math.degrees(a_), 0), name=f"Tooth_{i}_{j}")
-for sx in (-1, 1):
-    spike("head", (sx * 3.8, -2.4, 79.6), 3.0, 1.0, (8, sx * 32, 0), mat="plate", tip="accent")  # crown prongs
-block("head", (0, -6.1, 73.6), (1.2, 0.8, 3.4), "plate", name="Helm_Nasal")                        # nasal bar between the eyes
+block("head", (0, -6.1, 73.6), (1.2, 0.8, 3.4), "plate", name="Helm_Nasal")                     # nasal bar between the eyes
 block("head", (0, -6.1, 71.9), (1.1, 0.8, 1.1), "plate", (0, 45, 0), name="Helm_Nasal_Tip")
 block("head", (0, -0.4, 72.8), (7.6, 7.6, 8.6), "void", coll="Sentinel_Body")
+# ---------------- the shark jaw (v12): the helm sits inside a great maw rising from the collar. The upper jaw is a
+# hood of studded steel arching over the head, open at the front, its edge lined with ivory teeth pointing in at the
+# helm; the lower jaw is a gold-rimmed collar across the upper chest with teeth pointing up; a dorsal fin on the hood.
+# Built on the chest bone (the head turns inside it). x is authored narrower: the torso widening (x1.26 up here)
+# brings it to its real size.
+JAW_CX, JAW_CZ, JAW_RX, JAW_RZ, JAW_Y, JAW_D = 0.0, 67.0, 8.6, 17.0, -4.2, 9.0
+N_JAW = 22
+T0, T1 = math.radians(-12), math.radians(192)
+
+
+def _jaw_pt(t):
+    sn = math.sin(t)
+    k = 1 - 0.3 * max(0.0, sn) ** 2                                # a little pointed at the crown
+    return JAW_CX + JAW_RX * math.cos(t) * k, JAW_CZ + JAW_RZ * sn
+
+
+for i in range(N_JAW):
+    t0 = T0 + (T1 - T0) * i / N_JAW; t1 = T0 + (T1 - T0) * (i + 1) / N_JAW
+    (x0, z0), (x1, z1) = _jaw_pt(t0), _jaw_pt(t1)
+    mx, mz = (x0 + x1) / 2, (z0 + z1) / 2
+    dx, dz = x1 - x0, z1 - z0; L = math.hypot(dx, dz)
+    ang = math.degrees(math.atan2(-dz, dx))
+    block("chest", (mx, JAW_Y + JAW_D / 2, mz), (L * 1.1, JAW_D, 1.7), "plate", (0, ang, 0), name=f"Jaw_{i}")      # the hood
+    block("chest", (mx, JAW_Y - 0.3, mz), (L * 1.12, 0.8, 2.3), "trim", (0, ang, 0), name=f"JawLip_{i}")          # gold lip
+    for j, (fr, sz) in enumerate(((0.25, 2.0), (0.75, 1.4))):
+        px, pz = x0 + dx * fr, z0 + dz * fr
+        nx, nz = JAW_CX - px, JAW_CZ + 4.0 - pz; nl = math.hypot(nx, nz); nx, nz = nx / nl, nz / nl
+        a_ = math.degrees(math.atan2(nz, nx))
+        block("chest", (px + nx * 1.5, JAW_Y - 0.5, pz + nz * 1.5), (sz, 1.4, sz), "tooth", (0, 45 - a_, 0), name=f"JawTooth_{i}_{j}")
+# lower jaw: the collar bar across the upper chest, teeth pointing up at the helm
+block("chest", (0, -5.4, 64.6), (15.6, 2.0, 1.8), "trim", name="Jaw_Lower")
+for k in range(9):
+    x = -6.4 + k * 1.6
+    sz = 1.6 if k % 2 == 0 else 1.1
+    block("chest", (x, -5.6, 65.8), (sz, 1.2, sz), "tooth", (0, -45, 0), name=f"JawLowTooth_{k}")
+# dorsal fin on the crown of the hood, swept back
+for k, (dy, L, z, t) in enumerate(((0.0, 9.0, 84.6, 1.8), (1.0, 7.6, 86.4, 1.6), (2.1, 6.0, 88.2, 1.4), (3.3, 4.2, 90.0, 1.2), (4.5, 2.4, 91.6, 1.0))):
+    block("chest", (0, 1.2 + dy, z), (t, L, 1.9), "plate", name=f"Fin_{k}")
+    block("chest", (0, 1.2 + dy - L / 2 - 0.2, z), (t * 0.7, 0.8, 1.9), "accent", name=f"Fin_Edge_{k}")
 # ---------------- shoulders, arms, hands, legs (right authored, mirrored)
 for S, s in SIDE.items():
     X = lambda v: v if S == "R" else -v

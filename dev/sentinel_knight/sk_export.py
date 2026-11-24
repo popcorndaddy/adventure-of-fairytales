@@ -892,6 +892,8 @@ def marine_paint(o, mat, w, h, face):
         return np.clip(t, 0, 1), g
     if bone == "head" and mat in ("plate", "trim", "accent", "iron"):
         return helm_paint(o, mat, w, h, face)
+    if (o.name.startswith(("Jaw_", "Fin_")) and mat == "plate") or mat == "accent":   # the shark jaw hood and fin: helm steel
+        return helm_paint(o, mat, w, h, face)
     if mat in ("plate", "emblem"):
         t = black_plate(w, h, face)
         if bone == "tasset_F" and o.name in BIG and face == "north":         # the front tabard: purple cloth, gold skull
