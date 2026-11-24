@@ -10,11 +10,11 @@ A Forge 1.20.1 CurseForge modpack (Forge 47.4.28, 12 GB RAM recommended).
 | `modlist.html` | Human-readable mod list shipped with the pack |
 | `overrides/` | Everything copied on top of the mods when the pack installs |
 | `overrides/config/` | Mod configs, FTB Quests, FancyMenu menus and assets |
-| `overrides/kubejs/` | The pack's own scripts and assets (adventure book, boss route, fixes, balance, the Withered Sentinel boss) |
+| `overrides/kubejs/` | The pack's own scripts and assets (adventure book, boss route, fixes, balance) |
 | `overrides/patchouli_books/` | The Adventure Book |
 | `overrides/resourcepacks/`, `overrides/shaderpacks/` | Bundled packs |
 | `profileImage/` | Pack icon |
-| `dev/` | Source files that aren't part of the pack (e.g. the Withered Sentinel's Blockbench model) |
+| `dev/` | Source files that aren't part of the pack (none at the moment) |
 
 ## Building an importable zip
 
