@@ -1,0 +1,2921 @@
+# UPGRADES.md - the graft log (how Rootstock updates without overwriting)
+
+PURPOSE: The append only graft log: every kit concept update, recorded as
+  WHAT it is, which kit files CARRY it, how to GRAFT it onto an installed
+  project's own files, and which README section it touched, so installs
+  update by concept rather than by overwriting a project's customized files.
+INTENT: an installed Rootstock is an adaptation, not a copy, so the kit must
+  never update a project by overwriting its files; this log is the one place
+  updates travel as grafts instead.
+
+CURRENT KIT VERSION: **v1.65** (this file is the single source of truth for
+the kit's version; entries below are append-only, oldest first).
+
+Search keys: updates, upgrade, graft, version, pull changes, kit update.
+
+## Why updates are GRAFTS, never file copies
+
+An installed Rootstock is an ADAPTATION, not a copy: the receiving Claude
+renamed paths, tailored CLAUDE.md, rewired scripts, and the project has
+since grown its own knowledge INTO those files. Copying a newer kit file
+over an installed one would destroy exactly the thing the system exists to
+protect. So the kit never updates files in a project - it updates CONCEPTS.
+Each entry below is a scion: the idea, where it lives in the kit, and how
+to graft it onto a project's own files, whatever they are named there.
+
+## THE GRAFT PROTOCOL (for the Claude performing an update)
+
+1. Find the installed version: the project's CLAUDE.md carries a line
+   "Rootstock vX.Y installed <date> | updates: <policy>" (an install that
+   predates version marks counts as v1.0 - add the line while you are
+   there). The POLICY word is the CEO's standing answer to "should I
+   update?": **ask** (default - present newer grafts, CEO picks), **auto**
+   (graft everything newer, report after), **relevant** (offer only grafts
+   that benefit THIS project; record skips so they are never re-offered),
+   **never** (check only when the CEO explicitly asks). The CEO changes it
+   any time by saying so ("update automatically", "stop asking about
+   updates", "only show me relevant updates").
+2. Get the current kit (the CEO hands you the folder, or pull
+   github.com/Mazhron/rootstock-os) and read THIS file's entries NEWER
+   than the installed version.
+3. For each entry, in order: read its GRAFT instructions, then apply the
+   concept to the project's OWN files - additive edits in the project's
+   own names, paths, and voice. NEVER copy a kit file over an existing
+   project file. Two exceptions: a file the project does not have at all
+   (a genuinely new MD or reference script) may be copied fresh, then
+   adapted and indexed; and a hook or reference script the project took
+   unadapted (its CONFIG block aside) is replaced whole, its CONFIG block
+   re-applied and its `--selftest` re-run, as every whole-file hook graft
+   below has always said (written here in v1.46).
+4. If a graft contradicts something the CEO customized on purpose, THE
+   CONTRADICTION RULE applies: flag it, ask, never silently overwrite
+   their choice with ours.
+5. Bump the project's "Rootstock vX.Y installed" line to the new version
+   and ship the batch. One graft batch per update; the project's own
+   changelog records what was grafted.
+
+## The entries
+
+Every entry carries WHAT (the concept), CARRIES (the kit files that hold
+it), GRAFT (how it lands on an installed project's own files) and, from
+v1.17 on, README (the public-README section the concept touched, or
+"none, wording only" - the parity lint refuses a newest entry without it).
+
+### v1.0 - 2026-09-03 - The public release
+WHAT: the four pillars as first published: the knowledge wiki
+(WIKI_METHOD.md), the reporting discipline (REPORTING_METHOD.md), the
+delegation company (SUBAGENT_METHOD.md), the skills shelf (SKILLS.md +
+skills/), the front door install order, and the verbatim checkpoint law
+(both sides of the final exchange, exact words).
+CARRIES: every kit file at publication.
+GRAFT: not applicable - this is the baseline an install starts from.
+
+### v1.1 - 2026-09-03 - The usage sheet
+WHAT: the harness transcripts (~/.claude/projects/) meter every request
+for real - model, input/output/thinking tokens, cache reads/writes, every
+tool call named, sub-agents included. A miner script aggregates them into
+one regenerated CSV+TXT sheet: totals per day/week/month per model and
+per tool, workstation-keyed. Ends self-estimated token figures; shows
+where context money actually goes (first finding: file Reads dwarf
+everything - the wiki diet is the lever).
+CARRIES: REPORTING_METHOD.md section "The usage sheet: mine the harness
+meter, never self-estimate"; reference tools/usage_report.py; front door
+STEP 2 paragraph.
+GRAFT: copy usage_report.py fresh into the project's tools/, adapt its
+output paths + the project-name filter in transcript_dirs(), add it to
+the project's runner/metrics group, and add the section to the project's
+copy of REPORTING_METHOD.md (or its local equivalent). Nothing existing
+is touched.
+
+### v1.2 - 2026-09-03 - The graft log itself
+WHAT: this update mechanism. The kit carries a version and an append-only
+log of concept entries; installs carry a "Rootstock vX.Y installed" line
+in CLAUDE.md; updates are performed by grafting newer entries onto the
+project's own files per the protocol above.
+CARRIES: UPGRADES.md (this file); front door STEP 1 (the version line) +
+the UPDATING section.
+GRAFT: add the "Rootstock v1.2 installed" line to the project's CLAUDE.md
+index. Do NOT copy this file into projects - the graft log lives in the
+KIT only, where it stays current; a project needs just its version line.
+
+### v1.3 - 2026-09-03 - The update check + the update policy
+WHAT: projects stop discovering updates by luck. A small script reads the
+project's install stamp, fetches the kit's UPGRADES.md (local clone or
+the public repo over HTTPS), compares versions, prints any newer grafts,
+and states what the CEO's update POLICY (ask/auto/relevant/never, kept in
+the stamp line) tells the manager to do. Checks are rate-limited to
+weekly, never fail offline, and ledger one line per check; wired into
+standup, the reminder rides an existing habit instead of being one more
+thing to remember.
+CARRIES: reference tools/rootstock_update_check.py; the protocol's stamp
++ policy wording above; front door STEP 1 stamp + UPDATING section.
+GRAFT: copy rootstock_update_check.py fresh into the project's tools/,
+adapt STAMP_FILE/KIT_CLONE at its top, add it to the project's standup
+script or runner group, and extend the project's stamp line with
+"| updates: ask" (or the CEO's chosen policy - ask them once).
+
+### v1.4 - 2026-09-03 - The last exchange from ground truth
+WHAT: standup's verbatim replay of the final exchange (CEO's last prompt +
+manager's last response) no longer depends on the day file, which is only
+as fresh as the last checkpoint - a mid-arc /clear used to replay a STALE
+or condensed exchange (it failed three times in one day before this).
+Standup now mines THE LAST EXCHANGE directly from the harness transcripts
+(~/.claude/projects/<slug>/*.jsonl, the same ground truth the usage sheet
+meters): newest assistant text reply + the user prompt before it, skipping
+tool results, command wrappers, and the standup trigger itself. Word for
+word, image attachments counted, immune to manager discipline. The
+day-file WHERE WE LEFT OFF remains the committed, searchable record.
+CARRIES: reference tools/standup.py (print_last_exchange + the transcript
+helpers); skills/standup + skills/checkpoint SKILL.md wording; front door
+STEP 2 (both the script bullet and the protocol paragraph).
+GRAFT: copy the _slug/_transcript_files/_mine_exchange/print_last_exchange
+block from reference tools/standup.py into the project's standup script
+and call it first; refresh the project's standup + checkpoint skills from
+the kit's skills/ copies. Nothing else changes.
+
+### v1.5 - 2026-09-03 - Honest prerequisites + the brownfield rule
+WHAT: the first outside review (a stranger's Claude, fed the repo) found
+two assumptions the kit never stated - it expects git and Claude Code -
+and a real hazard: "install the kit" pointed at a live production repo
+invited an unapproved restructure. Now written down: the front door opens
+with WHAT THE FULL KIT ASSUMES; STEP 0 gains THE BROWNFIELD RULE
+(inventory first, adopt what already exists under other names, propose
+the mapping, get explicit CEO approval before editing anything existing,
+never a stop-the-world restructure, production-sensitive files
+untouchable without a named go-ahead) and MISSING PREREQUISITES (no git
+or no Claude Code = a PARTIAL install of the pieces that stand alone,
+skips recorded in the install stamp). reference tools/standup.py now
+degrades instead of crashing when project.godot, git, CLAUDE.md, or
+NEXT_STEPS.md are absent. README gains "What you need (and what still
+works without it)".
+CARRIES: front door (assumes block + the two STEP 0 rules); reference
+tools/standup.py; the kit repo's README.
+GRAFT: nothing to apply to healthy installed projects - this entry
+protects FUTURE installs. If a project was installed partially, add the
+skip markers to its stamp line (e.g. "| no-git") so update checks stop
+offering machinery it cannot run.
+
+### v1.6 - 2026-09-05 - The workflow registry (process amnesia killed)
+WHAT: the kit remembered commands (the Script Rule) and results (ledgers)
+but not CHOREOGRAPHY - the ORDER of a multi-step process. The origin
+project ran an art pipeline for weeks with no written recipe and let seven
+versions pile up unexported before noticing; after a /clear, order of
+operations was re-derived from chat that no longer existed. Now:
+WORKFLOWS.md at the repo root is THE PROCESS REGISTRY - one WHEN/STEPS/
+VERIFY runbook entry per repeatable multi-step process, pointing at deep
+docs rather than duplicating them. THE CAPTURE RULE: whoever performs a
+process checks the registry first; a stale entry is a bug fixed in the
+same batch; a missing entry is a WORKFLOW GAP captured in the same batch.
+Employees never edit the registry - their stamp gains a WORKFLOW line
+("matched <entry> | GAP: <uncovered process>") and the manager files the
+gap or delegates the write-up to the cheapest model (a write-up is
+transcription of the performer's own report, not discovery).
+CARRIES: WORKFLOW_METHOD.md (the portable method + entry template +
+bootstrap); front door STEP 1 (create the registry) and STEP 3 (the
+WORKFLOW stamp line); skills/brief SKILL.md (compose item 5 + the
+after-return gap step).
+GRAFT: copy WORKFLOW_METHOD.md fresh to the project's repo root and index
+it; create the project's WORKFLOWS.md seeded by transcribing its existing
+processes (cheap-model work from existing docs and scripts); add the
+WORKFLOW line to the stamp template in the project's SUBAGENTS.md
+equivalent plus a cheap-tier "workflow write-up" row to its assignments
+table; refresh the project's brief skill from the kit copy; add the
+capture rule to the project's standing laws in its own voice.
+
+### v1.7 - 2026-09-06 - The hooks (laws the harness enforces itself)
+WHAT: every ritual ran from the manager's memory and every law was prose;
+after a /clear the CEO had nothing until someone typed "standup", the
+checkpoint counter ticked only when remembered, "never delete a build
+zip" was a sentence. Claude Code HOOKS - scripts the harness runs at fixed
+moments - fix the class. Five ship: SessionStart injects the standup
+digest (startup/resume/clear/compact); Stop ticks the checkpoint counter
+only when work happened (HEAD or tree-status fingerprint) and REFUSES to
+end the turn once at DIRE; UserPromptSubmit prints the context gauge only
+when a threshold is crossed; PreCompact ledgers every compaction;
+PreToolUse on the shell tools denies what the laws forbid (generic:
+--no-verify, plain force push; project block: the origin's build-zip,
+runner-only, commit-dash and resource-file rules as templates). THE HOOKS
+RULE: a law the harness can enforce mechanically gets a hook, not a
+reminder. Manual --tick is retired (double-counts). Tier 3/4 ideas
+(wiki/kit hygiene on Write|Edit, subagent stamp check, OS toasts) are
+recorded in HOOKS_METHOD.md and the origin project's pin board.
+CARRIES: HOOKS_METHOD.md (contract, the five hooks, tiers, bootstrap);
+hooks/ (five scripts + _hooklib.py + settings.json template); reference
+tools/checkpoint.py (work_fingerprint + hook state, reset stores the
+fingerprint); skills/standup, checkpoint, ship (hook-aware wording); front
+door STEP 4 (hooks install with the skills).
+GRAFT: copy hooks/ into the project's tools/hooks/ (or its scripts folder;
+the scripts find the repo root from their own path and import the
+checkpoint script from the folder above); adapt bash_guard.py's PROJECT
+RULES block to the CEO's laws; install hooks/settings.json as
+.claude/settings.json (MERGE into an existing one, never replace arrays);
+gitignore .claude/hooks_state.json; add work_fingerprint /
+load_hook_state / save_hook_state to the project's checkpoint script (or
+copy the reference one); reorder its checkpoint ritual so --reset runs
+LAST; strike every "tick by hand" instruction from laws and skills;
+pipe-test each hook; add the registry entry "Add or change a harness
+hook" and a "The hooks" section to the tooling doc; index HOOKS_METHOD.md.
+
+### v1.8 - 2026-09-06 - The workstation inventory (a machine that installs itself)
+WHAT: the whole kit assumes tools already run - Python for scripts and
+hooks, the engine for tests and builds, the art programs - and nothing
+recorded what they were. A second machine, a reinstall or a
+collaborator's laptop meant rediscovering the setup from error messages.
+THE WORKSTATION RULE: the project keeps ONE workstation document
+(requirement tables with the WHY per row + the install move, split
+REQUIRED/OPTIONAL, the non-needs too, one section per known machine with
+its deltas, the on-disk layout, and the harness's own settings); every
+new dependency is written back to it in the same batch; a survey script
+mirrors the tables and prints HAVE/MISSING, exits non-zero on a missing
+required item, and ledgers one line; a new machine installs from the
+document and is "up to par" when the survey says so. Machine paths go
+through candidates + env override, never a lone hardcoded string.
+CARRIES: WORKSTATION_METHOD.md (the rule, the table columns, per-machine
+sections, bootstrap - including THE ASK: the receiving Claude surveys the
+CEO's current machine and writes the first inventory from what it finds);
+reference tools/workstation_survey.py (a working CHECKS-table probe with
+ledger line; rewrite its rows); front door STEP 2 (the survey installs
+with the reporting scripts).
+GRAFT: create the project's workstation document from a survey of the
+machine you are on (versions, paths, extensions, harness settings) plus
+the CEO's answers for what you cannot see; copy the reference survey and
+rewrite CHECKS to match; wire it into the parent loop's check group; add
+the registry entry "Bring a new workstation up to par"; index the doc in
+CLAUDE.md and add the write-back rule to the standing rules.
+
+### v1.9 - 2026-09-10 - The fan-out guard (a runaway the manager cannot cause)
+
+WHAT: a publicly reported catastrophe - a manager asked to "check my
+markdown files for consistency" spawned 821 sub-agents and burned 50M+
+tokens in thirty seconds - is the one mistake that outspends a month of
+work in one turn. The delegation method gains LAW 6, THE FAN-OUT LAW:
+sub-agents are spent money; a batch is a handful of parallel employees,
+a session a dozen, never a burst, never an employee that spawns
+employees, bulk-orchestration tools only at the CEO's per-use word; a
+task that seems to need more is a design problem, never a bigger
+fan-out. And because a law the manager can forget is not a guard rail,
+the hooks gain TIER 2b: a PreToolUse hook on EVERY tool that meters the
+session's spend from the transcript and refuses ONLY the runaway shapes
+- a burst of spawns inside a minute, a flood inside ten, or token
+velocity no real work produces - each clearing itself after a cooldown,
+and warns the CEO (a system message) on everything else: spawn count,
+session spend, velocity, the orchestration tool. CATASTROPHE-ONLY by
+the origin CEO's ruling, hours after a strict first cut (session caps,
+locks, CEO-only unlock commands) proved to be a rail on the path
+instead of the cliff edge: "I don't want to have to type these commands
+all the time and neither will any users who use Rootstock-os. I just
+wanted to prevent complete runaway agents and gigantic token spend."
+CARRIES: SUBAGENT_METHOD.md law 6; HOOKS_METHOD.md Tier 2b (+ the
+cliff-edge lesson in its change log); hooks/fanout_guard.py (the guard,
+LIMITS at the top, `--status` / `--resume` / `--selftest`);
+hooks/settings.json (the every-tool PreToolUse entry); skills/brief
+step 6 (the fan-out check before dispatch); front door THE HOOKS
+paragraph.
+GRAFT: add law 6 to the project's delegation rules and the fan-out check
+to its brief skill; copy fanout_guard.py into the project's hooks
+folder, set LIMITS with the CEO (the defaults never fire on real work),
+run `--selftest`, gitignore `.claude/fanout_state.json`, wire the
+every-tool PreToolUse entry, pipe one real tool call through it; add the
+standing rule to the core instructions file and the row to the tooling
+doc's hooks table. Nothing for the CEO to type afterwards - that is the
+point.
+
+### v1.10 - 2026-09-10 - The runaway numbers belong to the CEO
+WHAT: the fan-out guard's limits stop being constants the manager edits
+and become the CEO's setting. The origin CEO's ask, hours after the
+catastrophe-only ruling: a skill "that allows the user to tune their
+own runaway numbers. Calling the skill will give the current numbers
+and then allow for changes." The script keeps DEFAULTS; the CEO's tuned
+numbers live in a committed `.claude/fanout_limits.json` that overlays
+them per key (junk falls back, a missing file means defaults), so a
+kit graft never overwrites what the CEO chose. The guard grows
+`--limits` (every number current vs default with its one-line meaning),
+`--set key=value ...` (refusing a warn step above its halt, writing
+nothing on any error) and `--defaults`; its self-test always runs at
+DEFAULTS so tuning cannot fail it. The /runaway skill is the
+conversational front: show, ask, set, selftest, commit. Only the CEO
+tunes; the manager never raises a limit to get past a refusal.
+CARRIES: hooks/fanout_guard.py (DEFAULTS + MEANING + load_limits /
+set_limits / limits_table, the three flags, six new self-tests);
+skills/runaway/SKILL.md; SKILLS.md shelf entry; HOOKS_METHOD.md Tier 2b
+("THE NUMBERS ARE THE CEO'S") + change log; SUBAGENT_METHOD.md law 6
+(the numbers clause); skills/brief step 6 (never raise a limit to get
+past a refusal); hooks/README.txt; front door STEP 4 + THE FAN-OUT
+GUARD paragraph.
+GRAFT: replace the project's fanout_guard.py with the kit's (keep any
+project wording; if the project had edited LIMITS by hand, move those
+values into .claude/fanout_limits.json with `--set` and let the script
+return to DEFAULTS); copy skills/runaway; add the shelf entry and the
+law 6 clause; commit the JSON file (it is NOT gitignored - that is the
+point); run `--selftest` and `--limits` once.
+
+### v1.11 - 2026-09-10 - The spreadsheet rule (a sheet a human opens is an .xlsx)
+WHAT: the origin CEO opened the usage CSV in Excel and asked for what no
+CSV can carry - a frozen header row, thousands separators on every token
+column, bold TOTAL rows in line under each period's last record with the
+averages beside them, and a thick border under each total so the periods
+read apart - "I want future Rootstock users to have their Claude
+automatically do this when their Claude builds it." So THE SPREADSHEET
+RULE joins the reporting method: any script producing a sheet a person
+will open also writes an .xlsx twin in that shape (CSV/TXT stay for grep
+and diffs), degrading to CSV-only with a printed note when the library is
+missing. The reference usage sheet also grew THE BREAKDOWNS the same day:
+averages per request, the context-window "box" (input + cache read +
+cache written per request, average and biggest, by month), averages per
+tool call, and per-employee runs (one sub-agent transcript = one run,
+with its brief's first line) in their own CSV.
+CARRIES: REPORTING_METHOD.md "THE SPREADSHEET RULE" section; reference
+tools/usage_report.py (write_xlsx / _xlsx_sheet, the breakdowns, cache
+v2, TOTAL rows last in their period, total_tok / avg_tok columns); front
+door STEP 2 reference-tools paragraph; the openpyxl row for the
+workstation inventory + survey.
+GRAFT: add the rule section to the project's reporting doc; give every
+human-opened sheet an .xlsx writer per the section's mechanics (or adapt
+the reference script's two functions); add openpyxl to the workstation
+inventory + survey CHECKS; run the sheet once and open the .xlsx to see
+the frozen header and the ruled totals.
+
+### v1.12 - 2026-09-10 - The weighted column, the comparison rule, and the diet guard
+WHAT: the origin CEO's insight that only BUDGET-WEIGHTED tokens matter
+("It's cool to see I used 200 million tokens, but my budget is only being
+hit by 5 million. That should be the concept for any of the pillars"),
+built end to end the same day. (1) THE WEIGHTED COLUMN: the usage sheet
+prices every token by the API's own ratios (input 1, cache write 1.25 /
+2 on the 1-hour cache, cache read 0.1 or 0.025, output 5) and makes that
+the headline; raw is trivia beside it; the fan-out guard meters with the
+same read weight per model. (2) CACHE MISSES counted and priced: a
+request after a session's first whose cache write is most of its prompt
+is a prefix rewrite - the origin's all-time waste was 24% of its budget.
+(3) THE COMPARISON RULE ("a number without comparison means nothing"):
+a daily line file, one line per active day judged against the previous
+seven - weighted spend, misses, heavy whole-file reads, section-read
+share - with a CHECK / normal / LOW verdict and the reason named; standup
+prints its tail as THE BUDGET block and a CHECK is relayed verbatim.
+(4) THE READ DIET (the 10k rule) and THE OUTPUT DIET (every emitted token
+costs 5x) become law in the wiki method; the delegation method gains the
+10k delegation line. (5) THE DIET GUARD (hooks/diet_guard.py, Tier 2c):
+warn-only PreToolUse on Read|Bash|PowerShell - says a file's size and
+sections before a whole read past 10k tokens, and the missing limiter on
+a chatty shell shape (git log without a count, bare git diff, recursive
+listings, noisy installs), capped per session. Never a refusal.
+CARRIES: reference tools/usage_report.py (weighted, misses, read-diet
+classes, pillar/diet sections, usage_daily.txt, --quiet, cache v3);
+reference tools/standup.py (print_budget, --no-usage); reference
+tools/checkpoint.py (usage outputs in FP_IGNORE); hooks/diet_guard.py +
+settings.json entry + hooks/README.txt; hooks/fanout_guard.py
+(READ_MULT); WIKI_METHOD.md "The read diet" + "The output diet";
+REPORTING_METHOD.md "THE WEIGHTED COLUMN + THE COMPARISON RULE";
+SUBAGENT_METHOD.md "THE 10k LINE"; HOOKS_METHOD.md Tier 2c + bootstrap
+step 7 + change log; SKILLS.md + skills/standup (THE BUDGET block); front
+door STEP 2 + THE DIET GUARD paragraph.
+GRAFT: add weighted_tok (and the miss columns) to the project's usage
+sheet per the reporting section, or adapt the reference script's
+weighted() / daily_lines(); have standup print the daily line's tail;
+exclude the sheet's outputs from the checkpoint fingerprint; copy
+hooks/diet_guard.py fresh (nothing project-specific in it), wire its
+PreToolUse entry, run --selftest, gitignore .claude/diet_state.json;
+add the two diet sections to the project's wiki method and the 10k line
+to its delegation method; if the project's fan-out guard predates this,
+add READ_MULT so its meter agrees with the sheet.
+
+### v1.13 - 2026-09-10 - Advised means do it (the checkpoint advisory becomes the act)
+WHAT: the origin CEO, seeing a CHECKPOINT ADVISED line relayed for the
+second prompt running: "If a checkpoint is advised, you should do it.
+That way if you advise a checkpoint a user doesn't need to ask you to
+checkpoint, they can simply clear. If the checkpoint is a script, there
+is no reason not to just run it at the time a checkpoint is advised."
+So an ADVISED line from the prompt gauge or the Stop hook is an
+instruction: the manager runs the checkpoint ritual at the end of that
+reply, unprompted, provided the arc is closed and the tree is committed;
+the CEO then simply /clears. Mid-arc, the manager finishes the current
+step, ships it, and checkpoints before taking new work. The hooks' own
+wording changed to match ("checkpoint at the end of this reply if the
+arc is closed" instead of "suggest ... at the next arc boundary"). The
+honest limit stays: the day file stores the manager's final reply word
+for word, which no script can see before it is sent, so the script does
+the mechanics and the manager writes the two paragraphs.
+CARRIES: skills/checkpoint/SKILL.md (the rule at the top + the gauge
+paragraph); hooks/prompt_gauge.py + hooks/stop_tick.py (ADVISED
+wording); HOOKS_METHOD.md Tier 1 item 2 + change log; SKILLS.md change
+log; the origin's core-file checkpoint protocol.
+GRAFT: add the ADVISED MEANS DO IT paragraph to the project's checkpoint
+skill and its checkpoint law; reword the project's gauge/stop hook
+ADVISED strings so they say "checkpoint at the end of this reply if the
+arc is closed" (keep the project's own owner name); nothing else moves.
+
+### v1.14 - 2026-09-10 - The preservation law, the cold shelf, the learning loop
+WHAT: two of the origin CEO's asks in one evening. (1) THE PRESERVATION
+LAW, after public reports of an agent whose script deleted a person's
+files and another that wiped a machine: "You nor any of your employees
+should ever delete a file, record, etc. without express permission from
+the user. There should be no script created to delete either (without
+express permission of the user and a complete, double acknowledged
+approval of such)... We never want to lose knowledge, all of this is
+hard fought, hard earned knowledge, even the rarely used knowledge."
+Hence hooks/preserve_guard.py (Tier 2d, a refusal on delete verbs,
+work-discarding git verbs and deletion calls written into scripts;
+scratchpad and prose pass; one command per double-acknowledged grant;
+drive roots / home / repo root never), reference tools/delete_grant.py
+(the four verbatim texts, single use, ledgered), reference
+tools/retire.py (files move to a shelf folder, ledgered) and reference
+tools/cold_shelf.py (rarely-read wiki sections move to docs/cold/
+verbatim with a stub at the old heading and an index; --restore
+reverses). (2) THE LEARNING LOOP, after "does Rootstock learn?": three
+read-only scripts - check_wiki_links.py (dead See-also targets),
+wiki_heat.py (read counts per wiki section mined from the harness
+transcripts; the cold candidates), ledger_trends.py (ledger tails vs a
+thresholds table -> PROPOSE lines printed at standup; nothing applied,
+the CEO rules). The audit the law forced found the kit-mirror script
+emptying its target before copying; it now refuses a target whose
+README does not name the kit and reports stale files instead.
+CARRIES: hooks/preserve_guard.py + hooks/settings.json (its PreToolUse
+entry) + hooks/README.txt; reference tools/{delete_grant, retire,
+cold_shelf, check_wiki_links, wiki_heat, ledger_trends}.py;
+HOOKS_METHOD.md Tier 2d + bootstrap step 8 + change log; WIKI_METHOD.md
+"The cold shelf" + "The learning loop"; SUBAGENT_METHOD.md law 7;
+skills/brief (THE PRESERVATION LINE, step 7); SKILLS.md change log; the
+front door's STEP 4 hooks block.
+GRAFT: copy the guard + wire its entry + selftest + gitignore the grant
+file; copy the three movers and the three loop scripts into tools/ and
+wire the loop scripts into the project's check/metrics groups and its
+standup (the trends block prints after the budget block); add law 7 to
+the project's delegation rules and the preservation line to its brief
+skill; add the two registry entries (delete ritual; retire/cold shelf);
+give the core file a one-line index entry for docs/cold/INDEX.md and the
+law's paragraph. Then AUDIT existing scripts for deletion calls and
+bring each to the CEO - convert to a move, or keep with the CEO's word
+recorded. Nothing else moves; a project's own shelf folder name and
+thresholds are its own.
+
+
+### v1.15 - 2026-09-10 - Index-first reads, pictures priced by pixels, why cold is cold
+WHAT: three corrections to the learning loop, all born the evening the
+loop's first proposals were audited. (1) INDEX FIRST in the diet guard:
+the first whole read of a big file per session is refused and the
+refusal carries the file's own index (headings or function lines with
+line numbers, capped at 80); the same call repeated passes with a
+warning - the CEO's "section or split ... should not require my
+approval" made mechanical. (2) The usage sheet prices an image read by
+PIXELS (~w*h/750 after the API downscale, ~1-2k tokens), never by its
+base64 bytes: the old sizing made every screenshot a 100k "big read"
+and the sheet proposed diet fixes for a habit nobody had. A per-file
+big-reads ledger (tools/big_reads.py) names WHICH files were read whole
+and the fix each needs; the manager acts on it unasked. (3) The heat
+map says WHY a cold file is cold (git activity in the code area it
+documents: active-unread / current / dormant / process / reference /
+archive) and a whole-file read counts as seeing a section; only
+active-unread ever reaches a proposal - cold by read count is never a
+shelf reason (the CEO: game work touches certain files at certain times;
+the wiki is a human reference too). Trends proposals count only
+diet-named CHECKs and judge big reads on the last three active days.
+CARRIES: hooks/diet_guard.py (INDEX FIRST, image silence, selftest);
+reference tools/{usage_report, wiki_heat, ledger_trends, big_reads}.py;
+HOOKS_METHOD.md Tier 2c + change log; WIKI_METHOD.md "The read diet"
+(index first, the measurement lesson) + "The cold shelf" (why cold).
+GRAFT: refresh the diet guard and run its selftest; copy big_reads.py
+into tools/ and add it to the metrics group; if the project's usage
+sheet sizes tool results, add image_tokens and bump its cache version;
+give wiki_heat an AREA_MAP for the project's own doc->code areas (the
+kit copy carries Everwood's as the worked example - replace it); reword
+the project's cold proposal to active-unread only. Nothing else moves.
+
+### v1.16 - 2026-09-11 - The hygiene guard, the README check, and /preserve
+WHAT: the first PostToolUse hook and the preservation law's front, born
+the morning the kit's public README was found two versions behind (the
+CEO: "we definitely don't want the readme falling behind again"). (1)
+THE HYGIENE GUARD (Tier 3): after every Write/Edit lands, one stateless
+script says the law that applies to THAT file at the moment of the edit:
+a portable original -> refresh its kit copy, the graft log + version if
+a concept changed, the public README if a pillar/skill/hook/box item
+changed, then sync; a kit copy edited directly -> edit the original; the
+core instructions file -> its lint runs and a FAIL is relayed; a touched
+wiki-topic section without a See-also line -> named; a forbidden
+character (em/en dash) in player-facing text -> the edit is BLOCKED with
+the offending lines; a new asset -> run the import. (2) THE README
+CHECK: the kit sync script refuses to push while the public README's
+"Kit version:" line lags the graft log's CURRENT KIT VERSION - the one
+mechanical place a README-only-in-the-public-repo can be caught. (3)
+/preserve: the preservation law lived in prose plus three loose scripts;
+the skill takes a target and offers retire, shelve, then the
+twice-acknowledged delete grant, in that order, with the exact words
+recorded. Lesson: a reminder that fires at the edit is worth ten in a
+law file - the README fell behind while the law to refresh it was
+already written.
+CARRIES: hooks/hygiene_guard.py (+ its PostToolUse entry in
+hooks/settings.json, hooks/README.txt); HOOKS_METHOD.md Tier 3 +
+bootstrap step 9 + change log; skills/preserve/SKILL.md; SKILLS.md
+(shelf entry + change log); the front door STEP 4; WORKFLOW_METHOD's
+instance gains a README step in "Edit the future-project kit".
+GRAFT: copy hygiene_guard.py, rewrite its CONFIG block for the project
+(portable file names, kit folder, skills/hooks dirs, core file + lint
+command, wiki dirs, player-text patterns, assets folder), wire the
+Write|Edit|MultiEdit PostToolUse entry, run `--selftest` (25 checks).
+A project that publishes its own kit: add a "Kit version: vX.Y" line to
+the public README and the version check to its sync script. Copy the
+/preserve skill and list it on the shelf. A project with no player-
+facing text keeps the DASH rule's pattern list empty. Nothing else
+moves.
+
+### v1.17 - 2026-09-13 - The README gate (parity lint, graft README line, audit cadence)
+WHAT: the 09-13 four-employee audit of the public README found three
+prose slips the v1.16 version check could not see (a law count still
+"six", settings.json sent to the wrong folder, a mechanic misdescribed)
+and a page of mechanics nobody had been asked to write. The CEO: "What
+can we do to prevent the Readme from falling behind so far and missing
+information like that in the future?" Three layers, cheapest first.
+(1) THE PARITY LINT: a script derives every countable README fact from
+the kit folder itself - the law count from the delegation method's
+numbered list (and its heading's own number word), the skills from the
+skills dir (count word + every /name), the hooks from the hooks dir, the
+reference-tool count, every box-table row against the kit's top level
+and back, the version line - plus a small CLAIMS table of grep-able
+prose facts (a must-match and a must-not-match per slip already seen).
+The kit sync REFUSES to push on any FAIL; the check group runs it; a
+ledger line per run. (2) THE GRAFT README LINE: every graft entry gains
+a fourth field, README, naming the public-README section the concept
+touched or "none, wording only"; the lint fails while the newest entry
+lacks it, so "did this reach the front page?" is decided when the
+concept ships, not remembered later. (3) THE AUDIT CADENCE: the audit
+itself (read-only employees compare the README against every method
+file, the skills, the hooks and the front door) is ledgered with
+`--record`; ledger_trends PROPOSES the next one at standup when the kit
+folder has moved past a commit count or an age since the last line
+(owner's thresholds). Lesson: a version line is one fact; a README is
+a hundred, and the ones that drift are the ones no script reads.
+CARRIES: reference tools/readme_lint.py (+ its refusal in the kit sync
+script and its check-group line), reference tools/readme_audit.py,
+reference tools/ledger_trends.py (rule 7 + two thresholds), this file's
+README field (from this entry on), the process registry's kit entry
+(step 3 rewritten) and its new "Audit the public README" entry.
+GRAFT: a project that publishes its own kit or keeps any public README
+whose facts derive from files: copy readme_lint.py, rewrite its CONFIG
+block (README path, source-of-truth files, box heading, CLAIMS rows),
+call it from the publish/sync script as a refusal, add it to the check
+group, run `--selftest`. Add the README field to the project's own
+graft-log entries from its next entry on. Copy readme_audit.py, graft
+rule 7 and the two thresholds into the project's ledger_trends, record
+the last audit (or let the "none on record" proposal ask for the
+first). A project with no public README skips this entry whole.
+README: "Updating an installed project" (the README field + the gate
+sentence), "What is in the box" (reference tools: sixteen), the
+"Kit version:" line.
+
+### v1.18 - 2026-09-13 - The intent loop (INTENT.md, the comparison ledger, /correct, the systems audit)
+WHAT: the CEO, the same morning as the README gate: "I believe Intent would
+help cover the 'why' of something which may help you or any Claude make
+better decisions in the future. It's not as important that you know to
+make looping scripts because you were told to, it's almost more important
+that you understand we make looping scripts because 1.) It decreases your
+token usage, 2.) It's done the same every time and very structured, 3.)
+It's something that triggers without asking." Four parts. (1) THE INTENT
+FILE: one INTENT.md per project, one section per ruling - ASKED (the
+owner's prompt verbatim), WHY (the owner's numbered reasons verbatim),
+GENERALIZES TO (the manager's reading, marked as such), LIVES IN; a brief
+pastes the section; a missing section IS the question to ask. (2) THE
+COMPARISON LEDGER: before building, the manager logs its OWN reading of
+the ask (a CLAIM); employees state theirs in a stamp line; when the
+owner's intent is known the claim resolves SAME / SIMILAR / DIFFERENT
+with its source named (stated / correction / inferred - self-judged
+agreement is counted apart so it never inflates the rate). A script turns
+the log into day / week / month / actor agreement rates - txt for Claude,
+csv + xlsx for a human - and calls the trend IMPROVING / STEADY /
+DECLINING. The owner's why, verbatim: "we 1.) Want to have real data, 2.)
+We want to compare past to present, 3.) We want to know if we are
+improving, staying the same, or declining because each one of those will
+tell us something about our feedback loop." (3) THE CORRECTION RITUAL:
+/correct asks "What about the last thing I did needs correcting?",
+records the owner's words verbatim, resolves the open claim DIFFERENT by
+itself, then asks "What was the intent?" and /intent files the why - one
+feedback loop. (4) THE SYSTEMS AUDIT: the loop measured but never thought;
+a ledgered, cadence-proposed audit by a handful of read-only employees
+in four lanes (tokens, process, knowledge, features) returns proposals
+only. Three new trend rules propose on a declining agreement, stale
+claims, clustered corrections and audit age. Lesson: knowing the rule
+lets a Claude comply; knowing the why lets it decide the case the rule
+never named.
+CARRIES: INTENT_METHOD.md (the portable method + bootstrap); reference
+tools/intent_log.py, correction_log.py, intent_report.py,
+systems_audit.py, ledger_trends.py (rules 8-10 + four thresholds);
+skills/intent and skills/correct (+ SKILLS.md shelf entries); the /brief
+skill's step 8 (paste the intent, require the INTENT line); the front
+door's THE INTENT LOOP step.
+GRAFT: create INTENT.md from INTENT_METHOD.md's format with the first
+ruling the day one is made (never a backfill sweep); copy the four
+scripts, adapt paths; add intent_report to the metrics loop; graft rules
+8-10 + thresholds into the project's ledger_trends; copy the two skills
+and list them on the shelf; add the employee INTENT stamp line to the
+delegation rules and the paste-the-section step to the brief ritual; add
+INTENT.md and INTENT_METHOD.md index lines to the core file. A project
+with no owner rulings yet still creates the empty INTENT.md - the first
+correction fills it.
+README: "4. Lossless Sessions" (eight rituals, /intent and /correct), a
+new "The intent loop (INTENT_METHOD.md)" section after the hooks, "What
+is in the box" (INTENT_METHOD.md row, reference tools: twenty), the "Kit
+version:" line.
+
+See also: 'Future Project MDs/CONTRIBUTING.md' (the format law); '0 - READ
+  ME FIRST, CLAUDE.md' (installs from this log);
+  tools/rootstock_update_check.py (reads this file to check for updates).
+
+### v1.19 - 2026-09-13 - The format law, the purpose audit and the kit-sync ruling (CONTRIBUTING.md, FLAGS.md, /flag, the format guard)
+WHAT: the CEO, the same day as the intent loop, three rulings in one
+prompt. (1) THE KIT-SYNC RULING: "Every time I discuss rootstock-os, or
+it's features, scripts, audits, intents, laws , etc. the intention is to
+update the future projects and rootstock-os folder and upload to git
+with updated readme and files whenever applicable." A kit refresh script
+(originals -> copies, the owner-name substitution in scripts, adapted
+copies reported not overwritten) runs first inside the sync, and the
+prompt hook says KIT UNSYNCED until copies and mirror agree. (2) THE
+PURPOSE AUDIT: "Rootstock-os will eventually, hopefully, turn into a
+community involved system. Guardrails need to be in place so that
+anything written in updates must have a comment describing the purpose
+and intent of the 'thing' in the update. Claude MUST compare the purpose
+and intent of the thing vs what the thing actually reads whether it's a
+script, hook, code or injectable prompt. If there is reason to flag it,
+Claude should flag them green, yellow or red. Claude should always
+read-only -> Flag -> Explain. There should be a file that directly
+references anything that is green, yellow or red flags, tally them and
+put them in the git for review. Any Claude can review and put their
+findings there for future review." FLAGS.md is that file: one entry per
+audit (SAYS from the thing's PURPOSE line, DOES, FLAG, hash of the exact
+version), append-only, the tally regenerated at its top by script, STALE
+when the thing changes; the /flag skill and a WORKFLOWS entry carry the
+ritual; employees may flag (delegation rule 15) and report RED upward.
+(3) THE FORMAT LAW: "Any updates, upgrades, hooks, scripts, etc need to
+be in the same format so that they work with our current filing system.
+Anything without proper format should be flagged, a script should
+re-write it after review-only audit. This will be a law and may need
+this to be a hook somehow so that no one can inject a prompt that
+overrides safety protocols." Every kit thing carries PURPOSE / INTENT /
+Search keys / See also (a hook also --selftest + _hooklib, a skill its
+frontmatter, the settings template its SAFETY wiring); the format lint
+derives the scope from the kit folder, flags the rest, and --rewrite
+inserts ONLY the missing lines with the reviewer's words after a
+read-only look; the format guard hook (Tier 3b) blocks an unformatted
+edit and REFUSES a settings edit that unwires, narrows or mis-points a
+safety hook, with the shell guard (no shell writes into a settings file)
+and the Stop hook (refuses the turn while the wiring is broken) as
+twins. The first audit: four read-only employees flagged every kit thing
+in one batch (FLAGS.md carries the result). Lesson: a guardrail for a
+community kit cannot depend on the reader's good faith; it has to be a
+script that flags, a script that rewrites, and a hook that refuses.
+CARRIES: CONTRIBUTING.md (the two laws for contributors); FLAGS.md (the
+ledger); reference tools/format_lint.py, purpose_audit.py,
+refresh_kit.py; hooks/format_guard.py + its settings.json entries
+(PreToolUse and PostToolUse on Write|Edit|MultiEdit); hooks/bash_guard.py
+rule (no shell writes into a settings file); hooks/stop_tick.py (the
+Stop twin); hooks/prompt_gauge.py (the KIT UNSYNCED line); skills/flag;
+SUBAGENT_METHOD.md law + SKILLS.md shelf entry; HOOKS_METHOD.md Tier 3b;
+the front door's THE FORMAT GUARD + THE PURPOSE AUDIT step and the
+definition of done; the sync script's refresh + first gate + tally.
+GRAFT: copy the three scripts and the hook, adapt the CONFIG blocks
+(kit folder, hooks/skills dirs, settings path); wire the hook's two
+entries; add the settings-file rule to the project's shell guard and the
+Stop twin to its stop hook; add format_lint + purpose_audit --pending to
+the check group and the refresh + gate + tally to the publish script;
+copy CONTRIBUTING.md and let the first status run create FLAGS.md; run
+`format_lint.py` and rewrite each failing header BY SCRIPT after a
+read-only look (never by hand); then audit every thing once (a handful
+of read-only employees, one list each) so FLAGS.md starts with real
+data; add the /flag skill to the shelf and the flag rule to the
+delegation rules. A project with no public kit still keeps the format
+law for its own tools and hooks.
+README: "The hooks" (ten, the format guard bullet), "4. Lossless
+Sessions" (nine rituals, /flag), a new "The format law and the purpose
+audit (CONTRIBUTING.md)" section after the intent loop, "What is in the
+box" (CONTRIBUTING.md + FLAGS.md rows, skills: nine, hooks: ten,
+reference tools: 23), "Questions people ask" (Can I contribute?), the
+"Kit version:" line.
+
+### v1.20 - 2026-09-13 - The first audit's yellows closed (every hook answers --selftest, the front door read independently)
+WHAT: the CEO read the five yellows from the kit's first purpose audit
+(v1.19) and said "Do it all, make it happen." (1) The three info-only
+hooks (session_start, prompt_gauge, pre_compact) now answer
+`--selftest` like every guard: module-level work moved into main(), the
+pure builders (ledger line, gauge lines, header) factored out so a
+selftest never touches stdin, a real ledger or the standup script; live
+output byte-identical. Every hook in the kit now carries a selftest,
+which the format lint already expected. (2) The diet guard's docstring
+and the hooks README stopped saying it "never refuses": it refuses once
+per big file (INDEX FIRST, v1.15) and warns on everything else. (3) The
+front door got its first full read by a reviewer who did not write it.
+The read found the PURPOSE line claimed a four-pillar install while a
+third of the file installs the hooks, and the STEP 4 skill list lacked
+/correct /intent /flag; both fixed, re-read, GREEN. FLAGS.md: 58
+flagged, 58 GREEN, 0 YELLOW, 0 RED.
+CARRIES: hooks/pre_compact.py, hooks/prompt_gauge.py,
+hooks/session_start.py (the selftests); hooks/diet_guard.py and
+hooks/README.txt (the wording); the front door's PURPOSE line and STEP
+4 list; FLAGS.md (the re-flags); HOOKS_METHOD.md change log.
+GRAFT: copy the three hooks over the installed ones if they were taken
+unchanged (their live behaviour is identical; only the structure and
+the selftest are new) - if the project adapted them, graft the main()
+split and the _selftest() by hand and keep the project's text. Reword
+the diet guard's docstring the same way if the install kept the v1.12
+wording. Re-flag whatever changed. Then the lesson, which is the real
+graft: have a non-author read the front door of YOUR install whole once;
+three author passes missed what one independent read found.
+README: "The hooks" (the contract bullet: every kit hook answers
+--selftest), "The format law and the purpose audit" (the first audit's
+outcome line), the "Kit version:" line.
+
+### v1.21 - 2026-09-14 - The first systems audit, ruled and built (the loop law, trust the ledger, the ledgers born, open questions)
+WHAT: the systems audit (v1.18) ran for real: four read-only employees,
+one lane each, 26 proposals with evidence, nothing applied by the audit.
+The CEO ruled on all 26 the same night; this version is what the rulings
+built. (1) THE LOOP LAW ("Any script that should be run multiple times
+must be called by the main looping script; every action, every
+standup"): run_all.py ledgers every group run (loop_runs.txt), the
+session-start hook runs the session group once a day and measures the
+digest it injects (digest_size.txt), standup shows THE LOOP (each
+group's age), ledger_trends proposes on a stale group (rule 13), a big
+digest (rule 12) and an old open question (rule 11); probes ride every
+build. (2) TRUST THE LEDGER for the check scripts: _ledger.py, one
+helper at four append sites (format lint, purpose audit, README lint,
+link check) skips an identical result at an unchanged tree - gotcha
+found on the way: a ledger's own append changes the tree signature, so
+the ledgers exclude themselves. (3) The three preservation ledgers
+(retired_files, delete_grants, corrections) had never been born; the
+movers got --selftest against a temp dir and the ledgers exist
+header-only. (4) open_questions.py: a ledger for decisions only the
+owner can make, with age, shown in standup. (5) usage_report: avg tokens
+per Read on the daily line, usage_by_arc.txt (checkpoint to checkpoint,
+per-commit verdict), cache_misses.txt with causes (first finding: TTL
+gaps dominate - the price of coming back after an hour, not a habit).
+(6) stop_tick warns CHANGELOG UNEXPORTED; /checkpoint closes the loop
+first; /flag's batch rule sends more than five things to one employee
+("employee is cheap. Manager is not."). (7) Proposal-only thresholds
+moved to .claude/trend_limits.json; guard numbers stay in code
+(SECURITY FIRST, then cost, then efficiency - the CEO's order).
+CARRIES: reference tools/run_all.py, open_questions.py, _ledger.py
+(new); reference tools/standup.py, ledger_trends.py, usage_report.py,
+format_lint.py, purpose_audit.py, readme_lint.py, check_wiki_links.py,
+retire.py, delete_grant.py, correction_log.py; hooks/session_start.py,
+hooks/stop_tick.py; skills/checkpoint, skills/flag; INTENT_METHOD.md
+(the loop law + security-first sections); this entry.
+GRAFT: adopt run_all.py's GROUPS for your own habitual scripts, then let
+the session-start hook call it (the hook degrades to a note when
+run_all.py is absent). Wire _ledger.append_unless_identical at every
+append site you have that can run twice at one tree. Run the three
+movers' --selftest once and let them birth their ledgers. Add the three
+trend rules and the limits JSON; keep your guards' numbers in code.
+Seed open_questions.txt with whatever your owner has not answered yet.
+README: "The intent loop" (the first audit's outcome paragraph), "What
+is in the box" (26 scripts, the parent loop, open questions, trust the
+ledger).
+
+### v1.22 - 2026-09-14 - The core diet (CLAUDE.md is the hot core; cold sections move by script to sub-indexes; the front door renamed)
+WHAT: (1) A Reddit reader measured the kit's front door, then named
+"0 - READ ME FIRST, CLAUDE.md", at ~5k tokens and called the kit slop.
+The file was an install runbook, never a per-session CLAUDE.md, but the
+name invited the misread and the origin's real CLAUDE.md had drifted to
+~10k tokens while its own law said "index only". The CEO's ruling: the
+core keeps the most-used information and what falls out of the heat map
+moves BY SCRIPT into named, growable sub-indexes. (2) THE HOT CORE: the
+core lint (check_claude_md.py) now FAILS on a TOKEN budget (bytes/4;
+TOKEN_BUDGET, origin 3,500) and requires every docs/index/ sub-index to be
+named in the core. (3) THE MOVER: reference tools/core_diet.py measures
+every core section's heat (explicit reads of its lines from the
+transcript cache, reads of the wiki files it points at, git recency
+inside `core_cold_days`), moves COLD routed sections (`Index: <name>`;
+`Index: core` pins) verbatim into docs/index/<name>.md with a provenance
+comment and, while still over budget, the coldest routed sections next;
+each move leaves ONE stub line (`- heading -> docs/index/x.md | brief`,
+the brief from the section's Tags line) in the core's "## The
+sub-indexes" block. Unrouted cold sections are only PROPOSED.
+`--move-section` is the explicit call, `--restore` reverses, `--selftest`
+proves the round trip. It runs in the check group BEFORE the lint. (4)
+The scanners (wiki_heat, check_wiki_links, export_tag_index,
+export_wiki_view, cold_shelf) discover docs/index/*.md as wiki files.
+(5) THE FRONT DOOR is renamed "0 - READ ME FIRST.md" and cut to
+pointers (~1.8k tokens from ~4.5k): each step points at its method
+file's bootstrap section instead of restating it. (6) THE DIGEST DIET:
+standup prints the day file's STATE/NEXT lines but not its copy of the
+exchange when the transcript block already replayed it, and one tail
+line per ledger instead of two. (7) The origin's CLAUDE.md went from
+~10k tokens to ~3.5k: the standing rules to docs/index/laws.md, the
+long-form library + kit rules to library.md, versioning/changelog to
+process.md, engine gotchas to gotchas.md, the folder map to code.md.
+CARRIES: reference tools/core_diet.py (new); reference tools/
+check_claude_md.py, run_all.py, standup.py, wiki_heat.py,
+check_wiki_links.py, export_tag_index.py, cold_shelf.py;
+hooks/hygiene_guard.py (the front door's name); WIKI_METHOD.md "The hot
+core and the sub-indexes" + the architecture layer 1; the front door
+"0 - READ ME FIRST.md" (renamed, rewritten); this entry.
+GRAFT: give your core lint a TOKEN budget (bytes/4) and fail on it; copy
+core_diet.py, adapt CORE_NAME / INDEX_DIRNAME / the trend-limits key,
+run `--selftest`, put it in the check group BEFORE the lint; stamp your
+core's sections with `Index: <name>` (laws, library, process, gotchas,
+code are the origin's names - use your own) and `Tags: ... | brief`;
+run `--move-section` for what should leave now and let the loop handle
+the rest; teach your wiki scanners the docs/index/ folder; if your
+project's install file carries "CLAUDE.md" in its name and is not one,
+rename it. Trim your standup the same two ways if its digest passes
+~24k bytes.
+README: "Doesn't a wiki make the context HEAVIER?" (the table's core and
+digest rows), the new "The installed CLAUDE.md: what it holds and how
+big it is" subsection, "Quick start" (the front door's name), "Questions
+people ask" (the Reddit question), "What is in the box" (the front door
+row, 27 scripts, core_diet).
+
+### v1.25 - 2026-09-14 - The digest diet (the standup prints what the manager acts on; the loss test)
+WHAT: after the core diet and the pointer core, the standup digest was
+the largest fixed load at session start (~4.3k tokens on the origin).
+Measured by block, LEDGER TAILS was 35% of it (33 ledgers, one full line
+each, most unchanged for days) and several blocks repeated another (the
+daily usage line, the open questions, the day index, the summary twin of
+every *_runs ledger). The CEO's condition: "the most important pieces are
+context and efficiency. As long as there is no loss there, I'm happy."
+THE LOSS TEST: a line leaves the digest only when it duplicates another
+block, or carries no verdict and is one `tail -1` away by a path the
+digest already prints. Never cut: THE LAST EXCHANGE (the verbatim law)
+and WHERE WE LEFT OFF. The rest: a ledger's newest line prints in full
+only when it carries a verdict (CHECK, FAIL, RED n, STALE, WARN, UNSYNCED,
+a cliff) or is newer than the previous standup (digest_size.txt's last
+line); the others collapse to `name date` on shared "quiet" lines;
+duplicated ledgers are skipped; commits 12 -> 5; RECENT DAYS prints each
+day's first clause. Same session, before/after: 17.4 KB -> 6.3 KB (-64%).
+The warn threshold followed the size down (digest_warn_bytes 24000 ->
+12000), so growth is caught at the new floor, not the old ceiling.
+CARRIES: reference tools/standup.py (SHOWN_ELSEWHERE, has_verdict,
+line_stamp, last_standup_stamp, tails_plan, wrap_names, first_clause,
+--selftest); reference tools/ledger_trends.py (the lowered default);
+REPORTING_METHOD.md is unchanged (the ledgers themselves are untouched).
+GRAFT: copy standup.py fresh (keep the project's version-source block);
+lower digest_warn_bytes in the project's trend_limits.json to about twice
+its post-diet digest size; add the project's own verdict words to
+_VERDICT if its ledgers use others; add any ledger another block already
+prints to SHOWN_ELSEWHERE. Then run the digest twice and diff: every line
+that left must fail the loss test.
+README: "What actually loads" tables (the digest row: ~1.6k-2k tokens).
+
+### v1.24 - 2026-09-14 - The quiet audit (FLAGS.md's stamp means last changed, not last run)
+WHAT: the purpose audit's tally block carries an "Updated" stamp, and the
+loop runs the audit at every standup, so the stamp was rewritten every
+session even when no flag, row or count had moved. The mirror check saw
+one byte-different kit file and the prompt hook said KIT UNSYNCED on
+every prompt over nothing (the origin's open question Q0003). The CEO
+ruled option 2, fix the cause, over the cheap fix of teaching the mirror
+check to ignore that line: the audit now compares the fresh tally block
+against the one in the file with the stamp masked, and skips the write
+when nothing else changed. The stamp now means LAST CHANGED; the runs
+ledger (purpose_audit_runs.txt) still records every run. A generated
+line inside a committed file must not churn on a no-op run: a sync
+warning that fires on noise trains everyone to ignore it.
+CARRIES: reference tools/purpose_audit.py (regenerate() returns False on
+a stamp-only difference; selftest covers both branches); FLAGS.md (the
+generated tally, unchanged in shape).
+GRAFT: copy purpose_audit.py fresh over the project's adapted copy (the
+change is inside regenerate() and one helper; keep any local KIT_DIR or
+ledger-path edits). If the project's mirror check or sync hook was taught
+to ignore the Updated line as a workaround, drop that exception in the
+same batch. Any other generated stamp in a committed file gets the same
+treatment: rewrite on change, never on a run.
+README: "The format law and the purpose audit" (one sentence: the tally
+stamp moves only when a flag moves).
+
+### v1.23 - 2026-09-14 - The pointer core (CLAUDE.md points, the master index lists, rules load by path; Anthropic's 200-line target guarded)
+WHAT: (1) THE SECOND RULING on the core, the same day as v1.22. The CEO
+asked whether a single MASTER_INDEX would be the right call ("Claude.md
+should simply point to everything else") and had the manager read
+Anthropic's memory page (code.claude.com/docs/en/memory) before ruling.
+The page settles the mechanics: target under 200 lines per CLAUDE.md;
+`@path` imports and rules WITHOUT a paths field load at launch, so moving
+must-read text into them "helps organization but doesn't reduce context";
+a `.claude/rules/*.md` file WITH `paths:` front matter loads only when
+Claude reads a matching file; CLAUDE.md is guidance and hooks are the
+enforcement layer; block HTML comments are stripped before injection.
+The CEO's must-read chain enforced by hook was dropped by his own
+verdict ("your response is likely more correct than mine"); the master
+index and the smallest-possible core were kept. (2) KNOWLEDGE HAS THREE
+HOMES, by when it is needed: ALWAYS -> CLAUDE.md, the pointer core (the
+project in a paragraph, how to read, how to verify, the laws no hook
+enforces, one pointer to the master index; the origin: 68 lines, ~900
+tokens, from ~3.5k); WHEN A MATCHING FILE IS READ -> path-scoped rules
+(the origin: game-code.md for scripts/scenes/shaders, player-text.md for
+.tres/ui/store/changelog text, wiki.md for every .md; each moved VERBATIM
+with the core diet's provenance comment so --restore still works; the
+format header sits in a stripped HTML comment, free); ON DEMAND ->
+docs/index/MASTER_INDEX.md, THE ONE DOOR (every topic file, root file,
+sub-index, law stub, rule and knowledge file, one line each, every
+destination direct). The cross-workstation notes moved to
+docs/index/notes.md; standup prints their headlines from there. (3) THE
+GUARD: check_claude_md.py now fails past LINE_BUDGET 200 (Anthropic's
+number) or TOKEN_BUDGET 2,000 (the CEO's action line), WARNS past
+WARN_TOKENS 1,000, requires CLAUDE.md to name the master index, the
+master index to list every docs/systems and docs/index file and every
+rule, and fails on a rule with no paths field (it would load every
+session; its tokens are counted against the core). standup prints the
+lint's OK/WARN line under "== THE CORE" so the owner sees the size every
+session; the hygiene guard runs the lint the moment CLAUDE.md, the master
+index or a rule is edited. (4) core_diet.py's stub block now lives in the
+master index, not the core (selftest proves the round trip both ways;
+a pre-v1.23 core still holding its own block restores cleanly). (5)
+check_wiki_links treats the master index like the core (every docs/
+mention must resolve); refresh_kit carries PORTABLE_RULES (rules/wiki.md
+travels; game and text rules stay per project). (6) WORKFLOWS gained "Add
+or change a path-scoped rule"; the front door's STEP 1 and definition of
+done name the master index, the rules and the size line.
+CARRIES: rules/wiki.md (new, the first kit rule); reference tools/
+check_claude_md.py, core_diet.py, standup.py, check_wiki_links.py,
+refresh_kit.py; hooks/hygiene_guard.py (CORE_CONTRACT); WIKI_METHOD.md
+(architecture layer 1 + "The hot core and the sub-indexes": the second
+ruling and the three homes); the front door STEP 1 + definition of done;
+this entry.
+GRAFT: rewrite your core as a pointer file (identity, how to read, how to
+verify, the laws no hook enforces, ONE line naming docs/index/
+MASTER_INDEX.md); build the master index from the core's old library
+lines and its sub-index stub block; move each part-of-the-codebase rule
+set VERBATIM into `.claude/rules/<topic>.md` with a `paths:` list first
+and the core-diet provenance comment; copy rules/wiki.md and adjust its
+paths; take the new check_claude_md.py (set LINE_BUDGET 200, TOKEN_BUDGET
+and WARN_TOKENS to your owner's numbers, never raise them later),
+core_diet.py, standup.py, check_wiki_links.py, refresh_kit.py and the
+hygiene guard; run core_diet --selftest and check_claude_md; confirm a
+rule loads by opening a matching file and running /context.
+README: the new top section "What loads every session, what Anthropic
+says, and what guards it" (right after the intro), the "Doesn't a wiki
+make the context HEAVIER?" table (core row ~900 tokens / 68 lines), "The
+installed CLAUDE.md: what it holds and how big it is" (rewritten for the
+three homes), "Quick start" (the core lands under Anthropic's target),
+"What is in the box" (the rules/ row, 27 scripts), "Questions people ask"
+(the size question answered with Anthropic's number).
+
+### v1.26 - 2026-09-20 - The lesson loop (LESSONS.md, the one right way first; LESSON ADVISED)
+WHAT: the kit learned WHAT (the wiki, the tag index) and captured HOW in
+steps (WORKFLOW_METHOD.md), but judgment - do this first, here is what
+looked right and was not, here is what changes when A differs from B -
+had no home and nothing pushed the manager to write it. The CEO's ask:
+"something to push you to write what you learned, as well as push you to
+add to the knowledge base ... so in the future you don't make the same
+mistakes and just do the one correct way first". THE LESSON LAW: one
+book, LESSONS.md, one entry per task shape (heading in a prompt's words;
+Tags + Keys lines; THE ONE RIGHT WAY; dated TRIED / FAILED BECAUSE / DO
+INSTEAD; NUANCE lines; See also to the detail's home), grepped before any
+task the way the process registry is. Both ends are mechanical: the
+prompt hook names the entries whose Keys hit the prompt (THE LESSON
+LINE, at most three, with line numbers); the new Stop hook scans the
+turn's transcript slice for trial-and-error signals (the same command run
+again after an error, repeated edit misses, a FAIL then a PASS, an intent
+claim resolved DIFFERENT, an employee briefed twice, a correction prompt)
+and refuses to end the turn once with LESSON ADVISED (a block reaches the
+manager; a systemMessage does not); never the same slice twice; a turn
+that edited the book passes as WRITTEN. The correction ledger prints
+LESSON ADVISED after a DIFFERENT. Measured: lesson_runs.txt (MATCHED /
+ADVISED / WRITTEN / CHECK); `lesson_log.py --check` in the check group
+lints the entries; ledger_trends rule 14 proposes when advised lines pile
+up with no entry written. Origin lesson on the first day: a long heredoc
+through the shell tool fails on Windows past ~100 lines; the Write tool
+and a scratchpad edit script are the one right way.
+CARRIES: LESSONS.md (new: the law, the entry shape, the origin's first
+five entries); hooks/lesson_advisor.py (new); hooks/prompt_gauge.py (THE
+LESSON LINE); hooks/settings.json (the second Stop entry); hooks/
+README.txt; reference tools/lesson_log.py (new); reference tools/
+correction_log.py (the LESSON ADVISED print); reference tools/
+ledger_trends.py (rule 14 + lesson_advised_unwritten); reference tools/
+run_all.py (check group); reference tools/_ledger.py (the ledger name);
+hooks/hygiene_guard.py (LESSONS.md in KIT_MDS); HOOKS_METHOD.md (Tier 1
+item 5 + change log); skills/checkpoint/SKILL.md (step 0 asks for the
+lesson); the front door STEP 4; this entry.
+GRAFT: copy LESSONS.md to the project root and keep its top (the law and
+the entry shape); retire the origin's entries to a cold shelf or keep
+the ones that carry (the heredoc one carries to any Windows project);
+copy lesson_log.py to tools/ and lesson_advisor.py to tools/hooks/; take
+the new prompt_gauge.py or graft its LESSON LINE block (six lines in
+main, two selftest lines); add the Stop entry beside stop_tick's; add
+`.claude/lesson_state.json` to .gitignore; add `["tools/lesson_log.py",
+"--check"]` to run_all's check group and `lesson_runs.txt` to _ledger's
+LEDGER_BASENAMES; graft rule 14 and the `lesson_advised_unwritten` key
+into ledger_trends (and trend_limits.json if the project has one); add
+LESSONS.md to the hygiene guard's KIT_MDS if the project keeps a kit; add
+the LESSON ADVISED print to correction_log's DIFFERENT path; add the
+read-cheap line and the law line to the core (two lines each); add the
+"Write or amend a lesson" workflow entry and the checkpoint step 0
+sentence; run every --selftest and pipe-test the Stop hook once for real.
+README: "The hooks" (the eleventh hook, the count), "What is in the box"
+(the LESSONS.md row, the hooks count, the reference tools count and the
+lesson loop in the adopt list), and the new bullet "The lessons book (the
+lesson loop)" under the wiki pillar.
+
+### v1.27 - 2026-09-20 - The preserve guard hardened (the 48,000-file report: the script that runs is read first)
+WHAT: a public report the same day - an agent asked to rebuild a mirror
+wrote a remover to Temp, ran it in a later command, and its os.walk went
+through Windows directory junctions (islink() is False for a junction)
+into the live tree and the repo's .git: 48,000 files, the object store
+emptied, git unable to restore anything. The CEO: "We need to prevent
+this at all costs ... make sure what we have is robust enough". Probed
+with the incident's own shapes before reading the guard, fourteen of
+twenty-nine passed straight through: a heredoc body written to a
+SCRIPT file was exempt (the cat/tee exemption), a script being EXECUTED
+was never looked at, a bare-name target (rm build) needed a path
+character, a pipeline into the remove cmdlet had no argument to match,
+robocopy /MIR and rsync --delete were unknown, git checkout of a path,
+switch --discard-changes, force-with-lease, branch -f and filter-branch
+were open, .git/objects and a variable target ($DIR) were grantable, and
+a crash in the guard allowed the call. All closed: the guard now reads
+every script a command executes (the whole file when git does not track
+it, the uncommitted added lines when it does; grep/cat/diff is reading,
+not running), scans heredoc bodies aimed at script files, takes bare
+names and pipelines, knows the mirror verbs and the remaining git
+shapes, refuses any .git folder and any variable target with no grant
+possible, and falls back to a crude substring check on a crash (fail
+closed). Seventy-two selftest checks. The guard refused its own
+hardening five times (two-letter helper names that read as verbs,
+pattern sources that matched themselves) - reworded every time, never
+routed around; that is the new LESSONS.md entry.
+CARRIES: hooks/preserve_guard.py (the whole hardening); hooks/README.txt
+(the line); HOOKS_METHOD.md (Tier 2d: HARDENED, RUN, FAILS CLOSED);
+LESSONS.md ("Harden a guard against a public incident"); the origin's
+docs/systems/tooling.md row and WORKFLOWS.md "Delete something" NEVER
+line (project-side, described here so a graft knows to mirror them);
+this entry.
+GRAFT: take the new hooks/preserve_guard.py whole (no project-specific
+lines in it; the never-list reads the repo root from _hooklib) and run
+`python tools/hooks/preserve_guard.py --selftest`; note that a tracked
+script with an uncommitted diff that ADDS a deletion call is refused
+when run until committed or granted, and a committed script that
+cleans its own temp file is untouched; add the NEVER line to the
+project's delete workflow entry and the tooling row; copy the LESSONS.md
+entry if the project keeps a lessons book. Expect the guard to refuse
+edits to itself whose new text names a verb: split the literal or write
+the verb as r[m].
+README: "The hooks" (the preserve guard bullet: bare names, pipelines,
+mirror verbs, every force push, executed scripts read first, .git and
+variable targets, fail closed); no count changed.
+
+### v1.28 - 2026-09-20 - The auto-checkpoint on session end, and the local mirror
+WHAT: two asks the same evening. (1) The CEO: "Can we make /clear
+automatically check for a checkpoint, and if none was done, perform a
+checkpoint before clearing?" The harness fires SessionEnd at /clear
+(and logout, stdin closed, other; resume is a suspension) with the
+transcript path and a 60 s budget; it cannot hold the clear back and
+the manager is gone. So a twelfth hook does the MECHANICS alone, only
+when work is unbanked (a change outside the ledger folder or a commit
+off origin): the final exchange mined verbatim from the transcript into
+the day file as an AUTO section (the old one kept as SUPERSEDED), a
+"Checkpoint (auto)" commit, a push to origin and the mirror, the
+counter reset. Nothing unbanked = one ledger line. The judgment
+paragraphs are still the manager's, at the next real checkpoint. (2)
+After the 48,000-file report the CEO asked what a bare mirror is and
+named a drive: a reference tool pushes every branch and tag of the
+project and the kit repo to bare repos on another disk, from the ship
+and checkpoint rituals, the session loop and the new hook. Branches
+were assessed the same day as not the safeguard for that failure.
+Also in this version: the second README audit (four read-only lanes,
+T-0920-RA-1..4) - twelve prose slips fixed, nine new CLAIMS rows so
+they cannot recur, six mechanics the README never said.
+CARRIES: hooks/session_end.py (new); hooks/settings.json (the
+SessionEnd block, timeout 55); hooks/README.txt (the line);
+HOOKS_METHOD.md (Tier 1 #6, the heading's count, the change log);
+reference tools/backup_push.py (new); reference tools/run_all.py (the
+backup group inside session); reference tools/format_lint.py (the
+SAFETY row); reference tools/readme_lint.py (nine CLAIMS rows);
+skills/ship + skills/checkpoint (the mirror step, the net paragraph);
+this entry.
+GRAFT: copy hooks/session_end.py whole and merge the SessionEnd block
+into .claude/settings.json (timeout 55; the harness's SessionEnd
+budget is 60 s); it imports checkpoint.py and standup.py from tools/,
+so both reference tools must be installed. Run `--selftest` (18
+checks; the throwaway repo stays in the OS temp folder - the preserve
+guard refuses a script that removes its own sandbox). For the mirror:
+`git init --bare <other drive>/<name>.git`, `git remote add backup
+<that path>` in each repo, copy backup_push.py and set its REPOS list,
+add the backup group to run_all's GROUPS and the session composite,
+add the step to the ship and checkpoint skills. Add session_end.py to
+format_lint's SAFETY table so unwiring it is refused. Expect the first
+/clear after installing to write "already checkpointed" to
+docs/history/session_end_runs.txt when the tree was clean.
+README: "The hooks" (Twelve, the Session end bullet); "4. Lossless
+Sessions" (the checkpoint thresholds, the net bullet, the standup
+miner); "What is in the box" (hooks/ row names _hooklib.py and
+README.txt, 29 reference tools, the local mirror); plus the audit's
+fixes across pillars 1-3, the hooks, the intent loop, the companions,
+Quick start and Updating.
+
+### v1.29 - 2026-09-22 - The memory trim (harness auto-memory is machine-local only)
+WHAT: the CEO, told that the harness's per-machine auto-memory "costs
+tokens every session", asked whether it fights the kit: "Doesn't that go
+against the concept of Rootstock?" Mostly no - only the memory INDEX
+loads each session and the bodies read on demand, which is the kit's own
+shape. The real conflict found: auto-memory is per-machine and
+per-folder, never pulled, reviewed or linted, so any cross-machine
+project fact stored there is a shadow copy of what the repo owns,
+drifting stale invisibly (the origin's copy still said a version 76
+releases old). THE TRIM RULING: auto-memory keeps ONLY machine-local
+facts the repo cannot carry (exe paths, installs, PATH quirks);
+repo-shaped memories are banked VERBATIM into a topic file with
+provenance, superseded in place with stubs (the preservation law covers
+memories too), and a tally ledger counts every later need of a banked
+fact - the CEO's condition: "I want a ledger of what we're losing and if
+we reference them enough, we'll rethink our strategy." A threshold
+(first pass: 3 hits on one fact, or 5 total, inside 30 days) raises a
+PROPOSE to restore; the owner decides (the learning loop).
+Also in this version: the link checker skips fenced code blocks - banked
+memory bodies quote [[links]] to files that never were wiki pages, and
+quoted text is not a live link (found the day the first bank shipped:
+seven false DEADs).
+CARRIES: WIKI_METHOD.md ("The harness memory" section, after the
+architecture); WORKSTATION_METHOD.md (the closing paragraph of the
+Claude-side settings section); reference tools/check_wiki_links.py (the
+fenced-block skip in passes b and c); this entry.
+GRAFT: read the project's MEMORY.md index and split its entries:
+machine-local (keep; verify the paths still hold) versus repo-shaped
+(bank the body VERBATIM into a topic file + its master-index line, with
+a provenance line naming the repo file that owns the LIVE fact; rewrite
+the memory file as a SUPERSEDED stub pointing at the bank; open a
+history ledger - memory_bank_refs or your name for it - whose header
+carries the line format and the rethink threshold; register the
+reference-or-restore steps in the process registry). Run it once per
+machine - each workstation has its own memory store; the repo carries
+the ruling so the other machine's manager can follow it.
+README: "1. The Knowledge Wiki" (the harness-memory bullet).
+
+### v1.30 - 2026-09-26 - The delegation truth set (Tier 4a hooks)
+WHAT: three hooks that make the delegation truthfulness rules mechanical,
+born of the CEO's ask ("Can we make these processes more fool proof in
+any way through hooks or are we at maximum hookiness") and the public
+case he relayed: a manager that said its sub-agents did their job when
+they had not. brief_guard.py (PreToolUse on Agent|Task) refuses a work
+dispatch whose brief is missing the stamp template, the intent line, the
+budget line or the preservation line - a malformed brief costs a
+refusal, never a spent employee; read-only searcher types pass.
+delegation_auditor.py (PostToolUse on Agent|Task) reads the
+harness-metered tool/token figures out of every result (the numbers no
+model can fake): 0 metered calls on a work task is the fabrication tell,
+a TOOLS line claiming >3x the meter is a truthfulness signal, a report
+missing its template lines is named; one PENDING line per work
+delegation is appended to docs/history/delegation_pending.txt, resolved
+only by a NEW `RESOLVED | <id>` line (the tail is the state).
+verify_advisor.py (Stop) refuses a turn end once per unresolved set
+while a PENDING id lacks its RESOLVED line. All three sit in the format
+guard's SAFETY table, so unwiring them is refused. The stated ceiling:
+hooks force evidence to exist and numbers to agree; whether the diff
+matches the claims stays the manager's judgment. The SubagentStop stamp
+check stays pinned as ~redundant with the auditor.
+CARRIES: hooks/brief_guard.py, hooks/delegation_auditor.py,
+hooks/verify_advisor.py, hooks/settings.json (the three wirings),
+hooks/README.txt (the Tier 4a install paragraph + the verify_state
+gitignore line), HOOKS_METHOD.md (Tier 4a section + change log),
+reference tools/format_lint.py (the three SAFETY rows); this entry.
+GRAFT: copy the three hook scripts fresh into the project's hooks
+folder, merge the three settings entries, add the SAFETY rows to the
+project's format_lint copy, gitignore .claude/verify_state.json, run
+each script's --selftest, then pipe-test the loop once for real (a
+synthesized Agent result with 0 metered calls through the auditor, watch
+the advisor block, append the RESOLVED line, watch it pass). Name the
+harness backing beside the project's delegation rules (its SUBAGENTS.md
+counterpart) so the manager book and the guards tell one story.
+README: "4. The Sub-Agent Company" (the truthfulness hooks bullet) and
+the hook count in "6. The Hooks".
+
+### v1.31 - 2026-09-28 - The hook law (a warning from a hook is an order to the manager)
+WHAT: The origin CEO, after the Stop hook's CHANGELOG UNEXPORTED line was
+relayed to him three replies running instead of acted on: "I don't mind
+getting the warning if you forget or something is missed, but I shouldn't
+see it repeatedly, it's something you should be doing consistently. A
+Warning from the hook means do it, not relay the message for the user to
+do. This should be in Rootstock as well." ADVISED MEANS DO IT (v1.13)
+covered the lines tagged ADVISED; this broadens it to EVERY line a hook
+prints that names work (CHECKPOINT ADVISED, LESSON ADVISED, KIT UNSYNCED,
+CHANGELOG UNEXPORTED, LEDGER ADVISED): each is executed inside that reply,
+a hook words its line as an order to the manager and never as a note for
+the CEO, and the same line seen twice is the failure. Two mechanics ship
+with it: stop_tick.py's changelog count now skips commits whose subject
+starts with "changelog:" (the exporter's own commit - before, every export
+left "1 commit unexported" behind it and the warning cried wolf), and its
+line reads "MANAGER: run `python tools/export_changelog.py` and push before
+this reply ends". The selftest carries the incident shape (anchor at the
+export commit's parent, range ending at the export commit, must count 0).
+CARRIES: hooks/stop_tick.py (the count, the wording, the probe),
+HOOKS_METHOD.md (THE HOOK LAW under the checkpoint tier + change log),
+LESSONS.md (the C0002/C0003 entry: the closing check is "did ANY hook
+line name work this turn?"), hooks/README.txt; this entry.
+GRAFT: copy stop_tick.py fresh (or port `_commits_since_anchor`: `git log
+--format=%s anchor..HEAD`, count subjects not starting with "changelog:")
+and run its --selftest; in the project's CLAUDE.md replace the checkpoint
+law line with the hook law in one line ("any ADVISED / UNEXPORTED /
+UNSYNCED line a hook prints is an instruction done inside that reply,
+never relayed for the CEO to do"); add the broadening to the project's
+LESSONS entry for ADVISED.
+README: "The Checkpoint Protocol" bullet in "5. The Reporting Method"
+(ADVISED MEANS DO IT becomes the hook law) and the "Kit version:" line.
+
+### v1.32 - 2026-09-28 - Remote Control: the phone drives the same session
+WHAT: The origin CEO asked whether Claude Code on a phone could attach to
+a running session and ask the manager to do things, and whether the
+checkpoint /clear ritual survives it; then "document this somewhere in
+Rootstock for future use and understanding if I or another user is
+interested." The answer, from the harness docs: Remote Control
+(`/remote-control`, alias `/rc`) pairs the Claude mobile app to the SAME
+local session (same context, files, tools, hooks) through a QR code; the
+workstation must stay on; a /clear resets the conversation on the phone
+too, so a checkpoint clear needs no re-pairing; /clear, /compact,
+/context and /usage work from the phone while resume and plugin stay
+local; whether a phone-typed /clear fires the SessionStart hook's clear
+trigger is not stated in the docs and is recorded as unconfirmed with
+the one-clear check that settles it. A cloud session is the alternative
+when the machine must go off, without the workstation's tooling.
+CARRIES: WORKSTATION_METHOD.md ("Drive a session from a phone (Remote
+Control)" under the Claude-side settings section); this entry.
+GRAFT: nothing to install; read the section, then add one instance line
+to the project's WORKSTATION.md counterpart once a phone has been paired
+there (which login, whether the clear trigger fired from the phone).
+README: "Questions people ask" (the phone question) and the "Kit
+version:" line.
+
+### v1.33 - 2026-09-28 - The route line (which workflow or script, a lookup not an inference)
+WHAT: The origin CEO read Kelsey Hightower's Zero Token Architecture
+("infer once, export the logic, run it without inference") and asked
+where the article went further than Rootstock. The answer: the script
+rule already exports the logic, hooks already run at zero tokens, but
+WHICH exported thing handles a prompt was still the manager's inference
+every turn. His word: "lets get done what you think should get done."
+prompt_gauge.py now prints a ROUTE line naming the WORKFLOWS.md entries
+and the reference tools whose heading, WHEN line or Search keys the
+prompt hits (reference tools/route_index.py, reusing lesson_log's
+matcher: a multi-word key 2 points, a single word 1, under four content
+words nothing; a workflow needs 3, a tool 2, two of each at most). No
+ledger: a route is a pointer and the tool it names keeps its own. The
+same batch adds THE STEP COUNT to the systems audit's PROCESS lane
+(count the steps a model drives in each ritual and propose which become
+one command) and pins "Rootstock as a Claude Code plugin" on the origin's
+board, unlocked by a second project that wants the kit; a server layer
+(the CEO's Firebase aside) was ruled out as the article's "another system
+to monitor the agent".
+CARRIES: hooks/prompt_gauge.py (the ROUTE block + two selftest cases),
+reference tools/route_index.py (new), HOOKS_METHOD.md (item 3 + change
+log), hooks/README.txt (the route paragraph), 0 - READ ME FIRST.md (the
+lesson-loop step names it); this entry.
+GRAFT: copy route_index.py to tools/ beside lesson_log.py and
+prompt_gauge.py fresh (or port the ROUTE block: import route_index,
+print match_lines(prompt) under the hook tag, swallow every exception);
+run both --selftest. It needs the format law's Search keys on tools and
+a WORKFLOWS.md whose entries carry WHEN: lines; a project without those
+gets silence, not errors. Add the step-count sentence to the project's
+systems-audit workflow entry.
+README: "The lessons book (the lesson loop)" bullet in "1. The Knowledge
+Wiki" (the prompt hook also names the workflow and the script), the
+reference tools count and box line in "What is in the box", and the
+"Kit version:" line.
+
+### v1.34 - 2026-09-28 - The checkpoint named check (naming a checkpoint is making it)
+WHAT: The route line batch's reply closed with "a checkpoint and clear is
+the natural next step whenever you want to stop." The origin CEO: "If
+this is the case, you should have just done a checkpoint. Any reference
+to a checkpoint from any valid source should prompt you to do it"
+(correction C0004). v1.13 made an advised checkpoint a step, v1.31 made
+every hook line an order; this closes the SOURCE: the manager's own
+reply, the counter, the gauge and the roadmap are valid sources like a
+hook line, and a sentence saying a checkpoint is next is an order the
+manager gave itself. Mechanically: stop_tick.py reads the turn's reply
+text from the transcript (every assistant text block since the last
+typed prompt, through lesson_log's reader) and refuses once per prompt
+with CHECKPOINT NAMED when the reply names a checkpoint as due (the word
+within a sentence of next / natural / due / advised / ready / should /
+whenever / now) and lacks the safe-to-clear marker. A reply that made
+the checkpoint ends with the marker and passes; a bare mention of the
+counter or the state file passes; stop_hook_active stops a loop.
+CARRIES: hooks/stop_tick.py (CP_DUE_RE, checkpoint_named, reply_text,
+the block, five selftest cases), HOOKS_METHOD.md (item 2 + change log),
+hooks/README.txt; this entry.
+GRAFT: copy stop_tick.py fresh (or port checkpoint_named + reply_text and
+the block before the dire check; it imports lesson_log, so that
+reference tool must sit in tools/); run --selftest. In the project's
+CLAUDE.md widen the hook law by one clause: "and any reference to a
+checkpoint as due from any valid source (a hook, the manager's own
+reply)". Add the C0004 line to the project's ADVISED lesson.
+README: "The Checkpoint Protocol" bullet in "5. The Reporting Method"
+(the source clause) and the "Kit version:" line.
+
+### v1.35 - 2026-09-29 - The proposal law (a DO proposal is done, never asked)
+WHAT: The first reply after a /clear relayed the digest's four PROPOSE
+lines ("the systems audit is 14 days overdue ... the digest wants a
+trim") and asked what to work on. The origin CEO: "If an audit is
+required, and it can be done with a sub-agent, or a script, it doesn't
+need my permission. Just do it. If the standup digest requires a trim,
+it doesn't need my permission. Do it. These need to be added to
+rootstock." (correction C0005, the fourth relay of one week: v1.13 an
+ADVISED checkpoint, v1.31 a hook warning, v1.34 the manager's own
+sentence, now a standup proposal - one law: a line that names work as
+due, from any valid source, is an order done in that reply; the owner is
+asked only what only the owner can answer). The learning loop's "the
+owner decides" names the ASK class, never the mechanics. Mechanically:
+ledger_trends.py tags every PROPOSE line [DO] (a script, hook, employee
+or diet carries it) or [ASK] (an open question, a shelf, a declining
+rate, a game number), exposes the DO ones that clear when done and a HOW
+line per ledger; session_start.py's preamble says the DO lines are the
+first reply's work; stop_tick.py refuses once per prompt with PROPOSAL
+NAMED when the reply names a [DO] proposal its ledger still raises. The
+same batch ran the overdue systems audit (four read-only lanes, their
+DO items done or briefed, their ASK items relayed) and the second digest
+trim under the loss test (a moved line that only repeats the previous
+all-clear collapses; a long roadmap entry prints first clause ... last).
+CARRIES: reference tools/ledger_trends.py (ACTION, CLEARS, HOW, tagged,
+open_do, the header line), hooks/stop_tick.py (_PROPOSAL_WORDS,
+proposal_named, open_do_proposals, the block, six selftest cases),
+hooks/session_start.py (the preamble sentence), reference tools/
+standup.py (all_clear, roadmap_line, the tails plan, twelve selftest
+cases), HOOKS_METHOD.md (item 2 + change log), hooks/README.txt; this
+entry.
+GRAFT: copy the four scripts fresh or port: in ledger_trends add ACTION /
+CLEARS / HOW and print tagged lines; in stop_tick add proposal_named +
+the block after the checkpoint-named block (it imports ledger_trends, so
+that reference tool sits in tools/); in session_start extend the
+preamble; in standup add all_clear + roadmap_line. Run every --selftest.
+In the project's CLAUDE.md rewrite the learning-loop law: "a [DO]
+proposal is done in the reply that reads it, never asked; the owner
+decides only [ASK] ones". Add the lesson (a standup proposal is this
+reply's work) and the INTENT section in the CEO's words.
+README: "The wiki learns (the learning loop)" bullet in "1. The Knowledge
+Wiki" (the DO / ASK classes), "The Checkpoint Protocol" bullet in "4.
+Lossless Sessions" (the proposal source), the systems-audit paragraph in
+"The intent loop", and the "Kit version:" line.
+
+### v1.36 - 2026-09-29 - The pattern row (a named corrections pattern stops re-proposing)
+WHAT: The first standup after v1.35 raised the same two [DO] proposals
+the previous reply had already done: "4 corrections in the last 7 days -
+name the pattern" (named in laws.md the night before) and "the digest is
+13655 bytes - trim" (trimmed; the 00:38 measure was inflated by ~2 KB of
+new-since ledger lines that print in full by the loss test and expire at
+the next standup). A proposal that was done must not fire again until
+its ledger moves: the corrections count stays high for seven days by
+design, so the ledger needed a row that says "named". correction_log.py
+gains --pattern <ids> --law "..." [--intent-ref ...], which appends a
+PATTERN line (ten columns, the id field holds the range, next_id ignores
+it); ledger_trends.py raises the corrections proposal only when no
+PATTERN line is newer than the newest RECORD in the window, and its text
+now names the recording command. The digest proposal stays as it is: it
+reads the newest measurement, and a "measure" trigger line appended
+after a trim is the honest way to close it.
+CARRIES: reference tools/correction_log.py (pattern(), --pattern, the
+docstring paragraph, one selftest case), reference tools/ledger_trends.py
+(the PATTERN check in the corrections block); this entry.
+GRAFT: copy both reference tools fresh, or port pattern() + the CLI
+branch and the four-line check. In the project's WORKFLOWS.md "Correct a
+mistake" add the step: when ledger_trends proposes a pattern, name it,
+draft the law, then record it with --pattern in the same reply.
+README: "The wiki learns (the learning loop)" bullet in "1. The Knowledge
+Wiki" (one sentence: a done DO proposal clears by its ledger, the
+pattern row being the corrections case) and the "Kit version:" line.
+
+### v1.37 - 2026-09-29 - The manager's model call, the law ledgers, the version hint, the keep-warm trial
+WHAT: One owner message answered seven asks at once, and four of the
+answers were the same sentence: "You are the manager, you make the
+decision." (1) THE MODEL CALL: "You can downgrade or upgrade any task you
+see fit on a trial basis. If there are enough failures, then it needs to
+move up again ... I believe Fable is the only one you cannot use per my
+decision to save on tokens." The escalation rule (v1.x, the ~25% line)
+already said what moves a task type UP; nothing said the manager may move
+one DOWN without asking. Now the rule carries that clause, and the origin
+project ran two haiku trials the same night (one OK, one report-shape
+correction: the script was right, the stamp lines were missing). (2) THE
+LAW LEDGERS: "everything that can be measured should be, or else we can't
+learn from it. It's just dust in the wind. Make the call." Three laws had
+no ledger; two can be read by script (an actioned cross-workstation note
+still in notes.md; a tool changed in 30 days that no runbook, loop group,
+hook setting or skill names) and got reference tools/law_gaps.py, two
+append-only ledgers, WARN lines only, in the check group. The third (the
+contradiction rule) was left out on purpose: only a reader can see a
+contradiction, and a manual row would measure the manager's memory. Its
+first run caught a real unswept note. (3) THE VERSION HINT: "Do it if it
+makes sense": reference tools/version_hint.py prints none / patch / minor
+from what changed since the last version commit (never major, the
+owner's call) as the ship ritual's step 2 first reading. (4) THE KEEP-WARM
+TRIAL: asked whether the between-session cache gap could be prevented at
+all. The cache lives one hour after its last read and no harness setting
+lengthens it; but the miss ledger showed 113 of 146 TTL-gap misses were
+pauses of one to twelve hours inside a session, and a ping re-reads the
+context at about a tenth of a rewrite, so an in-session cron ping every
+30 minutes, capped at 16 pings, is cheaper than the miss for any pause
+under ten hours. Documented as a WORKFLOWS entry with its own retire
+test (the miss buckets must shrink), armed by the manager, measured at
+the next systems audit. Also that day: the warn line of the core lint
+retuned 1000 to 1500 (the 2000 budget untouched) after it fired every
+session with no cold unit to move, and the lesson that an ask put to the
+owner is a numbered question with a recommended answer, never a
+statement under an ASK heading.
+CARRIES: SUBAGENT_METHOD.md rule 5 (the assignment clause), reference
+tools/law_gaps.py (new), reference tools/version_hint.py (new), skills/
+ship/SKILL.md (step 2), reference tools/check_claude_md.py (WARN_TOKENS
+1500 with the reason), WIKI_METHOD.md (the two warn-threshold mentions,
+caught by the 2026-09-29 README audit), LESSONS.md (the ask shape); this
+entry.
+GRAFT: copy the two new tools; add law_gaps.py to run_all's check group;
+add the version hint to the ship skill's step 2; paste the assignment
+clause into the project's SUBAGENTS.md escalation rule; the keep-warm
+entry is optional and needs a harness with in-session cron (Claude
+Code's CronCreate); write the INTENT sections in the owner's words.
+README: "The scorecard" bullet in "3. The Employee System" (the
+assignment clause), the reference-tools box row (the count and the two
+new names) and the "Kit version:" line.
+
+### v1.38 - 2026-09-29 - The fourth digest trim (a ledger line the last exchange wrote is a duplicate)
+WHAT: The 10:29 standup read 14515 bytes and proposed the trim; the 00:41
+third trim had found nothing fixed to cut, so the question was where the
+overage lived. It lived in the "new since the last standup" rule doubling
+THE LAST EXCHANGE: the largest tail line (the keep-warm REPORT, 1.1 KB)
+was written by the manager one minute before the /clear, and the exchange
+that wrote it is replayed verbatim at the top of the same digest. Three
+loss-test cuts in standup.py: a no-verdict ledger line stamped inside the
+last exchange's window (user prompt time to manager reply time, both from
+the transcript) collapses to `name date ^exchange` (a verdict inside the
+window still prints in full; print_last_exchange returns the window in
+place of True); THE LOOP prints the run_all groups that share a last-run
+stamp on one line (seven lines to three); the auto "changelog: export"
+commits leave the commit list, git log has them. 14562 to 13415 bytes
+like-for-like on the same session; 12086 for the next standup, the rest
+being 01:37 audit lines that expire. Sixteen new selftest cases; the
+measure line closes the proposal (v1.36). The lever left is the number
+of ledgers, not the digest.
+CARRIES: reference tools/standup.py (in_window, tails_plan's window
+argument, loop_rows, keep_commit, the docstring paragraph, the selftest
+cases); this entry.
+GRAFT: copy standup.py; if your standup's last exchange comes from another
+source than the transcript, return its (first, last) stamps from
+print_last_exchange, or pass window=None to keep the previous behaviour;
+no settings change.
+README: the "Kit version:" line only (the reference-tools box row keeps
+its count).
+
+### v1.39 - 2026-09-29 - The pre-production security audit (SECURITY_METHOD.md, security_audit.py)
+WHAT: The kit audited its own process and never the app it builds. A
+Reddit survey (r/claude, u/Donchuan1998, 2026-09-29) of 100 publicly
+launched AI-built apps, checked with what any visitor's browser already
+downloads: 37 had a server-side secret in their frontend JavaScript
+(OpenAI, Stripe, Supabase), 78 were missing a security header, 12 served
+/.git/ or an .env file, 43 answered a wildcard CORS header, 9 were clean.
+The cause it names: an env variable renamed VITE_ or NEXT_PUBLIC_ to make
+a build error go away, which ships the secret to every visitor. Mazhron:
+"important to note inside of Rootstock as part of the audit of an app,
+saas or website where applicable before it goes into production ... to
+help keep users safe who are making them." SECURITY_METHOD.md is the
+new method file: THE SECURITY AUDIT RULE (the gate before the first
+public release and before any release that touched secrets, env, auth,
+headers, CORS, hosting or database rules; the rotation law: a key that
+was ever public is rotated, never merely removed; the prefix law; the
+script-and-ledger split; read-only against your own deployment), the
+nine-class checklist (secrets in the client, headers, exposed files,
+CORS, database rules, auth and rate limits per route, dependencies,
+logs, the game-export note that anything under res:// is public), the
+ledger line, the WORKFLOWS entry to paste, and the bootstrap. The
+reference tool security_audit.py runs the four classes a script can:
+--dir greps a production build for secret shapes (file, line and
+pattern name printed, never the match), --url reads the headers,
+requests the exposed paths expecting 404, and sends a foreign Origin
+to read the CORS answer; --record appends the counts and the hand-
+walked note to docs/history/security_audit_runs.txt through _ledger's
+dedup; --selftest serves a bad and a good site on localhost and checks
+sixteen cases. The origin project (a Godot game with no backend and no
+keys) is exempt by rule 1 and says so in its first ledger line.
+CARRIES: SECURITY_METHOD.md; reference tools/security_audit.py; the
+front door's STEP 5 line; this entry.
+GRAFT: copy SECURITY_METHOD.md and security_audit.py (to tools/); run
+--selftest; paste the method file's WORKFLOWS entry into your registry
+and add the one-line question to your ship ritual ("did this diff touch
+secrets, env, auth, headers, CORS, hosting or database rules? then the
+audit runs first"); add the .env family to .gitignore; if the project
+has no backend and no keys, write the exemption in its systems index
+and stop. No settings change, no hook.
+README: "What is in the box" (the SECURITY_METHOD.md row and the
+reference-tools row's count and list) and "Questions people ask" (the
+new "Does it check the app I build, or only my process?" answer).
+
+### v1.40 - 2026-09-30 - Four takes from serio-focus (the re-read dedup, the employee model rule, the live usage window, the guard replay) and the secret-file deny list
+WHAT: Mazhron asked for a discovery read of serio-focus
+(github.com/serio-ngo/serio-focus, Apache-2.0, a Claude Code plugin that
+governs tokens and fan-out) against Rootstock: "see what it does in
+comparison to Rootstock, same, similar, different, better or worse. Do
+not install anything." The verdict: a different animal (a token governor
+next to an operating system), the same one-home-per-fact law arrived at
+independently, and four places where it was ahead. Mazhron: "I want to
+add the things you suggest we add and edit it to Rootstock. Always should
+make things better if we can." Credit to its author for all four ideas.
+(1) THE RE-READ RULE in diet_guard.py: a later whole Read of a big file
+(the 10k line) that this session already read whole and that is unchanged
+since (mtime + size fingerprint) is refused once with "RE-READ (diet
+guard): ... already in context; Grep the section or Read with
+offset/limit; if the context was compacted since, repeat once", and the
+repeat passes; pre_compact.py calls forget_session_reads() so the marks
+never outlive a compaction. serio-focus applies it to every file; the kit
+keeps it to big files, where the waste is. (2) THE EMPLOYEE MODEL RULE in
+brief_guard.py: a work dispatch whose tool_input.model is missing, or
+names Fable, is refused with the other brief gaps. The harness fact that
+made it urgent: an Agent call with no model inherits the parent's model,
+so every model-less dispatch had been running on the manager's own tier
+against Mazhron's ruling ("Fable is the only one you cannot use"). (3)
+THE USAGE WINDOW (reference tools/usage_window.py + one line in
+prompt_gauge.py): the budget line was retrospective (the next standup's
+"+150%"); the plan's own limits are rolling five-hour and seven-day
+windows. The tool mines the same transcripts as usage_report.py,
+incrementally (a gitignored cache; 0.1s warm), and prints last 5h, the
+peak 5h inside the last 7 days, the share, and 7d; the gauge prints it
+only when the last 5h is already most of the 7-day peak (owner-tuned:
+window_warn_share 0.8 and window_floor_weighted 1000000 in
+.claude/fanout_limits.json) and ledgers that reading in
+docs/history/usage_window_runs.txt. (4) THE GUARD REPLAY (reference
+tools/guard_replay.py): the hooks' selftests check invented cases; this
+replays the last N days of recorded tool calls, employee transcripts
+included, through the four PreToolUse guards' pure judge functions in a
+sandbox (a fresh state per session, no ledger append, no command run)
+and prints per rule: replayed, would refuse now, refused live, NEW
+CATCHES and LOST; --record ledgers it in docs/history/guard_replay_runs.txt
+with WARN when anything was lost. Its first true run: 1261 calls in 7
+days, INDEX FIRST 9 would / 10 live / 1 lost (a shell read judged at
+today's file size), everything else exact. Also: the settings template
+gains a permissions.deny block (the destructive shell rules the origin
+project already carried plus Read/Edit of .env files, key material and
+credentials), zero runtime cost. Not taken, and why: the commit/push
+hold (the ship-every-batch ruling stands), the first-N-lines read cap
+(INDEX FIRST is the better answer), the flat deny list without a grant
+path, the output style.
+CARRIES: hooks/diet_guard.py, hooks/brief_guard.py, hooks/pre_compact.py,
+hooks/prompt_gauge.py, hooks/settings.json (the permissions.deny block);
+reference tools/usage_window.py, reference tools/guard_replay.py;
+HOOKS_METHOD.md (the settings note); this entry.
+GRAFT: copy the four hooks over yours and run each --selftest; copy the
+two tools to tools/ and run their --selftest; merge the permissions.deny
+block into your .claude/settings.json (validate with python -m json.tool);
+add the two window keys to .claude/fanout_limits.json only if the
+defaults are wrong for your plan; add `.claude/usage_window_state.json`
+to .gitignore; run `python tools/guard_replay.py --days 7 --record` once
+and read the LOST column before trusting a guard change; put the replay
+in your check loop.
+README: "The hooks" (the diet guard and brief guard sentences), "What is
+in the box" (the reference-tools row's count and list, the hooks row's
+settings-template words).
+
+### v1.41 - 2026-09-30 - The fourth README audit: the two grafts v1.39 and v1.40 named but never wrote (the ship question, the employee model rule)
+WHAT: Four read-only sonnet lanes read kit v1.40 against the public
+README (T-0930-RA-1..4). The README was close; the drift was upstream.
+v1.39's GRAFT line told every project to "add the one-line question to
+your ship ritual" and the kit's own ship skill never got it; v1.40's
+employee model rule lived in brief_guard.py and the README's hooks
+section while SUBAGENT_METHOD.md and the brief skill, the two things a
+manager reads before dispatching, said nothing. Both are written now:
+/ship step 1 asks THE SECURITY QUESTION (secrets, env, auth, headers,
+CORS, hosting or database rules touched? the audit runs first; a
+project with no backend answers by its standing exemption); /brief
+step 1 and SUBAGENT_METHOD.md's assignments section carry THE EMPLOYEE
+MODEL RULE (every dispatch names its model; a model-less call inherits
+the manager's tier; the brief guard refuses). The README took 22 edits:
+one numeric WRONG explained (the weighted shares stop at ~83% because
+the pillar shares assume the five-minute write rate and this machine
+runs the one-hour cache, so writes are the largest pillar at ~46%, which
+is what the method file's earlier 43% said; REPORTING_METHOD.md now
+dates its snapshot), the first-audit date reconciled in INTENT_METHOD.md
+(the night of 09-13, ledgered 09-14), the "sent anywhere" answer naming
+the security audit's own --url requests, "public URL" widened to "public
+release (a URL, a store listing, a showcase post)" in the README and the
+front door, Quick start's step 4 carrying the front door's STEP 5, and
+the hooks section gaining the usage window, the deny block, the guard
+replay and the lesson advisor's two named checks it had never mentioned.
+Six CLAIMS rows so none recurs; lint PASS at 91 checks.
+CARRIES: skills/ship/SKILL.md (step 1); skills/brief/SKILL.md (step 1);
+SUBAGENT_METHOD.md (the assignments section's closing rule);
+REPORTING_METHOD.md (the dated split); INTENT_METHOD.md (the audit
+date); 0 - READ ME FIRST.md (STEP 5's wording); reference
+tools/readme_lint.py (six CLAIMS rows); this entry.
+GRAFT: copy the two skills over yours (or add the two step-1 lines to
+your own); paste THE EMPLOYEE MODEL RULE paragraph into your
+SUBAGENT_METHOD.md after the assignments table; copy readme_lint.py if
+you run the README gate. No settings change, no hook change.
+README: "The four pillars" (pillar 3's "Who gets what" and pillar 4's
+/ship sentence), "The hooks" (the usage window, the deny block, the
+guard replay, the named checks), "Quick start" (step 4's last sentence),
+"Questions people ask" (the network answer, the security answer's
+"public release"), "What is in the box" (the usage-window words).
+
+### v1.42 - 2026-10-01 - The stop-time cross-check (delegation_auditor.py on SubagentStop: the employee's transcript is the meter, a self-count miss holds it once)
+WHAT: The rule-3 tightening the 09-30 checkpoint named, and the finding
+underneath it. The delegation auditor's PostToolUse branch sees the Agent
+call's RESULT; a background employee's result is only the launch notice,
+so 24 of the first 25 PENDING lines carried tools=? tokens=? and the
+cross-check had been blind since the trio was born. The SubagentStop
+event fires when the employee itself stops, foreground or background.
+The same script is now wired there: it finds the employee's own
+transcript (this build hands the MANAGER's file under transcript_path -
+the first live run metered 116 calls and 428k tokens, the whole session -
+and the employee's under agent_transcript_path, which is tried first,
+then <session>/subagents/agent-<id>.jsonl), counts its tool_use blocks
+(nine of nine matched the harness's figure exactly on the calibration
+day), sums output + cache-write tokens once per message id, and judges
+the union of the hand-back text, the last text block and
+last_assistant_message - the stop and the hand-back land in either order
+(foreground: hand-back first; background: the stop, then the hand-back,
+then a second stop). A missing template line, or a TOOLS line under
+selfcount_floor (0.7, owner-tuned in .claude/fanout_limits.json) of the
+meter by three or more calls, HOLDS the employee once with the true
+count in the reason; stop_hook_active plus an ASKED line at the ledger's
+tail guarantee once. A METER line then lands in delegation_pending.txt
+(task id from the brief's stamp, tools, tokens, claimed, verdict; "held
+once"; "pre-hand-back" on the earlier of a background employee's two).
+The PostToolUse branch gains the same miss tier (under the 3x rule) and
+recognises the launch notice even when the result echoes the brief.
+Replayed over the week's nine employees: the four misses the manager
+had ledgered by hand (26 of 43, 27 of 41, 41 of 70, 18 of 27) held,
+the three honest reports passed. Five live haiku runs proved the event
+fires for both modes. The Tier 4 pin "SubagentStop refuses an
+employee's stop when its report lacks the stamp" is built, as part of
+this, not as the deferred separate hook.
+CARRIES: hooks/delegation_auditor.py (main_subagent_stop,
+employee_transcript, read_transcript, stop_verdict, selfcount_miss,
+asked_before, launched_async; 20 new selftest cases); hooks/settings.json
+(the SubagentStop block); reference tools/format_lint.py (the SAFETY
+row); HOOKS_METHOD.md (Tier 4a's new bullet); hooks/README.txt;
+SUBAGENT_METHOD.md's manager book in the origin project (rule 3's
+mechanical line); this entry.
+GRAFT: copy delegation_auditor.py and run --selftest; add the
+SubagentStop block to your settings (the format guard refuses the edit
+if format_lint.py's SAFETY table does not know the row yet, so copy
+format_lint.py first); run one cheap employee and read the METER line
+at the tail of docs/history/delegation_pending.txt; add selfcount_floor
+to .claude/fanout_limits.json only if 0.7 is wrong for your employees.
+README: "The hooks" (the delegation truth set's auditor sentence).
+
+### v1.43 - 2026-10-05 - The one-turn line (an employee batches its independent tool calls into one turn)
+WHAT: The one piece of a public reply worth taking. Mazhron described
+Rootstock under a post (sub-agents orchestrated by the top model, cheap
+models for cheap tasks, scripts for anything repeatable, hooks against
+fan-out, indexed knowledge so agents read small); Ken Brown answered
+"make your subagents stateless and single use, have them do a fast pass
+read only for their one task, and call all tools in a single call".
+Two of those were already law 1 and law 3 (an employee starts with an
+empty context and one self-contained brief; readers are read-only by
+assignment, writers stay writers because that is where the cheap models
+earn their keep). The third was true and unwritten: nothing told an
+employee to fire its independent reads in ONE turn, and every extra turn
+re-reads the employee's whole growing context. Now the brief carries it
+verbatim: "Independent reads, greps and checks go in ONE turn, never one
+per turn; only a step that needs the previous result waits." It is a
+skill line, not a guard line: the delegation auditor's tools= count
+against the transcript's turn count is the measure, and a guard comes
+only if the ledger shows employees ignoring it.
+CARRIES: skills/brief/SKILL.md (item 3, THE ONE-TURN LINE);
+SUBAGENT_METHOD.md (law 1's last sentence); the origin project's
+SUBAGENTS.md rule 7 (the inside-an-employee sentence); this entry.
+GRAFT: add the verbatim line to your brief template under the budget
+line; add the sentence to your delegation rules' parallelism rule. No
+hook, no settings change, no new file.
+README: "The company" (the stamped-brief bullet's last sentence).
+
+### v1.44 - 2026-10-06 - The fifth README audit: six slips lived upstream in the method files, not the README
+WHAT: The audit's four read-only lanes (T-1006-RA-1..4) found the README
+right and its sources wrong six times, the reverse of the usual drift:
+the front door still said the core lint warns past 1,000 tokens (v1.37
+moved it to 1,500) and put the install stamp "in the core's index"
+(UPGRADES and the README say CLAUDE.md itself); WIKI_METHOD's learning
+loop still said the manager never applies a proposal unasked (the
+proposal law's [DO]/[ASK] split, 2026-09-29, superseded that);
+REPORTING_METHOD labelled the 2026-09-10 weighted window 44 days (it is
+50; 44 days is the raw window to 09-03); HOOKS_METHOD's Tier 4 pin still
+deferred the SubagentStop stamp refusal that v1.42 built; CONTRIBUTING's
+safety list named seven hooks when format_lint's SAFETY table, the code,
+names eleven, and its format-law list omitted the front door that
+carries the header; WORKFLOW_METHOD never mentioned law_gaps.py, the
+shadow check the README credited to it. All six fixed at the source.
+The README's own slips: "while a file is open" for a path-scoped rule
+(Claude Code loads it when Claude READS the file), a 93% weighted share
+in the raw-window receipt that the weighted section's 83% contradicted,
+the stale "deferred outright" sentence, and "a flag from someone other
+than the author" without CONTRIBUTING's "when possible". Twenty LACKS
+and POORLY edits beside them: the three knowledge layers and the
+bootstrap instruction, the comparison rule's thresholds, the runner's
+non-zero exit and own ledger line, the cold shelf's folder and mover,
+the auto-memory trim numbers, the employee's closing stamp (workflow and
+INTENT lines, the claim the manager logs), the fan-out refusal rule and
+where its numbers live, the checkpoint's dire consequence and the 30%
+floor, the mirror push and the self-ticking counter in /ship, the
+session-start triggers and the two UNSYNCED/UNEXPORTED lines, the
+auditor's three-call floor and delegation_pending.txt's line shapes, the
+safety tier named, the hooks' install walk, the graft batch's ship step,
+where to open Claude Code and the hooks' human parts in Quick start. Five
+CLAIMS rows keep the slips from recurring. Skipped by design: LICENSE
+and README.md rows in the box (the lint derives the box from the kit
+folder, which holds neither), and the long run-on splits (the reference
+tools cell, the truthfulness and checkpoint bullets) - a rewrite pass,
+not an audit edit.
+CARRIES: 0 - READ ME FIRST.md (STEP 1: 1,500 and the stamp's home);
+WIKI_METHOD.md ("The learning loop" step 3); REPORTING_METHOD.md ("THE
+WEIGHTED COLUMN" window label); HOOKS_METHOD.md ("Tier 4 (still
+pinned)"); CONTRIBUTING.md ("THE FORMAT" list, the SAFETY list);
+WORKFLOW_METHOD.md ("Who writes it", THE SHADOW CHECK bullet); the origin
+project's tools/readme_lint.py (five CLAIMS rows); this entry.
+GRAFT: if your install copied any of the six method files before this
+version, re-read the six sections named under CARRIES and apply the
+corrected sentence to your copy; if your core lint still warns at 1,000
+tokens, move it to 1,500; if your proposal step still waits for the
+owner on every line, adopt the [DO]/[ASK] split. No hook, no settings
+change, no new file.
+README: "What loads every session" (the rules row), "The receipts", "1.
+The Knowledge Wiki", "2. The Reporting Discipline", "3. The Delegation
+Company", "4. Lossless Sessions", "The hooks", "The format law",
+"Quick start", "Updating an installed project", "What is in the box".
+
+### v1.45 - 2026-10-12 - The due line: the checkpoint hooks order, they no longer advise
+WHAT: The origin CEO, after the gauge had said ADVISED through a long
+afternoon and the manager had kept shipping: "we should change this hook
+from advising a checkpoint to DO the checkpoint. Unless doing a
+checkpoint costs some unreasonable amount of tokens, it should just be
+done vs advising it. Any conversation after should have a checkpoint
+happen until the clear/standup ritual is complete." A checkpoint is a
+few thousand tokens; the "if the arc is closed" clause in the old line
+was the escape every skipped checkpoint had used. Now prompt_gauge.py
+and stop_tick.py print CHECKPOINT DUE - DO IT (the counter at 8 tasks,
+the context line under 80%), the context line fires on EVERY prompt past
+the threshold and each such reply ends with the ritual, an open arc is
+checkpointed as open (WHERE WE LEFT OFF names the step mid-way), the step
+ships first when mid-batch, and only a running employee waits. The
+checkpoint skill, HOOKS_METHOD's Tier 1 text, the laws stub, the session
+workflow and the shelf say the same; both hooks' selftests check the new
+wording.
+CARRIES: hooks/prompt_gauge.py (gauge_lines, the docstring, two selftest
+rows); hooks/stop_tick.py (the systemMessage at "advised"); the origin
+project's tools/checkpoint.py (the by-hand gauge, same words);
+skills/checkpoint/SKILL.md (THE DUE LINE paragraph, the context gauge
+paragraph); HOOKS_METHOD.md (Tier 1, THE DUE LINE); LESSONS.md ("If the
+hook says checkpoint advised", the RULING bullet); SKILLS.md (the
+/checkpoint shelf entry); this entry.
+GRAFT: replace your hooks/prompt_gauge.py and hooks/stop_tick.py with the
+kit's (both are whole-file hooks; re-run `--selftest` on each), then
+re-read the checkpoint skill's THE DUE LINE paragraph and apply it to
+your copy; no settings change, no new file. If your manager still treats
+a checkpoint line as advice, the words were the bug.
+README: "4. Lossless Sessions" (the checkpoint sentence), "The hooks"
+(prompt_gauge and stop_tick rows), "Kit version:".
+
+### v1.46 - 2026-10-12 - The sixth README audit: the due line's echoes, three upstream slips, the never-copy rule's second exception
+WHAT: The audit's four read-only lanes (T-1012-RA-1..4) ran the day v1.45
+shipped and found its echoes first: the README's hook rows never said
+CHECKPOINT DUE, its checkpoint bullet still said the ritual "refuses with
+an employee running or work uncommitted", and the checkpoint skill's own
+PRECONDITIONS still read "No uncommitted work; never checkpoint mid-arc"
+two paragraphs under THE DUE LINE that says the opposite (the one wait is
+a running employee; uncommitted work ships first, in the same reply; an
+open arc is checkpointed as open). Two more slips lived upstream:
+INTENT_METHOD's systems-audit paragraph and its law 5 still said "nothing
+is applied by the audit itself, ever; the owner decides", which the
+proposal law's [DO]/[ASK] split (2026-09-29) superseded, the same slip
+v1.44 fixed in WIKI_METHOD; and the front door's DEFINITION OF DONE
+omitted the hook selftests the README listed. The graft protocol's
+never-copy rule had one exception (a genuinely new file) while every
+whole-file hook graft in this log says "replace it with the kit's": the
+practice is now written as the second exception (a hook or reference
+script taken unadapted, CONFIG block aside, is replaced whole, its CONFIG
+re-applied, its selftest re-run). README slips beside those: the
+employee's closing stamp described as "a second line" (it is four: STAMP,
+TOOLS, WORKFLOW, INTENT); the ~46% writes share called "an earlier
+window" (it is the same 50-day window at the one-hour rate; the method's
+43/40/17 are the sheet's five-minute pillar shares); the manager's-tier
+rule framed as an optional owner's choice; the front door's size (~2k
+tokens, not 1.8k); the domain notes' home; the checkpoint counter
+"never ticked by hand" (true only with the hooks). Thirty-eight edits in
+all, among them the always-loaded auto-memory row in both what-loads
+tables, the fan-out guard's numbers, the 70% self-count floor, THE HOOK
+LAW in the hooks contract with its five line names, the brief guard's
+exempt agent types, the intent toolchain's script names, the kit repo's
+address, the install stamp and the counter reset in their rituals, the
+skills' plain-phrase triggers and the shipped rule's `paths:` value. Five
+CLAIMS rows keep the slips from recurring. The audit's own lesson: all
+four lanes lost their first turn to a kit path the brief gave from memory
+(one folder off); the audit workflow now names the lint's KIT_REPO as
+the source of that path, verified with `ls` before the dispatch.
+CARRIES: skills/checkpoint/SKILL.md (PRECONDITIONS); INTENT_METHOD.md
+("The systems audit" lane paragraph and law 5); 0 - READ ME FIRST.md
+(DEFINITION OF DONE); this file (THE GRAFT PROTOCOL step 3); the origin
+project's tools/readme_lint.py (five CLAIMS rows, two patterns re-anchored)
+and WORKFLOWS.md (the audit entry's path line); this entry.
+GRAFT: if your checkpoint skill still refuses on uncommitted work, make
+the running employee its only wait and ship the step first; if your
+intent method still says the systems audit only proposes, adopt the
+[DO]/[ASK] tags; add every hook's selftest to your definition of done;
+when a graft tells you to replace a hook whole, that is the protocol's
+second exception, not a breach of never-copy. No hook, no settings
+change, no new file.
+README: "What loads every session" (the auto-memory row), "The receipts"
+(the weighted window), "1. The Knowledge Wiki", "2. The Reporting
+Discipline", "3. The Delegation Company", "4. Lossless Sessions", "The
+hooks", "The intent loop", "The format law", "What it saves", "Quick
+start", "Updating an installed project", "What is in the box", "Kit
+version:".
+
+### v1.47 - 2026-10-13 - The retrieval evaluation: the lesson matcher measured against a query set and a replay
+WHAT: The CEO asked whether an AI-engineering post's vocabulary (RAG,
+pre-retrieval, retrieval, scoring, re-ranking, fine-tuning, a boot
+sequence, a tool registry, a state manager, "a representative query
+dataset ... measure if the system actually works") applied to the kit.
+Everything but two items mapped onto what the kit already does lexically
+and by hand (the table is in the origin's self-audit.md "Rootstock in the
+industry's words" and the README's new question); fine-tuning and a vector
+database do not apply and the WHY is written. The one real gap was the
+evaluation: the lesson ledger said WHICH entries fired on a prompt, never
+whether the RIGHT one did. reference tools/retrieval_eval.py closes it from
+two sides: a query file (retrieval_queries.txt, one `heading fragment ||
+prompt in the owner's voice` per line) scored hit or miss, and a replay of
+the newest 200 typed prompts, each re-matched and its turn scanned by
+lesson_log.signals for trial and error, giving four cells (named or silent
+x clean or trial; silent-trial is the recall gap) and a fire rate per entry
+(above 25% of eligible prompts is noise). Harness-generated messages (a
+skill body, an agent hand-back, an image drop) are not prompts and are
+filtered; prompts under four content words sit outside the cells. One
+ledger line per run through _ledger.py; the detail file names each miss
+and what fired instead. ledger_trends rule 16 proposes a [DO] on a miss or
+a noisy entry: the fix is always the Keys line, never the matcher. First
+run in the origin: 30 queries, 20 hit, 10 miss, noisy 0.
+CARRIES: reference tools/retrieval_eval.py (new; a query file beside it
+is the project's own, write one in the CEO's voice); reference
+tools/ledger_trends.py (rule 16, the DO class, the HOW line); reference
+tools/run_all.py (metrics group); the origin's WORKFLOWS.md "Evaluate the
+lesson retrieval"; the origin's self-audit.md section; README "Questions
+people ask" and the box line; this entry.
+GRAFT: adopt the tool and write ten query lines from your own LESSONS.md
+headings in the CEO's phrasing; run it once and read the misses before
+touching any Keys line; add the metrics-group line and the trends rule;
+add a query line every time a lesson is written. No hook, no settings
+change, one new file plus the query file.
+README: "Questions people ask" (the RAG question), "What is in the box"
+(the reference tools count and the lesson loop phrase), "Kit version:".
+
+### v1.48 - 2026-10-13 - The two-day update check, and the community path announced
+WHAT: The CEO opened the kit's community path ("it's time to get
+Rootstock_os to begin it's path down community involvement") and ruled on
+the plan the same day: contributions land in an inbox the sync never
+writes (the direction flip is a later entry), text only at first, a code
+RECOMMENDATION is welcome when it says how it works, why it works, what it
+might hurt and carries a before/after ledger, every owner is ASKED whether
+to take part and a chosen name plus a date/time is stamped on whatever
+they contribute, and the update check runs "once per day or two from now
+on" instead of weekly, with a push schedule for knowledge beside it. This
+entry ships the one piece that is a kit change today: CHECK_EVERY_DAYS 7
+to 2 in the update checker. The rest is the origin's roadmap entry NS-38
+and its topic file (docs/systems/rootstock-community.md: the rulings, the
+three phases, the founding exchange verbatim), built in later entries.
+CARRIES: reference tools/rootstock_update_check.py (CHECK_EVERY_DAYS = 2,
+the docstring and INTENT line); README "Updating an installed project"
+and "Questions people ask" (the cadence claim); this entry.
+GRAFT: set CHECK_EVERY_DAYS to 2 in your copy of the update checker (or
+replace it whole if you took it unadapted) and re-run it once; nothing
+else changes until the community entries land. No hook, no settings
+change.
+README: "Updating an installed project" (weekly to every two days),
+"Questions people ask" (the network-call sentence), "Kit version:".
+
+### v1.49 - 2026-10-13 - The community inbox: the door opens, text only, behind a gate
+WHAT: NS-38 phase 1. The public repo gains a contributors' inbox
+(community/inbox/, one stamped markdown file per contribution, named
+YYYY-MM-DD-<name>-<slug>.md, shaped by community/TEMPLATE.md), the rules
+page (community/README.md), five issue forms (lesson, gotcha, field notes,
+bug, code proposal: HOW IT WORKS / WHY IT WORKS / WHAT IT MIGHT HURT /
+LEDGER before and after), a pull-request template, a security policy
+(SECURITY.md: what pulling runs, which classes can run and after whose
+yes, the private reporting door) and a CI check on every pull request:
+reference tools/contribution_lint.py refuses, from anyone but the owner,
+a file outside the inbox, a non-markdown or binary file, a shell line or
+block, an install, a fetch, a deletion verb, an off-allowlist URL and an
+instruction aimed at a reading Claude (the prompt-injection guard), with
+a selftest of fifteen checks. The sync script now pulls the clone
+fast-forward before the copy and never touches community/ or .github/,
+so a merged contribution survives every sync (the mirror used to be
+one-way). The front door's STEP 0 gains item 6: the CEO is asked whether
+to take part and under what name, the answer lives in the install stamp
+(`| community: <name>` or `| community: no`), and a general lesson is
+offered for sharing at the moment it is written, never sent without a
+yes. The trend script gains rule 17, the push schedule: when the kit
+repo's last commit is older than two days and a kit file differs from
+the folder, standup proposes the sync as a DO. GitHub side: Discussions
+on, private vulnerability reporting on, a pinned "wanted" issue, and
+branch protection on main (pull requests only, one review, signed
+commits required, no force push; the owner's signing key is the one
+step only the owner can do). The CEO's words: "a user should have the
+choice to participate in the community side to help it grow. Their
+claude should ask them if they want to participate, their username or
+whatever name they choose with a timestamp (date/time) will be stamped
+on whatever they contribute."
+CARRIES: reference tools/contribution_lint.py (new); SECURITY.md (new);
+CONTRIBUTING.md "The community path"; 0 - READ ME FIRST.md STEP 0 item 6;
+reference tools/ledger_trends.py (rule 17, the kit_push_days limit);
+the origin's tools/sync_kit_repo.py (KEEP + the pull), WORKFLOWS.md
+"Review a community contribution (Rootstock)" and the sync entry's step
+5, WORKSTATION.md (the signing-key row), docs/systems/
+rootstock-community.md; kit repo only: community/README.md,
+community/TEMPLATE.md, community/inbox/README.md, .github/ISSUE_TEMPLATE/
+(five forms + config), .github/PULL_REQUEST_TEMPLATE.md,
+.github/workflows/contribution-lint.yml; README "Taking part", the box
+rows, "Can I contribute?"; this entry.
+GRAFT: nothing to copy for a project that does not publish a kit of its
+own. Add STEP 0 item 6's question to your install stamp if you want to
+take part (`| community: <name>`); from then on a general lesson is
+offered for sharing when written. A project that runs the trend script
+gains rule 17 only if it keeps a kit clone (it is silent otherwise).
+No hook, no settings change.
+README: "Taking part (the community inbox)" (new), "Updating an installed
+project" (the push rhythm), "Questions people ask" ("Can I contribute?"),
+"What is in the box" (SECURITY.md, the reference tools count and the
+community gate phrase), "Kit version:".
+
+### v1.50 - 2026-10-13 - The knowledge split: kind x domain, a manifest the front door reads
+WHAT: NS-38 phase 2. The kit's knowledge is a tree, not one book:
+knowledge/lessons/<domain>.md holds the origin's lessons split by domain
+(harness 39, godot 4, 2d 2 today; an entry's domain comes from its Tags
+line through a table, then a short override list, else harness), and
+knowledge/MANIFEST.md is one row per knowledge file (path, kind, domain,
+size in tokens, entries, one sentence) plus the WANTED rows: a kind x
+domain nobody has written (Unity and Unreal field notes, C++ gotchas, a
+2D graphics page, the nine silent-trial prompts). The front door's STEP 0
+item 4 now reads the manifest and pulls only the rows whose domain
+matches the answers. The kit's LESSONS.md stays as the lesson law, the
+entry shape and a pointer index: every heading under the file that holds
+it (THE PRESERVATION LAW). All of it is DERIVED: reference
+tools/split_knowledge.py builds the tree from the origin's one book on
+every kit refresh (refresh_kit.py's SPLIT set skips the plain copy and
+calls it), so the origin keeps one LESSONS.md for its hooks and the kit
+shows the split. Kinds: lessons, gotchas, field notes, design notes,
+graphics. Domains: harness, godot, unity, unreal, cpp, 2d, 3d. A domain
+gets a file only when it has entries (the assessment's caution: "Do not
+split finely before content exists ... Files appear when there is
+something to put in them"); the manifest's WANTED rows name the holes
+instead of stub files. The CEO's word: "Lets work on Phase 2".
+CARRIES: reference tools/split_knowledge.py (new: --selftest, --check,
+--dry-run; the ledger knowledge_split_runs.txt); reference
+tools/refresh_kit.py (SPLIT, the call after the copies); knowledge/
+MANIFEST.md and knowledge/lessons/harness.md, godot.md, 2d.md (new,
+generated); LESSONS.md (the pointer index); 0 - READ ME FIRST.md STEP 0
+item 4 and STEP 1 (one book per project); CONTRIBUTING.md "The community
+path" (where a graft lands); the origin's WORKFLOWS.md "Edit the
+future-project kit" step 1 and "Add a domain or a kind to the kit's
+knowledge taxonomy", reference tools/run_all.py's check group
+(split_knowledge --check); kit repo only: README "What is in the box"
+(the knowledge/ row, the LESSONS.md row), "Taking part", "Questions
+people ask" ("Which files do I actually need?"), community/README.md
+"What happens after the merge"; this entry.
+GRAFT: an installed project keeps ONE LESSONS.md (its hooks read it
+there); nothing in it is split. At the next update, open
+knowledge/MANIFEST.md, pull the rows whose domain matches yours, and
+append any entry your book lacks under its own heading (the entries are
+verbatim; the Tags and Keys lines travel with them). A project that
+publishes a kit of its own adopts split_knowledge.py and edits its CONFIG
+block (the tag table, the overrides, the wanted rows). No hook, no
+settings change.
+README: "What is in the box" (the knowledge/ row, the LESSONS.md row, the
+reference tools count), "Taking part" (where a merged file is grafted),
+"Questions people ask" ("Which files do I actually need?"), "Kit
+version:".
+
+### v1.51 - 2026-10-13 - The code gate: a code lane, the guards in CI, checksums and a signed tag per release
+WHAT: NS-38 phase 3. The CEO's intent, verbatim: "Anything pushed would
+need to come with whatever is needed to authenticate that the code is not
+malicious, we must ensure that no user could pull code and be forced to run
+it." The go word: "Lets do phase 3". Four parts. (1) A CODE LANE: a
+contributor may add Python under `community/code/<YYYY-MM-DD-name-slug>/`
+(one or more .py files, an optional README.md). The contribution lint now
+refuses, in that lane, a .py without the four header lines (PURPOSE,
+INTENT, Search keys, See also) in its docstring; without the stamp line
+`Contributed by: <name> | <YYYY-MM-DD HH:MM> | code | <domain>`; without
+`--selftest`; importing a network module (urllib, requests, socket,
+http.client and the like); calling eval, exec, compile, __import__,
+os.system, os.popen, shell=True, ctypes, marshal or pickle.loads; an
+off-allowlist URL; and an instruction aimed at a reading Claude. The inbox
+stays markdown only, and anything outside community/ (hooks/, settings.json,
+reference tools/, .github/) stays refused from a non-owner. (2) THE GUARDS
+IN CI: the pull request check gains two steps for contributed .py files:
+guard_replay.py replays the kit's own bash guard and preserve guard over
+each file (a deletion call or a shell-shaped line is a refusal), and each
+file's `--selftest` runs on GitHub's runner with a 60 second timeout.
+Nothing runs on any reader's machine. (3) NEVER WIRED: after a merge a
+contributed file sits in `community/code/` with its stamp and is never
+wired; a different Claude audits its purpose read-only (the flag skill) and
+files a FLAGS.md entry; the owner grafts it into reference tools/ or hooks/
+in a later kit batch, credits the stamp in this log, and only then does an
+install see it. The "Code proposal" issue form stays as the other door for
+a change to a kit file. (4) VERIFIABLE RELEASES: the sync script writes
+`SHA256SUMS` at the repo root (every file but .git and build junk) before
+each commit and, after each push, creates a SIGNED annotated tag
+`v<kit version>` and pushes it; an unsigned tag is never made, and a
+machine without the signing key prints a refusal. The first tagged release
+is v1.51. The update checker pins to the tag: it fetches `SHA256SUMS` and
+`UPGRADES.md` at `v<version>`, verifies the hash and prints `VERIFIED
+v1.51 (checksum matches)` before it lists grafts, or `UNVERIFIED` and
+refuses to list them on a mismatch.
+CARRIES: reference tools/contribution_lint.py (the code lane rules);
+reference tools/guard_replay.py (new: --file, --selftest); reference
+tools/sync_kit_repo.py (SHA256SUMS, the signed tag); reference
+tools/rootstock_update_check.py (pin and verify, --selftest);
+CONTRIBUTING.md "The community path"; SECURITY.md ("What a contributor can
+change", "Verifying a release"); 0 - READ ME FIRST.md (the verify line);
+kit repo only: .github/workflows/contribution-lint.yml,
+community/code/README.md, community/README.md,
+.github/PULL_REQUEST_TEMPLATE.md, README "Taking part", "Updating an
+installed project", "Questions people ask"; this entry.
+GRAFT: an installed project that takes contributions adopts the code lane
+rules into its own lint and the two CI steps (guard replay, selftest with a
+timeout). A project that publishes a kit adopts the checksum and tag steps
+into its sync script (SHA256SUMS before the commit, a signed tag after the
+push, a refusal when there is no signing key). Every install gains the
+verify step at update time: run the update checker and graft only from a
+VERIFIED release; the tag and SHA256SUMS are the proof, and an UNVERIFIED
+line means stop and tell the kit's owner. No hook, no settings change.
+README: "Taking part (the community inbox)", "Updating an installed
+project", "Questions people ask", "Kit version:".
+
+### v1.53 - 2026-10-19 - The seventh README audit: the Stop tick owns the NAMED checks, the safety tier is eleven, the dire refusal repeats
+WHAT: four read-only sonnet lanes (T-1019-RA-1..4) against kit v1.52 found
+three slips that lived UPSTREAM and are fixed at the source: HOOKS_METHOD.md
+filed the CHECKPOINT NAMED and PROPOSAL NAMED checks under the lesson
+advisor (they are stop_tick.py's, as its own change log said) and listed a
+SAFETY table of seven hooks where the lint's has eleven; the checkpoint
+skill called the dire refusal "once" where stop_tick refuses again every
+five tasks past 15; hooks/README.txt carried a "kit v1.30" label that went
+stale with every version (the label now points at UPGRADES.md). Fifteen
+README WRONG lines applied (the diet guard's RE-READ refusal, the usage
+sheet's dollars as estimates, the floor of three on the miss rule, the 70%
+hold's three-call gap, the update checker's two files at the signed tag,
+the code lane in the community gate's box row, the Quick start's community
+question and the stamp's community field, the two doors, a direction word,
+the same-day close of the first audit's yellows, Claude Code's own IDE
+extension running the hooks, the URGENT line named), about twenty-five
+LACKS and POORLY applied (the Index directive and the three core numbers,
+the cold shelf's index columns and the six cold classes, the cache-miss
+definition, what earns a ledger, the output diet's last bullets, layers
+versus homes, the duplicated bootstrap bullet, the brief header named
+apart from the STAMP line, the no-bulk-orchestration rule, the delete
+grant's mechanics, how a claim closes, the mirror push, escalation by
+effort, weighted tokens and the /runaway flags, the purpose audit's
+checklist and batch rule, the intent file's four fields, the n/a trend,
+the format law by class, what earns a registry entry, Remote Control,
+what SECURITY.md and CONTRIBUTING.md answer, the inbox stamp's kind and
+domain, the no-Python case); six new lint CLAIMS rows. Skipped by design:
+the box rows for community/, SHA256SUMS, LICENSE and .github (the lint
+derives the box), the seven-laws recap, the scorecard detail.
+CARRIES: HOOKS_METHOD.md (item 5 and the format guard's SAFETY paragraph),
+skills/checkpoint/SKILL.md, hooks/README.txt, reference tools/readme_lint.py
+(six CLAIMS rows), README.md, this entry.
+GRAFT: nothing to wire. An installed project's HOOKS_METHOD.md copy may
+take the two corrected paragraphs; its checkpoint skill's counter line
+may take the "then again every five tasks" words. No hook changed.
+README: "The hooks: laws the harness enforces itself", "3. The Delegation
+Company", "4. Lossless Sessions", "1. The Knowledge Wiki", "2. The
+Reporting Discipline", "The intent loop", "The format law and the purpose
+audit", "The two companions", "What you need", "Quick start", "Taking
+part", "Updating an installed project", "Questions people ask", "What is
+in the box" (the community gate's row).
+
+### v1.52 - 2026-10-15 - The worked example: one task priced twice, step by step
+WHAT: a new document, WORKED_EXAMPLE.md, that takes one ordinary task (a
+headless self-test for a new button, with the origin's real "a click test
+fails headless" trap) and prices it step by step for a user without the kit
+and a user with it: tool calls, tool results, output, cache reads, cache
+writes, context after each step, weighted totals with the usage sheet's
+price ratios (input x1, cache write x1.25, cache read x0.1, output x5), and
+then names which piece of the kit took which share (the lesson, the
+workflow, section reads, the digest and the pointer core, trust the ledger,
+the output diet) and why it compounds across turns and sessions. A model,
+not a meter: the metered numbers stay in the README's receipts; this file
+says where and why. The CEO's ask: "I feel it's very important for people
+and even another AI to understand." The README gained the section "The
+seven ways it saves tokens" the same day (the map the example walks) and
+the question "How much does it actually save?".
+CARRIES: WORKED_EXAMPLE.md (new); README "The seven ways it saves tokens",
+"What is in the box" (the new row), "Questions people ask"; this entry.
+GRAFT: nothing to wire. An installed project may copy the file beside its
+own method files for its manager to read once; a project that keeps its
+own usage sheet can replace the modeled sizes with its measured averages
+(the whole-read and section-read averages from its daily line) and keep the
+same steps.
+README: "The seven ways it saves tokens" (a pointer line to the example),
+"What is in the box" (the new row), "Questions people ask" ("How much does
+it actually save?" points at the example).
+
+### v1.54 - 2026-10-22 - The search and lookup employees pinned to the cheapest tier (agents/, and the brief guard's model rule reaches read-only dispatches)
+WHAT: the usage sheet showed read-only searches running on the manager's
+tier: the harness's built-in Explore type carries no model, the brief
+guard exempted read-only types from THE EMPLOYEE MODEL RULE, so a
+model-less search inherited the top tier silently. Two project agent
+files now pin the cheapest model in their front matter (`model: haiku`,
+read-only tools, a small call cap, the one-turn line): agents/explore.md
+(the broad grep/locate sweep) and agents/lookup.md (one fact: a value, a
+signature, a ledger tail). The brief guard reads a dispatch's pin from
+.claude/agents/<type>.md and holds read-only types to the model rule
+too: a search passes when its model is in the call or pinned by its
+file, is refused when neither, or when either names the manager's tier;
+the two harness helpers that carry their own model (claude-code-guide,
+statusline-setup) pass as before. The refresh script gains the agents
+class (.claude/agents/*.md -> agents/, prose, and `--adopt` takes one).
+The CEO's ask (2026-10-22, after /usage): "give the search and lookup
+ones a cheaper model."
+CARRIES: agents/explore.md, agents/lookup.md (new); hooks/brief_guard.py
+(pinned_model, the read-only branch of missing_pieces, SEARCH_MODEL_MSG,
+eight selftest rows); reference tools/refresh_kit.py (the agents class);
+SUBAGENT_METHOD.md (THE PINNED SEARCH paragraph); HOOKS_METHOD.md (Tier
+4a's DISPATCH bullet); 0 - READ ME FIRST.md (STEP 3); README.md; this
+entry.
+GRAFT: copy agents/ to the project's .claude/agents/ (two files, generic:
+no project name to edit); take the brief guard's new copy, or graft
+pinned_model and the read-only branch of missing_pieces by hand into an
+adapted one, then `python tools/hooks/brief_guard.py --selftest`; point
+the SUBAGENTS assignments table's search row at the explore agent and
+add a lookup row; the refresh script's change matters only at the origin.
+README: "3. The Delegation Company" (the who-gets-what bullet), "The
+hooks" (the delegation truth set bullet), "What is in the box" (the
+`agents/` row), "Kit version".
+
+### v1.55 - 2026-10-30 - The whole turn is the reply, and the percent line on every prompt
+WHAT: two corrections from the CEO after a consulting day. One: a reply
+that checkpoints did its answer, then its tool calls, then a two-line
+"checkpoint done" note; the transcript's last assistant text was the
+note, so the standup miner would have replayed that as the response and
+the summary the checkpoint exists to carry was only in the day file by
+hand. tools/standup.py's _mine_exchange now returns every assistant text
+of the final turn, joined in order, summary first; the selftest writes a
+five-record fixture and checks the join. Two: above the 80% line the
+prompt hook printed nothing about context, so two replies in a row gave
+no percent. tools/hooks/prompt_gauge.py now prints "context gauge: N%
+remaining (~Xk of ~Yk used)" on every prompt where no DUE or URGENT line
+already carries it, and the reply relays the number. The checkpoint
+skill gains THE WHOLE TURN (one final message: the answer, the percent,
+the marker; the day file holds that message) and THE PERCENT LINE. The
+CEO's words (2026-10-30): "Please be sure in the future to give me %
+used or left" and "you performed work after the main summary (which is
+what I want the checkpoint to carry), so we need to be sure that summary
+is what is checkpointed."
+CARRIES: reference tools/standup.py (_mine_exchange joins the turn; the
+selftest fixture), hooks/prompt_gauge.py (the percent line and its
+selftest), skills/checkpoint/SKILL.md (THE WHOLE TURN, THE PERCENT
+LINE), knowledge/lessons/harness.md (the 2026-10-30 lesson, derived).
+GRAFT: copy the three files over the installed ones; `python
+tools/standup.py --selftest` and `python tools/hooks/prompt_gauge.py
+--selftest` print 0 failed; the next prompt shows the percent line.
+README: "The hooks" (the context line on every prompt, now the percent
+above 80% too) and the standup line about the last exchange.
+
+### v1.56 - 2026-10-31 - The trial workflow: the lesson at the choice, the plan step, the small-file read set and the ladder, with the old way kept as the benchmark
+WHAT: the lesson loop had three ends and prevented nothing. Mazhron
+(2026-10-30, the Acme install): "Many times, you will look at a problem,
+perform a task, then look at a lesson after it fails, and say something
+like 'I tried the thing I wasn't supposed to try which is in lessons that
+says not to do it.' Why does that keep happening?" The diagnosis: the
+prompt-time LESSON LINE matches the prompt's words and the trap lives in
+a sub-step the prompt never names; a hit prints a headline, not the DO
+INSTEAD; every fresh session finds the wrong path as right as the last
+one did; the Stop-side advisor fires after the failure. Then: "Lets think
+about pre selection, selection and post selection of tools, context,
+lessons, workflows. How can we streamline this..." and "Keep our current
+work flow on record, lets try the new work flow you just suggested. We
+should keep track of the hits and misses (ledger them)... keep a record
+of the old way." And on 2026-10-31: "Please add this workflow to
+Rootstock and push to Git. We want Rootstock to keep the old workflow as
+a backup and as a benchmark." The principle: knowledge moves down a
+ladder as it proves itself (lesson -> WORKFLOWS step -> loop script ->
+refusing hook), each rung cheaper at the moment of use and harder to
+violate; the ladder script is the rule for when a thing moves.
+CARRIES: hooks/lesson_guard.py (NEW, Tier 4b: PreToolUse on shell,
+writes, edits and briefs; the call's text through lesson_log.py's
+matcher; each hit's DO INSTEAD injected once per entry per tool per
+session; SURFACED ledgered with the session id; the PLAN STEP note once
+per session after three unplanned writes; 17 selftest checks);
+hooks/settings.json (its PreToolUse entry); reference
+tools/plan_check.py (NEW: the arc's steps scored against LESSONS and the
+route index before the first write, a PLAN line per run); reference
+tools/lesson_ladder.py (NEW, the check group: MATCHED = the old face,
+SURFACED = the new face, each paired with an ADVISED of the same session
+within 20 minutes as a MISS, else a HIT; UNCOVERED and PLAN counted; one
+line per run in docs/history/workflow_trial_runs.txt; a lesson missed
+twice is a PROPOSE [DO] down a rung); hooks/diet_guard.py (the session
+read set widened to small files: one RE-READ (small) note per file per
+session, warn-only, cleared by compaction; five selftest checks);
+hooks/lesson_advisor.py (the ADVISED line carries session=<id>);
+reference tools/run_all.py (the ladder in the check group);
+hooks/README.txt (the guard's paragraph); HOOKS_METHOD.md ("Tier 4b -
+THE LESSON GUARD", the kit list heading, the changelog);
+WORKFLOW_METHOD.md ("The seed entry: Act on a prompt", the old way on
+record with its one-edit switch back, bootstrap step 6);
+knowledge/lessons/harness.md and LESSONS.md ("The lesson was there and I
+still tried the thing it says not to"); knowledge/MANIFEST.md (the
+harness row's size and count).
+GRAFT: copy hooks/lesson_guard.py, reference tools/plan_check.py and
+reference tools/lesson_ladder.py fresh into the project's tools/hooks/
+and tools/; an Edit of .claude/settings.json adds the lesson_guard
+PreToolUse entry (matcher Bash|PowerShell|Write|Edit|MultiEdit|
+NotebookEdit|Agent|Task, timeout 15); gitignore
+.claude/lesson_guard_state.json; replace hooks/diet_guard.py and
+hooks/lesson_advisor.py whole if the project took them unadapted, else
+graft the small_repeat branch and the session= prefix by hand; add
+["tools/lesson_ladder.py"] to run_all.py's check group after the lesson
+lint; copy the WORKFLOW_METHOD.md seed entry into the project's
+WORKFLOWS.md; the tooling table gains the guard's row and the diet
+guard's note. Verify: the three selftests print 0 failed; one piped call
+whose command carries an entry's Keys words injects the DO INSTEAD and
+the same call again is silent; `python tools/lesson_ladder.py` writes
+the first trial line. The old way needs nothing: it is the same ledger's
+MATCHED lines, and prompt_gauge.py's LESSON LINE stays wired.
+README: "The hooks" (the lesson guard bullet, sixteen hooks) and "What
+is in the box" (the hook counts, 40 working scripts).
+
+### v1.57 - 2026-10-31 - The retrieval ladder, the modes file, the effort line, the resume pointer, the big-write note and the keep-warm step; every old way kept behind one switch
+WHAT: Mazhron opened the rootstock-os session (2026-10-31) on "the
+processes for how Claude uses Rootstock for its workflows to produce
+better and more efficient responses while saving the most amount of
+tokens", then: "I'm trying to see how you use the knowledge bases and
+indexes in order. I would like to fine tune the efficiency of your
+order," with the test prompt "Please add a gnome to my game". The
+manager measured first (the origin's five newest WS2 sessions, 222
+requests): the kit's own hooks inject ~9k tokens a session, 84% of it
+the session-start digest, which fired 3.6 times a session (a resume
+~4.1k each, three inside one minute); the duplicated ritual output
+(day-file rewrite + verbatim relay) was 3% of output and not worth a
+ruling; two single Writes of generated install scripts cost 28.6k
+tokens of manager output; every request ran at effort high and 62% of
+the metered output (427k against ~164k visible) was thinking the
+transcript does not keep; the six cache misses of the four days were all
+TTL gaps at ~90k-230k weighted each while tools/keepwarm.py's own report
+had already ruled (2026-09-29) that pinging beats a rewrite for any
+pause under ~23 hours on Fable. And the route matcher, run on the gnome
+prompt against the origin's registry: "(no route line)" - fauna.md and
+"Cut and wire new creature or plant art" exist, no Keys line says gnome,
+so the order the manager retrieved in was improvised per prompt. Four
+asks were answered yes, and the order was ruled: indexes before files,
+files before code, lessons at the choice, and every retrieval that can
+run before the manager's first turn runs in the hook. Then: "Yes, build
+it. Please keep the old way stored somewhere appropriate. We always want
+the old ways stored for one, as a baseline, and two in case the new way
+is worse somehow or we could find a way to mix the two that would be
+better in the future."
+CARRIES: hooks/rootstock_modes.json (NEW, THE MODES FILE: copied to
+.claude/ and committed; route = ladder | classic, resume_digest =
+pointer | full, big_write_warn, effort_line; the old value of each key
+is the old way, named in its _old_ways block) and hooks/_hooklib.py
+(modes() and mode(), defaults in code); reference tools/route_index.py
+(route_block(): the classic matchers, then INDEX lines from
+docs/index/MASTER_INDEX.md and KNOWLEDGE_INDEX.md, then FILES whose name
+is made of the prompt's specific words, then the EFFORT line from the
+matched entry's `EFFORT:` field against the hook input's effort.level or
+CLAUDE_EFFORT, and THE INDEX DOOR once per session when nothing hits a
+prompt of three content words with one specific word; match_lines()
+kept byte for byte as the classic face; both faces ledger a ROUTE line
+in lesson_runs.txt; --block; the file walk cached per process; eleven
+new selftest checks); hooks/prompt_gauge.py (picks the face by the
+modes file, effort_now(), three selftest checks); hooks/session_start.py
+(THE RESUME POINTER: one line on a same-day resume, the whole digest on
+startup, clear, compact, a day change or resume_digest = full; ledgered
+as "resume-pointer"; seven selftest checks); hooks/diet_guard.py (BIG
+WRITE past 4k tokens of content, warn-only, once per file per session,
+off by the modes file; two selftest checks) and hooks/settings.json (its
+matcher gains Write; the format guard's SAFETY row still holds); agents/
+explore.md and lookup.md (`effort: low`); reference tools/keepwarm.py
+(NEW to the kit, the origin's tool unchanged: --ping, --report, the
+break-even at both read multipliers); reference tools/output_shape.py
+(NEW, the metrics group: per day the metered output against the visible
+output and the effort each request ran at, from the api-request records;
+CHECK when effort high or above covers 80% of requests and half the
+output is unseen); reference tools/retrieval_eval.py (--route: the two
+ROUTE faces over the replayed prompts, classic named / ladder named /
+door, one line per run in docs/history/route_eval_runs.txt); reference
+tools/run_all.py (output_shape in the metrics group); skills/checkpoint/
+SKILL.md (step 6, ARM THE KEEP-WARM) and SKILLS.md; WORKFLOW_METHOD.md
+(the entry template's EFFORT field; the seed entry "Act on a prompt"
+with THE ORDER and the old order kept; the second seed entry "Keep the
+cache warm across a pause" with its old WHEN line kept); HOOKS_METHOD.md
+("The modes file", the Tier 1 and 2c paragraphs, the change log);
+hooks/README.txt; SUBAGENT_METHOD.md (the effort pin); knowledge/
+lessons/harness.md and LESSONS.md ("The retrieval order was improvised
+per prompt"); knowledge/MANIFEST.md (the harness row).
+GRAFT: copy hooks/rootstock_modes.json to .claude/rootstock_modes.json
+and commit it; replace tools/hooks/_hooklib.py, prompt_gauge.py,
+session_start.py and diet_guard.py whole if the project took them
+unadapted, else graft modes()/mode(), the two-face route section with
+effort_now(), the resume branch with pointer_for(), last_digest_date()
+and resume_wants_full(), and the Write branch by hand; copy reference
+tools/route_index.py, keepwarm.py and output_shape.py fresh into tools/;
+graft route_eval() and the --route branch into tools/retrieval_eval.py;
+an Edit of .claude/settings.json adds Write to the diet guard's matcher;
+gitignore .claude/route_state.json; add ["tools/output_shape.py"] to
+run_all's metrics group after big_reads; add `effort: low` to the two
+agent files; add `EFFORT: medium` under the WHEN line of the registry's
+routine entries (ship, checkpoint, docs-only batches, ledger and
+transcription work) and leave design and ruling entries without one;
+graft the checkpoint skill's step 6 and both seed entries; set the
+session default with /effort medium and let the EFFORT line say when an
+arc wants high. Verify: the seven selftests print 0 failed; `python
+tools/route_index.py --block "<a prompt naming something that exists>"`
+names the file; a piped resume prints the pointer and digest_size.txt
+gains a "resume-pointer" line of under 200 tokens; a Write of 20,000
+characters prints BIG WRITE once; `python tools/output_shape.py` writes
+its first line; `python tools/retrieval_eval.py --route` writes its
+first line. THE OLD WAYS need nothing: flip the key in the modes file
+(route = classic, resume_digest = full, big_write_warn = false,
+effort_line = false) and the v1.33 line, the whole digest, the silent
+Write and the unprompted effort are back, with the same ledgers.
+FLAGGED (THE CONTRADICTION RULE): the origin's "Keep the cache warm"
+WHEN line said NEVER after a checkpoint, written when the ping was
+priced at 0.1x reads; the measured verdict at 0.025x and the October
+misses after checkpoints reverse it, so the kit's seed entry arms at
+every checkpoint that leaves the session open and keeps the old WHEN
+line on record. Mazhron's yes (2026-10-31) was to "make arming a step of
+the checkpoint ritual"; the reversal of the old line is named here so
+it is a ruling, not a drift.
+README: "The hooks" (the retrieval ladder and the modes file bullet)
+and "What is in the box" (the hooks/ row's modes file, 42 working
+scripts, the agents' effort pin).
+
+### v1.58 - 2026-11-03 - The verbatim opener, the safeguard fix, the brief diet, two more digest trims and the ledger merge; grown in the Acme Co install and carried back to the origin
+WHAT: five things an install (Acme Co Program, WS1 and WS2) grew in
+three days of daily use and Mazhron asked to have in the kit ("Please
+update rootstock with any of the changes we made to save token and
+start the handoff verbatim after a clear and any other changes that
+should be pushed there", 2026-11-03). THE SAFEGUARD FIX: the whole-turn
+replay (the v1.57-era rule that a reply is every text segment of its
+turn) re-emitted the manager's working narration verbatim at every
+standup, nested one level deeper each session, until the harness's
+safeguard flagged three sessions in one morning on prompts that could
+not be reworded; the miner now replays the FINAL message of the
+manager's last turn only, strips any quoted exchange nested inside it
+and caps each side at 2000 characters (was 8000; the day file's copy
+12000 to 2000). THE VERBATIM OPENER: with that guard in the miner the
+opener quotes BOTH sides word for word again (Mazhron 2026-11-03 15:35:
+"I prefer a verbatim opener. Even if it costs a little bit more."); the
+paraphrase the fix had added for a day cost him recognition of the
+reply for no safety it added. THE BRIEF DIET: wave 5's employee briefs
+were ~1,700 words each, ~450 of them the same rules block retyped; the
+fixed text (the stamp footer, the budget line, the one-turn line, the
+diff rule, the preservation law, the scope line) moves into one file
+the employee reads by path, and the brief carries a four-line RULES
+block plus the task. THE SIXTH AND SEVENTH DIGEST TRIMS: the day file's
+whole-turn exchange copy no longer prints twice under the verbatim
+block; and "WARN 0 | FAIL 0" is a count of nothing, not a verdict, so an
+all-clear audit line stops printing in full at every standup. THE
+LEDGER MERGE: when two workstations both append the hook ledgers, the
+pull conflicts on every one of them; merge_ledgers.py resolves them by
+file class (append-only ledgers union-merge, generated reports take
+ours and regenerate, the state file keeps the newest line per key) and
+deletes nothing. With them the lesson loop's two fixes: a DISMISSED
+line cancels a false ADVISED by an appended line, never an edit, and a
+lesson surfaced on both faces before one ADVISED is one miss, not two;
+and the lesson hook's advisory names the See also line the format lint
+requires, so a new entry is never written short of it.
+CARRIES: reference tools/standup.py (final_pair, strip_nested_relay,
+the 2000 cap, the sixth and seventh trims, selftest cases for each);
+hooks/session_start.py (header_for: the verbatim relay instruction
+naming the ruling and the guard); hooks/session_end.py (the day-file
+cap 2000); hooks/lesson_advisor.py (the See also line named); reference
+tools/lesson_ladder.py (ONE FAILURE, ONE MISS; the DISMISSED cancel);
+reference tools/lesson_log.py (--dismiss, the twice-recorded result
+counted once); reference tools/merge_ledgers.py (NEW); skills/standup/
+SKILL.md and skills/checkpoint/SKILL.md (THE VERBATIM OPENER, the final
+message stored, the checkpoint names THIS machine's day file);
+skills/brief/SKILL.md (the four-line RULES block) and skills/brief/
+EMPLOYEE_RULES.md (NEW, the fixed text); reference tools/refresh_kit.py
+(a skill's sibling .md files are paired beside its SKILL.md, so the
+rules file reaches the kit); knowledge/lessons/<domain>.md
+and LESSONS.md (nine entries: the push skipped for a missing remote,
+the SAME DAY line, the refused findings write, the ladder [DO] on one
+false ADVISED, the edit script's line-ending anchor, the header from
+the first Write, the whole-turn reply SUPERSEDED, the safeguard flag
+that repeats across rephrasings, the /brief diet).
+GRAFT: replace tools/standup.py, tools/hooks/session_start.py,
+tools/hooks/session_end.py, tools/hooks/lesson_advisor.py,
+tools/lesson_ladder.py and tools/lesson_log.py whole if the project took
+them unadapted (re-apply each CONFIG block, re-run each `--selftest`),
+else graft by hand: final_pair + strip_nested_relay + the 2000 caps and
+the two trims into standup.py, header_for's wording into
+session_start.py, the cap into session_end.py, the See also line into
+lesson_advisor.py, the DISMISSED cancel and the seen set into the
+ladder and the log. Copy merge_ledgers.py fresh into tools/ (only a
+project with two workstations needs it; wire it into the pull step of
+"Bring a new workstation up to par"). Copy skills/brief/EMPLOYEE_RULES.md
+beside the project's brief skill, set its root path, and graft the
+RULES block into the skill's step 3; graft THE VERBATIM OPENER wording
+into the standup and checkpoint skills' step 2 and the checkpoint's
+day-file rule. Append the nine lessons to the project's LESSONS.md
+verbatim. Verify: `python tools/standup.py --selftest` 0 failed and a
+standup after /clear prints both sides of the last exchange in quote
+blocks under 2000 characters each with no nested "USER'S LAST PROMPT"
+inside; the three hooks' selftests 0 failed; a brief passes the brief
+guard with the four-line block alone; `python tools/merge_ledgers.py`
+after a conflicted pull leaves no conflict markers and stages the files.
+README: "The standup digest" rows (seven trims, the last 2026-11-03; the
+verbatim opener) and "What is in the box" (43 working scripts, the brief
+skill's rules file).
+
+### v1.59 - 2026-11-06 - The plan step binding, the bare doors, the newest DO INSTEAD first and the runner-shaped signal; grown in the Acme Co install and carried back to the origin
+WHAT: four hook changes from one correction in the Acme Co install
+(C0003, 2026-11-06). The deploy to the server was refused for the
+second time with the permission in place, because the call was wrapped
+in a cd and a pipe and the allow rule matches only the bare call; and
+the lesson that said so was on the books both times. Mazhron: "Ok, so
+this happens a lot. I've already built the permission. You know I have
+it, it was supposed to be in your lessons or workflows. You have to do
+the deploy by itself. But whenever we get here, I feel like you don't
+read lessons or workflows or something in the correct order. So you
+keep getting it wrong. You do the same thing with a pass-fail test ...
+Perhaps there needs to be a planning step set against the workflows,
+then you look at lessons against your plans and workflows as not to
+have the same problems and fight against them when you already know
+the fix?" THE PLAN STEP, binding: the brief guard refuses a work
+dispatch until the session has run plan_check.py once (the lesson
+guard's per-session state records the run), so every step of an arc
+meets every lesson and workflow before the first employee; read-only
+searcher types still pass. THE BARE DOORS: the shell guard carries a
+BARE_DOORS tuple (an install's production doors; the Acme deploy
+script the first) and refuses a door wrapped in a cd prefix, a chain,
+a pipe or a redirect with the bare form named, before the auto-mode
+classifier sees it. NEWEST FIRST: the lesson guard joins an entry's DO
+INSTEAD clauses newest first, because the truth of an entry moves to
+its latest TRIED bullet and the 260-character cap used to cut exactly
+the clause that carried the fix. THE RUNNER-SHAPED SIGNAL: the lesson
+log's FAIL-then-PASS scan reads runner-shaped lines only (a verdict
+word with a count or a test name), never the word inside a grep of a
+test's source, which had counted a read as a failure.
+CARRIES: hooks/brief_guard.py (THE PLAN STEP, load_plan_state and the
+refusal text); hooks/lesson_guard.py (track_plan, the per-session plan
+mark; do_instead reversed); hooks/bash_guard.py (BARE_DOORS, the
+wrapped-door refusal, eight selftest cases); reference
+tools/lesson_log.py (the runner-shaped line filter); HOOKS_METHOD.md
+(Tier 2's fourth rule, Tier 4a's plan step, the lesson guard's NEWEST
+FIRST paragraph); hooks/README.txt (the brief guard's plan step line).
+GRAFT: replace tools/hooks/brief_guard.py, tools/hooks/lesson_guard.py
+and tools/lesson_log.py whole if the project took them unadapted
+(re-apply each CONFIG block, re-run each `--selftest`), else graft by
+hand: load_plan_state and the PLAN_MSG refusal into the brief guard,
+track_plan and the reversed do_instead into the lesson guard, the
+runner-shaped filter into lesson_log. The shell guard is adapted in
+every install: add the BARE_DOORS tuple and the wrapped-door block
+before verdict()'s final return, with the install's own door scripts in
+the tuple (empty where the project has no production door), and the
+eight cases in its selftest with the install's door name. Verify: the
+four selftests 0 failed; an Agent dispatch to a work type in a fresh
+session is refused with THE PLAN STEP named until
+`python tools/plan_check.py "step"` has run; a wrapped door call is
+refused with the bare form named; the lesson guard's injected line for
+an entry with two TRIED bullets opens with the newest DO INSTEAD.
+README: "The lesson guard" (the plan step binding since v1.59) and "The
+shell guard" (the bare doors) bullets; the kit version line.
+
+### v1.60 - 2026-11-06 - The install levels, the stranger's README and the overhead block; a reader's review answered
+WHAT: a developer's Claude reviewed the public repo (2026-11-06) and
+said three things: offer it in tiers instead of all or nothing (eighteen
+hook entries on day one, "36" by the reviewer's count of the word
+command, which each entry carries twice; no way to tell which matter);
+write a
+README for a stranger (the current one reads like the author's lab
+notebook); make the savings checkable (Everwood-only receipts, no
+overhead figure beside them). THE INSTALL LEVELS: lean (the pointer
+core, the master index, one rule, the core lint, the day file with
+standup and checkpoint and their two skills; no hook;
+hooks/settings.lean.json carries the deny block alone), standard (lean
+plus the reporting runner and ledgers, the delegation company, the
+skills shelf, and hooks/settings.standard.json: the session loop, the
+three safety guards and the delegation pair, eleven entries), full
+(every step, hooks/settings.json). The stamp carries `| level: <name>`;
+a level moves up by merging the next file's entries, never a reinstall.
+Levels, not tiers: the hooks already have Tiers. THE STRANGER'S README:
+README.md is now one paragraph, the before-and-after of what sits in
+context, a three-command quickstart, the levels, the box and a linked
+glossary; the long form moved whole to README_FULL.md (the receipts,
+the pillars, the questions people ask); the parity lint reads both as
+one text and requires the version line and the box table in README.md
+itself. THE OVERHEAD BLOCK: the usage sheet meters what the hooks
+inject (the hook_additional_context attachments of the transcripts,
+the text the model actually saw) per event and per month, as a share
+of the cache writes it rides in, and counts the injections the harness
+cut to a 2KB preview and a file path because the output passed the
+harness's persisted-output cap, about 10KB. Found while building it:
+twenty-six of the origin's twenty-seven digest injections since October
+were cut (10.2KB to 16.4KB), and the manager read the file back by a
+Read each time (twenty-nine such Reads), so the resume still landed but
+as a preview, a tool call and a result instead of one injection; a
+digest under 10KB arrives whole. The sample project with a with-and-without
+script (the reviewer's third ask) is not in this entry; it is the next
+measured arc.
+CARRIES: hooks/settings.lean.json and hooks/settings.standard.json
+(new); hooks/README.txt (the levels lines); HOOKS_METHOD.md (Bootstrap
+step 2); 0 - READ ME FIRST.md (STEP 0 item 7, the stamp's level field,
+STEP 4); reference tools/readme_lint.py (README_FULL.md read as one
+text with README.md, the front-page check); reference
+tools/usage_report.py (the attachment branch, the hooks key, the
+OVERHEAD block, cache v6); the kit repo's README.md and README_FULL.md.
+GRAFT: an installed project changes nothing for the levels unless it
+wants fewer hooks: pick the level, keep only that file's entries in
+.claude/settings.json, add `| level: <name>` to the stamp. The overhead
+block: replace tools/usage_report.py whole if taken unadapted (CONFIG
+re-applied; the cache rebuilds itself on the version bump), else graft
+the attachment branch of parse_file, the hooks key in merge_bucket and
+overhead_lines into the project's copy. The README gate: only a project
+that publishes a fact-derived README with a long form adds the second
+file to its lint. Verify: `python tools/usage_report.py --quiet`, then
+the OVERHEAD block in usage_metrics.txt names every hook event;
+`python tools/readme_lint.py` PASS; each settings file parses with
+json.tool.
+README: the whole README.md (rewritten for a stranger: "Three ways in",
+the quickstart, the box) and README_FULL.md "The kit's own overhead"
+(under the receipts); the kit version line.
+
+### v1.61 - 2026-11-06 - The cap split and the eighth trim: the digest delivered under the harness's 10,000-char injection cap
+WHAT: the overhead block of v1.60 found that the harness (entry point
+claude-vscode, 2.1.289) persists a hook's additionalContext past 10,000
+characters and injects a 2KB preview plus a file path: 26 of the
+origin's 27 standup digests since October were cut that way, invisible
+to digest_size.txt (which measures the script, not the delivery), and
+read back by a Read each time. THE CAP SPLIT: session_start.py measures
+the injection and, past INJECT_CAP (9,500 characters), moves whole
+sections to .claude/standup_tail.txt in a fixed order (the roadmap, the
+WS notes, recent days, the ledger tails' quiet lines, commits, the core
+line, the loop, the ledger verdicts, open questions, the proposals
+last; THE LAST EXCHANGE, WHERE WE LEFT OFF and the day line never)
+until the head fits, and ends the head with a DIGEST TAIL line naming
+each moved section and its size; nothing is dropped, the tail is one
+Read away by section; the ledger keeps the whole digest's bytes and
+its trigger field says head and tail; digest_cap_split = false in the
+modes file is the old way. THE EIGHTH TRIM, the same day, by the loss
+test: the hook's header lost the dated quotes it carried (~1,460 to
+~800 characters; the rulings live in HOOKS_METHOD.md and the standup
+skill), a commit subject prints its first 160 characters, a verdict
+sentence two ledgers carry prints once, a verdict older than the
+previous standup and a week collapses to its word on the quiet lines,
+and ledger_trends prints one line for every stale loop group instead
+of one per group; its digest_warn_bytes default is the cap, 10,000.
+The lesson is in the harness domain (LESSONS.md "A hook injection past
+10,000 characters arrives as a 2KB preview and a file path").
+CARRIES: hooks/session_start.py (header_for, INJECT_CAP, TAIL_ORDER,
+sections, split_for_cap, write_tail, main, eight selftest cases);
+hooks/_hooklib.py and hooks/rootstock_modes.json (digest_cap_split);
+reference tools/standup.py (THE EIGHTH TRIM: commit_line,
+verdict_word, dedupe_verdicts, tails_plan's stale collapse, five
+selftest cases); reference tools/ledger_trends.py (the loop line, the
+10,000 default); HOOKS_METHOD.md (Tier 1 #1, the modes list);
+hooks/README.txt; skills/standup/SKILL.md (step 1); knowledge/lessons/
+harness.md (the lesson); the kit repo's README.md and README_FULL.md.
+GRAFT: replace tools/hooks/session_start.py and tools/standup.py whole
+if taken unadapted (CONFIG re-applied, `--selftest` re-run), else
+graft by hand: header_for shortened, the CAP SPLIT block (constants,
+sections, short_name, tail_line, split_for_cap, write_tail) and the
+five main() lines into the hook; commit_line, verdict_word, _days_old,
+dedupe_verdicts and the two tails_plan changes into standup. Add
+digest_cap_split to the modes file and _hooklib's defaults, gitignore
+.claude/standup_tail.txt, add the lesson to the project's book and the
+skill's step-1 sentence. A project whose digest never passes 10,000
+characters sees no change in delivery. Verify: `python
+tools/hooks/session_start.py --selftest` and `python tools/standup.py
+--selftest` 0 failed; after the next /clear, digest_size.txt's newest
+line says `clear (head N, tail M)` with N under 9,500 when the digest
+is over the cap, and the OVERHEAD block's SessionStart row shows no
+new CUT.
+README: README.md "What it costs you back" and README_FULL.md "The
+kit's own overhead" (the cap split sentence); the kit version line.
+
+### v1.62 - 2026-11-15 - The trip diet's wider eye, its outcome ledger and the refuse switch; the trip diet itself is entered here, having shipped on 2026-11-03 without an entry
+WHAT: THE TRIP DIET shipped in the kit's files on 2026-11-03 (the
+one-script trip: three or more same-shaped tool calls are one script
+run once that prints a verdict, the kit's take on Code Mode and
+programmatic tool calling; LESSONS.md "The one-script trip",
+SUBAGENT_METHOD law 1 "the sandbox is chosen by the work", the diet
+guard's TRIP DIET note, trip_diet_warn in the modes file) but no entry
+here carried it, so an install that updates by this log never received
+it: two installs at v1.54 and v1.58, checked on 2026-11-15, had none
+of it. This entry carries the whole concept and three changes to it,
+asked for by the CEO the same day ("Is there a way we can solidify
+this to make it work better? ... Change it from a nudge to a
+mechanism?"). THE WIDER EYE: the note needed three same-shaped calls in
+an unbroken run, so the commonest trip (read a, edit a, read b, edit
+b) alternated two shapes and never raised it; the three calls are now
+counted inside the last six counted calls (TRIP_WINDOW), one note open
+at a time; a MultiEdit counts as an Edit, and a Grep counts when one
+pattern is asked of a new place (a new pattern is an investigation and
+is not counted). THE OUTCOME LEDGER: the hook appends one line per
+note to docs/history/trip_diet_runs.txt and one line for what followed
+it: HEEDED (a script came next), WALKED (the same shape went on to a
+new target), MOVED-ON (neither within four counted calls); `python
+tools/hooks/diet_guard.py --trips` and one TRIP DIET line in the usage
+sheet print the tally, so whether the note works is a number. A run of
+one MCP tool is counted there as MCP-RUN and says nothing, because a
+shell script cannot reach an MCP tool; the count is the evidence for
+or against building a door for them. THE REFUSE SWITCH:
+trip_diet_refuse = true in the modes file turns the note into a
+refusal of that third call, once, in the INDEX FIRST shape (the same
+call repeated passes, so a trip where one result decides the next
+costs one retry). It ships OFF: the old way is the default and the CEO
+flips it when the ledger shows the note walked past. Also in this
+version: the scripts that look for the kit clone three folders up
+(../../../rootstock-os) now fall back to a clone beside the project
+(../rootstock-os), the layout the README's quick start uses.
+CARRIES: hooks/diet_guard.py (TRIP_WINDOW, TRIP_FOLLOW, TRIP_LEDGER,
+_trip_shape, _trip_line, _flush_trips, trip_tally, trip_tally_line,
+the trip block at the end of evaluate, `--trips`, twelve new selftest
+cases); hooks/_hooklib.py and hooks/rootstock_modes.json
+(trip_diet_refuse); hooks/settings.json and hooks/settings.standard.json
+(the diet guard's matcher gains MultiEdit, Grep and mcp__.*);
+reference tools/usage_report.py (trip_diet_lines); reference
+tools/guard_replay.py (the trip_diet rule row; Write, Edit and
+MultiEdit replayed through the diet guard); HOOKS_METHOD.md (Tier 2c,
+the modes list, Bootstrap step 7); hooks/README.txt;
+knowledge/lessons/harness.md ("The one-script trip" and its v1.62
+nuance); SUBAGENT_METHOD.md law 1 (unchanged since 2026-11-03, named
+here for the graft); reference tools/backup_push.py, ledger_trends.py,
+purpose_audit.py, readme_lint.py, refresh_kit.py and
+workstation_survey.py (the clone beside the project); the kit repo's
+README.md and README_FULL.md.
+GRAFT: an install WITHOUT the trip diet (no "TRIP DIET" in its diet
+guard) takes all of it: replace tools/hooks/diet_guard.py whole if
+taken unadapted (`--selftest` re-run), else graft by hand TRIP_N and
+the v1.62 constants, _SCRIPTY, _LEAD_CD, _trip_shape, the four ledger
+helpers above evaluate, the trip block before evaluate's `if not
+msgs`, and the `--trips` and _flush_trips lines in main; add
+trip_diet_warn and trip_diet_refuse to _hooklib's MODES_DEFAULT and to
+.claude/rootstock_modes.json (an install older than v1.57 has no modes
+file: graft modes() and mode() from hooks/_hooklib.py and copy
+hooks/rootstock_modes.json first); add the lesson "The one-script
+trip" to the project's book and the SANDBOX IS CHOSEN BY THE WORK
+paragraph to its delegation law 1. An install WITH the trip diet takes
+the same file whole, or the changed pieces: the constants, the three
+new branches of _trip_shape, the helpers, the trip block, main. Both:
+set the diet guard's PreToolUse matcher in .claude/settings.json to
+Read|Bash|PowerShell|Write|Edit|MultiEdit|Grep|mcp__.*, add
+trip_diet_lines and its one call to the usage sheet, and the rule row
+to guard_replay if the install carries it. The hook creates
+docs/history/trip_diet_runs.txt at the first note; commit it like the
+other ledgers. Verify: `python tools/hooks/diet_guard.py --selftest`
+0 failed; `--trips` prints one line; after a session that edits three
+files one call at a time the ledger holds a NOTE line and its grade.
+README: README.md "Glossary" (the diet) and README_FULL.md "The hooks"
+(the diet guard's bullet); the kit version line.
+
+### v1.63 - 2026-11-15 - The kit is its own source: edited in rootstock-os and released from rootstock-os
+WHAT: Until v1.62 every file in this repo was a COPY. The originals
+lived in the origin project (its repo-root method files, tools/hooks,
+tools, .claude/skills); one script there copied them into a kit folder
+and a second mirrored that folder here, ran the gates, wrote the
+checksums and made the signed tag. A release could therefore only
+start inside the origin project, and an edit made here was overwritten
+by the next mirror. The CEO, 2026-11-15: "Rootstock was meant to work
+independently of Everwood." and, asked where the source should live,
+"Source of truth - This should be rootstock-os". THE DIRECTION FLIP:
+this repo is now the source. A kit thing is edited here; the release
+starts here; the origin project is an install like any other and takes
+its updates by graft. THE RELEASE SCRIPT (reference tools/
+release_kit.py, run from the repo root): a fast-forward pull, then the
+gates (the format lint and the README parity lint refuse on a FAIL;
+the README version line must equal this file's; the purpose audit's
+tally is printed and never refuses), then SHA256SUMS, the commit, the
+push and the version's one signed tag, made on main only and never
+unsigned, moved or deleted. `--check` runs the gates and stops;
+`--dry-run` shows what a release would commit; copied into a project it
+finds no kit around it and refuses before any git verb. THE GATES RUN
+IN PLACE: format_lint.py, readme_lint.py and purpose_audit.py now
+recognise the kit repo around them (the graft log and the front door
+beside their folder) and check it directly; the repo's own README,
+license, checksums, community/ and .github/ are not kit things, and no
+ledger line is written there (the kit repo keeps no docs/history; the
+release commit and its tag are the record). In a project the three
+behave as before. Two repairs ride along: the format lint's selftest
+fixture had not followed the safety table (brief_guard,
+delegation_auditor, verify_advisor and session_end were unwired in it,
+so "fully wired settings pass" failed), and the README lint, given a
+kit clone but no kit folder to compare it with, now prints SKIP where
+it used to stop on a missing file. THE CHECKSUMS ARE THE PUBLISHED
+BYTES: SHA256SUMS was written from the working copy, and a Windows
+clone checks text files out with CRLF while the repo and every
+download carry LF, so 15 of the 115 lines published up to v1.62 (the
+two READMEs, the license, community/ and .github/) never matched a
+downloaded file; the update checker verifies UPGRADES.md alone, which
+happened to stay LF, so no install saw it. The release now stages
+first and hashes the staged bytes, what git publishes, on any machine.
+A read-only audit of the release script by a second Claude found this
+before the first release ran. The other half of the same fault sat in
+the update checker: pointed at a local clone it hashed the clone's
+working copy of UPGRADES.md, so a Windows clone whose git had checked
+the file out with CRLF printed "UNVERIFIED local clone: checksum
+mismatch" over nothing; it now also tries the file with its line
+endings put back (verify_clone_text). Build junk and a session's own folders
+(__pycache__, *.pyc, .claude/, .vscode/, .idea/) are named in the
+clone's own .git/info/exclude before anything runs: one compiled file
+went out under the v1.62 tag because a script had been run inside the
+clone; it was removed from main the same day and the tag was left
+where it was. A tag that was signed but not pushed is pushed on the
+next run, and a release made without a version bump says how far the
+existing tag is behind. THE FLAG LEDGER SEES THE WHOLE REPO: files
+under community/ and .github/ could be flagged but were never counted,
+so a RED on the CI workflow or on a contributed script would still
+have printed "RED 0"; they are items now (counted, STALE when
+changed), and only the repo's own README pair, license, checksums and
+.gitignore are left out, at the top level alone. THE HYGIENE GUARD'S
+DEFAULT: its KIT REFRESH
+lines ("this is a portable original, refresh its copy in the kit
+folder, then sync") described the origin's old shape and shipped as the
+default CONFIG; the default is now a RECEIVING project (KIT_MDS empty,
+KIT_DIR blank, the rule silent), the shape one install had already
+adapted by hand, and a project that publishes kit things from a kit
+folder of its own names both. The ship skill's step 6 and the flag
+skill's steps 6 and 7 say release where they said sync. WHAT DID NOT
+MOVE: the lessons under
+knowledge/lessons/, knowledge/MANIFEST.md and the pointer index in
+LESSONS.md are still the origin project's book split by domain
+(reference tools/split_knowledge.py), contributed by that project when
+its book grows; their headers say so and they are not edited here.
+refresh_kit.py and split_knowledge.py stay in reference tools/ for a
+project that keeps a kit folder of its own; this repo no longer runs
+the first.
+CARRIES: reference tools/release_kit.py (new: is_kit, gates,
+staged_rows, write_checksums, ensure_excludes, tag_plan, ensure_tag,
+`--check`, `--dry-run`, `--selftest`); reference tools/format_lint.py,
+readme_lint.py and purpose_audit.py (IN_KIT, KIT_ONLY, the kit folder
+resolved to the repo itself, no ledger inside the kit repo;
+format_lint's selftest fixture; readme_lint's SKIP in a run and in the
+selftest, its ledger folder made when missing, dot entries left out of
+the box check; purpose_audit's TOP_SKIP, its SKIP when a project has no
+kit folder, its lock in the temp folder when inside the kit repo);
+reference tools/rootstock_update_check.py (verify_clone_text, two
+selftest rows); hooks/hygiene_guard.py (the receiving-project CONFIG, the
+`if not KIT_DIR` return, the selftest's two branches); HOOKS_METHOD.md
+(Tier 3 rule 1, the companion paragraph, the selftest count, Bootstrap
+step 9); hooks/README.txt; skills/ship/SKILL.md (step 6);
+skills/flag/SKILL.md (steps 6 and 7); knowledge/lessons/harness.md
+("Edit the kit's original, never its grab-copy": the rule reversed, the
+old one kept beside it); CONTRIBUTING.md ("How a release is made");
+SECURITY.md ("Verifying a release"); the kit repo's README.md and
+README_FULL.md.
+GRAFT: an ordinary install takes nothing it must act on: the release
+machinery is the kit repo's own, and release_kit.py is NOT copied into
+a project. An install that carries format_lint.py, readme_lint.py or
+purpose_audit.py unadapted may replace each whole (CONFIG block
+re-applied, `--selftest` re-run: format_lint 0 failed, purpose_audit 0
+failed); adapted, graft the selftest fixture rows, the README lint's
+SKIP condition and the purpose audit's TOP_SKIP and SKIP lines, or skip
+the entry and record the skip. An install whose purpose audit names
+its own root as the kit folder will see its nested README.md files
+become items (unflagged until audited); that is the intended reading.
+The update checker: add verify_clone_text below verify_text and call
+it in verify_release's clone branch, or take the file whole (CONFIG
+re-applied, `--selftest` PASS); an install that reads the kit over the
+network needs nothing. The
+hygiene guard: an install whose CONFIG still names a kit folder it does
+not have (KIT_DIR = "Future Project MDs", the old default) has been
+told to refresh copies that do not exist; set KIT_MDS = set(), KIT_DIR
+= "", KIT_SYNC and README_HINT = "none", add the `if not KIT_DIR:
+return None` line after the core-lint block of kit_refresh and the
+selftest's else branch, or take the file whole and re-apply the rest of
+its CONFIG (`--selftest` 0 failed, 21 checks). An install already
+adapted that way changes nothing. Reword the project's ship step 6 and
+flag steps 6 and 7 from the kit's skills, and take the lesson's new
+ONE RIGHT WAY into the project's book if it carries that entry. An
+install that grows kit things itself (the origin's old shape: a kit
+folder inside the project, a refresh script, a mirror script) retires
+both scripts, names its clone of this repo as KIT_DIR in the three
+lints' CONFIG, edits kit things in the clone and releases from there.
+Whoever releases needs a signing key on that machine (SECURITY.md).
+Verify, inside a clone of this repo: `python "reference
+tools/release_kit.py" --selftest` prints PASS and `--check` prints
+"gates passed".
+README: README.md (the version line, the box row for reference tools/,
+"Updating, taking part, origin"); README_FULL.md ("The format law and
+the purpose audit", "Updating an installed project").
+
+### v1.64 - 2026-11-15 - The kit repo can carry a local install of itself, and what is pushed stays the kit alone
+WHAT: Since v1.63 the kit is edited in its own repo, and a repo worked
+in without the kit has none of it: no context gauge, no lesson at the
+choice, no guards, no day file. The CEO, 2026-11-15: "The rootstock-os
+root should have rootstock-os installed for the greatest ability to
+function", and "I want to be able to use Rootstock-os to make
+everything more efficient, save tokens, create knowledge, learn
+lessons, etc, but I want to able to push a clean version to git that
+others can take and use for their own projects". THE LOCAL INSTALL:
+whoever owns a clone may install the kit in the clone itself (CLAUDE.md,
+tools/, docs/, .claude/, WORKFLOWS.md, WORKSTATION.md, SUBAGENTS.md,
+NEXT_STEPS.md, INTENT.md and the optional boards). It is that machine's
+own and is never published: the release script names those top-level
+paths (SELF_INSTALL) in the clone's .git/info/exclude before anything
+runs, so git never sees them, they are never staged, never checksummed
+and never in a release. This keeps SECURITY.md's promise whole: pulling
+the repo still runs nothing, because no settings file and no hook
+wiring is ever in it. THE CHECKS LOOK PAST IT: format_lint.py,
+readme_lint.py and purpose_audit.py read the root-anchored lines of
+that exclude file (_local_names) and treat those top-level names as
+the clone owner's, never kit things, so the box table, the header law
+and the flag tally count the kit alone. One file of the install IS
+still judged: its .claude/settings.json is checked for the safety
+wiring against tools/hooks/, so the format guard protects the wiring
+of a local install the way it does in any project.
+CARRIES: reference tools/release_kit.py (SELF_INSTALL, ensure_excludes,
+one selftest row); reference tools/format_lint.py (_local_names,
+LOCAL_NAMES, classify and the settings branch of check_text, one
+selftest row); reference tools/readme_lint.py and purpose_audit.py
+(_local_names in the box check and the item walk); the kit repo's
+README.md and README_FULL.md.
+GRAFT: an install takes nothing: the change acts only inside a clone of
+the kit repo. A project that keeps the three lints unadapted may take
+them whole (CONFIG re-applied, `--selftest` re-run) or record the skip.
+To make a local install in a clone of the kit: run
+`python "reference tools/release_kit.py" --check` once (it writes the
+exclude lines), then install by the front door with the clone as the
+project; copy hooks/ to tools/hooks/ and reference tools/ to tools/,
+point the three version readers at UPGRADES.md's CURRENT KIT VERSION
+line, set the lesson book to knowledge/lessons/harness.md, and keep
+format_lint.py, readme_lint.py, purpose_audit.py and release_kit.py as
+the kit's own copies. Verify: `git status --short` lists no install
+file; `python "reference tools/release_kit.py" --check` prints "gates
+passed" with the install in place. A local install has no first
+commit and the preserve guard's tracked-script selftest case cannot
+pass in it; both are the cost of keeping it out of git.
+README: README.md (the version line; "Updating, taking part, origin");
+README_FULL.md ("Updating an installed project").
+
+### v1.65 - 2026-11-16 - Six repairs from a flag pass run on a second machine: the Standard level's hook scripts, the origin's name out of two tools, the mirror's last sentences, five purpose lines that left out a write
+WHAT: On 2026-11-16 the 38 kit things that had changed since their last
+flag, or had never had one, were read by a Claude on a machine that had
+written none of them (FLAGS.md, the entries by sonnet-flag-1116). No
+RED. The CEO asked for six of the yellows to be repaired ("Please fix
+the 6 yellows"). THE STANDARD LEVEL'S SCRIPTS: the install text said to
+copy the whole hooks/ folder at every level, and the format lint's
+SAFETY table reads a hook script that is present and not wired as
+broken wiring (presence is adoption). A Standard install made by that
+text, once it also carried format_lint.py, failed the lint with five
+SAFETY lines (fanout_guard, hygiene_guard, format_guard twice,
+verify_advisor) and the Stop tick refused the turn end with SAFETY
+WIRING BROKEN at each new batch of work, over wiring that was whole for
+its level. The table is right and stays as it is: a table that asked
+the stamp for the level would let an edit of the stamp switch a guard
+off. The text is what changed: a level copies the scripts it wires
+(Full all of them, Standard _hooklib.py and the ten that
+settings.standard.json names, Lean none) and copies the rest on the day
+it moves up. THE ORIGIN'S NAME IN TWO TOOLS: usage_report.py picked
+transcript folders by the literal text "everwood", so in every other
+project the usage sheet, the standup's budget line and the overhead
+block found no transcripts at all; it now takes the folder named for
+the repo root and any folder carrying the repo's own folder name
+(TRANSCRIPT_MATCH in its CONFIG replaces a generic name). standup.py's
+block title read OPEN QUESTIONS TO MAZHRON and reads OPEN QUESTIONS TO
+THE OWNER, the title open_questions.py already writes at the head of
+its ledger. THE MIRROR'S LAST SENTENCES: refresh_kit.py,
+ledger_trends.py's push schedule and the SKILLS RULE still told the
+reader to run tools/sync_kit_repo.py or to refresh a copy in "Future
+Project MDs/", the shape v1.63 retired; they say what v1.63 says now
+(the kit repo is edited in place; a project that publishes from a kit
+folder of its own names its publish step in the hygiene guard's
+KIT_SYNC). One thing sat under the words: in a project with no kit
+folder refresh_kit.py stopped on a missing-folder error in `--check`
+and in a plain refresh (`--adopt` made the folder instead), and the
+prompt hook's KIT line was silent there only because the hook swallows
+the error; check_line() now returns nothing by design and every mode
+of the script says "no kit folder here" and stops. THE PROMPT GAUGE'S
+HEADER said silent on a normal turn and "No ledger" for the route; the
+body has printed a gauge line on every prompt since 2026-10-30 and
+ledgered a ROUTE line since v1.57, and the header says so. FIVE PURPOSE
+LINES now name what the body writes or runs: route_index.py (the ROUTE
+ledger line, the door's state file), retrieval_eval.py (--route and its
+second ledger), run_all.py (the backup group, and that the listed
+members are the origin's, to be rewritten), standup.py (the two scripts
+it runs that write) and usage_report.py (the parse cache, git log, the
+prompt label it keeps). run_all.py also carried one workstation's node
+folder on its PATH line; that is an empty CONFIG list (EXTRA_PATH) now,
+and no machine's path is in the kit. THE CODE PROPOSAL FORM said code
+comes "never as a pull request" while community/README.md has taken new
+standalone scripts by pull request under community/code/ since v1.51;
+the form says both. A second read-only pass over the repaired files
+(sonnet-flag-1116b) found the first draft of this entry wrong about
+refresh_kit.py, which it had said printed KIT UNSYNCED on every prompt
+in a receiving project, and five small things in the repairs (a
+`--check` that said "in step" where there was no kit folder, an INTENT
+still saying zero cost, two purpose lines that left out the folder
+above the repo, a header that said five commits where the code says
+two); all were corrected before the release. Left yellow on purpose:
+seven issue and pull
+request forms have no PURPOSE line, community/TEMPLATE.md carries the
+contributor's placeholder as its own, and WORKFLOW_METHOD.md ships two
+runnable entries its PURPOSE does not name.
+CARRIES: 0 - READ ME FIRST.md (STEP 0 item 7, STEP 4); HOOKS_METHOD.md
+(Bootstrap step 1); hooks/README.txt (the tools/hooks/ line); reference
+tools/usage_report.py (TRANSCRIPT_MATCH, _slug, transcript_dirs,
+PURPOSE); reference tools/standup.py (the block title, PURPOSE, the
+header's commit default);
+reference tools/open_questions.py (one pointer); reference
+tools/refresh_kit.py (PURPOSE, See also, the guard at the head of
+check_line and of main, the KIT UNSYNCED sentence, SUBST's comment);
+reference tools/ledger_trends.py
+(PURPOSE, rule 17's comment and sentence); SKILLS.md (THE SKILLS RULE,
+the front door's name); hooks/prompt_gauge.py (the header, PURPOSE and
+INTENT, no code); reference tools/route_index.py and retrieval_eval.py
+(PURPOSE); reference tools/run_all.py (PURPOSE, EXTRA_PATH);
+.github/ISSUE_TEMPLATE/code_proposal.yml (the description); the kit
+repo's README.md.
+GRAFT: A STANDARD install first: run `python tools/format_lint.py` if
+the project carries it. SAFETY lines that name fanout_guard,
+hygiene_guard, format_guard or verify_advisor mean the whole hooks
+folder was copied. Either move up (merge hooks/settings.json's entries;
+the scripts are already there) or move those four scripts out of
+tools/hooks/ with the project's mover (tools/retire.py, never a delete)
+and copy them back on the day the level moves up. A Full install and a
+Lean install change nothing. Every install that carries
+usage_report.py: replace transcript_dirs() with the kit's (and _slug
+and TRANSCRIPT_MATCH above it), then `python tools/usage_report.py` and
+read the first lines of docs/history/usage_metrics.txt; an install
+whose sheet was already full had adapted that line by hand and keeps
+its own. standup.py: the two print lines of the open-questions block,
+by hand. refresh_kit.py, if the project copied it and has no kit
+folder: add the guards at the head of check_line() and of main(), or retire
+the script (a receiving project never runs it). run_all.py: an install
+that needs a folder on PATH for its group scripts names it in
+EXTRA_PATH; the origin's line is gone from the kit copy and an adapted
+copy keeps what it has. The header and PURPOSE rewordings
+(prompt_gauge, route_index, retrieval_eval, ledger_trends, run_all,
+standup, usage_report, SKILLS.md) are taken with the file when it is
+unadapted and skipped, with the skip recorded, when it is not: no
+behaviour rides on them. Verify: `python tools/format_lint.py` passes
+at the install's level; the usage sheet names this project's sessions;
+a prompt in a project without a kit folder prints no KIT UNSYNCED.
+README: README.md (the version line).

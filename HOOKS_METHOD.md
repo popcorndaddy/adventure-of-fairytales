@@ -1,0 +1,1013 @@
+# HOOKS_METHOD.md - laws the harness enforces itself (PORTABLE, part of the future-project kit)
+
+PURPOSE: Documents the harness hooks, session start, prompt, stop,
+  compaction, and tool-call guards, that enforce CLAUDE.md's laws
+  mechanically instead of relying on the manager's memory, plus the hook
+  contract and the kit's hook roster.
+INTENT: Founded on Mazhron's question: Claude has a thing called hooks, are
+  there any we could create and add to our workflows. Every law and ritual
+  previously ran from the manager's memory; a hook turns Claude should into
+  Claude cannot.
+
+Founded 2026-09-06 on Mazhron's question "Claude has a thing called hooks -
+are there any we could create and add to our workflows?". The answer was
+yes, and the reason is structural: every law in CLAUDE.md, every ritual on
+the skills shelf, ran from the manager's MEMORY. After a /clear the CEO
+had nothing until someone typed "standup"; the checkpoint counter ticked
+only when the manager remembered; "never delete a build zip" was a
+sentence. A HOOK is a script the HARNESS runs at a fixed moment, with no
+one remembering anything. It turns "Claude should" into "Claude can't".
+
+Search keys: hooks, harness hooks, settings.json, session start, stop
+hook, pretooluse, deny, block, context gauge, auto standup, auto tick.
+See also: SKILLS.md (the voluntary twin: skills run when invoked, hooks
+run when the harness reaches a moment), REPORTING_METHOD.md (the ledgers
+the hooks feed), SUBAGENT_METHOD.md (the stamp a Tier-4 hook will check),
+WORKFLOW_METHOD.md (the registry entry "Add or change a harness hook").
+
+## THE HOOKS RULE (standing, Mazhron 2026-09-06)
+
+A law the harness CAN enforce mechanically gets a hook, not a prose
+reminder. The test: does the law fire at a moment the harness exposes
+(session start, prompt submit, before/after a tool call, manager stop,
+compaction, employee stop)? If yes, script it. Prose stays for judgment
+calls; hooks take the mechanical ones. Adding a hook is a normal batch:
+script + wiring + pipe test + its doc line + (if portable) the kit copy
+and an UPGRADES entry.
+
+## The contract (what a hook is, mechanically)
+
+- Wiring: `.claude/settings.json` (project-level, CHECKED IN - it travels
+  to every workstation via git) maps an EVENT (+ optional tool MATCHER) to
+  a command. The command form that survives Windows paths with spaces and
+  a missing env var: `python "${CLAUDE_PROJECT_DIR:-.}/tools/hooks/x.py"`.
+- Input: one JSON object on stdin. Common fields: `session_id`,
+  `transcript_path`, `cwd`; per event: `source` (SessionStart:
+  startup/resume/clear/compact), `trigger` (PreCompact: manual/auto),
+  `tool_name` + `tool_input` (PreToolUse; a shell tool's command is
+  `tool_input.command`), `stop_hook_active` (Stop: true when this stop
+  was already refused once - the loop guard).
+- Output: exit 0 + plain stdout = injected as context (UserPromptSubmit,
+  SessionStart); JSON `{"hookSpecificOutput": {"hookEventName": E,
+  "additionalContext": T}}` does the same explicitly; PreToolUse deny =
+  `{"hookSpecificOutput": {"hookEventName": "PreToolUse",
+  "permissionDecision": "deny", "permissionDecisionReason": R}}`; Stop
+  refuse = `{"decision": "block", "reason": R}`; `{"systemMessage": M}`
+  shows the user a line without touching the model's context.
+- Exit 2 = BLOCKING ERROR with stderr fed back. A Python "can't open
+  file" is exit 2 - a mis-pathed PreToolUse hook refuses EVERY tool call.
+  Hence the `${CLAUDE_PROJECT_DIR:-.}` form, never a bare relative path,
+  and a try/except around anything that can throw.
+- A broken settings.json silently disables every hook in it: validate
+  with `python -m json.tool .claude/settings.json` after each edit.
+- The template's permissions.deny block (v1.40, a take from serio-focus)
+  is the layer under the hooks: destructive shell shapes and Read/Edit of
+  .env files, key material and credentials are refused by the harness
+  itself, before any hook runs, at zero cost. Merge it, do not replace
+  your own list.
+- The settings watcher picks up edits live for directories that had a
+  settings file at session start; a brand-new file MAY need /hooks or a
+  restart (in the origin project it was picked up live).
+- Cost: one interpreter launch (~0.3 s) per trigger. Fine for session,
+  prompt, stop, compact and shell-command hooks; a PostToolUse hook on
+  every Write/Edit must stay a pattern match with no heavy imports.
+
+## The kit hooks (hooks/ - sixteen scripts + _hooklib + settings.json; the sixteenth, lesson_guard.py, is Tier 4b below)
+
+TIER 1 - the resumption + checkpoint loop:
+1. `session_start.py` (SessionStart, all sources): runs the standup
+   script and injects the digest with a relay instruction. Resumption no
+   longer depends on anyone typing "standup"; after an auto-compaction the
+   digest re-anchors the summary. THE RESUME POINTER (kit v1.57): on a
+   same-day resume it injects one line instead (the conversation is
+   intact, the digest already in it; ledgered as "resume-pointer", ~100
+   tokens against ~4k), the whole digest on startup, clear, compact, a
+   day change, or resume_digest = full in the modes file (the old way).
+   The origin's ledger before it: 3.6 fires a session, three resumes
+   inside one minute.
+   THE CAP SPLIT (kit v1.61, 2026-11-06): the harness (entry point
+   claude-vscode, 2.1.289, measured from the transcripts; LESSONS.md "A
+   hook injection past 10,000 characters arrives as a 2KB preview and a
+   file path") persists a hook's additionalContext past 10,000 characters
+   and injects a 2KB preview plus the path; 26 of the origin's 27 digests
+   since October were cut that way and read back by a Read. The hook now
+   measures the injection and, past INJECT_CAP (9,500), moves whole
+   sections to .claude/standup_tail.txt in a fixed order (the roadmap,
+   the WS notes, recent days, the ledger tails' quiet lines, commits, the
+   core line, the loop, the ledger verdicts, open questions, the
+   proposals last; THE LAST EXCHANGE, WHERE WE LEFT OFF and the day line
+   never) until the head fits, and ends the head with a DIGEST TAIL line
+   naming each moved section and its size: nothing dropped, the tail one
+   Read away by section. digest_size.txt keeps the whole digest's bytes
+   (the diet ritual measures the digest, not the delivery) and the
+   trigger field says `clear (head N, tail M)`. digest_cap_split = false
+   in the modes file injects the whole text, the old way. THE EIGHTH TRIM
+   landed the same day in standup.py (commit subjects capped, a verdict
+   two ledgers carry printed once, verdicts older than a week collapsed
+   to their word) and in this hook's header, which lost the dated quotes
+   it carried: THE VERBATIM OPENER (Mazhron 2026-11-03 15:35, "I prefer
+   a verbatim opener. Even if it costs a little bit more.") and THE
+   SAFEGUARD FIX of the same afternoon (the block is the final message,
+   nested relay stripped, 2000 chars a side) are stated here and in the
+   standup skill, and the header says them in one sentence.
+2. `stop_tick.py` (Stop): ticks the checkpoint counter ONLY when work
+   happened - `work_fingerprint()` in the checkpoint script = HEAD + the
+   working tree's porcelain status minus bookkeeping files. A Q&A reply
+   does not tick. ADVISED (8 tasks or <80% context) = a system message
+   to the user; URGENT (15 tasks or <30% context) = the hook REFUSES to
+   end the turn once (re-blocks every 5 tasks; `stop_hook_active` guards
+   the loop) and the reason tells the manager to relay and checkpoint.
+   Manual `--tick` is retired (it double-counts next to the hook).
+   ADVISED MEANS DO IT (kit v1.13, the origin CEO's ruling 2026-09-10:
+   "If a checkpoint is advised, you should do it. That way a user
+   doesn't need to ask you to checkpoint, they can simply clear"): an
+   ADVISED line from either hook is an instruction, not a suggestion -
+   the manager runs the checkpoint ritual at the end of that reply, and
+   the CEO just /clears. THE DUE LINE (kit v1.45, the origin CEO
+   2026-10-12: "change this hook from advising a checkpoint to DO the
+   checkpoint. Unless doing a checkpoint costs some unreasonable amount
+   of tokens, it should just be done vs advising it. Any conversation
+   after should have a checkpoint happen until the clear/standup ritual
+   is complete"): both hooks print CHECKPOINT DUE - DO IT; the context
+   line fires on every prompt past 80% and every such reply ends with
+   the ritual, an open arc checkpointed as open; "if the arc is closed"
+   is no longer an escape. Mid-batch: ship the step, then checkpoint in
+   the same reply; only a running employee waits. THE HOOK
+   LAW (kit v1.31, the origin CEO 2026-09-28, after a warn-only line was
+   relayed to him three replies running: "A Warning from the hook means
+   do it, not relay the message for the user to do"): the rule covers
+   EVERY line a hook prints that names work - CHECKPOINT ADVISED, LESSON
+   ADVISED, KIT UNSYNCED, CHANGELOG UNEXPORTED, LEDGER ADVISED - not only
+   the ones tagged ADVISED. Each is executed inside that reply; a hook
+   words its line as an order to the manager, never as a note for the
+   CEO; the same line seen twice is the failure. stop_tick.py's changelog
+   count also skips the export's own "changelog:" commit (it warned "1
+   commit" after every export before). Why the
+   whole thing is not one script: the day file stores both sides of the
+   final exchange word for word, and the manager's side is the reply
+   being written at that moment - no script can see it before it is
+   sent. The script does the mechanics (push, fingerprint, reset); the
+   manager writes the two paragraphs.
+3. `prompt_gauge.py` (UserPromptSubmit): silent unless a threshold is
+   crossed; then one line the manager relays verbatim. Zero tokens on a
+   normal turn. Since kit v1.33 (THE ROUTE LINE, 2026-09-28, after
+   Kelsey Hightower's Zero Token Architecture) it also names the
+   WORKFLOWS.md entries and the reference tools whose heading, WHEN line
+   or Search keys the prompt hits (reference tools/route_index.py, the
+   lesson matcher; at most two of each), so "does software already
+   handle this" is a lookup and not the manager's inference each turn.
+   THE RETRIEVAL LADDER (kit v1.57, the CEO 2026-10-31: "fine tune the
+   efficiency of your order"; his test prompt "Please add a gnome to my
+   game" got no line at all): with route = ladder in the modes file the
+   hook prints route_block() instead - the same WORKFLOWS entries and
+   tools, then the INDEX lines of docs/index/MASTER_INDEX.md and
+   KNOWLEDGE_INDEX.md the prompt's specific words hit, then the FILES
+   whose name those words make (gnome.tscn), then an EFFORT line when
+   the matched entry's `EFFORT:` level is below the level the session
+   runs at (the hook input's effort.level or CLAUDE_EFFORT; a hook can
+   read the effort, not set it, so the line names the /effort command),
+   and when none of the four hits a prompt of three content words with
+   one specific word, THE INDEX DOOR once per session (the master
+   index's headings and the sub-index names; .claude/route_state.json,
+   gitignored). route = classic prints the v1.33 line byte for byte.
+   Both faces ledger a ROUTE line in lesson_runs.txt; `python
+   tools/retrieval_eval.py --route` scores classic named / ladder named
+   / door over the replayed prompts.
+4. `pre_compact.py` (PreCompact): one ledger line per compaction
+   (when/WS/version/manual-auto/context/unbanked tasks) in
+   docs/history/compact_runs.txt; a system message on auto.
+5. `lesson_advisor.py` (Stop; kit v1.26, THE LESSON LOOP, the CEO's ask
+   2026-09-20: "something to push you to write what you learned, as
+   well as push you to add to the knowledge base"): the checkpoint
+   counter's twin for learning. It reads the turn's transcript slice
+   (since the last Stop, a line pointer per transcript in .claude/
+   lesson_state.json) through reference tools/lesson_log.py and, on a
+   trial-and-error signal - the same command run again after an error,
+   repeated edit misses, a FAIL followed by a PASS, an intent claim
+   resolved DIFFERENT, an employee briefed twice, a prompt that reads as
+   a correction - REFUSES to end the turn once with LESSON ADVISED, and
+   ADVISED MEANS DO IT: the manager writes or amends the LESSONS.md
+   entry for the task shape (or the wiki fact under a Tags line, or one
+   line saying why there is no lesson) before the turn ends. A block is
+   used, not a systemMessage, because only a block's reason reaches the
+   manager. Never the same slice twice; a turn that edited the book is
+   ledgered WRITTEN and passes. The prompt end lives in prompt_gauge.py
+   (THE LESSON LINE: the entries whose Keys hit the prompt, read before
+   the first tool call). Ledger: docs/history/lesson_runs.txt; the
+   check loop lints the book and ledger_trends proposes when advised
+   lines pile up unwritten. State file: gitignore it.
+   Since kit v1.34 (THE CHECKPOINT NAMED CHECK, 2026-09-28, correction
+   C0004: "Any reference to a checkpoint from any valid source should
+   prompt you to do it") the Stop tick (stop_tick.py, not this hook: filed
+   here by mistake until the seventh README audit, 2026-10-19) reads the
+   turn's reply text from the
+   transcript and refuses once per prompt when the reply names a
+   checkpoint as due (the word within a sentence of next / natural / due
+   / advised / ready / should / whenever / now) without the safe-to-clear
+   marker: naming a checkpoint is making it, and the manager's own reply
+   is a valid source like any hook line.
+   Since kit v1.35 (THE PROPOSAL NAMED CHECK, 2026-09-29, correction
+   C0005: "If an audit is required, and it can be done with a sub-agent,
+   or a script, it doesn't need my permission. Just do it.") the same
+   reader, the Stop tick, holds the reply to the standup's proposals: ledger_trends.py
+   tags every PROPOSE line [DO] or [ASK] and exposes the DO ones that
+   clear when done (the systems audit, the README audit, the digest trim,
+   a stale loop group, dead links, an unwritten lesson, a stale claim);
+   a reply that names one of them while its ledger still raises it is
+   refused once per prompt with PROPOSAL NAMED, and the block's reason
+   carries the scripted way (HOW). A reply that did it passes because
+   the ledger no longer proposes; a reply that never mentions it passes.
+
+6. `session_end.py` (SessionEnd; kit v1.28, THE AUTO-CHECKPOINT, the
+   CEO's ask 2026-09-20: "Can we make /clear automatically check for a
+   checkpoint, and if none was done, perform a checkpoint before
+   clearing?"): fires when the session ends (clear, logout, stdin
+   closed, other; a `resume` suspension is ignored). It cannot hold the
+   clear back and the manager is gone, so it does the MECHANICS alone
+   and only when work is UNBANKED (a change outside the ledger folder,
+   or a commit not on origin): mines the final prompt + reply verbatim
+   from the session's transcript (transcript_path; the standup miner),
+   writes them into today's day file as an AUTO `## WHERE WE LEFT OFF`
+   (the old section stays above it under a SUPERSEDED heading, the
+   file and its index line are created if missing, NEXT LIKELY says
+   "not written"), `git add -A` + a "Checkpoint (auto)" commit, a push
+   to origin and to the local mirror (backup_push.py), then the counter
+   reset with the fingerprint stored. Nothing unbanked = one ledger
+   line (docs/history/session_end_runs.txt) and nothing else. Never
+   raises: an exception is a ledger line and exit 0. Budget: the
+   harness caps SessionEnd at 60 s total, so the settings timeout is
+   55 and every git call has its own. What it is NOT: the manager's
+   checkpoint - the judgment paragraphs (STATE in prose, OPEN QUEUE,
+   NEXT LIKELY) are still written at the next real one, and ADVISED
+   MEANS DO IT still stands; this is the net under it. `--selftest`
+   builds a throwaway repo with its own bare origin in the OS temp
+   folder and runs the real path (18 checks); the sandbox is left for
+   the OS, because the preserve guard refuses a script that removes
+   its own sandbox and the lesson says reword, never route around.
+
+TIER 2 - shell guards (`bash_guard.py`, PreToolUse on Bash|PowerShell):
+generic rules - no `--no-verify`, no plain force push - plus a PROJECT
+RULES block the receiving project fills with its own laws. The origin
+project's examples: no delete/move in the builds folder (build zips are
+never deleted), tests only through the runner script (never set the test
+env var by hand), no em/en dashes in commit text (subjects become the
+public changelog), no shell writes/redirects into engine resource files
+(the BOM gotcha). The fourth rule (C0003, 2026-11-06, grown in the Acme
+install): THE BARE DOORS - a script in the guard's BARE_DOORS tuple (an
+install's production doors, empty in the kit; the Acme deploy was the
+first) wrapped in a cd
+prefix, a chain, a pipe or a redirect is refused with the bare form
+named, because the allow rule matches only the bare call and a wrapped
+one goes to the auto-mode classifier, which refuses it.
+
+TIER 2b - THE FAN-OUT GUARD (`fanout_guard.py`, PreToolUse on EVERY
+tool; kit v1.9, the CEO's ask 2026-09-10 after a public report of a
+manager spawning 821 sub-agents and burning 50M+ tokens in thirty
+seconds). CATASTROPHE-ONLY by the CEO's ruling the same day ("this
+might be too restrictive... I just wanted to prevent complete runaway
+agents and gigantic token spend"): nothing fires on real work, nothing
+needs a command to lift, and the manager is never locked out for more
+than a cooldown.
+- THE SPEND METER: every call folds the NEW bytes of the session
+  transcript and its employee transcripts into raw + WEIGHTED tokens
+  (weighted ~ cost: input 1, cache write 1.25, cache read 0.1, output 5;
+  byte offsets in the state file, so a warm call costs ~0.06 s). The
+  first sight of a file backfills totals without feeding the velocity
+  meter, so installing mid-session never trips on catch-up.
+- REFUSES only the runaway shapes: a BURST (8 spawns inside 60 s,
+  machine-wide - the 821 shape), a FLOOD (25 spawns inside 10 min per
+  session - a loop, not a plan), and RUNAWAY VELOCITY (10M weighted
+  tokens inside 120 s: every tool call refused until the window drains,
+  a self-clearing cooldown; the manager can still talk and report).
+- WARNS, never refuses, on everything else: a systemMessage the CEO sees
+  plus a context line the manager relays - every 10 spawns, every 10M
+  weighted tokens, velocity past 3M inside the window, and a one-time
+  reminder when the bulk-orchestration tool runs.
+- No unlock file, no --allow commands, no self-edit lock: `--status`
+  shows the meter, `--resume` clears it early, `--selftest` runs the
+  twenty-four pipe tests in-process (always at DEFAULTS, so tuning can
+  never fail them). The manager-side rule is the delegation method's
+  law 6 (THE FAN-OUT LAW); the guard is what makes it true on a bad day.
+- THE NUMBERS ARE THE CEO'S (kit v1.10, the origin CEO's ask
+  2026-09-10): the script carries DEFAULTS; the CEO's tuned numbers live
+  in `.claude/fanout_limits.json` (COMMITTED - they travel with the repo
+  and survive a kit graft; a missing or junk file falls back per key).
+  `--limits` prints every number current vs default with its meaning,
+  `--set key=value ...` writes (refusing a warn threshold above its halt),
+  `--defaults` forgets. The /runaway skill (SKILLS.md) is the
+  conversational front: show, ask, set, selftest, commit. The manager
+  never raises a limit on its own - a refusal still means stop and
+  report.
+
+TIER 2c - THE DIET GUARD (`diet_guard.py`, PreToolUse on Read|Bash|
+PowerShell|Write|Edit|MultiEdit|Grep|mcp__.*; kit v1.12, the origin CEO's ruling 2026-09-10 after the
+weighted-usage insight: only the tokens that count against the plan
+matter, and under those weights the manager's context is written at
+1.25x and every tool result rides in it forever). Nothing to type; one
+refusal shape only (INDEX FIRST, kit v1.15), the rest warn-only unless
+the CEO switches the trip diet's refusal on (v1.62, below):
+- TRIP DIET (2026-11-03, the CEO after reading Code Mode and
+  programmatic tool calling - "the AI writes the whole trip as code ...
+  runs once in a sandbox ... returns only the answer"): the third
+  same-shaped call on a new target (Edit, MultiEdit, Write, Read by
+  file; Bash, PowerShell by verb; Grep by pattern, one place per call)
+  gets one warn-only note per shape per session naming the targets and
+  the move - the rest of the trip as one script run once that prints a
+  verdict (LESSONS.md "The one-script trip"). A repeat on the same
+  target is a retry and does not count; a shell call that is itself a
+  script (a heredoc, `python -`, a .py run, three or more chained
+  steps) clears the view - it IS the move. Off with trip_diet_warn =
+  false in the modes file.
+  THE WIDER EYE (kit v1.62, 2026-11-15, the CEO: "Is there a way we can
+  solidify this to make it work better? ... Change it from a nudge to
+  a mechanism?"): the three calls are counted inside the last six
+  counted calls, not in an unbroken run, because the commonest trip
+  alternates two shapes (read a, edit a, read b, edit b) and never
+  made three in a row; one note is open at a time. THE OUTCOME LEDGER:
+  every note is graded by what follows it, one line each in
+  docs/history/trip_diet_runs.txt - HEEDED (a script came next), WALKED
+  (the same shape went on to a new target), MOVED-ON (neither within
+  four counted calls) - and `python tools/hooks/diet_guard.py --trips`
+  or the usage sheet's TRIP DIET line prints the tally, so "does the
+  note work" is a number. A run of one MCP tool is counted there as
+  MCP-RUN and says nothing: a shell script cannot reach an MCP tool,
+  and the count is what decides whether a door for them is worth
+  building. THE REFUSE SWITCH: trip_diet_refuse = true in the modes
+  file (off by default) turns the note into a refusal of that third
+  call, once, in the INDEX FIRST shape - the same call repeated
+  passes, so a trip where one result decides the next costs one
+  retry. The CEO flips it when the ledger shows the note walked past.
+  MultiEdit, Grep and mcp__.* join the matcher for it.
+- BIG WRITE (kit v1.57, the CEO's yes 2026-10-31): a Write whose content
+  is past ~4k tokens gets one warn-only note per file per session - the
+  manager's output is the 5x pillar, and on the origin two single Writes
+  of generated install scripts cost 28.6k output tokens (~143k weighted);
+  the note names the employee or script route (SUBAGENT_METHOD's
+  cheapest tier regenerates artifacts) and the manager proceeds when the
+  file needs its exact text. Off with big_write_warn = false in the
+  modes file. The format guard's SAFETY row (Read, Bash) still holds
+  with Write added to the matcher.
+- INDEX FIRST (kit v1.15, the origin CEO's order 2026-09-10 PM: "section
+  or split as necessary ... should not require my approval ... part of
+  the looping scripts"): the FIRST whole read of a big file per file per
+  session is refused, and the refusal carries the file's own index -
+  `## ` headings for markdown, func/class/def lines for code, each with
+  its line number, capped at 80 - so the next call reads one section by
+  offset/limit. The SAME call repeated passes with the warning only (the
+  editing exception, no words needed). A file with no structure only
+  warns; an image is silent (priced by pixels, ~1-2k tokens however many
+  bytes it holds - sizing pictures by their bytes was the bug that made
+  the origin project's "21 big reads a day": they were screenshots).
+- THE READ DIET (the 10k rule): every later whole-file Read (no
+  offset/limit) or bare cat/type/Get-Content of a file past ~10k tokens
+  gets one line at the moment of the decision - the size, the line
+  count, how many `## ` sections it has, and the cheaper move (grep the
+  headings and read one section; or, for an understand-this step,
+  delegate the reading to an employee and take back a summary). The CEO's own idea was a token count
+  in every heading; that went stale by design and cost output to
+  maintain, so the count is GENERATED at the cliff edge instead - the
+  harness knows the file size before the read happens. Editing that
+  needs the exact text is a fair reason to proceed; the guard says so.
+- THE OUTPUT DIET: a chatty shell shape with no limiter - git log
+  without a count, a bare git diff, a recursive listing, a noisy
+  install - gets the limiter to add, at most three times per session
+  per shape so a deliberate choice is not nagged.
+- `--selftest` runs the in-process checks; state in
+  `.claude/diet_state.json` (gitignored). The outcome is graded by the
+  usage sheet's daily line (REPORTING_METHOD.md, THE COMPARISON RULE):
+  heavy whole-file reads and section-read share, each day against the
+  previous seven, so a bad day is named the next morning.
+
+TIER 2d - THE PRESERVE GUARD (`preserve_guard.py`, PreToolUse on Bash|
+PowerShell|Write|Edit|MultiEdit|NotebookEdit; kit v1.14, the origin CEO's
+ruling 2026-09-10 after public reports of an agent whose script deleted a
+person's files and another that wiped a machine: "You nor any of your
+employees should ever delete a file, record, etc. without express
+permission from the user. There should be no script created to delete
+either"). A REFUSAL, the second one in the kit after the fan-out guard,
+and like it aimed at the cliff edge only:
+- SHELL: delete verbs with a path argument (rm, rmdir, rd, del, erase,
+  unlink, shred, Remove-Item, ri, Clear-Content, format, diskpart,
+  truncate), find -delete, xargs rm, moves into nul or /dev/null, the
+  git verbs that discard work or history (rm, clean, reset --hard,
+  checkout -- path, restore path, branch -d/-D, push --delete, stash
+  drop/clear, worktree remove, tag -d, reflog expire, gc --prune), and
+  deletion CALLS inside a one-liner or an executed heredoc.
+  HARDENED (kit v1.27, 2026-09-20) after a public report - an agent's
+  throwaway remover, written to Temp and run in a later command, walked
+  a tree through Windows directory junctions (os.walk and islink() do
+  not stop at a junction) and emptied a repo's .git, 48,000 files: a
+  bare-name target (rm build), a pipeline or foreach body feeding a
+  delete verb, find -exec, the mirror verbs (robocopy /MIR or /PURGE,
+  rsync --delete), git checkout of a path or `.`, switch
+  --discard-changes, every force push (the grant is the go-ahead),
+  branch -f/-M, filter-branch, prune. A variable target ($DIR, %X%) is
+  refused outright: the guard cannot read it, so no grant can cover it.
+- RUN: every script a command EXECUTES (python x.py, pwsh -File, bash
+  x.sh, node, `&`, a script that starts a command; flags or a runner
+  like timeout in between) is read and scanned before it runs - the
+  whole file when git does not track it, only the uncommitted ADDED
+  lines when it does. Whatever wrote the script (a Write the guard saw,
+  a heredoc, an editor, another agent), it cannot delete when it runs.
+  grep, cat or diff of a script is reading, not running, and passes.
+- WRITE: content that adds deletion calls to a non-prose file (the
+  os/shutil/pathlib calls, the engine's file removal, fs.rm and
+  fs.promises.rm, rimraf, File.Delete, a subprocess or os.system that
+  names a delete verb, a Remove-Item, rm -rf, rd /s, robocopy /MIR,
+  rsync --delete, find -delete or git clean line in a script). Prose
+  files pass: a law written down names the verbs it bans, and the guard
+  refused its own author's documentation twice before that exemption
+  existed (and its own hardening five times: two-letter helper variables
+  that read as verbs, pattern sources that matched themselves - reword,
+  never route around).
+- PASSES: every path inside the session scratchpad (the harness's own
+  per-session junk); a heredoc body fed to cat/tee whose target is a
+  PROSE file (a body aimed at a script file is scanned like code); ONE
+  command matching a live GRANT.
+- FAILS CLOSED: a crash inside the guard falls back to a crude substring
+  check of the obvious verbs and refuses on a hit; a guard bug never
+  becomes an open door.
+- THE GRANT (tools/delete_grant.py, reference tools/): the manager asks
+  naming the exact target, the CEO says yes, the manager restates, the
+  CEO says yes again, and the four texts are recorded VERBATIM in
+  .claude/delete_grant.json (gitignored, 15 minutes, single use - the
+  guard marks it used, never removes it) plus a committed ledger
+  docs/history/delete_grants.txt. The grant script itself refuses the
+  never-list.
+- NEVER, grant or not: a drive root, the home folder, the repo root or
+  its .git, a bare wildcard, a path that climbs out with "..". Those
+  shapes have no legitimate use in an agent's hands.
+- THE MOVERS replace deletion: tools/retire.py moves a file to
+  _retired/<same relative path> with a ledger line; tools/cold_shelf.py
+  moves a rarely-read wiki section to docs/cold/ verbatim with a stub at
+  the old heading and an index line (WIKI_METHOD.md "The cold shelf").
+  A wrong memory is marked superseded in place.
+- `--selftest` runs 35 in-process checks. No state file; the grant is
+  the only thing it reads besides the tool input.
+The lesson that shaped it: the guard fired on its author within a
+minute of being wired (the settings watcher is live) - first on a
+docstring that mentioned the remove call, then on the documentation
+table naming the banned verbs. Both were the guard working as written;
+the fix was a prose exemption, not a workaround. And the audit the law
+forced turned up one real hazard: the kit-mirror script wiped its
+target folder before copying, which a misconfigured path would have
+turned into an emptied directory. It now refuses a target whose README
+does not name the kit and reports stale files instead of removing them.
+
+State: `.claude/hooks_state.json` (gitignored - the fingerprint is per
+machine); `.claude/fanout_state.json` (gitignored, the guard's meter);
+`.claude/diet_state.json` (gitignored, the diet guard's per-session caps);
+`.claude/delete_grant.json` (gitignored, the single-use grant). The checkpoint script's `--reset` stores the fingerprint LAST so
+the checkpoint commit itself is not counted; the checkpoint ritual's step
+order is commit + push, THEN reset, THEN the marker.
+
+## Tier 3 - THE HYGIENE GUARD (hygiene_guard.py, PostToolUse on Write|Edit|MultiEdit)
+Tags: process, lessons | The laws easiest to forget mid-batch fire on a file edit, not a command - so the harness says them at the edit (kit v1.16)
+
+Born 2026-09-11 when the public README was found two kit versions
+behind: three law batches had shipped in one evening and nothing said
+"refresh the README" at the moment the originals changed. The CEO:
+"we definitely don't want the readme falling behind again." One script,
+pattern matching only, no state, one interpreter launch per edit
+(~0.3 s). It runs AFTER the edit lands and answers with context lines -
+never a refusal - except the dash rule, which BLOCKS (PostToolUse
+"decision: block" feeds the reason back so the line is fixed at once).
+Its CONFIG block at the top names the project's files; a kit install
+rewrites that block and nothing else.
+
+1. KIT REFRESH (only in a project that publishes kit things from a kit
+   folder of its own; the hook's default CONFIG since kit v1.63 names no
+   kit folder, a RECEIVING project, and this rule is silent there: the
+   kit repo is its own source and a kit thing is edited in it): the
+   edited file is a portable original (a kit MD, a skill's SKILL.md, a
+   hook script, a tool that has a reference copy) ->
+   one line naming the grab-copy to refresh, the graft-log entry + version
+   bump if a concept changed, the public README if a pillar / skill /
+   hook / box item changed, then the sync script. Editing a kit COPY
+   directly names the original instead; editing the graft log reminds of
+   the version line; editing the core instructions file runs its lint at
+   once and relays a FAIL (silent when OK).
+2. SEE-ALSO: a touched section of a wiki topic page (the link checker's
+   hygiene scope) carries no "See also:" line -> the heading is named at
+   the edit, instead of in the next link-checker run. A Write lints every
+   section; an Edit only the section(s) its new text landed in.
+3. DASH (BLOCKS): player-facing text (resource files, UI scripts, the
+   store copy, the changelog) received an em or en dash -> the offending
+   lines come back and the manager fixes them before anything else. The
+   origin project's 217-dash sweep never runs again.
+4. IMPORT: a new asset file landed under the assets folder -> "run the
+   engine import before the next test".
+
+Companion, not a hook: the kit's release script (reference
+tools/release_kit.py, run inside the kit repo since v1.63) REFUSES to
+release while the README's "Kit version:" line lags the graft log's
+CURRENT KIT VERSION or the README parity lint fails - the release is the
+one place a stale README can be caught mechanically.
+
+`--selftest` runs 21 in-process checks in a receiving project, 26 in a
+publishing one (every rule, its scope edges, the
+outside-the-repo and empty-input cases).
+
+See also: WORKFLOWS.md "Edit the future-project kit (Rootstock)"; the
+link checker (reference tools/check_wiki_links.py, the after-the-fact
+twin of rule 2); SKILLS.md (THE SKILLS RULE the kit-refresh line backs).
+
+## Tier 3b - THE FORMAT GUARD (format_guard.py, PreToolUse + PostToolUse on Write|Edit|MultiEdit)
+Tags: process, architecture, lessons | A community kit needs a guardrail that does not depend on the reader's good faith: a hook that refuses the unsafe settings edit and blocks the unformatted one (kit v1.19)
+
+Born 2026-09-13 from the CEO's three-part ruling on community updates
+(INTENT.md "The format law"): "Anything without proper format should be
+flagged, a script should re-write it after review-only audit. This will
+be a law and may need this to be a hook somehow so that no one can
+inject a prompt that overrides safety protocols." One script, stateless,
+one JSON parse plus pattern matching, ~0.3 s per edit; it imports the
+format lint (reference tools/format_lint.py) and dispatches on the
+event name:
+
+1. BEFORE an edit of a settings file (.claude/settings.json or the kit's
+   hooks/settings.json): the would-be text is computed (a Write's
+   content; an Edit's old -> new applied to the current file) and
+   REFUSED if it would not parse, would name a hook script that does not
+   exist beside it, or would leave any SAFETY hook unwired, narrowed or
+   mis-pointed. The SAFETY table lives in the lint, eleven rows:
+   preserve_guard, bash_guard, fanout_guard, diet_guard, hygiene_guard,
+   format_guard, brief_guard, delegation_auditor, verify_advisor,
+   stop_tick and session_end, each with the event and the tools its matcher must cover.
+   Only the CEO changes the wiring, by hand; a prompt, a brief or a
+   contributed patch cannot.
+2. AFTER any edit of a kit thing or its original: the lint runs on that
+   one file and the edit is BLOCKED (PostToolUse "decision: block" - the
+   reason comes back, the edit stays) until the header is right:
+   PURPOSE, INTENT, Search keys, See also; a hook's --selftest and
+   _hooklib import; a skill's frontmatter. The reason carries the
+   rewrite command (`format_lint.py --rewrite <path> --purpose ...
+   --intent ...`), which inserts only the missing lines after a
+   read-only look - never a hand edit.
+
+Two twins close the other doors: the shell guard refuses a shell write
+into a settings file (redirect, Set-Content, sed -i, tee, copy/move, a
+python one-liner), and the Stop hook refuses to end the turn once per
+fingerprint while the live settings file fails the safety check. The
+three together are what "no one can inject a prompt that overrides
+safety protocols" means mechanically.
+
+`--selftest` runs the in-process checks against the live settings file
+(deny on an unwiring Write, on a rename to a missing script, on
+unparsable JSON; silence on a timeout edit; silence on out-of-scope
+files). Install: wire both entries from the kit's settings.json, run the
+selftest, then `python tools/format_lint.py` to see what the project's
+own tools and hooks lack.
+
+See also: reference tools/format_lint.py (the checks, the scope, the
+rewrite); reference tools/purpose_audit.py + FLAGS.md (the audit the
+PURPOSE line serves); CONTRIBUTING.md (the law for contributors);
+SKILLS.md (/flag); WORKFLOWS "Format-check and rewrite a kit thing".
+
+## Tier 4a - THE DELEGATION TRUTH SET (brief_guard.py, delegation_auditor.py, verify_advisor.py)
+
+Born 2026-09-26 of the CEO's ask ("Can we make these processes more fool
+proof in any way through hooks") and the public case he relayed the same
+day: a manager that said its sub-agents did their job when they had not.
+The manager book's truthfulness rules (SUBAGENT_METHOD.md: the stamp
+template, the metered fabrication check, ledger-every-delegation) were
+discipline; these three make the mechanical parts mechanical, one hook
+per moment:
+- DISPATCH: brief_guard.py (PreToolUse on Agent|Task, a REFUSAL) - a
+  work brief missing the STAMP/TOOLS/WORKFLOW template, the INTENT line,
+  the budget line or the preservation line is refused with the pieces
+  named; a malformed brief costs a refusal, never a spent employee.
+  Read-only searcher agent types carry no brief laws; since kit v1.54
+  they carry the model rule, the model taken from the call or from the
+  agent file's `model:` pin (.claude/agents/<type>.md), so a search
+  never inherits the manager's tier. THE PLAN STEP (C0003, 2026-11-06):
+  a work dispatch is also refused while the session has no
+  tools/plan_check.py run on record (the lesson guard's per-session
+  state file), so the arc's steps meet the lessons and workflows before
+  the first employee; read-only types need no plan.
+- RESULT: delegation_auditor.py (PostToolUse on Agent|Task) - reads the
+  harness-metered tool/token figures out of the result (the numbers no
+  model can fake): 0 metered calls on a work task = the fabrication
+  tell; a TOOLS line claiming >3x the meter = a truthfulness signal; a
+  report without its template lines is named. One PENDING line per work
+  delegation lands in docs/history/delegation_pending.txt (id + metered
+  truth) so no delegation vanishes unledgered. Resolution is a NEW
+  `RESOLVED | <id> | OK/CORRECTED - <words>` line, never an edit.
+- THE EMPLOYEE'S STOP (2026-10-01, the same script on SubagentStop):
+  the RESULT branch above sees the Agent call's result, and with a
+  background employee that is only the launch notice - 24 of the first
+  25 PENDING lines carried tools=? tokens=?, so rule 3 had nothing to
+  cross-check. At the employee's own stop the hook finds its transcript
+  (agent_transcript_path, else <session>/subagents/agent-<id>.jsonl;
+  this build hands the MANAGER's file under transcript_path), counts the
+  tool_use blocks (the harness's own figure, nine of nine exact on the
+  calibration day), sums output + cache-write tokens once per message
+  id, and judges the union of the hand-back text, the last text block
+  and last_assistant_message (the stop and the hand-back land in either
+  order). A report without its template lines, or a TOOLS line under
+  selfcount_floor (0.7, owner-tuned in .claude/fanout_limits.json) of
+  the meter by three calls or more, HOLDS the employee once with the
+  true count in the reason ("your TOOLS line says 18, the transcript
+  holds 27; restate it"); stop_hook_active and an ASKED line at the
+  ledger's tail guarantee once. Then a METER line lands in the pending
+  ledger: `METER | <task id> | tools=N tokens=~Mk | claimed=C | OK /
+  RULE 3 MISS / MALFORMED / FABRICATION TELL`, read at the tail (the
+  event fires twice for a background employee, before and after the
+  hand-back; the earlier line says pre-hand-back). The first replay
+  over the week's nine employees reproduced the manager's hand ledger
+  exactly: four misses held, three honest reports passed.
+- STOP: verify_advisor.py (Stop, a once-per-set REFUSAL, the lesson
+  advisor's pattern) - a PENDING id with no later RESOLVED line refuses
+  the turn end once: verify cheap, write the manager-book ledger line,
+  resolve the intent claim, append RESOLVED - or say in one line why
+  verification waits. State: .claude/verify_state.json (gitignored).
+THE CEILING, stated when the set was built: hooks force evidence to
+exist and numbers to agree; whether the diff matches the claims and
+whether an OK verdict is earned stays the manager's judgment, audited
+through the ledgers.
+
+## Tier 4b - THE LESSON GUARD (lesson_guard.py, PreToolUse on Bash|PowerShell|Write|Edit|MultiEdit|NotebookEdit|Agent|Task)
+
+Tags: hooks, lessons, learning loop | The lesson at the choice: the DO INSTEAD surfaced on the tool call, not only on the prompt; the prompt-time line stays wired as the older twin
+
+NEWEST FIRST (C0003, 2026-11-06): the injected line joins an entry's DO
+INSTEAD clauses newest first, because an entry's truth moves to its
+latest TRIED or DONE bullet while its first clause goes stale, and the
+260-character cap used to cut exactly the clause that carried the fix
+(the wrapped deploy, refused twice). The lesson guard's per-session
+state also records whether tools/plan_check.py ran, which the brief
+guard reads for THE PLAN STEP (Tier 4a).
+
+THE ASK (Mazhron 2026-10-30): "Many times, you will look at a problem,
+perform a task, then look at a lesson after it fails, and say something
+like 'I tried the thing I wasn't supposed to try which is in lessons
+that says not to do it.' Why does that keep happening?" Then: "Lets try
+the fix for the hook, please keep a reference to the old hook somewhere
+so we don't lose it. There may be a way to mix them in the future."
+
+WHY THE OLD LOOP MISSED (the manager's diagnosis, LESSONS.md "The lesson
+was there and I still tried the thing it says not to"): the prompt-time
+LESSON LINE (prompt_gauge.py, kit v1.26) matches the PROMPT's words, and
+the trap lives in a sub-step the prompt never names; a hit printed a
+headline, not the DO INSTEAD; lessons describe the wrong path that looked
+right, which looks right again to every fresh session; and the Stop-side
+lesson_advisor.py fires AFTER the fail-then-pass, so the loop recorded
+mistakes well and prevented none.
+
+WHAT IT DOES: on each shell, write, edit or sub-agent call it gathers the
+call's text (the command; the file path plus the edit text; the brief),
+runs tools/lesson_log.py's own matcher (match, the same Keys lines and
+scoring the prompt-time line uses) and, for each hit not yet shown for
+that tool in this session, injects as additionalContext one line: the
+entry's line number, heading and its DO INSTEAD clauses joined (THE ONE
+RIGHT WAY when an entry has none), capped at 260 characters. Warn-only:
+it never refuses. Silent on a call that edits or runs the lesson
+machinery itself (LESSONS.md, lesson_log.py, the two lesson hooks).
+State: .claude/lesson_guard_state.json (gitignored; the session id and
+the shown set, reset when the session changes). Ledger: one `SURFACED |
+<tool> | <entries>` line per hit in docs/history/lesson_runs.txt, next
+to MATCHED (the prompt-time line) and ADVISED (the Stop end), so the
+three ends of the loop are measured in one file.
+
+THE OLD WAY, KEPT: prompt_gauge.py's LESSON LINE is untouched and still
+wired. Both run. THE MIX, when wanted: the prompt-time line writes its
+hits for the turn (a state file keyed by session) and the guard skips an
+entry the prompt already named; or the guard falls silent on tools the
+prompt-time line covered that turn. Neither is built; the SURFACED lines
+are the data to decide with (a lesson surfaced and violated anyway is the
+next refusing hook).
+
+THE TRIAL (Mazhron 2026-10-30, "Keep our current work flow on record,
+lets try the new work flow... keep track of the hits and misses (ledger
+them)"): three builds over the one ledger, WORKFLOWS.md "Act on a
+prompt: the trial workflow and the old way kept". (1) The plan step,
+tools/plan_check.py: the arc's steps through the same matchers before
+the first write, a PLAN line per run; this guard notes once per session
+when three writes pass with no plan_check run. (2) The session read set
+widened to small files in diet_guard.py: a repeat whole read of an
+unchanged small file gets one RE-READ (small) note, warn-only, cleared
+by compaction like the big-file marks. (3) The ladder,
+tools/lesson_ladder.py in the check group: SURFACED (new face) and
+MATCHED (old face) each carry a session id now (lesson_advisor.py's
+ADVISED too) and are paired with a following ADVISED of the same
+session within 20 minutes as a MISS, else a HIT; UNCOVERED counts the
+ADVISED neither face preceded; one line per run in
+docs/history/workflow_trial_runs.txt; a lesson missed twice is a
+PROPOSE [DO] to move its DO INSTEAD one rung down (lesson -> WORKFLOWS
+step -> loop script -> refusing hook). The old way is the same ledger
+read on its MATCHED lines; the switch back is one settings.json edit.
+
+Test: `python tools/hooks/lesson_guard.py --selftest` (17 checks, pure);
+pipe one call whose command carries an entry's Keys words twice, the
+first injects, the second is silent. `python tools/plan_check.py
+--selftest`, `python tools/lesson_ladder.py --selftest`.
+
+## Tier 4 (still pinned - the origin project's FUTURE_FEATURES.md)
+
+SubagentStop refusing an employee's stop when its report lacks the stamp /
+workflow line: deferred 2026-09-26 as ~90% redundant with
+delegation_auditor, then BUILT in v1.42 (2026-10-01) as the auditor's own
+stop-time branch (Tier 4a: a report without its template lines is held
+once), so it is no longer pinned;
+Notification -> an OS toast when the manager waits on permission or
+idles after a long employee run.
+
+## The modes file (kit v1.57 - every new way beside its old way, one key each)
+Tags: hooks, process, baseline | .claude/rootstock_modes.json: the CEO's switches between each v1.57 behaviour and the old way it replaced; the old path stays in the code and is selected by the key
+
+The CEO's standing rule (2026-10-31, on the retrieval ladder): "Please
+keep the old way stored somewhere appropriate. We always want the old
+ways stored for one, as a baseline, and two in case the new way is worse
+somehow or we could find a way to mix the two that would be better in
+the future." LESSONS "Give a system a second face" said it for game
+systems; this is the same law for the hooks. hooks/rootstock_modes.json
+is copied to .claude/rootstock_modes.json and COMMITTED (like
+fanout_limits.json, the CEO's setting travels with the repo);
+tools/hooks/_hooklib.py modes() reads it with the defaults in code, so a
+missing file or key means the new way and a parse error never crashes a
+hook. The keys and their old values:
+
+- route: ladder (v1.57) | classic (v1.33, the two-line ROUTE).
+- resume_digest: pointer (v1.57) | full (the whole digest on resume).
+- big_write_warn: true (v1.57) | false (the diet guard silent on Write).
+- effort_line: true (v1.57) | false (no EFFORT line).
+- digest_cap_split: true (v1.61) | false (the whole digest injected; the
+  harness cuts it to a 2KB preview past 10,000 characters).
+- trip_diet_warn: true (2026-11-03) | false (the diet guard silent on
+  same-shaped calls).
+- trip_diet_refuse: false (the note only, the way since 2026-11-03) |
+  true (v1.62: the third same-shaped call refused once, the same call
+  repeated passes). The one key whose default IS the old way: a
+  refusal is switched on by the CEO after the trip ledger argues for
+  it, never shipped on.
+
+Switching back is one flip, no code edit, and no ledger changes shape:
+both route faces write ROUTE lines, both resume shapes write
+digest_size.txt lines, so tools/retrieval_eval.py --route and the
+digest ledger compare the faces from the same data. A new behaviour
+added to a hook after v1.57 earns a key here in the same batch, with its
+old value named in the file's _old_ways block; a behaviour without an
+old way (a new refusal) does not. The CEO flips a key by saying so; the
+manager never flips one on its own, and a mix of two faces is a design
+the ledgers argue for first.
+
+## Bootstrap (new project)
+
+1. Copy the kit's hooks/ folder to the project's tools/hooks/ (or wherever
+   its scripts live; the scripts locate the repo root from their own path
+   and import the checkpoint script from the folder above them). Copy
+   only the scripts the install level wires (kit v1.65): Full takes the
+   whole folder, Standard takes _hooklib.py and the ten scripts
+   settings.standard.json names, Lean takes none. Presence is adoption:
+   a SAFETY hook whose script sits in tools/hooks/ but is not wired is
+   what the format lint fails and the Stop tick refuses as SAFETY WIRING
+   BROKEN, so a level leaves out the scripts it does not wire and copies
+   them on the day it moves up.
+2. Copy the install level's file to .claude/settings.json (MERGE if the
+   project already has one - never replace its arrays). Validate with
+   json.tool. THE INSTALL LEVELS (kit v1.60, after a reader's review:
+   "offer it in tiers instead of all or nothing"; levels, because the
+   hooks already have Tiers): hooks/settings.lean.json is the deny block
+   and no hook; hooks/settings.standard.json is eleven entries, the
+   session loop (session_start, prompt_gauge, stop_tick, pre_compact,
+   session_end), the three safety guards (bash, preserve, diet) and the
+   delegation pair (brief_guard, delegation_auditor); hooks/settings.json
+   is all eighteen. The install stamp carries `| level: <name>`; a
+   level moves up by merging the next file's entries and running the
+   front-door steps it adds, never by a reinstall.
+3. Gitignore `.claude/hooks_state.json` and `.claude/settings.local.json`.
+4. Make sure the project's checkpoint script has `work_fingerprint`,
+   `load_hook_state`, `save_hook_state` (the kit's reference
+   tools/checkpoint.py carries them); reorder its checkpoint ritual so
+   `--reset` runs last; strike every "tick by hand" instruction from its
+   laws and skills.
+5. Fill the bash guard's PROJECT RULES block from the CEO's STEP-0 laws.
+6. Pipe-test every hook with synthesized stdin (`echo '{"tool_input":
+   {"command":"..."}}' | python tools/hooks/bash_guard.py`); trigger the
+   shell guard live once. Add the WORKFLOW entry "Add or change a harness
+   hook" to the process registry and a "The hooks" section to the tooling
+   doc (the table of event/script/does + the gotchas above).
+7. The diet guard needs nothing project-specific: wire its
+   Read|Bash|PowerShell|Write|Edit|MultiEdit|Grep|mcp__.* PreToolUse
+   entry (the template settings.json has it), run `python tools/hooks/diet_guard.py --selftest`, gitignore
+   `.claude/diet_state.json`. If the project's checkpoint script
+   fingerprints the tree, exclude the usage sheet's outputs (the
+   reference copy does) so standup's silent refresh never counts as work.
+8. The preserve guard needs nothing project-specific either: wire its
+   Bash|PowerShell|Write|Edit|MultiEdit|NotebookEdit PreToolUse entry
+   (the template settings.json has it), run `python
+   tools/hooks/preserve_guard.py --selftest`, gitignore
+   `.claude/delete_grant.json`, copy delete_grant.py, retire.py and
+   cold_shelf.py from reference tools/ into tools/. Then AUDIT the
+   project's existing scripts for deletion calls (grep the os/shutil/
+   pathlib removal calls and the shell verbs) and bring each to the CEO:
+   convert to a move, or keep with the CEO's word on record. Add the
+   registry entries "Delete something (the grant ritual)" and "Retire a
+   file or move a wiki section to the cold shelf".
+9. The hygiene guard (Tier 3): rewrite its CONFIG block (the portable
+   MD names, the kit folder, the skills/hooks dirs, the core file + its
+   lint command, the wiki dirs the link checker lints, the player-text
+   patterns, the assets folder + import hint), wire its
+   Write|Edit|MultiEdit PostToolUse entry (the template settings.json
+   has it), run `python tools/hooks/hygiene_guard.py --selftest`. No
+   state file. A receiving project (the default) leaves KIT_MDS empty
+   and KIT_DIR blank. Give the public README (if the project publishes a
+   kit) a "Kit version: vX.Y" line so the release script's check can hold.
+
+## Change log
+
+- 2026-09-06 WS1: founded. Tier 1 + 2 built and pipe-tested in Everwood
+  (kit v1.7); Tier 3/4 pinned on the origin project's FUTURE_FEATURES.md.
+- 2026-09-10 WS1: Tier 2b, the fan-out guard (kit v1.9) - the CEO's ask
+  after the 821-agents report. The first cut was STRICT (session caps,
+  a workflow lock, a self-edit lock, CEO-only unlock commands, a bash
+  rule refusing the manager); it locked its own author out mid-batch
+  and, within the hour, the CEO ruled it too restrictive: "I don't want
+  to have to type these commands all the time and neither will any
+  users who use Rootstock-os. I just wanted to prevent complete runaway
+  agents and gigantic token spend." Loosened to CATASTROPHE-ONLY the
+  same day (burst/flood/velocity refusals that clear themselves;
+  warnings for the rest; no unlock machinery). Lesson: a guard rail is
+  for the cliff edge, not the path - if a normal day ever needs a
+  command to get past it, the rail is in the wrong place.
+- 2026-09-10 WS1 (later): the numbers become the CEO's (kit v1.10) -
+  `--limits` / `--set` / `--defaults` on the guard, a committed
+  .claude/fanout_limits.json over the script's DEFAULTS, and the /runaway
+  skill as the front. Rule of thumb that fell out: a guard's defaults
+  belong to the kit, its tuning to the project - keep them in separate
+  files so a graft never overwrites what the CEO chose.
+- 2026-09-10 WS1 (evening): Tier 2c, the diet guard (kit v1.12) - born
+  from the CEO's weighted-usage insight ("the most important token counts
+  are the ones that actually count against a user's usage amount"). The
+  usage sheet had shown that under budget weights cache WRITES are the
+  top pillar and output is a fifth; the two leaks are whole-file reads
+  and chatty tool results, and both are visible BEFORE the call. Hence a
+  warn-only PreToolUse guard that says the number at the decision point.
+  Lesson: a hook can enforce a diet only if it never blocks - the manager
+  sometimes needs the whole file (an edit), and a refusal there would
+  breed workarounds; a one-line cost at the cliff edge changes the habit
+  without a fight.
+- 2026-09-10 WS1 (night): ADVISED MEANS DO IT (kit v1.13) - the CEO:
+  "If the checkpoint is a script, there is no reason not to just run it
+  at the time a checkpoint is advised." Both hooks' ADVISED lines now
+  say "checkpoint at the end of this reply if the arc is closed"; the
+  checkpoint skill carries the rule at its top. An advisory the manager
+  merely relays is a nag; an advisory the manager acts on is a law.
+- 2026-09-10 WS1 (night): Tier 2d, the preserve guard (kit v1.14) - the
+  CEO's ruling after public reports of an agent whose script deleted a
+  person's files and another that wiped a machine: nobody deletes, no
+  script deletes, and a real deletion is granted twice and recorded. The
+  same evening the CEO asked whether the system learns, and the answer
+  became three read-only scripts (link checker, section heat map, ledger
+  trends -> proposals at standup) plus the cold shelf: pruning means
+  MOVING to an indexed shelf, never deleting - "all of this is hard
+  fought, hard earned knowledge, even the rarely used knowledge." The
+  guard refused its own author twice within minutes (a docstring, then
+  the documentation naming the banned verbs); prose files are exempt now.
+  The audit it forced found the kit-mirror script emptying its target
+  folder before copying - a misconfigured path away from the horror
+  story - and that is fixed too.
+- 2026-09-10 PM (kit v1.15): Tier 2c gains INDEX FIRST - the first whole
+  read of a big file per session is refused with the file's index in the
+  refusal, the same call repeated passes; images are silent (priced by
+  pixels). Born when the origin project's "21 big reads a day" turned out
+  to be screenshots sized by their bytes.
+- 2026-09-11 WS1: Tier 3, the hygiene guard (kit v1.16) - the first
+  PostToolUse hook. Born when the public README was found two kit
+  versions behind; the CEO: "we definitely don't want the readme falling
+  behind again." Kit-refresh reminder (naming the README), See-also lint
+  at the edit, the dash rule as a block, the import reminder; plus the
+  sync script's README version check. Tier 4 stays pinned. Lesson: a
+  reminder that fires at the moment of the edit is worth ten in a law
+  file - the README fell behind while the law was already written.
+- 2026-09-13 WS1 (kit v1.19): Tier 3b, the format guard - the first hook
+  that runs BEFORE and AFTER the same tools. Born from the CEO's ruling
+  on community updates: every kit thing carries one header, a script
+  flags the rest and rewrites only the missing lines after a read-only
+  look, and a hook refuses a settings edit that would unwire a safety
+  hook, so "no one can inject a prompt that overrides safety protocols".
+  Twins in the shell guard (no shell writes into a settings file) and
+  the Stop hook (refuses the turn while the wiring is broken); the prompt
+  gauge gained the KIT UNSYNCED line the same day. Lesson: a guardrail
+  for a community kit cannot depend on good faith; it is a script that
+  flags, a script that rewrites, and a hook that refuses.
+- 2026-09-13 PM (kit v1.20): the first purpose audit's five yellows closed.
+  The three info-only hooks (session_start, prompt_gauge, pre_compact)
+  gained `--selftest` with no live change (module work into main(), pure
+  builders factored so a selftest never touches stdin, a real ledger or
+  the standup script); every hook in the kit now answers `--selftest`.
+  The diet guard's docstring stopped claiming it never refuses (it
+  refuses once, INDEX FIRST). The front door got its first independent
+  full read, which found the PURPOSE line undersold the hooks install
+  and a stale skill list; both fixed, then GREEN. Lesson: the audit
+  loop works on the kit's own authors - a non-author read found what
+  three author passes had not.
+- 2026-09-14 (kit v1.21): THE LOOP LAW landed in two hooks. session_start
+  now runs the parent loop's session group once a day before the digest
+  (a note says it ran or when it last ran; a missing run_all.py degrades
+  to a note) and appends the digest's byte size to digest_size.txt every
+  time it fires, so the injected context is measured, not guessed.
+  stop_tick adds a warn-only CHANGELOG UNEXPORTED line when commits sit
+  past the changelog anchor (once per count; silent when no anchor
+  exists). Both selftests extended. The systems audit that asked for
+  this is in INTENT_METHOD.md "The loop law".
+
+- 2026-09-20 WS1: Tier 1 gains the lesson advisor (kit v1.26), THE LESSON
+  LOOP's stop end, with the prompt end in prompt_gauge.py and the book in
+  LESSONS.md. The CEO's ask: a system that learns HOW, not only what -
+  the one right way first, then the pitfalls as headlines, so trial and
+  error is paid for once. Design note: a Stop hook's systemMessage
+  reaches the user, its block reason reaches the manager; an instruction
+  to the manager must be a block, guarded so it can never trap (once per
+  slice signature, stop_hook_active, WRITTEN passes).
+- 2026-09-20 WS1 PM (kit v1.28): Tier 1 #6, the SessionEnd auto-checkpoint
+  (session_end.py) - the CEO's ask the same evening, after the mirror
+  question: /clear checks for a checkpoint and does the mechanics itself
+  when none was done. Twelve scripts now. The local mirror
+  (backup_push.py, a reference tool) pushes every ref to a bare repo on
+  another drive; the hook, the ship and checkpoint skills and run_all's
+  session group all call it.
+- 2026-09-26 WS2 (kit v1.30): Tier 4a, THE DELEGATION TRUTH SET - the
+  CEO asked "Can we make these processes more fool proof in any way
+  through hooks or are we at maximum hookiness" after relaying a public
+  case (a manager that said its sub-agents did their job when they had
+  not). Three hooks, one per moment of a delegation: brief_guard.py
+  refuses a lawless work brief at dispatch; delegation_auditor.py reads
+  the metered figures out of every result (the fabrication tell, the
+  TOOLS-line cross-check) and appends the PENDING line;
+  verify_advisor.py refuses a turn end while a PENDING id lacks its
+  RESOLVED line. All three in the format guard's SAFETY table. Fifteen
+  scripts now. The fourth idea (the SubagentStop stamp check) stays
+  pinned as ~redundant with the auditor. Lesson from building: the
+  SAFETY table bites the kit template too - three single edits each
+  left the other two unwired and were refused; one whole-file write
+  that adds all three at once is the move.
+- kit v1.31 (2026-09-28): THE HOOK LAW - every work-naming hook line is
+  an order to the manager, executed in that reply, worded as such;
+  stop_tick.py's changelog count skips "changelog:" commits (the export
+  itself no longer reads as one unexported commit) and its line says
+  MANAGER: run the export before this reply ends. Selftest gained the
+  incident shape (anchor at the export's parent, range to the export
+  commit, must count 0).
+- 2026-09-28 WS1 (late): THE ROUTE LINE (kit v1.33). The CEO read Kelsey
+  Hightower's Zero Token Architecture ("infer once, export the logic, run
+  it without inference") and asked which of its gaps Rootstock should
+  close; the one that mattered was the routing: the script rule exports
+  the logic, but WHICH workflow or script handles a prompt was still
+  inferred every turn. prompt_gauge.py now prints ROUTE with the
+  matching WORKFLOWS.md entries and tools (route_index.py: the lesson
+  matcher over headings, WHEN lines and Search keys; a workflow needs 3
+  points, a tool 2, two of each at most). No ledger: a route is a
+  pointer, the tool it names keeps the ledger. First eleven real prompts:
+  six routed right, five silent, none wrong.
+- 2026-09-28 WS1 (later still): THE CHECKPOINT NAMED CHECK (kit v1.34).
+  The route line batch's reply closed "a checkpoint and clear is the
+  natural next step whenever you want to stop"; the CEO: "If this is the
+  case, you should have just done a checkpoint. Any reference to a
+  checkpoint from any valid source should prompt you to do it" (C0004).
+  C0002 made an advised checkpoint a step, C0003 made every hook line an
+  order; this closes the source: the manager's own reply counts.
+  stop_tick.py reads the reply text since the last typed prompt (the
+  lesson loop's transcript reader) and refuses once per prompt when it
+  names a checkpoint as due without the marker; stop_hook_active keeps
+  it from looping; five selftest cases carry the incident sentence.
+- 2026-09-29 WS1: THE PROPOSAL NAMED CHECK (kit v1.35). The first reply
+  after /clear relayed the digest's four PROPOSE lines and asked what
+  to work on; the CEO: "If an audit is required, and it can be done with
+  a sub-agent, or a script, it doesn't need my permission. Just do it.
+  If the standup digest requires a trim, it doesn't need my permission.
+  Do it." (C0005, the fourth relay of the week: C0002 a hook's ADVISED,
+  C0003 a hook's warning, C0004 the manager's own sentence, C0005 a
+  standup proposal - one law, a line that names work is an order).
+  ledger_trends.py tags every proposal [DO] / [ASK]; session_start.py's
+  preamble says the DO lines are the first reply's work; stop_tick.py
+  refuses once per prompt when the reply names a [DO] proposal its
+  ledger still raises; six selftest cases carry the incident reply.
+- 2026-10-30 WS2 (Acme Co Program): THE LESSON GUARD (Tier 4b,
+  lesson_guard.py). Mazhron asked why the manager keeps trying the thing
+  a lesson says not to and then finding the lesson after the failure;
+  the diagnosis (prompt-time match, headline not DO INSTEAD, fresh
+  sessions, Stop-side loop) and the fix (the same matcher run on the
+  tool call, the DO INSTEAD injected once per entry per tool per
+  session, SURFACED ledgered) are above. The prompt-time LESSON LINE
+  stays wired by Mazhron's ruling ("keep a reference to the old hook
+  somewhere so we don't lose it. There may be a way to mix them in the
+  future").
+- 2026-10-30 WS2 (Acme Co Program): THE TRIAL WORKFLOW. Mazhron: "Keep
+  our current work flow on record, lets try the new work flow you just
+  suggested. We should keep track of the hits and misses (ledger them)
+  so we can keep track of success or failure of the new workflow
+  concept." The plan step (plan_check.py), the small-file read set
+  (diet_guard.py), the ladder (lesson_ladder.py, the check group,
+  workflow_trial_runs.txt), session ids on SURFACED and ADVISED, the
+  PLAN STEP note in lesson_guard.py. The old way stays on record in
+  WORKFLOWS.md "Act on a prompt" with its one-edit switch back.
+- 2026-10-31 kit v1.56: the trial workflow and the lesson guard join the
+  kit from the Acme install (Mazhron: "Please add this workflow to
+  Rootstock and push to Git. We want Rootstock to keep the old workflow as
+  a backup and as a benchmark."); UPGRADES.md v1.56.
+- 2026-10-31 kit v1.57: the retrieval ladder in prompt_gauge.py's ROUTE
+  (the index lines, the existing files, the EFFORT line, the index door),
+  THE RESUME POINTER in session_start.py, BIG WRITE in diet_guard.py
+  (Write joins its matcher), and THE MODES FILE that keeps every old way
+  one key away (Mazhron: "We always want the old ways stored ... as a
+  baseline"); UPGRADES.md v1.57.

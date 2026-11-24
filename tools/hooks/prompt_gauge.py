@@ -1,0 +1,301 @@
+"""UserPromptSubmit hook: the context gauge + task counter, every prompt
+(Tier 1, #3). Until 2026-10-30 it was silent unless a threshold was
+crossed; since the percent line it prints one plain gauge line on a
+normal turn and an order (DUE, URGENT) past a threshold. The manager
+relays the line verbatim (the CEO's 80% rule 2026-09-04; the 8/15 task
+thresholds 2026-09-02).
+
+Since 2026-09-20 it also carries THE LESSON LINE (the CEO: "nothing surfaces
+a lesson before I start"): the prompt's words are matched against the Keys
+line of every LESSONS.md entry (tools/lesson_log.py match_lines) and the
+matching headlines, at most three, are printed with their line numbers so the
+manager reads the entry before the first tool call; a MATCHED line goes to
+docs/history/lesson_runs.txt. Silent on a prompt that hits nothing.
+
+Since 2026-09-13 it also carries THE KIT LINE: "KIT UNSYNCED" while a
+portable original is newer than its kit copy or the kit folder is ahead
+of the public mirror (tools/refresh_kit.py --check), silent otherwise and
+always silent in a project with no kit folder of its own.
+
+Since 2026-09-28 it also carries THE ROUTE LINE (kit v1.33, after Kelsey
+Hightower's Zero Token Architecture: the script rule exports the logic, but
+WHICH workflow or script handles a prompt was still inferred every turn):
+the prompt's words are matched against every WORKFLOWS.md entry's heading
+and WHEN line and every reference tool's Search keys (tools/route_index.py,
+the lesson matcher) and the hits, at most two of each, are printed under
+ROUTE so the scripted way is checked before it is re-derived. (v1.33 kept
+no ledger for it; since kit v1.57 each face ledgers one ROUTE line, below.)
+
+Since 2026-09-30 it also carries THE USAGE WINDOW LINE (Rootstock
+T-0930-RS-2, the CEO's ask: the standup's budget line is retrospective, but
+the plan's own limits are rolling five-hour and seven-day windows):
+tools/usage_window.py's gauge_line() (--advise --record, in-process) runs
+on every prompt and is printed only when the last 5 hours are already most
+of the last 7 days' worst 5-hour stretch; an ADVISED reading is also
+ledgered there. Silent otherwise.
+
+Since 2026-10-31 (kit v1.57) THE ROUTE LINE has two faces, picked by the
+modes file (.claude/rootstock_modes.json, `route`): "ladder" prints
+tools/route_index.py's route_block() - the WORKFLOWS entries and tools as
+before, plus the INDEX lines where the facts live, the FILES that already
+exist, and an EFFORT line when the matched entry's `EFFORT:` level differs
+from the level this session runs at (the hook input's effort.level or the
+CLAUDE_EFFORT variable; the CEO 2026-10-31, after the measure that 62% of
+metered output was unseen thinking at effort high); when nothing hits a
+task-shaped prompt it prints THE INDEX DOOR once per session. "classic" is
+the v1.33 two-line ROUTE, byte-for-byte. Either face ledgers one ROUTE line
+(docs/history/lesson_runs.txt) so tools/retrieval_eval.py --route scores
+them against each other - the old way stays the baseline.
+
+Answers `--selftest` (house pattern: PASS/FAIL lines on the pure line
+builder, never stdin or a real prompt).
+
+PURPOSE: UserPromptSubmit hook that prints the checkpoint counter line when
+  a task threshold is crossed (8 tasks DUE, 15 dire) and the
+  context-remaining line on EVERY prompt (a DUE order under 80%;
+  above 80% a plain "context gauge: N% remaining" line, relayed in the reply
+  until the /clear - the CEO 2026-10-12: the hook orders the checkpoint, it
+  does not advise one), plus since 2026-09-13
+  a KIT UNSYNCED line when a portable original is newer than its kit copy,
+  and since 2026-09-20 the LESSONS line naming the LESSONS.md entries whose
+  Keys match the prompt, so the one right way is read before the first tool call,
+  and since 2026-09-28 the ROUTE line naming the WORKFLOWS.md entries and the
+  reference tools whose heading, WHEN line or Search keys the prompt hits,
+  and since 2026-09-30 a live USAGE WINDOW line (tools/usage_window.py)
+  when the rolling five-hour spend is already most of the seven-day peak;
+  since 2026-10-31 the ROUTE has a ladder face (index lines, existing
+  files, the EFFORT line, the index door once per session) and a classic
+  face, chosen by the modes file, both ledgered. What it writes: MATCHED
+  and ROUTE lines in docs/history/lesson_runs.txt (through
+  tools/lesson_log.py), the index door's once-per-session mark in
+  .claude/route_state.json (through tools/route_index.py) and an ADVISED
+  reading in the usage window's own ledger (tools/usage_window.py).
+INTENT: relays the checkpoint and context thresholds and the kit-sync check
+  for the price of one gauge line on a normal turn, so the manager
+  checkpoints or refreshes the kit only when the harness itself has
+  detected the need.
+
+Search keys: prompt hook, context gauge, 80 percent rule, task counter,
+kit unsynced, lessons line, lesson loop, route line, which script, usage
+window, live budget, rolling window, route block, retrieval ladder, index
+door, effort line, modes file.
+See also: tools/checkpoint.py (thresholds + the transcript probe);
+tools/hooks/stop_tick.py (the tick that feeds the counter); tools/lesson_log.py
+(match_lines); tools/route_index.py (the route line); tools/usage_window.py
+(the five-hour/seven-day window line); LESSONS.md; WORKFLOWS.md.
+"""
+import os
+import sys
+
+from _hooklib import mode, read_input  # noqa: F401  (sets sys.path)
+import checkpoint as cp
+
+
+def effort_now(data, env=None):
+    """The effort level this session runs at, lowercase, or "" when the
+    harness did not say (the hook input's effort.level first, then the
+    CLAUDE_EFFORT variable the harness sets for hook commands)."""
+    env = os.environ if env is None else env
+    lvl = ""
+    eff = data.get("effort") if isinstance(data, dict) else None
+    if isinstance(eff, dict):
+        lvl = str(eff.get("level") or "")
+    elif isinstance(eff, str):
+        lvl = eff
+    if not lvl:
+        lvl = str(env.get("CLAUDE_EFFORT") or "")
+    return lvl.strip().lower()
+
+
+def gauge_lines(n, load_):
+    """The checkpoint + context lines the live hook prints, as a list."""
+    lines = []
+    if n >= 15:
+        lines.append("!!!!! CHECKPOINT URGENT (%d tasks since last checkpoint) - "
+                     "checkpoint before taking new work !!!!!" % n)
+    elif n >= 8:
+        lines.append("~~ CHECKPOINT DUE (%d tasks since last checkpoint) - DO IT: "
+                     "ship if mid-batch, then end this reply with the checkpoint; "
+                     "an open arc is checkpointed as open ~~" % n)
+    if load_ is not None:
+        remaining = cp.context_remaining(load_)
+        phrase = cp.context_phrase(load_)   # the one gauge shape (2026-11-02)
+        if remaining < 0.30:
+            lines.append("!!!!! CHECKPOINT URGENT (%s) - checkpoint + /clear NOW; "
+                         "auto-compact is lossy !!!!!" % phrase)
+        elif remaining < 0.80:
+            # THE DUE LINE (the CEO 2026-10-12: "change this hook from
+            # advising a checkpoint to DO the checkpoint ... Any conversation
+            # after should have a checkpoint happen until the clear/standup
+            # ritual is complete"): this fires on EVERY prompt past the 80%
+            # line, and every one of those replies ends with a checkpoint.
+            lines.append("~~ CHECKPOINT DUE (%s; the CEO's 80%% rule) - DO IT: ship "
+                         "if mid-batch, then end this reply with the checkpoint, and "
+                         "every reply after it until the /clear + standup; an open "
+                         "arc is checkpointed as open ~~" % phrase)
+        else:
+            # THE PERCENT LINE (the CEO 2026-10-30: "be sure in the future to
+            # give me % used or left"; 2026-11-02: same shape as the DUE line):
+            # above the 80% line the hook still prints the gauge, and the
+            # reply relays it.
+            lines.append("context gauge (%s) - relay the gauge in the reply" % phrase)
+    return lines
+
+
+def main():
+    data = read_input()
+    # THE KEEP-WARM EXCLUSION (the CEO 2026-09-29, the ping retune): a
+    # cache keep-warm ping is not a turn; every line this hook would print
+    # is context the ping exists to keep small, and the hook law's orders
+    # wait for the next real turn. tools/keepwarm.py owns the marker.
+    if (data.get("prompt") or "").lstrip().startswith("[keep-warm ping"):
+        return
+    ws = cp.which_ws()
+    n = cp.load().get(ws, (0, ""))[0]
+    load_ = cp.context_load()
+    lines = gauge_lines(n, load_)
+    if lines:
+        print("[HOOK prompt_gauge] " + " | ".join(lines)
+              + " (relay to the CEO verbatim)")
+    # THE KIT LINE (the CEO 2026-09-13: whenever Rootstock is discussed, the
+    # kit folder and the public repo are updated in the same batch): one
+    # line while an original is newer than its kit copy or the kit is ahead
+    # of the mirror.
+    try:
+        import refresh_kit as _rk
+        _kit = _rk.check_line()
+    except Exception:  # noqa: BLE001 - a hook never crashes the turn
+        _kit = None
+    if _kit:
+        print("[HOOK prompt_gauge] " + _kit)
+    # THE LESSON LINE (the CEO 2026-09-20): the entries whose Keys hit this
+    # prompt, read before the first tool call. Silent when nothing matches.
+    try:
+        import lesson_log as _ll
+        _lines = _ll.match_lines(data.get("prompt") or "")
+    except Exception:  # noqa: BLE001 - a hook never crashes the turn
+        _lines = []
+    if _lines:
+        print("[HOOK prompt_gauge] " + "\n".join(_lines))
+        try:
+            _ll.record("MATCHED", " / ".join(x.strip() for x in _lines[1:]))
+        except Exception:  # noqa: BLE001
+            pass
+    # THE ROUTE LINE (the CEO 2026-09-28, after the ZTA article): the
+    # WORKFLOWS entry and the tool this prompt already has, so the routing
+    # is a lookup and not an inference. Silent when nothing matches.
+    # THE TWO FACES (kit v1.57, the CEO 2026-10-31: "keep the old way stored
+    # ... as a baseline"): route=ladder prints route_block() (the how, where
+    # the facts live, what exists, the effort, the index door once per
+    # session); route=classic prints the v1.33 match_lines() unchanged.
+    # Both ledger a ROUTE line so retrieval_eval --route can compare them.
+    _prompt = data.get("prompt") or ""
+    _routes = []
+    try:
+        import route_index as _ri
+        if mode("route", "ladder") == "classic":
+            _routes = _ri.match_lines(_prompt)
+            _wf, _tl = _ri.match(_prompt) if _routes else ([], [])
+            _ri.route_record("classic", {"wf": len(_wf), "tools": len(_tl)}, _prompt)
+        else:
+            _eff = effort_now(data) if mode("effort_line", True) else ""
+            _routes, _counts = _ri.route_block(_prompt, data.get("session_id"), _eff)
+            if not mode("effort_line", True):
+                _routes = [x for x in _routes if not x.lstrip().startswith("EFFORT:")]
+            _ri.route_record("ladder", _counts, _prompt)
+    except Exception:  # noqa: BLE001 - a hook never crashes the turn
+        _routes = _routes or []
+    if _routes:
+        print("[HOOK prompt_gauge] " + "\n".join(_routes))
+    # THE USAGE WINDOW LINE (the CEO's ask 2026-09-30, Rootstock T-0930-RS-2):
+    # a live rolling five-hour read instead of the next morning's standup
+    # line. tools/usage_window.py owns the numbers, the owner-tuned share/
+    # floor and the ADVISED ledger; this is silent on a normal turn and a
+    # slow cold cache or any exception must never break the gauge.
+    try:
+        import usage_window as _uw
+        _uw_line = _uw.gauge_line()
+    except Exception:  # noqa: BLE001 - a hook never crashes the turn
+        _uw_line = None
+    if _uw_line:
+        print("[HOOK prompt_gauge] " + _uw_line)
+
+
+def _selftest():
+    """Exercises gauge_lines() directly - never touches stdin or a prompt."""
+    fails = 0
+    ok = gauge_lines(0, None) == []
+    print(("PASS  " if ok else "FAIL  ") + "n=0, no context load gives no lines")
+    fails += not ok
+    ok = any("DUE" in x and "DO IT" in x for x in gauge_lines(8, None))
+    print(("PASS  " if ok else "FAIL  ") + "n=8 gives a DUE line")
+    fails += not ok
+    ok = any("URGENT" in x for x in gauge_lines(15, None))
+    print(("PASS  " if ok else "FAIL  ") + "n=15 gives an URGENT line")
+    fails += not ok
+    urgent_load = int(cp.COMPACT_BUDGET * 0.75)  # 25% remaining < 30%
+    ok = any("CONTEXT" in x and "URGENT" in x for x in gauge_lines(0, urgent_load))
+    print(("PASS  " if ok else "FAIL  ") + "under 30% remaining gives CONTEXT URGENT")
+    fails += not ok
+    advised_load = int(cp.COMPACT_BUDGET * 0.50)  # 50% remaining, 30-80%
+    ok = any("CONTEXT" in x and "DUE" in x and "every reply after" in x
+             for x in gauge_lines(0, advised_load))
+    print(("PASS  " if ok else "FAIL  ") + "30-80% remaining gives CONTEXT DUE, every reply")
+    fails += not ok
+    quiet_load = int(cp.COMPACT_BUDGET * 0.10)  # 90% remaining
+    got = gauge_lines(0, quiet_load)
+    ok = (len(got) == 1 and got[0].startswith("context gauge (CONTEXT: 90% remaining, ")
+          and "of ~" in got[0] and "(10% used)" in got[0] and "DUE" not in got[0])
+    print(("PASS  " if ok else "FAIL  ") + "above 80% remaining gives the plain gauge line, same shape (2026-11-02)")
+    fails += not ok
+    try:
+        import lesson_log as _ll
+        ok = any("LESSONS.md line" in x for x in _ll.match_lines(
+            "brief an employee on the wetland species numbers and the lanes envelope"))
+        print(("PASS  " if ok else "FAIL  ") + "a prompt hitting a LESSONS.md Keys line gets the lessons line")
+        fails += not ok
+        ok = _ll.match_lines("standup") == []
+        print(("PASS  " if ok else "FAIL  ") + "a short prompt gets no lessons line")
+        fails += not ok
+    except ImportError:
+        print("FAIL  lesson_log.py missing next to checkpoint.py")
+        fails += 1
+    try:
+        import route_index as _ri
+        ok = any("WORKFLOWS.md line" in x for x in _ri.match_lines(
+            "ship this docs-only batch: commit, export the changelog and push, no build"))
+        print(("PASS  " if ok else "FAIL  ") + "a prompt hitting a WORKFLOWS entry gets the route line")
+        fails += not ok
+        ok = _ri.match_lines("the pine tree looks too dark against the winter snow tiles") == []
+        print(("PASS  " if ok else "FAIL  ") + "a game prompt gets no route line")
+        fails += not ok
+    except ImportError:
+        print("FAIL  route_index.py missing next to lesson_log.py")
+        fails += 1
+    # v1.57: the effort reader and the modes switch, pure
+    ok = (effort_now({"effort": {"level": "High"}}, env={}) == "high"
+          and effort_now({}, env={"CLAUDE_EFFORT": "medium"}) == "medium"
+          and effort_now({}, env={}) == "")
+    print(("PASS  " if ok else "FAIL  ") + "effort_now reads the hook input, then CLAUDE_EFFORT, else empty")
+    fails += not ok
+    ok = mode("route", "ladder") in ("ladder", "classic") and isinstance(mode("effort_line", True), bool)
+    print(("PASS  " if ok else "FAIL  ") + "the modes file answers route and effort_line with valid values")
+    fails += not ok
+    try:
+        import route_index as _ri
+        _blk, _c = _ri.route_block(
+            "ship this docs-only batch: commit, export the changelog and push, no build", door=False)
+        ok = bool(_blk) and _c["wf"] >= 1
+        print(("PASS  " if ok else "FAIL  ") + "the ladder face names the same WORKFLOWS entry the classic face does")
+        fails += not ok
+    except (ImportError, AttributeError):
+        print("FAIL  route_index.py lacks route_block (v1.57)")
+        fails += 1
+    print("prompt_gauge selftest: %d failed" % fails)
+    return 1 if fails else 0
+
+
+if __name__ == "__main__":
+    if "--selftest" in sys.argv[1:]:
+        sys.exit(_selftest())
+    main()
