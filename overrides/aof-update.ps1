@@ -51,7 +51,7 @@ $tmp = Join-Path $env:TEMP ("aof-update-" + [guid]::NewGuid().ToString('N').Subs
 try {
   [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
   $hdrs = @{ 'User-Agent' = 'aof-update' }
-  $entries = @(); $manifest = $null; $sha = ''
+  $entries = @(); $manifest = $null; $sha = ''; $apiErr = ''
   if ($ZipPath) {
     $dir = Join-Path $tmp 'zip'; Expand-Archive $ZipPath $dir -Force
     $r = Get-ChildItem $dir -Directory | ? { Test-Path (Join-Path $_.FullName 'overrides') } | Select-Object -First 1
@@ -62,15 +62,17 @@ try {
   } else {
     $branches = if ($Branch) { @($Branch) } else { @('main', 'unpack-pack') }
     foreach ($b in $branches) {
-      try { $c = Invoke-RestMethod -UseBasicParsing "https://api.github.com/repos/$Repo/commits/$b" -Headers $hdrs } catch { continue }
-      $tree = Invoke-RestMethod -UseBasicParsing "https://api.github.com/repos/$Repo/git/trees/$($c.sha)?recursive=1" -Headers $hdrs
+      try { $c = Invoke-RestMethod -UseBasicParsing "https://api.github.com/repos/$Repo/commits/$b" -Headers $hdrs }
+      catch { if ("$_" -match 'rate limit') { $apiErr = "GitHub only answers 60 update checks an hour per network; try again in a while." }; continue }
+      if (-not $Force -and -not $DryRun -and (Test-Path $ShaFile) -and ((Get-Content $ShaFile -Raw).Trim() -eq "$b $($c.sha)")) {
+        Say "Adventures of Fairytale is up to date ($b @ $($c.sha.Substring(0, 7)))."; exit 0
+      }
+      try { $tree = Invoke-RestMethod -UseBasicParsing "https://api.github.com/repos/$Repo/git/trees/$($c.sha)?recursive=1" -Headers $hdrs }
+      catch { if ("$_" -match 'rate limit') { $apiErr = "GitHub only answers 60 update checks an hour per network; try again in a while." }; continue }
       $files = @($tree.tree | ? { $_.type -eq 'blob' -and $_.path.StartsWith('overrides/') })
       if (-not $files.Count) { continue }                                    # this branch doesn't hold the unpacked pack
       if ($tree.truncated) { Say "GitHub's file list for '$b' was cut short; some files may be missed this time." }
       $sha = $c.sha; $Branch = $b
-      if (-not $Force -and -not $DryRun -and (Test-Path $ShaFile) -and ((Get-Content $ShaFile -Raw).Trim() -eq "$b $sha")) {
-        Say "Adventures of Fairytale is up to date ($b @ $($sha.Substring(0, 7)))."; exit 0
-      }
       foreach ($f in $files) {
         $url = "https://raw.githubusercontent.com/$Repo/$sha/" + (($f.path -split '/' | % { [Uri]::EscapeDataString($_) }) -join '/')
         $entries += [pscustomobject]@{ Rel = $f.path.Substring(10).Replace('/', '\'); Sha = $f.sha; Src = $null; Url = $url }
@@ -79,7 +81,10 @@ try {
       try { Invoke-WebRequest -UseBasicParsing "https://raw.githubusercontent.com/$Repo/$sha/manifest.json" -OutFile $manifest } catch { $manifest = $null }
       break
     }
-    if (-not $entries.Count) { Say "Couldn't find the pack files on GitHub ($Repo, branches: $($branches -join ', ')). Nothing changed."; exit 1 }
+    if (-not $entries.Count) {
+      if ($apiErr) { Say "$apiErr Nothing changed."; exit 1 }
+      Say "Couldn't find the pack files on GitHub ($Repo, branches: $($branches -join ', ')). Nothing changed."; exit 1
+    }
   }
 
   # ---- copy changed files
